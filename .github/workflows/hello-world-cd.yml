@@ -29,8 +29,8 @@ env:
   DOTNET_VERSION: '3.1'
   ORGANISATION_NAME: 'endk'
   AZURE_FUNCTIONAPP_NAME: 'helloworld'
-  PROJECT_NAME: TEMPLATE_REPLACE__YOUR_DOMAIN_NAME_LOWERCASE_NO_SYMBOLS
-  REPOSITORY_NAME: TEMPLATE_REPLACE__YOUR_REPOSITORY_PATH
+  PROJECT_NAME: timeseries
+  REPOSITORY_NAME: Energinet-DataHub/geh-timeseries
 
 jobs:
   build_helloworld:
@@ -66,22 +66,22 @@ jobs:
       matrix:
         environment: [
           {
-            long: rg-DataHub-TEMPLATE_REPLACE__YOUR_DOMAIN_NAME-U,
+            long: rg-DataHub-TimeSeries-U,
             short: u,
             name: Development
           },
           {
-            long: rg-DataHub-TEMPLATE_REPLACE__YOUR_DOMAIN_NAME-T,
+            long: rg-DataHub-TimeSeries-T,
             short: t,
             name: Test
           },
           {
-            long: rg-DataHub-TEMPLATE_REPLACE__YOUR_DOMAIN_NAME-B,
+            long: rg-DataHub-TimeSeries-B,
             short: b,
             name: Preprod
           },
           {
-            long: rg-DataHub-TEMPLATE_REPLACE__YOUR_DOMAIN_NAME-P,
+            long: rg-DataHub-TimeSeries-P,
             short: p,
             name: Production
           }
