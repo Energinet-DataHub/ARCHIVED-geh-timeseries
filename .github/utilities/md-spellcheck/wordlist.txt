@@ -4,3 +4,5 @@ Energinet
 IaC
 mergeable
 Terraform
+TimeSeries
+StyleCop
