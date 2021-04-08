@@ -1,8 +1,12 @@
+# Words to be ignored by spell checker
+Databricks
 ﻿DataHub
 github
 Energinet
 IaC
 mergeable
+pytest
 Terraform
 TimeSeries
+TODO
 StyleCop
