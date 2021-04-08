@@ -1,4 +1,4 @@
-# Business workflows - time series
+# Business workflows - Time Series
 
 Below you will find an elaboration of the business workflows maintain by this domain.
 
