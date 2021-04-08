@@ -5,6 +5,7 @@ github
 Energinet
 IaC
 mergeable
+pytest
 Terraform
 TimeSeries
 TODO
