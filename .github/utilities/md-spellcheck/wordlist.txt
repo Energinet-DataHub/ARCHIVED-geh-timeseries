@@ -1,5 +1,5 @@
 # Words to be ignored by spell checker
-DataBricks
+Databricks
 dataflow
 dataflows
 ﻿DataHub
