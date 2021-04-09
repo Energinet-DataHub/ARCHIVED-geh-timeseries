@@ -4,9 +4,9 @@
 
 The time series domain focuses primarily on receiving, validating, storing and distributing time series data to relevant market participants to be used for billing, etc.
 
-A time series is a message containing a collection of measurements for a given market evaluation point and it documents the amount of electricity being consumed, produced or exchanged. The measurements received can come in different resolutions e.g. hourly or 15 minutes values. Although the domain is built with the intend for higher resolutions like 5 minutes or higher.
+A time series is a message containing a collection of measurements for a given Metering Point and it documents the amount of electricity being consumed, produced or exchanged. The measurements received can come in different resolutions e.g. hourly or 15 minutes values, although the domain is built with the intend for higher resolutions like 5 minutes or higher.
 
-Performance is essential for this time series engine as the expected through-put will be high. Current performance target is processing 16 million time series values per hour.
+Performance is essential for this time series engine as the expected through-put will be high. Current performance target is processing 16 million time series values per hour, but this figure is expected to be raised significantly.
 
 The domain is also in charge of responding to time series data requests from market participants, and it is a key input data provider for the calculations performed by the [Aggregations domain](https://github.com/Energinet-DataHub/geh-aggregations) in order to settle the electricity market.
 
@@ -20,6 +20,8 @@ These are the business processes maintained by this domain.
 | ... |
 
 ## Architecture
+
+Upon receival, the time series data gets processed within [DataBricks](https://databricks.com/). In DataBricks, jobs and libraries implemented in Python takes care of validating the data, enriching it with Metering Point master data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data together with recipient information is handed over to the [Post Office domain](https://github.com/Energinet-DataHub/geh-post-office) for distribution. Time series data failing validation will be rejected and the time series sender will be notified by a message handed over to the Post Office domain.
 
 ![design](ARCHITECTURE.png)
 
