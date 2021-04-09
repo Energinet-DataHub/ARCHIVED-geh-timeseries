@@ -14,9 +14,9 @@ These are the business processes maintained by this domain.
 
 | Processes |
 | ------------- |
-| [Submission of time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-workflows.md#submission-of-time-series-data) |
-| [Request for time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-workflows.md#request-for-time-series-data) |
-| [Request for historical time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-workflows.md#request-for-historical-time-series-data) |
+| [Submission of time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#submission-of-time-series-data) |
+| [Request for time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#request-for-time-series-data) |
+| [Request for historical time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#request-for-historical-time-series-data) |
 | ... |
 
 ## Architecture
