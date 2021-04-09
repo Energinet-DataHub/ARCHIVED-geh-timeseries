@@ -42,3 +42,5 @@ Learn how to get started with Green Energy Hub [here](https://github.com/Energin
 ## Where can I get more help?
 
 Code owners? Slack or? Referral to main repository?
+
+Please note that we have provided a [Dictionary](https://github.com/Energinet-DataHub/green-energy-hub/tree/main/docs/dictionary-and-concepts) to help understand many of the terms used throughout the repo.
