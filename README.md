@@ -21,7 +21,7 @@ These are the business processes maintained by this domain.
 
 ## Architecture
 
-Upon receival, the time series data gets processed within [DataBricks](https://databricks.com/). In DataBricks, jobs and libraries implemented in Python takes care of validating the data, enriching it with Metering Point master data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data together with recipient information is handed over to the [Post Office domain](https://github.com/Energinet-DataHub/geh-post-office) for distribution. Time series data failing validation will be rejected and the time series sender will be notified by a message handed over to the Post Office domain.
+Upon receival, the time series data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data, enriching it with Metering Point master data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data together with recipient information is handed over to the [Post Office domain](https://github.com/Energinet-DataHub/geh-post-office) for distribution. Time series data failing validation will be rejected and the time series sender will be notified by a message handed over to the Post Office domain.
 
 ![design](ARCHITECTURE.png)
 
