@@ -1,4 +1,5 @@
 # Words to be ignored by spell checker
+Architechtural
 Databricks
 dataflow
 dataflows
@@ -9,6 +10,7 @@ IaC
 mergeable
 pytest
 receival
+repo
 StyleCop
 succesfull
 Terraform
