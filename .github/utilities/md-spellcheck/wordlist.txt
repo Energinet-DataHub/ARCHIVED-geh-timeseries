@@ -1,12 +1,15 @@
 # Words to be ignored by spell checker
+Architechtural
 Databricks
+dataflow
+dataflows
 ﻿DataHub
 github
 Energinet
 IaC
 mergeable
 pytest
+StyleCop
 Terraform
 TimeSeries
 TODO
-StyleCop
