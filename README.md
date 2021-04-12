@@ -14,14 +14,14 @@ These are the business processes maintained by this domain.
 
 | Processes |
 | ------------- |
-| [Submission of time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#submission-of-time-series-data) |
-| [Request for time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#request-for-time-series-data) |
-| [Request for historical time series data](https://github.com/Energinet-DataHub/geh-timeseries/blob/UpdateRepoDocs/docs/business-processes.md#request-for-historical-time-series-data) |
+| [Submission of time series data](./docs/business-processes.md#submission-of-time-series-data) |
+| [Request for time series data](./docs/business-processes.md#request-for-time-series-data) |
+| [Request for historical time series data](./docs/business-processes.md#request-for-historical-time-series-data) |
 | ... |
 
 ## Architecture
 
-Upon receival, the time series data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data, enriching it with Metering Point master data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data together with recipient information is handed over to the [Post Office domain](https://github.com/Energinet-DataHub/geh-post-office) for distribution. Time series data failing validation will be rejected and the time series sender will be notified by a message handed over to the Post Office domain.
+Upon receipt of a time series message, the data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data, enriching it with Metering Point master data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data together with recipient information is handed over to the [Post Office domain](https://github.com/Energinet-DataHub/geh-post-office) for distribution. Time series data failing validation will be rejected and the time series sender will be notified by a message handed over to the Post Office domain.
 
 ![design](ARCHITECTURE.png)
 
@@ -41,6 +41,6 @@ Learn how to get started with Green Energy Hub [here](https://github.com/Energin
 
 ## Where can I get more help?
 
-Code owners? Slack or? Referral to main repository?
+Read about the community for Green Energy Hub [here](https://github.com/Energinet-DataHub/green-energy-hub/blob/main/COMMUNITY.md) and learn about how to get involved and get help.
 
-Please note that we have provided a [Dictionary](https://github.com/Energinet-DataHub/green-energy-hub/tree/main/docs/dictionary-and-concepts) to help understand many of the terms used throughout the repo.
+Please note that we have provided a [Dictionary](https://github.com/Energinet-DataHub/green-energy-hub/tree/main/docs/dictionary-and-concepts) to help understand many of the terms used throughout the repository.

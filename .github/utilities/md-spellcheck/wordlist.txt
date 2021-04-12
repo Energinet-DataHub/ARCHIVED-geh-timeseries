@@ -9,10 +9,7 @@ Energinet
 IaC
 mergeable
 pytest
-receival
-repo
 StyleCop
-succesfull
 Terraform
 TimeSeries
 TODO
