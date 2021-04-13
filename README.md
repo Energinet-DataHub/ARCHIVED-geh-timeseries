@@ -8,8 +8,6 @@ This should be replaced by content that fits your domain. test
 
 ![design](ARCHITECTURE.png)
 
-## Repository origin
+## Domain Road Map
 
-This repository was created using the Green Energy Hub template.
-
-Please read the [template documentation](./docs/template-readme/README.md) for details and introduction to the template.
+No work planned in current program increment.
