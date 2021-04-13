@@ -33,7 +33,11 @@ TODO - Add dataflow diagram.
 
 ## Domain Road Map
 
-TODO
+No work planned in current program increment. However, future work will be planned including the following:
+
+1. Time Series is moved from current private repository to this public repository in order to become open source.
+2. Time series business processes is moved to its own domain, in order to ensure flexibility, independence of other domains, and stability.
+3. The domain supports the business processes listed above.
 
 ## Getting Started
 
