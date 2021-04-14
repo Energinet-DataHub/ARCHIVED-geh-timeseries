@@ -4,7 +4,7 @@ Energinet and any contributors reserve all others rights, whether under their re
 
 ## Third-Party Licenses
 
-The charges domain relies on open source libraries and tools.
+The time series domain relies on open source libraries and tools.
 We recommend you read their licenses, as their terms may differ from the terms described in our [LICENSE](LICENSE).
 Microsoft NuGet packages have been omitted from this list.
 
