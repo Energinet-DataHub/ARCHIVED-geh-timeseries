@@ -52,7 +52,7 @@ jobs:
 
       # https://github.com/marketplace/actions/github-spellcheck-action
       - name: Markdown spell check
-        uses: rojopolis/spellcheck-github-actions@0.5.0
+        uses: rojopolis/spellcheck-github-actions@0.13.0
         continue-on-error: true
         id: md-spell-check
 
