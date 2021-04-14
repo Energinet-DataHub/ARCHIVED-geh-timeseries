@@ -8,6 +8,7 @@ github
 Energinet
 IaC
 mergeable
+MPL
 NuGet
 pytest
 StyleCop
