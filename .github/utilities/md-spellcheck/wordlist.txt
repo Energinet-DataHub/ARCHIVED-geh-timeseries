@@ -8,8 +8,10 @@ github
 Energinet
 IaC
 mergeable
+NuGet
 pytest
 StyleCop
 Terraform
 TimeSeries
 TODO
+Url
