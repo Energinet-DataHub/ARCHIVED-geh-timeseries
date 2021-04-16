@@ -27,9 +27,9 @@ Upon receipt of a time series message, the data gets processed within [Databrick
 
 ## Context Streams
 
-This sections documents the dataflows to and from the time series domain.
+This sections documents the data flows to and from the time series domain.
 
-TODO - Add dataflow diagram.
+![Context stream](./images/TimeSeriesContextStreams.png "Time Series context streams")
 
 ## Domain Road Map
 
