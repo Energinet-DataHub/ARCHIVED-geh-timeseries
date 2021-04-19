@@ -31,7 +31,7 @@ The Green Energy Hub repository relies on open source libraries and tools. We re
 
 | Name | Version | Url | License |
 | -- | -- | -- | -- |
-| `coverlet.collector` | 1.2.0 | <https://www.nuget.org/packages/coverlet.collector/1.2.0> | MIT |
+| `coverlet.collector` | 3.0.3 | <https://www.nuget.org/packages/coverlet.collector/3.0.3> | MIT |
 | `Fluent Assertions` | 5.10.3 | <https://www.nuget.org/packages/FluentAssertions/5.10.3/> | Apache-2.0 |
 | `NSubstitute` | 4.2.2 | <https://www.nuget.org/packages/NSubstitute/4.2.2> | BSD-3-Clause |
 | `StyleCop.Analyzers` | 1.1.118 | <https://www.nuget.org/packages/StyleCop.Analyzers/1.1.118> | Apache-2.0 |
