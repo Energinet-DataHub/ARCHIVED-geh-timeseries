@@ -1,8 +1,18 @@
+# Words to be ignored by spell checker
+Architechtural
+Databricks
+dataflow
+dataflows
 ﻿DataHub
 github
 Energinet
 IaC
 mergeable
+MPL
+NuGet
+pytest
+StyleCop
 Terraform
 TimeSeries
-StyleCop
+TODO
+Url
