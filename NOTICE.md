@@ -36,4 +36,4 @@ The Green Energy Hub repository relies on open source libraries and tools. We re
 | `NSubstitute` | 4.2.2 | <https://www.nuget.org/packages/NSubstitute/4.2.2> | BSD-3-Clause |
 | `StyleCop.Analyzers` | 1.1.118 | <https://www.nuget.org/packages/StyleCop.Analyzers/1.1.118> | Apache-2.0 |
 | `xunit` | 2.4.1 | <https://www.nuget.org/packages/xunit/2.4.1> | [`xunit` license](https://raw.githubusercontent.com/xunit/xunit/master/license.txt) |
-| `xunit.runner.visualstudio` | 2.4.0 | <https://www.nuget.org/packages/xunit.runner.visualstudio/2.4.0> | [`xunit` license](https://raw.githubusercontent.com/xunit/xunit/master/license.txt) |
+| `xunit.runner.visualstudio` | 2.4.3 | <https://www.nuget.org/packages/xunit.runner.visualstudio/2.4.3> | [`xunit` license](https://raw.githubusercontent.com/xunit/xunit/master/license.txt) |
