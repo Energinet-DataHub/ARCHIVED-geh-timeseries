@@ -16,9 +16,10 @@ matrix:
           - title
           - alt
           ignores:
-          - ':matches(code, pre)'
+          - ':matches(code, pre, a)'
           - 'code'
           - 'pre'
+          - 'a'
     sources:
     - '../../**/*.md'
     default_encoding: utf-8
