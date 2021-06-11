@@ -1,0 +1,14 @@
+storage-account-name=mystorageacoount
+storage-account-key=<account-key>
+storage-container-name=data
+
+master-data-path=master-data/master-data.csv
+
+input-eh-connection-string=Endpoint=sb://myeventhub.servicebus.windows.net/;SharedAccessKeyName=Listen;SharedAccessKey=<key>;EntityPath=input;
+
+cosmos-db-endpoint=https://xxxx.documents.azure.com:port/
+cosmos-db-masterkey=<masterkey>
+cosmos-db-database-name=database_name
+cosmos-db-collection-name=database_collection_name
+
+telemetry-instrumentation-key=<application insights instrumentation key, GUID format>
