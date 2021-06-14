@@ -4,6 +4,7 @@ Databricks
 dataflow
 dataflows
 ﻿DataHub
+geh
 github
 Energinet
 IaC
@@ -11,7 +12,10 @@ mergeable
 MPL
 NuGet
 pytest
+pytests
+PySpark
 StyleCop
+src
 Terraform
 TimeSeries
 TODO
