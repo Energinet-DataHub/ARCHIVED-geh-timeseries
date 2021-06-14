@@ -4,6 +4,7 @@ Databricks
 dataflow
 dataflows
 ﻿DataHub
+geh
 github
 Energinet
 IaC
@@ -14,6 +15,7 @@ pytest
 pytests
 PySpark
 StyleCop
+src
 Terraform
 TimeSeries
 TODO
