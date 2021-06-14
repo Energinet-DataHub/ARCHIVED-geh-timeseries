@@ -11,6 +11,8 @@ mergeable
 MPL
 NuGet
 pytest
+pytests
+PySpark
 StyleCop
 Terraform
 TimeSeries

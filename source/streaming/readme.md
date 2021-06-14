@@ -8,9 +8,9 @@ Source code is mainly located in folder `geh_stream`. This folder also constitut
 
 [Pytest](https://pytest.org/) is used for unit testing.
 
-### Testing Pyspark using fixture factories
+### Testing PySpark using fixture factories
 
-It is quite cumbersome to unit test pyspark with data frames with a large number of columns.
+It is quite cumbersome to unit test PySpark with data frames with a large number of columns.
 
 In order to do this various concepts have been invented. In general you should start searching in the `conftest.py` files.
 
