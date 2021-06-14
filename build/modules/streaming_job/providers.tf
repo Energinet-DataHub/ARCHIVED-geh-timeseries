@@ -11,12 +11,25 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql import DataFrame
-from datetime import datetime
-from pyspark.sql.functions import col
 
+#Set the terraform required version
+terraform {
+  required_version = ">= 0.12.6"
 
-def filter_time_period(df: DataFrame, from_time: datetime, to_time: datetime):
-    return df \
-        .filter(col('Time') >= from_time) \
-        .filter(col('Time') <= to_time)
+  required_providers {
+    databricks = {
+      source = "databrickslabs/databricks"
+      version = "0.2.5"
+    }
+  }
+}
+
+provider "databricks" {
+  azure_workspace_resource_id = var.databricks_id
+}
+
+provider "azurerm" {
+  features {}
+  skip_provider_registration = true  
+}
+

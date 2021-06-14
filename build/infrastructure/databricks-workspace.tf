@@ -11,4 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .coordinator_service import CoordinatorService
+resource "azurerm_databricks_workspace" "databricks" {
+  name                = "dbw-${var.organisation}-${var.environment}"
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  sku                 = "standard"
+  tags                = data.azurerm_resource_group.main.tags
+}

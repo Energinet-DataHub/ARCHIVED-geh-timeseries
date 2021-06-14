@@ -11,5 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .validated_dataframe import add_time_series_validation_status_column, store_points_of_valid_time_series
-from .monitor_batch import get_rows_in_batch, track_batch_back_to_original_correlation_requests
+output "kv_timeseries_name" {
+  description      = "Name of the keyvault"
+  value            = module.kv_timeseries.name
+  sensitive        = true
+}
+
+output "evhar_receivedqueue_receiver_connection_string" {
+  description      = "Connection string of the received queue"
+  value            = module.evhar_receivedqueue_receiver_connection_string.name
+  sensitive        = true
+}

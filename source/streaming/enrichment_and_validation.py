@@ -56,17 +56,6 @@ p.add('--streaming-checkpoint-path', type=str, required=False, default="checkpoi
 p.add('--telemetry-instrumentation-key', type=str, required=True,
       help='Instrumentation key used for telemetry')
 
-# CosmosDB
-p.add('--cosmos-db-endpoint', type=str, required=True,
-      help='Cosmos DB endpoint')
-p.add('--cosmos-db-masterkey', type=str, required=True,
-      help='Cosmos DB access key')
-p.add('--cosmos-db-database-name', type=str, required=True,
-      help='Cosmos DB database name')
-p.add('--cosmos-db-collection-name', type=str, required=True,
-      help='Cosmos DB collection name')
-
-
 args, unknown_args = p.parse_known_args()
 
 if unknown_args:
@@ -127,24 +116,6 @@ print("Input event hub config:", input_eh_conf)
 
 raw_streaming_data = read_time_series_streaming_data(spark, input_eh_conf)
 
-# %% Create Post Office
-from geh_stream.monitoring import Telemetry
-from geh_stream.batch_operations import PostOffice
-
-telemetry_client = Telemetry.create_telemetry_client(args.telemetry_instrumentation_key)
-
-output_delta_lake_path = BASE_STORAGE_PATH + args.output_path
-checkpoint_path = BASE_STORAGE_PATH + args.streaming_checkpoint_path
-
-writeConfigCosmosDb = {
-    "Endpoint": args.cosmos_db_endpoint,
-    "Masterkey": args.cosmos_db_masterkey,
-    "Database": args.cosmos_db_database_name,
-    "Collection": args.cosmos_db_collection_name,
-    "Upsert": "false"
-}
-postOffice = PostOffice(writeConfigCosmosDb)
-
 # %% Process time series as points
 from pyspark.sql import DataFrame
 
@@ -153,21 +124,6 @@ from geh_stream.monitoring import MonitoredStopwatch
 import geh_stream.batch_operations as batch_operations
 
 time_series_points = parse_enrich_and_validate_time_series_as_points(raw_streaming_data, master_data_df)
-
-
-def __send_to_post_office(batched_time_series_points: DataFrame, watch: MonitoredStopwatch):
-    # Send time series messages to post office (CosmosDb) in order to eventually be sent to market actors.
-    # Number of executors is used for a temporariy workaround to improve throughput and lower latency.
-    # See more in post office implementation.
-    number_of_executors = spark.sparkContext.defaultParallelism
-
-    timer = watch.start_sub_timer(postOffice.sendValid.__name__)
-    postOffice.sendValid(batched_time_series_points, number_of_executors)
-    timer.stop_timer()
-
-    timer = watch.start_sub_timer(postOffice.sendRejected.__name__)
-    postOffice.sendRejected(batched_time_series_points, number_of_executors)
-    timer.stop_timer()
 
 
 def __process_data_frame(batched_time_series_points: DataFrame, _: int):
@@ -183,8 +139,6 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
 
         # Make valid time series points available to aggregations (by storing in Delta lake)
         batch_operations.store_points_of_valid_time_series(batched_time_series_points, output_delta_lake_path, watch)
-
-        __send_to_post_office(batched_time_series_points, watch)
 
         batch_count = batch_operations.get_rows_in_batch(batched_time_series_points, watch)
 
