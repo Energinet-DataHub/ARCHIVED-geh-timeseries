@@ -17,10 +17,6 @@ on:
   pull_request:
     branches: 
       - main
-    paths:
-      - build/infrastructure/**
-      - .github/**
-      - source/streaming/geh_stream/**
   workflow_dispatch:
 
 jobs:
@@ -35,7 +31,7 @@ jobs:
         uses: fkirc/skip-duplicate-actions@v1.4.0
         with:
           github_token: ${{ github.token }}
-          paths: '["**.py"]'
+          paths: '["**.py", "build/infrastructure/**", ".github/**", "source/streaming/geh_stream/**"]'
 
       - name: Checkout
         if: ${{ steps.skip_check.outputs.should_skip == 'false' }}
