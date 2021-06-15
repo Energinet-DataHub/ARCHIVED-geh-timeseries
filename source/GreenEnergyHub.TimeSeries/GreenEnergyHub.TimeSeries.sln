@@ -40,6 +40,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.Json", "..\S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TestHelpers", "..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj", "{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.MessageReceiver", "source\GreenEnergyHub.TimeSeries.MessageReceiver\GreenEnergyHub.TimeSeries.MessageReceiver.csproj", "{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,10 @@ Global
 		{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -91,9 +97,10 @@ Global
 		{BEE26AFC-4E8A-4005-B84C-487D4487423F} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
 		{0C63BAFE-D498-4B77-9EFE-CA885FD7587C} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
 		{BB933926-FE46-44A3-BD3A-A4C2CFBC6FA2} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
-		{2780409A-4228-4856-ABB4-266CFD1811A4} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}		
+		{2780409A-4228-4856-ABB4-266CFD1811A4} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
+		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF} = {0F6D6178-E28A-445D-99A8-7CABDC3EC55A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CC9992B-81F9-4F47-8F02-D9D126AC403B}
-	EndGlobalSection	
+	EndGlobalSection
 EndGlobal
