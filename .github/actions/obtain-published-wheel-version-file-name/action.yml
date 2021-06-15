@@ -1,0 +1,14 @@
+name: The File Name of the File Containing Version of Latest Published Wheel File
+
+outputs:
+  filename:
+    description: Filename of file containing version of latest deployed wheel file.
+    value: ${{ steps.filename.outputs.filename }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Return filename of file containing version of last published wheel
+      id: filename
+      run: echo "::set-output name=filename::latest-published-wheel-version"
+      shell: bash

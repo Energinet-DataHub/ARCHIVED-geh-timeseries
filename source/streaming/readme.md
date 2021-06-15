@@ -70,7 +70,7 @@ Test coverage can be calculated by executing the script `create_coverage_report.
 
 ## Attach vs code debugger to pytest
 
-Running the `debugz.sh` script in 'src/streaming' allows you to debug the pytests with VS code.
+Running the `debugz.sh` script in 'source/streaming' allows you to debug the pytests with VS code.
 In your `launch.json` file add the following configuration:
 
 ```json
