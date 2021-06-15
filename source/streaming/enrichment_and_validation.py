@@ -116,6 +116,11 @@ print("Input event hub config:", input_eh_conf)
 
 raw_streaming_data = read_time_series_streaming_data(spark, input_eh_conf)
 
+# %% Telemetry
+from geh_stream.monitoring import Telemetry
+
+telemetry_client = Telemetry.create_telemetry_client(args.telemetry_instrumentation_key)
+
 # %% Process time series as points
 from pyspark.sql import DataFrame
 
@@ -170,6 +175,8 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
 # recovery with a exactly-once semantic. See more on
 # https://spark.apache.org/docs/latest/structured-streaming-programming-guide.html#fault-tolerance-semantics.
 # The trigger determines how often a batch is created and processed.
+output_delta_lake_path = BASE_STORAGE_PATH + args.output_path
+checkpoint_path = BASE_STORAGE_PATH + args.streaming_checkpoint_path
 out_stream = time_series_points \
     .writeStream \
     .option("checkpointLocation", checkpoint_path) \

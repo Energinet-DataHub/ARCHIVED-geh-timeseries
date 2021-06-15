@@ -1,6 +1,6 @@
 storage-account-name=mystorageacoount
 storage-account-key=<account-key>
-storage-container-name=data
+storage-container-name=messagedata
 
 master-data-path=master-data/master-data.csv
 
