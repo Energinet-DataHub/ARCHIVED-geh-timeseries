@@ -43,6 +43,8 @@ It is assumed that `Azure CLI` for Windows and the Azure AD module for `powershe
 
 The value of this need to be 1-3 characters.
 
+Note that using the utility scripts available in the domain assumes the environment is `s`.
+
 #### Warning
 
 The environment value will be appended to the name of some of your Azure resources as some names need to be unique worldwide.
@@ -67,7 +69,7 @@ This should be set to the name of the resource group you want to deploy into.
 
 This should be set to the name of the project this deployment is part of, usually the same as the domain name.
 
-For use with this domain, the recommended value is `charges`, but it really is up to developer.
+For use with this domain, the recommended value is `tseries`, but it really is up to developer.
 
 Make sure it does not get any longer than 7 characters.
 
