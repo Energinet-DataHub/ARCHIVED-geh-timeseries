@@ -1,11 +1,11 @@
-name: SonarCloud
+name: SonarCloudDotNet
 on:
   push:
     branches:
       - main
     paths:
       - source/**
-      - .github/workflows/sonarcloud.yml
+      - .github/workflows/sonarcloud-dotnet.yml
 
   pull_request:
     types: [opened, synchronize, reopened]
