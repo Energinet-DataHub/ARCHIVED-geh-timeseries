@@ -26,7 +26,7 @@ on:
 jobs:
   databricks-ci:
     runs-on: ubuntu-latest
-    name: Databricks static and unit test
+    name: Databricks flake8 and unit test
     steps:
 
       # https://github.com/marketplace/actions/skip-duplicate-actions
