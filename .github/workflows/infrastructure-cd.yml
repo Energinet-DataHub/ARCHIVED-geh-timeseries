@@ -24,7 +24,7 @@ on:
   workflow_dispatch: {}
 env:
   ORGANISATION_NAME: endk
-  PROJECT_NAME: timeseries
+  PROJECT_NAME: tseries
 
 jobs:
   infra_deploy:
