@@ -69,7 +69,7 @@ This should be set to the name of the resource group you want to deploy into.
 
 This should be set to the name of the project this deployment is part of, usually the same as the domain name.
 
-For use with this domain, the recommended value is `charges`, but it really is up to developer.
+For use with this domain, the recommended value is `tseries`, but it really is up to developer.
 
 Make sure it does not get any longer than 7 characters.
 
