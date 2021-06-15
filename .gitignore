@@ -386,5 +386,5 @@ run_args*.conf
 .terraform
 .terraform.lock.hcl
 build/infrastructure/**/*.tfvars
-.terraform.tfstate.backup
-.terraform.tfstate
+terraform.tfstate.backup
+terraform.tfstate
