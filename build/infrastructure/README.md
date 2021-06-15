@@ -43,6 +43,8 @@ It is assumed that `Azure CLI` for Windows and the Azure AD module for `powershe
 
 The value of this need to be 1-3 characters.
 
+Note that using the utility scripts available in the domain assumes the environment is `s`.
+
 #### Warning
 
 The environment value will be appended to the name of some of your Azure resources as some names need to be unique worldwide.
