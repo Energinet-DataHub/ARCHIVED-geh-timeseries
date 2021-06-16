@@ -19,6 +19,10 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  ORGANISATION_NAME: endk
+  PROJECT_NAME: tseries
+
 jobs:
   pre_job:
     runs-on: ubuntu-latest
@@ -70,10 +74,6 @@ jobs:
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
-    env:
-      WHEEL_STORAGE_NAME: 'enrgtwheels'
-      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
-      WHEEL_CONTAINER_NAME: 'wheels'
     strategy:
       matrix:
         environment: [
@@ -98,6 +98,11 @@ jobs:
             name: Production
           }
         ]
+    env:
+      WHEEL_STORAGE_NAME: 'enrgtwheels'
+      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_CONTAINER_NAME: 'wheels'
+      ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
       name: ${{ matrix.environment.long }}
 
@@ -295,10 +300,10 @@ jobs:
       # rather create duplicate ENV pipeline vatiable if needed to separate concerns
       - name: Set TF Vars
         run: |
-          echo "TF_VAR_environment=${{ env.ENV_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_environment=${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ matrix.environment.long }}" >> $GITHUB_ENV
-          echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ env.ENV_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
           echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV
@@ -308,7 +313,7 @@ jobs:
         with:
           backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
           resource-group-name: "${{ matrix.environment.long }}"
-          storage-account-name: "tfstateendk${{ env.ENV_NAME }}"
+          storage-account-name: "tfstateendk${{ matrix.environment.short }}"
 
       # Create streaming job
       - name: Terraform Databricks Init

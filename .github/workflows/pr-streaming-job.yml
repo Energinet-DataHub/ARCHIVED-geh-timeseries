@@ -19,6 +19,14 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  ORGANISATION_NAME: endk
+  PROJECT_NAME: 'time${{ github.event.number }}'
+  RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
+  ENVIRONMENT_SHORT: u
+environment:
+  name: rg-DataHub-Testing-U
+
 jobs:
   pre_job:
     runs-on: ubuntu-latest
@@ -74,9 +82,6 @@ jobs:
       WHEEL_STORAGE_NAME: 'enrgtwheels'
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
-      WHEEL_ENVIRONMENT_NAME: 'rg-DataHub-Testing-U'
-    environment:
-      name: rg-DataHub-Testing-U
 
     steps:
       - name: Setup Python
@@ -108,8 +113,8 @@ jobs:
       #Create Wheel Repository Container if needed
       - name: Create Wheel Repository Storage
         run: |
-          az storage account create --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
-          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
         if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
 
@@ -135,7 +140,7 @@ jobs:
       - name: Upload Wheel
         run: |
           version="${{ steps.next-wheel-file-version.outputs.next_version }}"
-          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "geh_stream-${version}-py3-none-any.whl" \
           --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
@@ -143,7 +148,7 @@ jobs:
 
       - name: Update Wheel Version file
         run: |
-          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
           --file "./source/streaming/VERSION" \
@@ -158,7 +163,6 @@ jobs:
     env:
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
-      WHEEL_ENVIRONMENT_NAME: 'rg-DataHub-Testing-U'
 
     steps:
       - name: Checkout code
@@ -248,10 +252,10 @@ jobs:
       # rather create duplicate ENV pipeline vatiable if needed to separate concerns
       - name: Set TF Vars
         run: |
-          echo "TF_VAR_environment=${{ env.ENV_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ env.WHEEL_ENVIRONMENT_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ env.ENV_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
           echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV
@@ -261,7 +265,7 @@ jobs:
         with:
           backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
           resource-group-name: "${{ env.WHEEL_ENVIRONMENT_NAME }}"
-          storage-account-name: "tfstateendk${{ env.ENV_NAME }}"
+          storage-account-name: "tfstateendk${{ env.ENVIRONMENT_SHORT }}"
 
       # Create streaming job
       - name: Terraform Databricks Init
