@@ -284,18 +284,6 @@ jobs:
         run: |
           dbfs cp --overwrite ./source/streaming/enrichment_and_validation.py ${{ env.MAIN_PYTHON_FILE }}
 
-      - uses: suisei-cn/actions-download-file@v1
-        name: Download Custom CosmosDB connector
-        with:
-          # Temporarily used package. See comments in .devcontainer/spark-defaults.conf.
-          url: "https://github.com/FabianMeiswinkel/PrivateNugetPackages/raw/master/azure-cosmosdb-spark_3.0.0_2.12-3.6.2-uber.jar"
-          target: cosmosdb_connector/
-
-      - name: Copy Custom CosmosDB connector to DBFS
-        id: copy_cosmosdb_connector_todbfs
-        run: |
-          dbfs cp --overwrite ./cosmosdb_connector/azure-cosmosdb-spark_3.0.0_2.12-3.6.2-uber.jar dbfs:/streaming/cosmosdb-connector.jar
-
       # Try not to reference TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
       # rather create duplicate ENV pipeline vatiable if needed to separate concerns
       - name: Set TF Vars
