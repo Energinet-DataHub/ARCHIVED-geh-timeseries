@@ -25,7 +25,16 @@ limitations under the License.
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="JetBrains.Annotations" Version="2021.1.0" />
       <PackageReference Include="NodaTime" Version="3.0.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Messages" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\messaging\source\GreenEnergyHub.Messaging\GreenEnergyHub.Messaging.csproj" />
     </ItemGroup>
 
 </Project>
