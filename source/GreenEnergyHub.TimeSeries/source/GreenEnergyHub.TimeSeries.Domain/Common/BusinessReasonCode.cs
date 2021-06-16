@@ -15,11 +15,14 @@
 namespace GreenEnergyHub.TimeSeries.Domain.Common
 {
     /// <summary>
-    /// The document type indicates the intended business context of this business message.
+    /// BusinessReasonCode indicates the intended business context.
     /// </summary>
-    public enum DocumentType
+    public enum BusinessReasonCode
     {
         Unknown = 0,
-        NotifyValidatedMeasureData = 66, // This will be received as E66 in ebiX
+        ContinuousMeterReading = 6, // This will be received as D06 i ebiX
+        Periodical = 23, // This will be received as E23 in ebiX
+        HistoricalData = 30, // This will be received as E30 in ebiX
+        PeriodicalFlexMetering = 42, // This will be received as D42 in ebiX
     }
 }
