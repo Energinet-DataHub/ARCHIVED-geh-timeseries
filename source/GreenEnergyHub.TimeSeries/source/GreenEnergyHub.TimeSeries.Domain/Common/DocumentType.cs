@@ -20,6 +20,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
     public enum DocumentType
     {
         Unknown = 0,
-        NotifyValidatedMeasureData = 66, // This will be received as E66 in ebiX
+        NotifyValidatedMeasureData = 1, // This will be received as E66 in ebiX
     }
 }
