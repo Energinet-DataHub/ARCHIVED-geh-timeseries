@@ -12,21 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.CodeAnalysis;
-using GreenEnergyHub.TimeSeries.Domain.Command;
-using GreenEnergyHub.TimeSeries.Domain.Common;
-
-#pragma warning disable 8618
-
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Common
 {
-    public class TimeSeriesCommand : CommandBase
+    /// <summary>
+    /// IMPORTANT: This is used in transport so the numbers matters.
+    /// </summary>
+    public enum MarketParticipantRole
     {
-        public TimeSeriesCommand([NotNull] string correlationId)
-            : base(correlationId)
-        {
-        }
-
-        public Document Document { get; set; }
+        Unknown = 0,
+        EnergySupplier = 1,
+        GridAccessProvider = 2,
+        SystemOperator = 3,
+        MeteredDataResponsible = 4,
+        EnergyAgency = 5,
     }
 }

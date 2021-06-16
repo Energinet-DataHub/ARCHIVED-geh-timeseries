@@ -11,22 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-using System.Diagnostics.CodeAnalysis;
-using GreenEnergyHub.TimeSeries.Domain.Command;
-using GreenEnergyHub.TimeSeries.Domain.Common;
-
-#pragma warning disable 8618
-
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Common
 {
-    public class TimeSeriesCommand : CommandBase
+    /// <summary>
+    /// IndustryClassification indicates the industry context. E.g. if a time series is related to electricity.
+    /// </summary>
+    public enum IndustryClassification
     {
-        public TimeSeriesCommand([NotNull] string correlationId)
-            : base(correlationId)
-        {
-        }
-
-        public Document Document { get; set; }
+        Unknown = 0,
+        Electricity = 23,
     }
 }
