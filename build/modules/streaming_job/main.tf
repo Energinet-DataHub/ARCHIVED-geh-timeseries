@@ -56,7 +56,7 @@ resource "databricks_job" "streaming_job" {
       "--storage-account-name=${var.storage_account_name}",
       "--storage-account-key=${var.storage_account_key}",
       "--storage-container-name=${var.streaming_container_name}",
-      "--master-data-path=market-data/market-data-enrichment.csv",
+      "--master-data-path=master-data/master-data.csv",
       "--output-path=delta/meter-data/",
       "--input-eh-connection-string=${var.input_eventhub_listen_connection_string}",
       "--max-events-per-trigger=100",
