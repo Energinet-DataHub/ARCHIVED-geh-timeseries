@@ -14,7 +14,7 @@
 
 using NodaTime;
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public class Point
     {

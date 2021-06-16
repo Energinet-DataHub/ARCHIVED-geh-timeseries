@@ -15,7 +15,7 @@
 using System.Collections.Generic;
 using NodaTime;
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public class SeriesPeriod
     {

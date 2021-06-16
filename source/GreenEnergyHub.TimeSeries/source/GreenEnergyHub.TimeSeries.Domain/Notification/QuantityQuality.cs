@@ -12,15 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public enum QuantityQuality
     {
         Unknown = 0,
         Measured = 1, // Received as E01 in ebiX
-        Revised = 36, // Received as 36 in ebiX
-        Estimated = 56, // Received as 56 in ebiX
-        QuantityMissing = 99, // Received in separate boolean field in ebiX
-        Calculated = 101, // Received as D01 in ebiX
+        Revised = 2, // Received as 36 in ebiX
+        Estimated = 3, // Received as 56 in ebiX
+        QuantityMissing = 4, // Received in separate boolean field in ebiX
+        Calculated = 5, // Received as D01 in ebiX
     }
 }

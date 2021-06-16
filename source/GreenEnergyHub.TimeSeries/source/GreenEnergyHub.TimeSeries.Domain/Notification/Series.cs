@@ -16,7 +16,7 @@ using NodaTime;
 
 #pragma warning disable 8618
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public class Series
     {

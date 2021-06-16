@@ -18,7 +18,7 @@ using GreenEnergyHub.TimeSeries.Domain.Common;
 
 #pragma warning disable 8618
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public class TimeSeriesCommand : CommandBase
     {

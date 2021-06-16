@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
+namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public enum SettlementMethod
     {
         Unknown = 0,
         Profiled = 1, // This will be received as E01 in ebiX
         NonProfiled = 2, // This will be received as E02 in ebiX
-        Flex = 101, // This will be received as D01 in ebiX
+        Flex = 3, // This will be received as D01 in ebiX
     }
 }
