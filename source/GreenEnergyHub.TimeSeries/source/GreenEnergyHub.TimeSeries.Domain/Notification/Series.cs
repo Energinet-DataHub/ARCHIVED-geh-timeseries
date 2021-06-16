@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using NodaTime;
 
 #pragma warning disable 8618
@@ -20,6 +21,11 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
     public class Series
     {
+        public Series()
+        {
+            Points = new List<Point>();
+        }
+
         /// <summary>
         /// Contains a unique ID for the specific times series, provided by the sender.
         /// </summary>
@@ -37,6 +43,13 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
 
         public MeasureUnit Unit { get; set; }
 
-        public SeriesPeriod Period { get; set; }
+        public Resolution Resolution { get; set; }
+
+        public Instant StartDateTime { get; set; }
+
+        public Instant EndDateTime { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2227", Justification = "Ease of use, for example JSON deserialization")]
+        public List<Point> Points { get; set; }
     }
 }
