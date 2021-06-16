@@ -32,7 +32,7 @@ jobs:
           github_token: ${{ github.token }}
           paths: '[
             "source/streaming/**",
-            ".github/workflows/streaming-job.yml"
+            ".github/workflows/pr-streaming-job.yml"
           ]'
 
   # Execute static checks (flake8) and unit tests.
