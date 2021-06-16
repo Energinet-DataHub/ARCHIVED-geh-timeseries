@@ -11,52 +11,200 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-name: Streaming Job Deploy (Enrichment and Validation)
+name: Streaming Job
+
 on:
-  # IMPORTANT: This push trigger has been commented out because the workflow depends on
-  # .github/workflows/build-publish-wheel-file.yml and it would thus introduce a race condition
-  # to have this workflow triggered automatically.
-  # We'll need to eventually solve this problem so we can have this workflow triggered automatically.
-  #push:
-    #branches:
-    #  - main
-    #paths:
-    #  - source/streaming/geh_stream/**
-    #  - build/infrastructure/databricks_streaming_job/**
-    #  - build/infrastructure/job_modules/**
-    #  - .github/workflows/streaming-job-cd.yml
+  push:
+    branches:
+      - main
   workflow_dispatch:
-    inputs:
-      resource_group_name:
-        description: 'Resource Group Name You Want to Use for Deployment'
-        required: true
-        default: ''
-      env_name:
-        description: 'Env name used to postfix resources names'
-        required: true
-        default: ''
-      client_id:
-        description: 'Service Principal Client (Application) Id'
-        required: true
-        default: ''
-      object_id:
-        description: 'Service Principal Object Id'
-        required: true
-        default: ''
-      client_secret:
-        description: 'Service Principal Secret'
-        required: true
-        default: ''
 
 jobs:
-  streaming_job_deploy:
-
-    # Name the Job
-    name: Deploy databricks cluster and create job
-    # Set the type of machine to run on
+  pre_job:
     runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - name: Should skip?
+        id: skip_check
+        uses: fkirc/skip-duplicate-actions@v1.4.0
+        with:
+          github_token: ${{ github.token }}
+          paths: '[
+            "source/streaming/**",
+            ".github/workflows/streaming-job.yml"
+          ]'
+
+  streaming_job_ci:
+    runs-on: ubuntu-latest
+    name: flake8 and unit test
+    description: Execute static checks (flake8) and unit tests.
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/TrueBrain/actions-flake8
+      - name: Static checks
+        uses: TrueBrain/actions-flake8@master
+        with:
+          path: ./source
+          ignore: E501,F401,E402,W503
+
+      - name: Unit tests
+        uses: ./.github/actions/databricks-unit-test
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-databricks_artifacts
+          path: ./source/streaming/htmlcov/
+
+  wheel_build_publish:
+    name: Build and Publish Wheel File
+    description: |
+      Creates streaming job wheel file and deploys it.
+      This job is a candidate for splitting into the ci and cd jobs.
+    needs: pre_job
+    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      WHEEL_STORAGE_NAME: 'enrgtwheels'
+      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_CONTAINER_NAME: 'wheels'
+    strategy:
+      matrix:
+        environment: [
+          {
+            long: rg-DataHub-TimeSeries-U,
+            short: u,
+            name: Development
+          },
+          {
+            long: rg-DataHub-TimeSeries-T,
+            short: t,
+            name: Test
+          },
+          {
+            long: rg-DataHub-TimeSeries-B,
+            short: b,
+            name: Preprod
+          },
+          {
+            long: rg-DataHub-TimeSeries-P,
+            short: p,
+            name: Production
+          }
+        ]
     environment:
-      name: rg-DataHub-D
+      name: ${{ matrix.environment.long }}
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.6' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Read Pipeline Configuration
+        uses: ./.github/actions/read-pipeline-configuration
+
+      - name: Set Environment Secrets
+        run: |  
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SPN_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+
+      - name: Azure CLI Install and Login
+        uses: ./.github/actions/azure-cli-install-login
+      
+      - name: Check If Wheel Repository Storage exists
+        id: wheel-storage-exists
+        run: |
+          storage_exists=$(az storage account check-name --name ${{ env.WHEEL_STORAGE_NAME }} | python3 -c "import sys, json; print(not json.load(sys.stdin)['nameAvailable'])")
+          echo "::set-output name=wheel-storage-exists::${storage_exists}"
+
+      #Create Wheel Repository Container if needed
+      - name: Create Wheel Repository Storage
+        run: |
+          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
+        if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
+
+      # Obtain next wheel file version - step 1 of 2
+      - name: Obtain Wheel Version File
+        id:   wheel-version-file-name
+        uses: ./.github/actions/obtain-published-wheel-version-file-name
+
+      # Obtain next wheel file version - step 2 of 2
+      - name: Obtain Next Wheel Version
+        id:   next-wheel-file-version
+        uses: ./.github/actions/obtain-next-wheel-version
+        with:
+          published_wheel_version_file_url: "${{ env.WHEEL_STORAGE_ADDRESS }}${{ steps.wheel-version-file-name.outputs.filename }}"
+
+      - name: Create Python Wheel for Databricks Jobs
+        working-directory: ./source/streaming
+        run: |
+          echo "${{ steps.next-wheel-file-version.outputs.next_version }}" > VERSION
+          pip install wheel
+          python setup.py sdist bdist_wheel
+
+      - name: Upload Wheel
+        run: |
+          version="${{ steps.next-wheel-file-version.outputs.next_version }}"
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
+          --name "geh_stream-${version}-py3-none-any.whl" \
+          --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
+          --account-key $account_key
+
+      - name: Update Wheel Version file
+        run: |
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
+          --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
+          --file "./source/streaming/VERSION" \
+          --account-key $account_key
+
+  streaming_job_cd:
+    name: Deploy databricks cluster and create job
+    needs: [streaming_job_ci, wheel_build_publish]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [
+          {
+            long: rg-DataHub-TimeSeries-U,
+            short: u,
+            name: Development
+          },
+          {
+            long: rg-DataHub-TimeSeries-T,
+            short: t,
+            name: Test
+          },
+          {
+            long: rg-DataHub-TimeSeries-B,
+            short: b,
+            name: Preprod
+          },
+          {
+            long: rg-DataHub-TimeSeries-P,
+            short: p,
+            name: Production
+          }
+        ]
+    environment:
+      name: ${{ matrix.environment.long }}
     env:
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
