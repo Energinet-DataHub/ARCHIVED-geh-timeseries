@@ -15,8 +15,6 @@
 using System.Collections.Generic;
 using NodaTime;
 
-#pragma warning disable 8618
-
 namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
 {
     public class SeriesPeriod
