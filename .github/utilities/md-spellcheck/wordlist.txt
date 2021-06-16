@@ -7,11 +7,12 @@ dataflows
 ﻿DataHub
 deserialize
 DTO
+Energinet
+FluentValidation
 geh
 github
 GreenEnergyHub
-Energinet
-FluentValidation
+hardcoded
 IaC
 mergeable
 MPL
