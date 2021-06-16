@@ -107,8 +107,8 @@ jobs:
       #Create Wheel Repository Container if needed
       - name: Create Wheel Repository Storage
         run: |
-          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage account create --resource-group ${{ matrix.environment.long }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
         if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
 
@@ -134,7 +134,7 @@ jobs:
       - name: Upload Wheel
         run: |
           version="${{ steps.next-wheel-file-version.outputs.next_version }}"
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "geh_stream-${version}-py3-none-any.whl" \
           --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
@@ -142,7 +142,7 @@ jobs:
 
       - name: Update Wheel Version file
         run: |
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
           --file "./source/streaming/VERSION" \
@@ -169,11 +169,6 @@ jobs:
           echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
           echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
           echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
-
-      # Run only if workflow started on demand (manually triggered)
-      - name: Set Variables from Pipeline Inputs
-        uses: ./.github/actions/override_env_settings
-        if:   github.event.inputs.resource_group_name
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
@@ -253,7 +248,7 @@ jobs:
         run: |
           echo "TF_VAR_environment=${{ env.ENV_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_resource_group_name=${{ matrix.environment.long }}" >> $GITHUB_ENV
           echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ env.ENV_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
@@ -263,7 +258,7 @@ jobs:
         uses: ./.github/actions/configure-terraform-backend
         with:
           backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
-          resource-group-name: "${{ env.RESOURCE_GROUP_NAME }}"
+          resource-group-name: "${{ matrix.environment.long }}"
           storage-account-name: "tfstateendk${{ env.ENV_NAME }}"
 
       # Create streaming job
