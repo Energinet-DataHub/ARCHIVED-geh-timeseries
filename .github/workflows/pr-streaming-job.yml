@@ -86,9 +86,6 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-        
-      - name: Read Pipeline Configuration
-        uses: ./.github/actions/read-pipeline-configuration
 
       - name: Set Environment Secrets
         run: |  
@@ -164,9 +161,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Read Pipeline Configuration
-        uses: ./.github/actions/read-pipeline-configuration
 
       - name: Set Environment Secrets
         run: |
