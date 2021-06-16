@@ -24,8 +24,6 @@ env:
   PROJECT_NAME: 'time${{ github.event.number }}'
   RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
   ENVIRONMENT_SHORT: u
-environment:
-  name: rg-DataHub-Testing-U
 
 jobs:
   pre_job:
