@@ -11,7 +11,7 @@ runs:
           wsId=$(az resource show \
           --resource-type Microsoft.Databricks/workspaces \
           -g "${{env.RESOURCE_GROUP_NAME}}" \
-          -n "dbw-${{ env.ORGANISATION_NAME }}-${{ env.ENVIRONMENT_SHORT }}" \
+          -n "dbw-${{ env.PROJECT_NAME }}-${{ env.ORGANISATION_NAME }}-${{ env.ENVIRONMENT_SHORT }}" \
           --query id -o tsv)
 
           getToken () {

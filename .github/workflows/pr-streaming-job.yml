@@ -156,7 +156,8 @@ jobs:
 
   streaming_job_cd:
     name: Deploy databricks cluster and create job
-    needs: [streaming_job_ci, wheel_build_publish]
+    # TODO BJARKE: Removed temp to test this job faster
+    #needs: [streaming_job_ci, wheel_build_publish]
     runs-on: ubuntu-latest
     environment:
       name: rg-DataHub-Testing-U
