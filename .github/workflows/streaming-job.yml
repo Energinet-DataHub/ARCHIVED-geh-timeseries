@@ -301,7 +301,7 @@ jobs:
         with:
           backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
           resource-group-name: "${{ matrix.environment.long }}"
-          storage-account-name: "tfstateendk${{ matrix.environment.short }}"
+          storage-account-name: "tfstate${{ env.PROJECT_NAME }}${{ matrix.environment.short }}"
 
       # Create streaming job
       - name: Terraform Databricks Init
