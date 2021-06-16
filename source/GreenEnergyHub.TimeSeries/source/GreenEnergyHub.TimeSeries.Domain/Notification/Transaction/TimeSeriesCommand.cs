@@ -13,8 +13,9 @@
 // limitations under the License.
 
 using System.Diagnostics.CodeAnalysis;
+using GreenEnergyHub.TimeSeries.Domain.Command;
 
-namespace GreenEnergyHub.TimeSeries.Domain.Command
+namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
 {
     public class TimeSeriesCommand : CommandBase
     {
