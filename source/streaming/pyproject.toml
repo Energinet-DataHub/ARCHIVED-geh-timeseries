@@ -6,10 +6,6 @@
 combined_coverage_min = 73
 line_coverage_min = 73
 
-    [coverage-threshold.modules."aggregation-jobs/"]
-    combined_coverage_min = 73
-    line_coverage_min = 73
-
     [coverage-threshold.modules."geh_stream/"]
     combined_coverage_min = 73
     line_coverage_min = 73
