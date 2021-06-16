@@ -244,7 +244,7 @@ jobs:
           echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_storage_account_name=timeseriesdata${{ env.ORGANISATION_NAME }}${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=data${{ env.PROJECT_NAME }}${{ env.ORGANISATION_NAME }}${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
           echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV
