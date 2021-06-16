@@ -19,3 +19,11 @@ module "appi" {
   location            = data.azurerm_resource_group.main.location
   tags                = data.azurerm_resource_group.main.tags
 }
+
+module "kvs_appi_instrumentation_key" {
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  name                      = "appinsights_instrumentation_key"
+  value                     = module.appi.instrumentation_key
+  key_vault_id              = module.kv_timeseries.id
+  dependencies              = [module.appi.dependent_on]
+}
