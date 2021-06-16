@@ -27,7 +27,7 @@ data "azurerm_key_vault_secret" "evhar_inboundqueue_receiver_connection_string" 
 }
 
 module "streaming_job" {
-  source                                         = "../modules/streaming_job"
+  source                                         = "../../modules/streaming_job"
   databricks_id                                  = var.databricks_id
   module_name                                    = "StreamingJob"
   storage_account_name                           = var.storage_account_name
