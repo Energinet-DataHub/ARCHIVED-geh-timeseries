@@ -74,6 +74,7 @@ jobs:
       WHEEL_STORAGE_NAME: 'enrgtwheels'
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
+      WHEEL_ENVIRONMENT_NAME: 'rg-DataHub-Testing-U'
     environment:
       name: rg-DataHub-Testing-U
 
@@ -107,8 +108,8 @@ jobs:
       #Create Wheel Repository Container if needed
       - name: Create Wheel Repository Storage
         run: |
-          az storage account create --resource-group ${{ matrix.environment.long }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
-          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage account create --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
         if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
 
@@ -134,7 +135,7 @@ jobs:
       - name: Upload Wheel
         run: |
           version="${{ steps.next-wheel-file-version.outputs.next_version }}"
-          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "geh_stream-${version}-py3-none-any.whl" \
           --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
@@ -142,7 +143,7 @@ jobs:
 
       - name: Update Wheel Version file
         run: |
-          account_key=$(az storage account keys list --resource-group ${{ matrix.environment.long }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ env.WHEEL_ENVIRONMENT_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
           --file "./source/streaming/VERSION" \
