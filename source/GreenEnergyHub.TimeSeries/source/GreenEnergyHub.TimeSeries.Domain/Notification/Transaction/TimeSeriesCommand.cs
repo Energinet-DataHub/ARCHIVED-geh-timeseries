@@ -28,5 +28,7 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification.Transaction
         }
 
         public Document Document { get; set; }
+
+        public Series Series { get; set; }
     }
 }
