@@ -35,10 +35,10 @@ jobs:
             ".github/workflows/streaming-job.yml"
           ]'
 
+  # Execute static checks (flake8) and unit tests.
   streaming_job_ci:
     runs-on: ubuntu-latest
     name: flake8 and unit test
-    description: Execute static checks (flake8) and unit tests.
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     
@@ -62,11 +62,11 @@ jobs:
           name: build-databricks_artifacts
           path: ./source/streaming/htmlcov/
 
+  # description: |
+  #   Creates streaming job wheel file and deploys it.
+  #   This job is a candidate for splitting into the ci and cd jobs.
   wheel_build_publish:
     name: Build and Publish Wheel File
-    description: |
-      Creates streaming job wheel file and deploys it.
-      This job is a candidate for splitting into the ci and cd jobs.
     needs: pre_job
     if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
