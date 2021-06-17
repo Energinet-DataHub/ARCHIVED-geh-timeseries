@@ -58,7 +58,7 @@ jobs:
 
   infra_deploy:
     name: Deploy infrastructure
-    needs: infra_pre_job
+    needs: [infra_pre_job, streaming_pre_job]
     if: ${{ needs.infra_pre_job.outputs.should_skip != 'true' || needs.streaming_pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     environment:
@@ -180,7 +180,7 @@ jobs:
   #   This job is a candidate for splitting into the ci and cd jobs.
   wheel_build_publish:
     name: Build and Publish Wheel File
-    needs: streaming_pre_job
+    needs: infra_deploy
     if: ${{ needs.streaming_pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     env:
