@@ -1,18 +1,5 @@
-﻿Microsoft Visual Studio Solution File, Format Version 12.00
-# Copyright 2020 Energinet DataHub A/S
-#
-# Licensed under the Apache License, Version 2.0 (the "License2");
-# you may not use this file except in compliance with the License.
-# You may obtain a copy of the License at
-#
-#     http://www.apache.org/licenses/LICENSE-2.0
-#
-# Unless required by applicable law or agreed to in writing, software
-# distributed under the License is distributed on an "AS IS" BASIS,
-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-# See the License for the specific language governing permissions and
-# limitations under the License.
-#
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31112.23
 MinimumVisualStudioVersion = 10.0.40219.1
@@ -22,27 +9,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EFB093C9
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GreenEnergyHub", "GreenEnergyHub", "{8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Domain", "source\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj", "{969352DC-C04D-4FE8-A555-D3D34527CBC7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.Domain", "source\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj", "{969352DC-C04D-4FE8-A555-D3D34527CBC7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Application", "source\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj", "{CBC2A198-CC21-4D01-849D-0C41E8378A25}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.Application", "source\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj", "{CBC2A198-CC21-4D01-849D-0C41E8378A25}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Infrastructure", "source\GreenEnergyHub.TimeSeries.Infrastructure\GreenEnergyHub.TimeSeries.Infrastructure.csproj", "{74F32CD3-350D-4647-BF9D-4DB8BC325AD2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.Infrastructure", "source\GreenEnergyHub.TimeSeries.Infrastructure\GreenEnergyHub.TimeSeries.Infrastructure.csproj", "{74F32CD3-350D-4647-BF9D-4DB8BC325AD2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Core", "source\GreenEnergyHub.TimeSeries.Core\GreenEnergyHub.TimeSeries.Core.csproj", "{DCBF701E-D2DA-412E-98D6-AA2A55CE9AD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.Core", "source\GreenEnergyHub.TimeSeries.Core\GreenEnergyHub.TimeSeries.Core.csproj", "{DCBF701E-D2DA-412E-98D6-AA2A55CE9AD0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Tests", "source\GreenEnergyHub.TimeSeries.Tests\GreenEnergyHub.TimeSeries.Tests.csproj", "{BB933926-FE46-44A3-BD3A-A4C2CFBC6FA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.Tests", "source\GreenEnergyHub.TimeSeries.Tests\GreenEnergyHub.TimeSeries.Tests.csproj", "{BB933926-FE46-44A3-BD3A-A4C2CFBC6FA2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.TestCore", "source\GreenEnergyHub.TimeSeries.TestCore\GreenEnergyHub.TimeSeries.TestCore.csproj", "{2780409A-4228-4856-ABB4-266CFD1811A4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.TestCore", "source\GreenEnergyHub.TimeSeries.TestCore\GreenEnergyHub.TimeSeries.TestCore.csproj", "{2780409A-4228-4856-ABB4-266CFD1811A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.Iso8601", "..\iso8601\GreenEnergyHub.Iso8601\GreenEnergyHub.Iso8601.csproj", "{C13CD7B9-F3E4-4042-B78D-763A113EEE0D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.Iso8601", "..\iso8601\GreenEnergyHub.Iso8601\GreenEnergyHub.Iso8601.csproj", "{C13CD7B9-F3E4-4042-B78D-763A113EEE0D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.Json", "..\Shared\GreenEnergyHub\source\GreenEnergyHub.Json\GreenEnergyHub.Json.csproj", "{BEE26AFC-4E8A-4005-B84C-487D4487423F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.Json", "..\Shared\GreenEnergyHub\source\GreenEnergyHub.Json\GreenEnergyHub.Json.csproj", "{BEE26AFC-4E8A-4005-B84C-487D4487423F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TestHelpers", "..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj", "{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TestHelpers", "..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj", "{0C63BAFE-D498-4B77-9EFE-CA885FD7587C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.MessageReceiver", "source\GreenEnergyHub.TimeSeries.MessageReceiver\GreenEnergyHub.TimeSeries.MessageReceiver.csproj", "{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.TimeSeries.MessageReceiver", "source\GreenEnergyHub.TimeSeries.MessageReceiver\GreenEnergyHub.TimeSeries.MessageReceiver.csproj", "{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.Messaging", "..\messaging\source\GreenEnergyHub.Messaging\GreenEnergyHub.Messaging.csproj", "{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.Messaging", "..\messaging\source\GreenEnergyHub.Messaging\GreenEnergyHub.Messaging.csproj", "{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GreenEnergyHub.Messaging.Integration.ServiceCollection", "..\messaging\source\GreenEnergyHub.Messaging.Integration.ServiceCollection\GreenEnergyHub.Messaging.Integration.ServiceCollection.csproj", "{E3B9BE32-B0C6-4210-AA59-769CB5A71278}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -94,18 +83,23 @@ Global
 		{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E3B9BE32-B0C6-4210-AA59-769CB5A71278}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3B9BE32-B0C6-4210-AA59-769CB5A71278}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3B9BE32-B0C6-4210-AA59-769CB5A71278}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3B9BE32-B0C6-4210-AA59-769CB5A71278}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{BB933926-FE46-44A3-BD3A-A4C2CFBC6FA2} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
+		{2780409A-4228-4856-ABB4-266CFD1811A4} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
 		{C13CD7B9-F3E4-4042-B78D-763A113EEE0D} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
 		{BEE26AFC-4E8A-4005-B84C-487D4487423F} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
 		{0C63BAFE-D498-4B77-9EFE-CA885FD7587C} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
-		{BB933926-FE46-44A3-BD3A-A4C2CFBC6FA2} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
-		{2780409A-4228-4856-ABB4-266CFD1811A4} = {EFB093C9-3F44-4B27-B377-A6CD9B25AFEC}
 		{5B29036A-F1C7-43FE-B8AA-C1A334B9E5CF} = {0F6D6178-E28A-445D-99A8-7CABDC3EC55A}
 		{FD55D534-BEA4-4E95-A5C6-D2CD92EEB66A} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
+		{E3B9BE32-B0C6-4210-AA59-769CB5A71278} = {8E1E68E2-7F6B-4FA3-8B97-80CA59BDB57C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CC9992B-81F9-4F47-8F02-D9D126AC403B}

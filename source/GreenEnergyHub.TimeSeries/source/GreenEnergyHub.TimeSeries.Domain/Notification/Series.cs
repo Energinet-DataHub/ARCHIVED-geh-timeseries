@@ -43,7 +43,7 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
 
         public MeasureUnit Unit { get; set; }
 
-        public Resolution Resolution { get; set; }
+        public TimeSeriesResolution Resolution { get; set; }
 
         public Instant StartDateTime { get; set; }
 

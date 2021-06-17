@@ -26,6 +26,7 @@ limitations under the License.
 
     <ItemGroup>
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj" />
+      <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Core\GreenEnergyHub.TimeSeries.Core.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
     </ItemGroup>
 
