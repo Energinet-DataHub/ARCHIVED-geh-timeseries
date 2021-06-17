@@ -16,12 +16,30 @@ using NodaTime;
 
 namespace GreenEnergyHub.TimeSeries.Core.DateTime
 {
+    /// <summary>
+    /// Interface for service that provides help with handling time zones in NodaTime
+    /// </summary>
     public interface IZonedDateTimeService
     {
+        /// <summary>
+        /// Retrieve the current zoned date and time
+        /// </summary>
+        /// <returns>The ZonedDateTime that represents the current time</returns>
         ZonedDateTime GetZonedDateTimeNow();
 
+        /// <summary>
+        /// Converts a local date and time to a zoned date and time
+        /// </summary>
+        /// <param name="localDateTime">The local date and time to convert</param>
+        /// <param name="strategy">The strategy used to solve ambiguity</param>
+        /// <returns>ZonedDateTime representing the provided local date and time</returns>
         ZonedDateTime GetZonedDateTime(LocalDateTime localDateTime, ResolutionStrategy strategy);
 
+        /// <summary>
+        /// Converts an instant to a zoned date and time
+        /// </summary>
+        /// <param name="instant">The instant to convert</param>
+        /// <returns>Zoned date and time representing the provided instant</returns>
         ZonedDateTime GetZonedDateTime(Instant instant);
     }
 }
