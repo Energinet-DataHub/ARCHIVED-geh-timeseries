@@ -17,7 +17,7 @@ using GreenEnergyHub.Messaging.Transport;
 namespace GreenEnergyHub.TimeSeries.Domain.Messages
 {
     /// <summary>
-    /// Interface for messages exchanged in the charge domain
+    /// Interface for messages exchanged in the timeseries domain
     /// </summary>
     public interface IMessage : IOutboundMessage, IInboundMessage
     {
