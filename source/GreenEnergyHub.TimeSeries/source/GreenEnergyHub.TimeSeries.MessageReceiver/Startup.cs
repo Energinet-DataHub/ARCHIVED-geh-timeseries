@@ -13,7 +13,9 @@
 // limitations under the License.
 
 using System.Diagnostics.CodeAnalysis;
+using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
 using GreenEnergyHub.TimeSeries.MessageReceiver;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,8 +36,9 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
 
         private static void ConfigureMessaging(IFunctionsHostBuilder builder)
         {
-            // TODO: This line should be replaced by the MessageRegistration once a need for more messaging arise
-            builder.Services.AddScoped<ICorrelationContext, CorrelationContext>();
+            builder.Services
+                .AddMessaging()
+                .AddMessageExtractor<TimeSeriesCommand>();
         }
     }
 }

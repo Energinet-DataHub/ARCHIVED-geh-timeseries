@@ -14,6 +14,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,10 +32,14 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         /// </summary>
         private const string FunctionName = "TimeSeriesHttpTrigger";
         private readonly ICorrelationContext _correlationContext;
+        private readonly MessageExtractor<TimeSeriesCommand> _messageExtractor;
 
-        public TimeSeriesHttpTrigger(ICorrelationContext correlationContext)
+        public TimeSeriesHttpTrigger(
+            ICorrelationContext correlationContext,
+            MessageExtractor<TimeSeriesCommand> messageExtractor)
         {
             _correlationContext = correlationContext;
+            _messageExtractor = messageExtractor;
         }
 
         [FunctionName(FunctionName)]
@@ -49,6 +54,13 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             SetupCorrelationContext(context);
 
             return await Task.FromResult(new OkResult()).ConfigureAwait(false);
+        }
+
+        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(HttpRequest req)
+        {
+            var command = await _messageExtractor.ExtractAsync(req.Body).ConfigureAwait(false);
+
+            return command;
         }
 
         private void SetupCorrelationContext(ExecutionContext context)

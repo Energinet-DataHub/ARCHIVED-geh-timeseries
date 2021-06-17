@@ -14,7 +14,7 @@
 
 namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
-    public enum Resolution
+    public enum TimeSeriesResolution
     {
         Unknown = 0,
         QuarterOfHour = 1,
