@@ -13,11 +13,12 @@
 # limitations under the License.
 
 # The purpose of this workflow is to create an environment
-# in which it is possible to dertermin the state of the streaming job. Included is:
+# in which it is possible to dertermin the state of the changes included in the branch this workflow is executed on.
+# Only the required jobs are run based on changes supplied in branch:
 # 1) Infrastructure building / deploying.
-# 2) Flake8 and unit tests
-# 3) Build and publish wheel
-# 4) Deploy Databricks cluster and create job
+# 2) Flake8 and unit tests.
+# 3) Build and publish wheel.
+# 4) Deploy Databricks cluster and create job.
 
 name: PR Environment - Setup
 
