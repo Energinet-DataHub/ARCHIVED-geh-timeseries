@@ -11,6 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+# The purpose of this workflow is to create an environment
+# in which it is possible to dertermin the state of the streaming job. Included is:
+# 1) Infrastructure building / deploying.
+# 2) Flake8 and unit tests
+# 3) Build and publish wheel
+# 4) Deploy Databricks cluster and create job
+
 name: PR Environment - Setup
 
 on:
@@ -26,6 +34,7 @@ env:
   ENVIRONMENT_SHORT: u
 
 jobs:
+# Helps to determine if no changes are made to infrastructure or this workflow.
   infra_pre_job:
     runs-on: ubuntu-latest
     outputs:
@@ -41,6 +50,7 @@ jobs:
             ".github/workflows/pr-env-setup.yml"
           ]'
 
+  # Helps to determine if no changes are made to streaming code or this workflow.
   streaming_pre_job:
     runs-on: ubuntu-latest
     outputs:
@@ -56,6 +66,7 @@ jobs:
             ".github/workflows/pr-env-setup.yml"
           ]'
 
+  # Infrastructure deployment is only needed if there have been changes to infrastructure, the streaming code, or this workflow.
   infra_deploy:
     name: Deploy infrastructure
     needs: [infra_pre_job, streaming_pre_job]
@@ -149,6 +160,7 @@ jobs:
           check_for_duplicate_msg: true  # OPTIONAL
 
   # Execute static checks (flake8) and unit tests.
+  # Is only run if there has been changes to the streaming code.
   streaming_unittests:
     runs-on: ubuntu-latest
     name: flake8 and unit test
