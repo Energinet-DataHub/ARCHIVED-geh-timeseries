@@ -36,7 +36,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             where TInboundMessage : IInboundMessage
         {
             _services.AddScoped<MessageExtractor<TInboundMessage>>();
-            _services.AddScoped<MessageDeserializer<TInboundMessage>, JsonMessageDeserializer<TInboundMessage>>();
+            _services.AddScoped<JsonMessageDeserializer<TInboundMessage>, JsonMessageDeserializer<TInboundMessage>>();
 
             return this;
         }

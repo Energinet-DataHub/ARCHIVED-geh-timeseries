@@ -26,8 +26,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
         /// </summary>
         public string Id { get; set; }
 
-        public string CorrelationId { get; set; }
-
         /// <summary>
         ///  Point in time set by the TimeSeries domain
         /// </summary>

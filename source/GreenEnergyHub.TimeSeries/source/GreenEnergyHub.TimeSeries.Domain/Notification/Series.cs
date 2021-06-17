@@ -31,9 +31,9 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
         /// </summary>
         public string Id { get; set; }
 
-        public Product Product { get; set; }
-
         public string MeteringPointId { get; set; }
+
+        public Product Product { get; set; }
 
         public MeteringPointType MeteringPointType { get; set; }
 

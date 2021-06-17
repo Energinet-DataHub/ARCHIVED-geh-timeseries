@@ -20,12 +20,12 @@ using GreenEnergyHub.Messaging.Transport;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
 {
-    public class JsonMessageDeserializer<TInboundMessage> : MessageDeserializer<TInboundMessage>
+    public class XmlMessageDeserializer<TInboundMessage> : JsonMessageDeserializer<TInboundMessage>
       where TInboundMessage : IInboundMessage
     {
         private readonly IJsonSerializer _jsonSerializer;
 
-        public JsonMessageDeserializer(IJsonSerializer jsonSerializer)
+        public XmlMessageDeserializer(IJsonSerializer jsonSerializer)
         {
             _jsonSerializer = jsonSerializer;
         }

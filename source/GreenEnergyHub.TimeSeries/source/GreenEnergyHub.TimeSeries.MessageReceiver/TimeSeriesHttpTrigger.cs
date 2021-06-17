@@ -14,6 +14,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
+using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Http;
@@ -32,11 +33,11 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         /// </summary>
         private const string FunctionName = "TimeSeriesHttpTrigger";
         private readonly ICorrelationContext _correlationContext;
-        private readonly MessageExtractor<TimeSeriesCommand> _messageExtractor;
+        private readonly MessageExtractor _messageExtractor;
 
         public TimeSeriesHttpTrigger(
             ICorrelationContext correlationContext,
-            MessageExtractor<TimeSeriesCommand> messageExtractor)
+            MessageExtractor messageExtractor)
         {
             _correlationContext = correlationContext;
             _messageExtractor = messageExtractor;
@@ -45,20 +46,22 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         [FunctionName(FunctionName)]
         public async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            [NotNull] HttpRequest req,
+            [NotNull] byte[] message,
             [NotNull] ExecutionContext context,
             ILogger log)
         {
-            log.LogInformation("Function {FunctionName} started to process a request with a body of size {SizeOfBody}", FunctionName, req.Body.Length);
+            log.LogInformation("Function {FunctionName} started to process a request", FunctionName);
 
             SetupCorrelationContext(context);
 
-            return await Task.FromResult(new OkResult()).ConfigureAwait(false);
+            var command = await GetTimeSeriesCommandAsync(message).ConfigureAwait(false);
+
+            return await Task.FromResult(new OkObjectResult(command)).ConfigureAwait(false);
         }
 
-        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(HttpRequest req)
+        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(byte[] message)
         {
-            var command = await _messageExtractor.ExtractAsync(req.Body).ConfigureAwait(false);
+            var command = (TimeSeriesCommand)await _messageExtractor.ExtractAsync(message).ConfigureAwait(false);
 
             return command;
         }

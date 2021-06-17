@@ -26,7 +26,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
     public class MessageExtractor<TInboundMessage> : MessageExtractor
         where TInboundMessage : IInboundMessage
     {
-        public MessageExtractor([NotNull] MessageDeserializer<TInboundMessage> deserializer)
+        public MessageExtractor([NotNull] JsonMessageDeserializer<TInboundMessage> deserializer)
             : base(deserializer)
         {
         }

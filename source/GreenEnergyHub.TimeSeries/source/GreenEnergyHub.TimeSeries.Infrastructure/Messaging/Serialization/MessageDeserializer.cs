@@ -16,7 +16,7 @@ using GreenEnergyHub.Messaging.Transport;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
 {
-    public abstract class MessageDeserializer<TInboundMessage> : MessageDeserializer
+    public abstract class JsonMessageDeserializer<TInboundMessage> : MessageDeserializer
         where TInboundMessage : IInboundMessage
     {
     }
