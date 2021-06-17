@@ -21,8 +21,8 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
     {
         Unknown = 0,
         ContinuousMeterReading = 1, // This will be received as D06 i ebiX
-        Periodical = 2, // This will be received as E23 in ebiX
+        PeriodicMetering = 2, // This will be received as E23 in ebiX
         HistoricalData = 3, // This will be received as E30 in ebiX
-        PeriodicalFlexMetering = 4, // This will be received as D42 in ebiX
+        PeriodicFlexMetering = 4, // This will be received as D42 in ebiX
     }
 }
