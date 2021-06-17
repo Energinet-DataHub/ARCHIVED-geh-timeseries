@@ -149,10 +149,10 @@ jobs:
           check_for_duplicate_msg: true  # OPTIONAL
 
   # Execute static checks (flake8) and unit tests.
-  streaming_job_ci:
+  streaming_unittests:
     runs-on: ubuntu-latest
     name: flake8 and unit test
-    needs: [streaming_pre_job, infra_deploy]
+    needs: streaming_pre_job
     if: ${{ needs.streaming_pre_job.outputs.should_skip != 'true' }}
     
     steps:
@@ -263,7 +263,7 @@ jobs:
 
   streaming_job_cd:
     name: Deploy databricks cluster and create job
-    needs: [streaming_job_ci, wheel_build_publish]
+    needs: wheel_build_publish
     runs-on: ubuntu-latest
     environment:
       name: rg-DataHub-Testing-U
