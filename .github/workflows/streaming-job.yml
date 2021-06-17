@@ -210,7 +210,7 @@ jobs:
     env:
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
-      RESOURCE_GROUP_NAME: ${{ matrix.environment.short }}
+      RESOURCE_GROUP_NAME: ${{ matrix.environment.long }}
 
     steps:
 
