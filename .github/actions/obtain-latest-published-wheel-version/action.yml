@@ -1,0 +1,21 @@
+name: Obtain Latest Published Wheel Version
+description: Obtain latest published wheel version
+
+inputs:
+  published_wheel_version_file_url:
+    description: The url of the file containing the name of the file containing the latest published wheel version
+
+outputs:
+  version:
+    description: The version of the latest published Python wheel
+    value: ${{ steps.version.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - id: version
+      run: |
+        url=${{ inputs.published_wheel_version_file_url }}
+        version=$(curl $url)
+        echo "::set-output name=version::$version"
+      shell: bash

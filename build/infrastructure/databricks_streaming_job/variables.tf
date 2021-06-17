@@ -11,19 +11,39 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-name: License Check CI
+variable "databricks_id" {
+  type = string
+}
 
-on:
-  pull_request:
-    branches: 
-      - main
-  workflow_dispatch: {}
+variable "environment" {
+  type = string
+}
 
-jobs:
-  check-license-lines:
-    name: Check License Lines
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check License Lines
-      uses: kt3k/license_checker@v1.0.3
+variable "organisation" {
+  type = string
+}
+
+variable "resource_group_name" {
+  type = string
+}
+
+variable "storage_account_name" {
+  type = string
+}
+
+variable "streaming_container_name" {
+  type = string
+  default = "messagedata"
+}
+
+variable "python_main_file" {
+  type = string
+}
+
+variable "wheel_file" {
+  type = string
+}
+
+variable "keyvault_id" {
+  type = string
+}

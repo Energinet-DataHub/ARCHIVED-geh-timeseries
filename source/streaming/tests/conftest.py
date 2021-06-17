@@ -255,18 +255,6 @@ default_obs_time = datetime.strptime("2020-01-01T00:00:00+0000", date_time_forma
 
 
 @pytest.fixture(scope="module")
-def cosmos_write_config():
-    writeConfig = {
-        "Endpoint": "",
-        "Masterkey": "",
-        "Database": "",
-        "Collection": "",
-        "Upsert": "true"
-    }
-    return writeConfig
-
-
-@pytest.fixture(scope="module")
 def valid_atomic_value_schema():
     """
     Valid atomic data point schema to send

@@ -1,0 +1,410 @@
+# Copyright 2020 Energinet DataHub A/S
+#
+# Licensed under the Apache License, Version 2.0 (the "License2");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# The purpose of this workflow is to create an environment
+# in which it is possible to dertermin the state of the changes included in the branch this workflow is executed on.
+# Only the required jobs are run based on changes supplied in branch:
+# 1) Infrastructure building / deploying.
+# 2) Flake8 and unit tests.
+# 3) Build and publish wheel.
+# 4) Deploy Databricks cluster and create job.
+
+name: PR Environment - Setup
+
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+env:
+  ORGANISATION_NAME: endk
+  PROJECT_NAME: 'time${{ github.event.number }}'
+  RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
+  ENVIRONMENT_SHORT: u
+
+jobs:
+# Helps to determine if no changes are made to infrastructure or this workflow.
+  infra_pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - name: Should skip?
+        id: skip_check
+        uses: fkirc/skip-duplicate-actions@v1.4.0
+        with:
+          github_token: ${{ github.token }}
+          paths: '[
+            "build/infrastructure/**",
+            ".github/workflows/pr-env-setup.yml"
+          ]'
+
+  # Helps to determine if no changes are made to streaming code or this workflow.
+  streaming_pre_job:
+    runs-on: ubuntu-latest
+    outputs:
+      should_skip: ${{ steps.skip_check.outputs.should_skip }}
+    steps:
+      - name: Should skip?
+        id: skip_check
+        uses: fkirc/skip-duplicate-actions@v1.4.0
+        with:
+          github_token: ${{ github.token }}
+          paths: '[
+            "source/streaming/**",
+            ".github/workflows/pr-env-setup.yml"
+          ]'
+
+  # Infrastructure deployment is only needed if there have been changes to infrastructure, the streaming code, or this workflow.
+  infra_deploy:
+    name: Deploy infrastructure
+    needs: [infra_pre_job, streaming_pre_job]
+    if: ${{ needs.infra_pre_job.outputs.should_skip != 'true' || needs.streaming_pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    environment:
+      name: rg-DataHub-Testing-U
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Environment Secrets
+        run: |  
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_wrapper: false
+      
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      - name: Azure CLI Install and Login
+        uses: ./.github/actions/azure-cli-install-login
+
+      - name: Setup Authorization to pull TF modules
+        run: |
+          git config --local --remove-section http."https://github.com/"
+          git config --global url."https://foo:${{ secrets.PAT_TOKEN }}@github.com/Energinet-DataHub/geh-terraform-modules".insteadOf "https://github.com/Energinet-DataHub/geh-terraform-modules"
+      
+      - name: Check If Terraform State Storage exists
+        id: state-storage-exists
+        run: |
+          storage_exists=$(az storage account check-name --name 'tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}' | python3 -c "import sys, json; print(not json.load(sys.stdin)['nameAvailable'])")
+          echo "::set-output name=state-storage-exists::${storage_exists}"
+
+      # Create TF State Container if needed
+      - name: Create Terraform State Storage
+        run: |
+          storage_name="tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
+          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name $storage_name --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name $storage_name --query '[0].value' -o tsv)
+          az storage container create --name tfstate --account-name $storage_name --account-key $account_key
+        if: steps.state-storage-exists.outputs.state-storage-exists == 'False'
+
+      # Try not to reference TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
+      # rather create duplicate ENV pipeline vatiable if needed to separate concerns
+      - name: Set TF Vars
+        run: |
+          echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
+          echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_project=${{ env.PROJECT_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_tenant_id=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_spn_object_id=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
+
+      - name: Configure Terraform Backend
+        uses: ./.github/actions/configure-terraform-backend
+        with:
+          backend-file-path: "./build/infrastructure/backend.tf"
+          resource-group-name: "${{ env.RESOURCE_GROUP_NAME }}"
+          storage-account-name: "tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
+
+      - name: Terraform Init
+        working-directory: ./build/infrastructure
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ./build/infrastructure
+        run: terraform plan
+
+      - name: Terraform Apply
+        working-directory: ./build/infrastructure
+        run: terraform apply -no-color -auto-approve
+        continue-on-error: false
+
+      - name: comment PR
+        uses: unsplash/comment-on-pr@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          msg: "Congratulations! Your enviroment was successfully deployed into rg-DataHub-Testing-U (Resources will contain the name ${{ env.PROJECT_NAME }}). It will automatically be destroyed again when the PR is closed."
+          check_for_duplicate_msg: true  # OPTIONAL
+
+  # Execute static checks (flake8) and unit tests.
+  # Is only run if there has been changes to the streaming code.
+  streaming_unittests:
+    runs-on: ubuntu-latest
+    name: flake8 and unit test
+    needs: streaming_pre_job
+    if: ${{ needs.streaming_pre_job.outputs.should_skip != 'true' }}
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/TrueBrain/actions-flake8
+      - name: Static checks
+        uses: TrueBrain/actions-flake8@master
+        with:
+          path: ./source
+          ignore: E501,F401,E402,W503
+
+      - name: Unit tests
+        uses: ./.github/actions/databricks-unit-test
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: build-databricks_artifacts
+          path: ./source/streaming/htmlcov/
+
+  # description: |
+  #   Creates streaming job wheel file and deploys it.
+  #   This job is a candidate for splitting into the ci and cd jobs.
+  wheel_build_publish:
+    name: Build and Publish Wheel File
+    needs: infra_deploy
+    if: ${{ needs.streaming_pre_job.outputs.should_skip != 'true' }}
+    runs-on: ubuntu-latest
+    env:
+      WHEEL_STORAGE_NAME: 'enrgtwheels'
+      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_CONTAINER_NAME: 'wheels'
+    environment:
+      name: rg-DataHub-Testing-U
+
+    steps:
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8.6' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Environment Secrets
+        run: |  
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+
+      - name: Azure CLI Install and Login
+        uses: ./.github/actions/azure-cli-install-login
+      
+      - name: Check If Wheel Repository Storage exists
+        id: wheel-storage-exists
+        run: |
+          storage_exists=$(az storage account check-name --name ${{ env.WHEEL_STORAGE_NAME }} | python3 -c "import sys, json; print(not json.load(sys.stdin)['nameAvailable'])")
+          echo "::set-output name=wheel-storage-exists::${storage_exists}"
+
+      #Create Wheel Repository Container if needed
+      - name: Create Wheel Repository Storage
+        run: |
+          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
+        if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
+
+      # Obtain next wheel file version - step 1 of 2
+      - name: Obtain Wheel Version File
+        id:   wheel-version-file-name
+        uses: ./.github/actions/obtain-published-wheel-version-file-name
+
+      # Obtain next wheel file version - step 2 of 2
+      - name: Obtain Next Wheel Version
+        id:   next-wheel-file-version
+        uses: ./.github/actions/obtain-next-wheel-version
+        with:
+          published_wheel_version_file_url: "${{ env.WHEEL_STORAGE_ADDRESS }}${{ steps.wheel-version-file-name.outputs.filename }}"
+
+      - name: Create Python Wheel for Databricks Jobs
+        working-directory: ./source/streaming
+        run: |
+          echo "${{ steps.next-wheel-file-version.outputs.next_version }}" > VERSION
+          pip install wheel
+          python setup.py sdist bdist_wheel
+
+      - name: Upload Wheel
+        run: |
+          version="${{ steps.next-wheel-file-version.outputs.next_version }}"
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
+          --name "geh_stream-${version}-py3-none-any.whl" \
+          --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
+          --account-key $account_key
+
+      - name: Update Wheel Version file
+        run: |
+          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
+          --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
+          --file "./source/streaming/VERSION" \
+          --account-key $account_key
+
+  streaming_job_cd:
+    name: Deploy databricks cluster and create job
+    needs: wheel_build_publish
+    runs-on: ubuntu-latest
+    environment:
+      name: rg-DataHub-Testing-U
+    env:
+      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set Environment Secrets
+        run: |  
+          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v1.2.1
+        with:
+          terraform_wrapper: false
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.7' # Version range or exact version of a Python version to use, using SemVer's version range syntax
+          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
+
+      - name: Azure CLI Install and Login
+        uses: ./.github/actions/azure-cli-install-login
+
+      - name: Obtain Databricks Workspace ID and Url
+        id: obtain-db-id-url
+        uses: ./.github/actions/obtain-databricks-id-url
+
+      - name: Databricks CLI Install And Connect
+        uses: ./.github/actions/databricks-cli-install-connect
+        with:
+          workspace-url: ${{ steps.obtain-db-id-url.outputs.workspace-url }}
+
+      - name: Obtain Keyvault ID and Name
+        id: obtain-keyvault-id-name
+        uses: ./.github/actions/obtain-keyvault-id-name
+
+      # Download wheel file - step 1 of 4
+      - name: Obtain Wheel Version File Name
+        id:   wheel-version-file-name
+        uses: ./.github/actions/obtain-published-wheel-version-file-name
+        
+      # Download wheel file - step 2 of 4
+      - name: Obtain Wheel Version
+        id:   wheel-version
+        uses: ./.github/actions/obtain-latest-published-wheel-version
+        with:
+          published_wheel_version_file_url: "${{ env.WHEEL_STORAGE_ADDRESS }}${{ steps.wheel-version-file-name.outputs.filename }}"
+
+      # Download wheel file - step 3 of 4
+      - name: Construct Wheel File Name
+        uses: ./.github/actions/construct-wheel-file-name
+        with:
+          wheel_version: ${{ steps.wheel-version.outputs.version }}
+          
+      # Download wheel file - step 4 of 4
+      - uses: suisei-cn/actions-download-file@v1
+        name: Download the Wheel File
+        with:
+          url: "${{ env.WHEEL_STORAGE_ADDRESS }}${{ env.WHEEL_FILE_NAME }}"
+          target: wheels/
+
+      - name: Copy Wheel File to Databricks Workspace
+        uses: ./.github/actions/copy-wheel-file-to-databricks
+
+      - name: Copy Job Definition to Databricks File System (DBFS)
+        id: copy_main_file_todbfs
+        run: |
+          dbfs cp --overwrite ./source/streaming/enrichment_and_validation.py ${{ env.MAIN_PYTHON_FILE }}
+
+      # Try not to reference TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
+      # rather create duplicate ENV pipeline vatiable if needed to separate concerns
+      - name: Set TF Vars
+        run: |
+          echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
+          echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=data${{ env.PROJECT_NAME }}${{ env.ORGANISATION_NAME }}${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
+          echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
+          echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
+          echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV
+
+      - name: Configure Terraform Backend
+        uses: ./.github/actions/configure-terraform-backend
+        with:
+          backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
+          resource-group-name: "${{ env.RESOURCE_GROUP_NAME }}"
+          storage-account-name: "tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
+
+      # Create streaming job
+      - name: Terraform Databricks Init
+        working-directory: ./build/infrastructure/databricks_streaming_job
+        run: terraform init
+
+      - name: Terraform Plan
+        working-directory: ./build/infrastructure/databricks_streaming_job
+        run: terraform plan
+
+      # resource in command must match with resource name in main.tf
+      # after feature: https://github.com/databrickslabs/terraform-provider-databricks/issues/389
+      # is available this should be changed and job should not be recreated on each run - taint to be removed
+      - name: Terraform Databricks Apply
+        id: terraform-apply
+        working-directory: ./build/infrastructure/databricks_streaming_job
+        run: |
+          terraform apply -no-color -auto-approve
+          terraform taint module.streaming_job.databricks_job.streaming_job
+          echo "::set-output name=job-id::$(terraform output databricks_job_id)"
+        continue-on-error: false
+
+      - name: Databricks CLI Run the Job
+        id: run-job
+        uses: ./.github/actions/databricks-cli-run-jobs
+        with:
+          job-ids: ${{ steps.terraform-apply.outputs.job-id }}
+
+      - name: Check Job Status
+        working-directory: ./build
+        run: |
+          pip install configargparse
+          pip install requests
+          python -u job_status_check.py --job-run-ids  ${{ steps.run-job.outputs.job-run-ids }} --retries 2 --databricks-url 'https://${{ steps.obtain-db-id-url.outputs.workspace-url }}' --token ${{ env.DATABRICKS_AAD_TOKEN }}

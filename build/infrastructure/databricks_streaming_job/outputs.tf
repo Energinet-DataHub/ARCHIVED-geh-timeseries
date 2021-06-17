@@ -11,19 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-name: License Check CI
-
-on:
-  pull_request:
-    branches: 
-      - main
-  workflow_dispatch: {}
-
-jobs:
-  check-license-lines:
-    name: Check License Lines
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check License Lines
-      uses: kt3k/license_checker@v1.0.3
+output "databricks_job_id" {
+  value = module.streaming_job.databricks_job_id
+}

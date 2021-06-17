@@ -73,6 +73,42 @@ For use with this domain, the recommended value is `tseries`, but it really is u
 
 Make sure it does not get any longer than 7 characters.
 
+### `tenant_id`
+
+The value to use can be found by running the following in `powershell` and supply login for the user that has access to the resource group:
+
+```PowerShell
+az login
+```
+
+In the result, a field will be called `tenantId`.
+
+The value is what is needed for `tenantId` (hint: it looks like a `GUID`)
+
+### `spn_object_id`
+
+This variable has to be filled with the object id of the user that has access to the resource group you want to deploy to.
+
+So if you are deploying to your own resource group from your own machine, this has to be the object id of the user you use to login to the Azure Portal to see the resource group in question.
+
+If the Object ID is unknown, it can be found with using `powershell`.
+
+First, login to the Azure AD with the the account that has access to the resource group. Run the following command and supply your login information:
+
+```PowerShell
+Connect-AzureAd
+```
+
+Then, ask the Azure AD for your object ID by using the following command:
+
+```PowerShell
+Get-AzureADUser -searchstring "username@yourdomain.com"
+```
+
+The object ID should now be displayed as the first column in the result.
+
+This ID is the value you need for `object_id` (hint: it looks like a `GUID`)
+
 ## Prerequisites
 
 ### Installing `Azure CLI`

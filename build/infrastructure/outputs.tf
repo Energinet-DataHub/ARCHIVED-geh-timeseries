@@ -11,19 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-name: License Check CI
+output "kv_timeseries_name" {
+  description      = "Name of the keyvault"
+  value            = module.kv_timeseries.name
+  sensitive        = true
+}
 
-on:
-  pull_request:
-    branches: 
-      - main
-  workflow_dispatch: {}
-
-jobs:
-  check-license-lines:
-    name: Check License Lines
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check License Lines
-      uses: kt3k/license_checker@v1.0.3
+output "evhar_receivedqueue_receiver_connection_string" {
+  description      = "Connection string of the received queue"
+  value            = module.evhar_receivedqueue_receiver_connection_string.name
+  sensitive        = true
+}
