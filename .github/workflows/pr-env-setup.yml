@@ -193,7 +193,7 @@ jobs:
     
   deploy_function:
     name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
-    needs: build_messagereceiver
+    needs: [build_messagereceiver, infra_deploy]
     runs-on: ubuntu-latest
     strategy:
       matrix:
