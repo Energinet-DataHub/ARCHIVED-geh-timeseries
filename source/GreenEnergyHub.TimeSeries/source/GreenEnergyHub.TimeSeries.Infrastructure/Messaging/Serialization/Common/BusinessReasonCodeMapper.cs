@@ -12,14 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using GreenEnergyHub.TimeSeries.Domain.Common;
+
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    internal class DocumentConverterConstants
+    public static class BusinessReasonCodeMapper
     {
-        internal const string Id = "mRID";
-
-        internal const string Type = "type";
-
-        internal const string BusinessReasonCode = "process.processType";
+        public static BusinessReasonCode MapBusinessReasonCode(string value)
+        {
+            return value switch
+            {
+                "E23" => BusinessReasonCode.PeriodicMetering,
+                "E30" => BusinessReasonCode.HistoricalData,
+                "D06" => BusinessReasonCode.ContinuousMeterReading,
+                "D42" => BusinessReasonCode.PeriodicFlexMetering,
+                _ => BusinessReasonCode.Unknown
+            };
+        }
     }
 }

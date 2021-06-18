@@ -20,9 +20,9 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
     public enum BusinessReasonCode
     {
         Unknown = 0,
-        ContinuousMeterReading = 1, // This will be received as D06 i ebiX
-        PeriodicMetering = 2, // This will be received as E23 in ebiX
-        HistoricalData = 3, // This will be received as E30 in ebiX
-        PeriodicFlexMetering = 4, // This will be received as D42 in ebiX
+        ContinuousMeterReading = 1,
+        PeriodicMetering = 2,
+        HistoricalData = 3,
+        PeriodicFlexMetering = 4,
     }
 }
