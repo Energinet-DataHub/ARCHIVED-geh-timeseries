@@ -16,14 +16,18 @@ using GreenEnergyHub.TimeSeries.Domain.Common;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    public static class IndustryClassificationMapper
+    public static class MarketParticipantRoleMapper
     {
-        public static IndustryClassification Map(string value)
+        public static MarketParticipantRole Map(string value)
         {
             return value switch
             {
-                "23" => IndustryClassification.Electricity,
-                _ => IndustryClassification.Unknown
+                "DDQ" => MarketParticipantRole.EnergySupplier,
+                "DDM" => MarketParticipantRole.GridAccessProvider,
+                "EZ" => MarketParticipantRole.SystemOperator,
+                "MDR" => MarketParticipantRole.MeteredDataResponsible,
+                "STS" => MarketParticipantRole.EnergyAgency,
+                _ => MarketParticipantRole.Unknown
             };
         }
     }

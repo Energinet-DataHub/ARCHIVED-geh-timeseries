@@ -18,7 +18,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
 {
     public static class BusinessReasonCodeMapper
     {
-        public static BusinessReasonCode MapBusinessReasonCode(string value)
+        public static BusinessReasonCode Map(string value)
         {
             return value switch
             {

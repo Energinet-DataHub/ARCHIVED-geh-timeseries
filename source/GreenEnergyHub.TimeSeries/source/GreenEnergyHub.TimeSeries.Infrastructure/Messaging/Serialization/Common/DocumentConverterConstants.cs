@@ -23,5 +23,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
         internal const string BusinessReasonCode = "process.processType";
 
         internal const string IndustryClassification = "businessSector.type";
+
+        internal const string SenderId = "sender_MarketParticipant.mRID";
+
+        internal const string SenderBusinessProcessRole = "sender_MarketParticipant.marketRole.type";
+
+        internal const string RecipientId = "receiver_MarketParticipant.mRID";
+
+        internal const string RecipientBusinessProcessRole = "receiver_MarketParticipant.marketRole.type";
     }
 }

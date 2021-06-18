@@ -18,7 +18,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
 {
     public static class DocumentTypeMapper
     {
-        public static DocumentType MapDocumentType(string value)
+        public static DocumentType Map(string value)
         {
             return value switch
             {

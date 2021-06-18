@@ -47,7 +47,11 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
 
         private static async Task<Document> ParseDocumentAsync(XmlReader reader)
         {
-            var document = new Document();
+            var document = new Document()
+            {
+                Sender = new MarketParticipant(),
+                Recipient = new MarketParticipant(),
+            };
 
             await ParseFieldsAsync(reader, document).ConfigureAwait(false);
 
@@ -79,17 +83,37 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                 else if (reader.Is(DocumentConverterConstants.Type, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    document.Type = DocumentTypeMapper.MapDocumentType(content);
+                    document.Type = DocumentTypeMapper.Map(content);
                 }
                 else if (reader.Is(DocumentConverterConstants.BusinessReasonCode, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    document.BusinessReasonCode = BusinessReasonCodeMapper.MapBusinessReasonCode(content);
+                    document.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
                 }
                 else if (reader.Is(DocumentConverterConstants.IndustryClassification, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    document.IndustryClassification = IndustryClassificationMapper.MapIndustryClassification(content);
+                    document.IndustryClassification = IndustryClassificationMapper.Map(content);
+                }
+                else if (reader.Is(DocumentConverterConstants.SenderId, ns))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    document.Sender.Id = content;
+                }
+                else if (reader.Is(DocumentConverterConstants.SenderBusinessProcessRole, ns))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    document.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                }
+                else if (reader.Is(DocumentConverterConstants.RecipientId, ns))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    document.Recipient.Id = content;
+                }
+                else if (reader.Is(DocumentConverterConstants.RecipientBusinessProcessRole, ns))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    document.Recipient.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
                 }
                 else if (reader.IsElement())
                 {
