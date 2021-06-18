@@ -101,7 +101,7 @@ jobs:
     env:
       WHEEL_STORAGE_NAME: 'enrgtwheels'
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
-      WHEEL_CONTAINER_NAME: 'wheels'
+      WHEEL_CONTAINER_NAME: ${{ env.PROJECT_NAME }}${{ matrix.environment.short }}
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
       name: ${{ matrix.environment.long }}
@@ -179,7 +179,7 @@ jobs:
 
   streaming_job_cd:
     name: Deploy databricks cluster and create job
-    needs: [streaming_job_ci]
+    needs: [streaming_job_ci, wheel_build_publish]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -291,7 +291,7 @@ jobs:
           echo "TF_VAR_environment=${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ matrix.environment.long }}" >> $GITHUB_ENV
-          echo "TF_VAR_storage_account_name=data${{ env.ORGANISATION_NAME }}${{ matrix.environment.short }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=data${{ env.PROJECT_NAME }}${{ env.ORGANISATION_NAME }}${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
           echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV
