@@ -20,13 +20,11 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
     {
         public static DocumentType MapDocumentType(string value)
         {
-            switch (value)
+            return value switch
             {
-                case "E66":
-                    return DocumentType.NotifyValidatedMeasureData;
-                default:
-                    return DocumentType.Unknown;
-            }
+                "E66" => DocumentType.NotifyValidatedMeasureData,
+                _ => DocumentType.Unknown
+            };
         }
     }
 }
