@@ -165,7 +165,8 @@ jobs:
           msg: "Congratulations! Your enviroment was successfully deployed into rg-DataHub-Testing-U (Resources will contain the name ${{ env.PROJECT_NAME }}). It will automatically be destroyed again when the PR is closed."
           check_for_duplicate_msg: true  # OPTIONAL
 
- build_messagereceiver:
+  # Builds the messagereceiver.
+  build_messagereceiver:
     name: Build Message receiver
     runs-on: ubuntu-latest
     steps:
@@ -190,7 +191,7 @@ jobs:
           name: drop
           path: '${{ github.workspace }}/output'
     
-  deploy_function:
+   deploy_function:
     name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
     needs: build_messagereceiver
     runs-on: ubuntu-latest
