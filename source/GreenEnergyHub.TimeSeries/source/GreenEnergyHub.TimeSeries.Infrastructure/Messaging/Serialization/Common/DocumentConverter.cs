@@ -76,6 +76,11 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Id = content;
                 }
+                else if (reader.Is(DocumentConverterConstants.Type, ns))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    document.Type = DocumentTypeMapper.MapDocumentType(content);
+                }
                 else if (reader.IsElement())
                 {
                     // CIM does not have the payload in a separate element,

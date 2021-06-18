@@ -12,12 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using GreenEnergyHub.TimeSeries.Domain.Common;
+
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    internal class DocumentConverterConstants
+    public static class DocumentTypeMapper
     {
-        internal const string Id = "mRID";
-
-        internal const string Type = "type";
+        public static DocumentType MapDocumentType(string value)
+        {
+            switch (value)
+            {
+                case "E66":
+                    return DocumentType.NotifyValidatedMeasureData;
+                default:
+                    return DocumentType.Unknown;
+            }
+        }
     }
 }
