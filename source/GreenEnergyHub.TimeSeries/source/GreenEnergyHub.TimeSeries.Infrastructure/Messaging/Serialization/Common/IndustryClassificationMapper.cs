@@ -12,16 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using GreenEnergyHub.TimeSeries.Domain.Common;
+
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    internal class DocumentConverterConstants
+    public static class IndustryClassificationMapper
     {
-        internal const string Id = "mRID";
-
-        internal const string Type = "type";
-
-        internal const string BusinessReasonCode = "process.processType";
-
-        internal const string IndustryClassification = "businessSector.type";
+        public static IndustryClassification MapIndustryClassification(string value)
+        {
+            return value switch
+            {
+                "23" => IndustryClassification.Electricity,
+                _ => IndustryClassification.Unknown
+            };
+        }
     }
 }
