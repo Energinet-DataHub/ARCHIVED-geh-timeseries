@@ -33,8 +33,6 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
 
         protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Document document);
 
-        protected abstract string GetNameSpace();
-
         private static bool RootElementNotFound(XmlReader reader, string rootElement, string rootNamespace)
         {
             return reader.NodeType != XmlNodeType.Element
@@ -45,6 +43,15 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
         private static bool IfRootElementIsNotAssigned(string rootElement, string rootNamespace)
         {
             return rootElement.Length == 0 && rootNamespace.Length == 0;
+        }
+
+        private static async Task<Document> ParseDocumentAsync(XmlReader reader)
+        {
+            var document = new Document();
+
+            await ParseFieldsAsync(reader, document).ConfigureAwait(false);
+
+            return await Task.FromResult(document).ConfigureAwait(false);
         }
 
         private static async Task ParseFieldsAsync(XmlReader reader, Document document)
@@ -64,28 +71,19 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
                     rootElement = reader.LocalName;
                     ns = reader.NamespaceURI;
                 }
-                else if (reader.Is("mRID", ns))
+                else if (reader.Is(DocumentConverterConstants.Id, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Id = content;
                 }
                 else if (reader.IsElement())
                 {
+                    // CIM does not have the payload in a separate element,
+                    // so we have to assume that the first unknown element
+                    // is the start of the specialized document
                     break;
                 }
             }
-        }
-
-        private async Task<Document> ParseDocumentAsync(XmlReader reader)
-        {
-            var document = new Document();
-
-            var ns = GetNameSpace();
-            // var rootElement = "NotifyValidatedMeasureData_MarketDocument";
-            // reader.ReadToFollowing(rootElement, ns);
-            await ParseFieldsAsync(reader, document).ConfigureAwait(false);
-
-            return await Task.FromResult(document).ConfigureAwait(false);
         }
     }
 }

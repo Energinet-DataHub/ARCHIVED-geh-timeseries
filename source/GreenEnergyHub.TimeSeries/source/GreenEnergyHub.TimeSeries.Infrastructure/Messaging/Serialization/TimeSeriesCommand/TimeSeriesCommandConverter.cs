@@ -21,7 +21,6 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeS
 {
     public class TimeSeriesCommandConverter : DocumentConverter
     {
-        private const string RootNameSpace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
         private readonly ICorrelationContext _correlationContext;
 
         public TimeSeriesCommandConverter(ICorrelationContext correlationContext)
@@ -39,11 +38,6 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeS
             };
 
             return await Task.FromResult(command).ConfigureAwait(false);
-        }
-
-        protected override string GetNameSpace()
-        {
-            return RootNameSpace;
         }
     }
 }
