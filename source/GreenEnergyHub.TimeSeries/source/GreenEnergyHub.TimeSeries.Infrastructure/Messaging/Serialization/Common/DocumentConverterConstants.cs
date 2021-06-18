@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
     internal class DocumentConverterConstants
     {

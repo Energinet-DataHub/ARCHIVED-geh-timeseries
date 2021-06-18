@@ -16,9 +16,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Domain.Common;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
     public abstract class DocumentConverter
     {
@@ -31,7 +30,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
             return await Task.FromResult(message).ConfigureAwait(false);
         }
 
-        protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Document document);
+        protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Domain.Common.Document document);
 
         private static bool RootElementNotFound(XmlReader reader, string rootElement, string rootNamespace)
         {
@@ -45,16 +44,16 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
             return rootElement.Length == 0 && rootNamespace.Length == 0;
         }
 
-        private static async Task<Document> ParseDocumentAsync(XmlReader reader)
+        private static async Task<Domain.Common.Document> ParseDocumentAsync(XmlReader reader)
         {
-            var document = new Document();
+            var document = new Domain.Common.Document();
 
             await ParseFieldsAsync(reader, document).ConfigureAwait(false);
 
             return await Task.FromResult(document).ConfigureAwait(false);
         }
 
-        private static async Task ParseFieldsAsync(XmlReader reader, Document document)
+        private static async Task ParseFieldsAsync(XmlReader reader, Domain.Common.Document document)
         {
             string rootElement = string.Empty;
             string ns = string.Empty;

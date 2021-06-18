@@ -16,6 +16,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
 {
