@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using GreenEnergyHub.Messaging.Transport;
@@ -6,7 +7,7 @@ using GreenEnergyHub.TimeSeries.Domain.Common;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using NodaTime;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
 {
     public class TimeSeriesCommandDeserializer : MessageDeserializer
     {
@@ -19,8 +20,17 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
 
         public override async Task<IInboundMessage> FromBytesAsync(byte[] data, CancellationToken cancellationToken = default)
         {
+            var command = GetTimeSeriesCommandExample();
+
+            await using MemoryStream stream = new MemoryStream(data);
+
+            return await Task.FromResult(command).ConfigureAwait(false);
+        }
+
+        private Domain.Notification.TimeSeriesCommand GetTimeSeriesCommandExample()
+        {
             var correlationId = _correlationContext.CorrelationId;
-            var command = new TimeSeriesCommand(correlationId)
+            var command = new Domain.Notification.TimeSeriesCommand(correlationId)
             {
                 Document = new Document()
                 {
@@ -69,7 +79,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
                 command.Series.Points.Add(point);
             }
 
-            return await Task.FromResult(command).ConfigureAwait(false);
+            return command;
         }
     }
 }
