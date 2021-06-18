@@ -190,7 +190,8 @@ jobs:
         with:
           name: drop
           path: '${{ github.workspace }}/output'
-    
+
+  # Deploys the function
    deploy_function:
     name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
     needs: build_messagereceiver
@@ -199,7 +200,7 @@ jobs:
       matrix:
         environment: [
           {
-            long: rg-rg-DataHub-Testing-U,
+            long: rg-DataHub-Testing-U,
             short: u,
             name: Development
           }
