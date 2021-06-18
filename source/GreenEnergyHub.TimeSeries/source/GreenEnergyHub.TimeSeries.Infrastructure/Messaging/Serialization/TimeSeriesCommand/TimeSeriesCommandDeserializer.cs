@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Common;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
@@ -12,17 +13,23 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeS
     public class TimeSeriesCommandDeserializer : MessageDeserializer
     {
         private readonly ICorrelationContext _correlationContext;
+        private readonly TimeSeriesCommandConverter _timeSeriesCommandConverter;
 
-        public TimeSeriesCommandDeserializer(ICorrelationContext correlationContext)
+        public TimeSeriesCommandDeserializer(
+            ICorrelationContext correlationContext,
+            TimeSeriesCommandConverter timeSeriesCommandConverter)
         {
             _correlationContext = correlationContext;
+            _timeSeriesCommandConverter = timeSeriesCommandConverter;
         }
 
         public override async Task<IInboundMessage> FromBytesAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            var command = GetTimeSeriesCommandExample();
-
             await using MemoryStream stream = new MemoryStream(data);
+
+            using XmlReader reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
+
+            var command = await _timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
 
             return await Task.FromResult(command).ConfigureAwait(false);
         }

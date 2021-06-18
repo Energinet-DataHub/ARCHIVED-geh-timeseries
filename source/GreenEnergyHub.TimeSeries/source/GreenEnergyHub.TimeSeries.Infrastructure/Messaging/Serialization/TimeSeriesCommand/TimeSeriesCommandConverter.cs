@@ -16,14 +16,26 @@ using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.MessageTypes.Common;
 using GreenEnergyHub.Messaging.Transport;
+using GreenEnergyHub.TimeSeries.Domain.Notification;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
 {
     public class TimeSeriesCommandConverter : MarketDocumentConverter
     {
-        protected override Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, MarketDocument document)
+        private readonly ICorrelationContext _correlationContext;
+
+        public TimeSeriesCommandConverter(ICorrelationContext correlationContext)
         {
-            throw new System.NotImplementedException();
+            _correlationContext = correlationContext;
+        }
+
+        protected override async Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, MarketDocument document)
+        {
+            var correlationId = _correlationContext.CorrelationId;
+
+            var command = new Domain.Notification.TimeSeriesCommand(correlationId);
+
+            return await Task.FromResult(command).ConfigureAwait(false);
         }
     }
 }

@@ -36,6 +36,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
 
         private static void ConfigureMessaging(IFunctionsHostBuilder builder)
         {
+            builder.Services.AddScoped<TimeSeriesCommandConverter>();
             builder.Services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             builder.Services.AddMessaging();
         }
