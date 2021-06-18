@@ -101,7 +101,7 @@ jobs:
     env:
       WHEEL_STORAGE_NAME: 'enrgtwheels'
       WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
-      WHEEL_CONTAINER_NAME: ${{ env.PROJECT_NAME }}${{ matrix.environment.short }}
+      WHEEL_CONTAINER_NAME: "${{ env.PROJECT_NAME }}${{ matrix.environment.short }}"
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
       name: ${{ matrix.environment.long }}
