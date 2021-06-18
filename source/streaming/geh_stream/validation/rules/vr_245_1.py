@@ -23,6 +23,6 @@ def validate_vr_245_1(df):
                     ~
                     (
                         (col("md.MarketEvaluationPointType") == MarketEvaluationPointType.consumption.value)
-                        & col("Period_Point_Quantity").isNotNull()
-                        & (col("Period_Point_Quantity") < 0)
+                        & col("series_point_quantity").isNotNull()
+                        & (col("series_point_quantity") < 0)
                     ))

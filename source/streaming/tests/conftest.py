@@ -150,15 +150,16 @@ def time_series_json_factory():
         "SettlementMethod": "x",
         "MarketEvaluationPoint_mRID": "{4}",
         "CorrelationId": "a",
-        "Period": {{
+        "series": {{
             "Resolution": "x",
             "TimeInterval_Start": "{0}",
             "TimeInterval_End": "{0}",
-            "Points": [
+            "points": [
                 {{
-                    "Quantity": "{2}",
-                    "Quality": "{3}",
-                    "Time": "{5}"
+                    "position": 1,
+                    "quantity": "{2}",
+                    "quality": "{3}",
+                    "observationTime": "{5}"
                 }}
             ]
         }}
@@ -272,9 +273,9 @@ def valid_atomic_value_schema():
         StructField("MarketDocument_RecipientMarketParticipant_Type", StringType(), False),
         StructField("MarketDocument_MarketServiceCategory_Kind", StringType(), False),
         StructField("DistributionList", ArrayType(StringType()), False),
-        StructField("Period_Point_Quantity", SchemaFactory.quantity_type, False),
-        StructField("Period_Point_Quality", StringType(), False),
-        StructField("Period_Point_Time", TimestampType(), False),
+        StructField("series_point_quantity", SchemaFactory.quantity_type, False),
+        StructField("series_point_quality", StringType(), False),
+        StructField("series_point_observationTime", TimestampType(), False),
         StructField("MarketDocument_CreatedDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)
     ])

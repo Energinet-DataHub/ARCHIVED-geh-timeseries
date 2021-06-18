@@ -29,8 +29,8 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
     batch_df \
         .filter(col("IsTimeSeriesValid") == lit(True)) \
         .select(col("MarketEvaluationPoint_mRID"),
-                col("Period_Point_Time").alias("Time"),
-                col("Period_Point_Quantity").alias("Quantity"),
+                col("series_point_observationTime").alias("time"),
+                col("series_point_quantity").alias("quantity"),
                 col("CorrelationId"),
                 col("MessageReference"),
                 col("MarketDocument_mRID"),
@@ -41,7 +41,7 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("TimeSeries_mRID"),
                 col("MktActivityRecord_Status"),
                 col("MarketEvaluationPointType"),
-                col("Period_Point_Quality").alias("Quality"),
+                col("series_point_quality").alias("quality"),
                 col("MeterReadingPeriodicity"),
                 col("MeteringMethod"),
                 col("MeteringGridArea_Domain_mRID"),
@@ -56,9 +56,9 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("QuantityMeasurementUnit_Name"),
                 col("Product"),
 
-                year("Period_Point_Time").alias("year"),
-                month("Period_Point_Time").alias("month"),
-                dayofmonth("Period_Point_Time").alias("day")) \
+                year("series_point_observationTime").alias("year"),
+                month("series_point_observationTime").alias("month"),
+                dayofmonth("series_point_observationTime").alias("day")) \
         .repartition("year", "month", "day") \
         .write \
         .partitionBy("year", "month", "day") \

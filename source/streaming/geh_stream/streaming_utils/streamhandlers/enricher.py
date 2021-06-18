@@ -24,8 +24,8 @@ class Enricher:
         joined_data = parsed_data.alias("pd") \
             .join(master_data.alias("md"),
                   (col("pd.MarketEvaluationPoint_mRID") == col("md.MarketEvaluationPoint_mRID"))
-                  & (col("pd.Period_Point_Time") >= col("md.ValidFrom"))
-                  & (col("pd.Period_Point_Time") < col("md.ValidTo")), how="left")
+                  & (col("pd.series_point_observationTime") >= col("md.ValidFrom"))
+                  & (col("pd.series_point_observationTime") < col("md.ValidTo")), how="left")
 
         # Remove column that are only needed in order to be able to do the join
         return joined_data \

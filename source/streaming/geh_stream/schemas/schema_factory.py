@@ -14,7 +14,7 @@
 import copy
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
+from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 from .schema_names import SchemaNames
 
 
@@ -55,15 +55,16 @@ class SchemaFactory:
         .add("SettlementMethod", StringType(), True) \
         .add("MarketEvaluationPoint_mRID", StringType(), False) \
         .add("CorrelationId", StringType(), False) \
-        .add("Period", StructType()
+        .add("series", StructType()
              .add("Resolution", StringType(), False)
              .add("TimeInterval", StructType()
                   .add("Start", TimestampType(), False)
                   .add("End", TimestampType(), False), False)
-             .add("Points", ArrayType(StructType()
-                  .add("Quantity", quantity_type, False)
-                  .add("Quality", StringType(), False)
-                  .add("Time", TimestampType(), False), True), False), False)
+             .add("points", ArrayType(StructType()
+                  .add("position", IntegerType(), False)
+                  .add("quantity", quantity_type, False)
+                  .add("quality", StringType(), False)
+                  .add("observationTime", TimestampType(), False), True), False), False)
 
     # ValidFrom and ValidTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
