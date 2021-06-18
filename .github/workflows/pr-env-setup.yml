@@ -33,6 +33,11 @@ env:
   PROJECT_NAME: 'time${{ github.event.number }}'
   RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
   ENVIRONMENT_SHORT: u
+  CSPROJ_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.MessageReceiver/GreenEnergyHub.TimeSeries.MessageReceiver.csproj'
+  SOLUTION_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/GreenEnergyHub.TimeSeries.sln'
+  DOTNET_VERSION: '3.1'
+  AZURE_FUNCTIONAPP_NAME: 'message-receiver'
+  REPOSITORY_NAME: Energinet-DataHub/geh-timeseries
 
 jobs:
 # Helps to determine if no changes are made to infrastructure or this workflow.
@@ -159,6 +164,75 @@ jobs:
         with:
           msg: "Congratulations! Your enviroment was successfully deployed into rg-DataHub-Testing-U (Resources will contain the name ${{ env.PROJECT_NAME }}). It will automatically be destroyed again when the PR is closed."
           check_for_duplicate_msg: true  # OPTIONAL
+
+
+ build_messagereceiver:
+    name: Build Message receiver
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@master
+        
+      - name: Setup .NET ${{ env.DOTNET_VERSION }} environment
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Build and test project
+        uses: ./.github/actions/dotnet-build-and-test
+        with:
+          CSPROJ_FILE_PATH: ${{ env.CSPROJ_FILE_PATH }}
+          SOLUTION_FILE_PATH: ${{ env.SOLUTION_FILE_PATH }}
+          OUTPUT_PATH: '${{ github.workspace }}/output'
+
+      - name: Publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: drop
+          path: '${{ github.workspace }}/output'
+    
+  deploy_function:
+    name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
+    needs: build_messagereceiver
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        environment: [
+          {
+            long: rg-rg-DataHub-Testing-U,
+            short: u,
+            name: Development
+          }
+        ]
+    environment:
+      name: ${{ matrix.environment.long }}
+    steps:
+      - name: Download artifact 
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+          path: drop
+
+      - name: Setup Azure CLI
+        shell: bash
+        run: |
+          curl -sL https://aka.ms/InstallAzureCLIDeb
+          sudo bash
+          az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_SECRET }} --tenant ${{ secrets.TENANT_ID }}
+          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
+
+      - name: Get function publish profile
+        id: get-publish-profile
+        run: |
+          publish_profile=$(az webapp deployment list-publishing-profiles --name azfun-${{ env.AZURE_FUNCTIONAPP_NAME }}-${{ env.PROJECT_NAME }}-${{ env.ORGANISATION_NAME }}-${{ matrix.environment.short }} --resource-group ${{ matrix.environment.long }} --subscription ${{ secrets.SUBSCRIPTION_ID }} --xml)
+          echo "::set-output name=publish-profile::${publish_profile}"
+
+      - name: Deploy function
+        uses: Azure/functions-action@v1
+        with:
+          app-name: "azfun-${{ env.AZURE_FUNCTIONAPP_NAME }}"
+          package: ${{ github.workspace }}/drop
+          publish-profile: ${{ steps.get-publish-profile.outputs.publish-profile }}
 
   # Execute static checks (flake8) and unit tests.
   # Is only run if there has been changes to the streaming code.
