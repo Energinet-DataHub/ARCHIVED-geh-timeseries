@@ -14,14 +14,14 @@
 
 using System.Threading.Tasks;
 using System.Xml;
-using GreenEnergyHub.Messaging.MessageTypes.Common;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Domain.Notification;
+using GreenEnergyHub.TimeSeries.Domain.Common;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
 {
-    public class TimeSeriesCommandConverter : MarketDocumentConverter
+    public class TimeSeriesCommandConverter : DocumentConverter
     {
+        private const string RootNameSpace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
         private readonly ICorrelationContext _correlationContext;
 
         public TimeSeriesCommandConverter(ICorrelationContext correlationContext)
@@ -29,13 +29,21 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeS
             _correlationContext = correlationContext;
         }
 
-        protected override async Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, MarketDocument document)
+        protected override async Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Document document)
         {
             var correlationId = _correlationContext.CorrelationId;
 
-            var command = new Domain.Notification.TimeSeriesCommand(correlationId);
+            var command = new Domain.Notification.TimeSeriesCommand(correlationId)
+            {
+                Document = document,
+            };
 
             return await Task.FromResult(command).ConfigureAwait(false);
+        }
+
+        protected override string GetNameSpace()
+        {
+            return RootNameSpace;
         }
     }
 }

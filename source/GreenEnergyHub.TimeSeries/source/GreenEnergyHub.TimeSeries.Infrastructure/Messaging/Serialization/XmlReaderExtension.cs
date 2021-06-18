@@ -12,25 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using System.Xml;
-using GreenEnergyHub.Messaging.MessageTypes.Common;
-using GreenEnergyHub.Messaging.Transport;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization
 {
-    public abstract class MarketDocumentConverter
+    public static class XmlReaderExtension
     {
-        public async Task<IInboundMessage> ConvertAsync([NotNull] XmlReader reader)
+        public static bool Is(
+            [NotNull]this XmlReader reader,
+            [NotNull]string localName,
+            [NotNull]string ns,
+            XmlNodeType xmlNodeType = XmlNodeType.Element)
         {
-            var document = new MarketDocument();
-
-            var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
-
-            return await Task.FromResult(message).ConfigureAwait(false);
+            return reader.LocalName.Equals(localName) && reader.NamespaceURI.Equals(ns) &&
+                   reader.NodeType == xmlNodeType;
         }
 
-        protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, MarketDocument document);
+        public static bool IsElement([NotNull] this XmlReader reader)
+        {
+            return reader.NodeType == XmlNodeType.Element;
+        }
     }
 }
