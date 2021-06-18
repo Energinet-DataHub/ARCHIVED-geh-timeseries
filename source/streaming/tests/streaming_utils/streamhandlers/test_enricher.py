@@ -58,7 +58,7 @@ def test_enrich_returns_correct_row_count(enriched_data):
 def test_enrich_joins_matching_parsed_row_with_master_data(enriched_data):
     matched_rows = enriched_data.filter(col("md.ConnectionState").isNotNull())
     assert matched_rows.count() == 1
-    assert matched_rows.first().CorrelationId == "a"
+    assert matched_rows.first().correlationId == "a"
 
 
 # Are there 2 rows left with null master data fields (for the rows that don't fit the join conditions)

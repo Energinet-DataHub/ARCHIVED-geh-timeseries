@@ -36,15 +36,15 @@ class SchemaFactory:
     message_body_schema: StructType = StructType() \
         .add("mRID", StringType(), False) \
         .add("MessageReference", StringType(), False) \
-        .add("MarketDocument", StructType()
-             .add("mRID", StringType(), False)
+        .add("document", StructType()
+             .add("id", StringType(), False)
              .add("Type", StringType(), False)
-             .add("CreatedDateTime", TimestampType(), False)
-             .add("SenderMarketParticipant", StructType()
-                  .add("mRID", StringType(), False)
+             .add("createdDateTime", TimestampType(), False)
+             .add("sender", StructType()
+                  .add("id", StringType(), False)
                   .add("Type", StringType(), False), False)
-             .add("RecipientMarketParticipant", StructType()
-                  .add("mRID", StringType(), False)
+             .add("recipient", StructType()
+                  .add("id", StringType(), False)
                   .add("Type", StringType(), True), False)
              .add("ProcessType", StringType(), False)
              .add("MarketServiceCategory_Kind", StringType(), False), False) \
@@ -54,12 +54,11 @@ class SchemaFactory:
         .add("MarketEvaluationPointType", StringType(), False) \
         .add("SettlementMethod", StringType(), True) \
         .add("MarketEvaluationPoint_mRID", StringType(), False) \
-        .add("CorrelationId", StringType(), False) \
+        .add("correlationId", StringType(), False) \
         .add("series", StructType()
-             .add("Resolution", StringType(), False)
-             .add("TimeInterval", StructType()
-                  .add("Start", TimestampType(), False)
-                  .add("End", TimestampType(), False), False)
+             .add("resolution", StringType(), False)
+             .add("startDateTime", TimestampType(), False)
+             .add("endDateTime", TimestampType(), False)
              .add("points", ArrayType(StructType()
                   .add("position", IntegerType(), False)
                   .add("quantity", quantity_type, False)
@@ -103,13 +102,13 @@ class SchemaFactory:
     make_all_nullable(parsed_schema)
 
     parquet_schema: StructType = StructType() \
-        .add("CorrelationId", StringType(), False) \
+        .add("correlationId", StringType(), False) \
         .add("MessageReference", StringType(), False) \
-        .add("MarketDocument_mRID", StringType(), False) \
-        .add("CreatedDateTime", TimestampType(), False) \
-        .add("SenderMarketParticipant_mRID", StringType(), False) \
+        .add("document_id", StringType(), False) \
+        .add("createdDateTime", TimestampType(), False) \
+        .add("sender_id", StringType(), False) \
         .add("ProcessType", StringType(), False) \
-        .add("SenderMarketParticipantMarketRole_Type", StringType(), False) \
+        .add("sender_Type", StringType(), False) \
         .add("MarketServiceCategory_Kind", StringType(), False) \
         .add("TimeSeries_mRID", StringType(), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
@@ -118,9 +117,9 @@ class SchemaFactory:
         .add("MarketEvaluationPointType", StringType(), False) \
         .add("SettlementMethod", StringType(), True) \
         .add("MarketEvaluationPoint_mRID", StringType(), False) \
-        .add("Quantity", quantity_type, True) \
-        .add("Quality", StringType(), True) \
-        .add("Time", TimestampType(), False) \
+        .add("quantity", quantity_type, True) \
+        .add("quality", StringType(), True) \
+        .add("observationTime", TimestampType(), False) \
         .add("MeteringMethod", StringType(), True) \
         .add("MeterReadingPeriodicity", StringType(), True) \
         .add("MeteringGridArea_Domain_mRID", StringType(), False) \

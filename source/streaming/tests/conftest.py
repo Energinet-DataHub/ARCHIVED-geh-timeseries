@@ -126,18 +126,17 @@ def time_series_json_factory():
     {{
         "TimeSeries_mRID": "g",
         "MessageReference": "b",
-        "MarketDocument": {{
-            "mRID": "c",
+        "document": {{
+            "id": "c",
             "Type": "x",
-            "CreatedDateTime": "{0}",
-            "SenderMarketParticipant": {{
-                "mRID": "x",
+            "createdDateTime": "{0}",
+            "requestDate": "x",
+            "sender": {{
+                "id": "x",
                 "Type": "x"
             }},
-            "RecipientMarketParticipant": {{
-                "mRID": {{
-                    "value": "x"
-                }},
+            "recipient": {{
+                "id": "x",
                 "Type": "x"
             }},
             "ProcessType": "e",
@@ -149,11 +148,11 @@ def time_series_json_factory():
         "MarketEvaluationPointType": "{1}",
         "SettlementMethod": "x",
         "MarketEvaluationPoint_mRID": "{4}",
-        "CorrelationId": "a",
+        "correlationId": "a",
         "series": {{
-            "Resolution": "x",
-            "TimeInterval_Start": "{0}",
-            "TimeInterval_End": "{0}",
+            "resolution": "x",
+            "startDateTime": "{0}",
+            "endDateTime": "{0}",
             "points": [
                 {{
                     "position": 1,
@@ -262,21 +261,21 @@ def valid_atomic_value_schema():
     """
     return StructType([
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
+        StructField("correlationId", StringType(), False),
         StructField("MarketEvaluationPoint_mRID", StringType(), False),
         StructField("MeterReadingPeriodicity", StringType(), False),
         StructField("Product", StringType(), False),
         StructField("QuantityMeasurementUnit_Name", StringType(), False),
         StructField("MarketEvaluationPointType", StringType(), False),
         StructField("SettlementMethod", StringType(), False),
-        StructField("MarketDocument_ProcessType", StringType(), False),
-        StructField("MarketDocument_RecipientMarketParticipant_Type", StringType(), False),
-        StructField("MarketDocument_MarketServiceCategory_Kind", StringType(), False),
+        StructField("document_ProcessType", StringType(), False),
+        StructField("document_recipient_Type", StringType(), False),
+        StructField("document_MarketServiceCategory_Kind", StringType(), False),
         StructField("DistributionList", ArrayType(StringType()), False),
         StructField("series_point_quantity", SchemaFactory.quantity_type, False),
         StructField("series_point_quality", StringType(), False),
         StructField("series_point_observationTime", TimestampType(), False),
-        StructField("MarketDocument_CreatedDateTime", TimestampType(), False),
+        StructField("document_createdDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)
     ])
 
@@ -298,11 +297,11 @@ def invalid_time_series_schema():
     return StructType([
         StructField("TimeSeries_mRID", StringType(), False),
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
-        StructField("MarketDocument_SenderMarketParticipant_mRID", StringType(), False),
-        StructField("MarketDocument_SenderMarketParticipant_Type", StringType(), False),
-        StructField("MarketDocument_mRID", StringType(), False),
-        StructField("MarketDocument_ProcessType", StringType(), False),
+        StructField("correlationId", StringType(), False),
+        StructField("document_sender_id", StringType(), False),
+        StructField("document_sender_Type", StringType(), False),
+        StructField("document_mRID", StringType(), False),
+        StructField("document_ProcessType", StringType(), False),
         StructField("VR-245-1-Is-Valid", BooleanType(), False),
         StructField("VR-250-Is-Valid", BooleanType(), False),
         StructField("VR-251-Is-Valid", BooleanType(), False),
