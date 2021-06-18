@@ -190,8 +190,8 @@ jobs:
         with:
           name: drop
           path: '${{ github.workspace }}/output'
-
-   deploy_function:
+    
+  deploy_function:
     name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
     needs: build_messagereceiver
     runs-on: ubuntu-latest
