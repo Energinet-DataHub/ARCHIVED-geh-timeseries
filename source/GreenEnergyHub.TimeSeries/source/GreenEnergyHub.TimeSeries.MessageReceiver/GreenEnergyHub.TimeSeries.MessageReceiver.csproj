@@ -16,13 +16,16 @@ limitations under the License.
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <LangVersion>9</LangVersion>
     <AzureFunctionsVersion>v3</AzureFunctionsVersion>
+    <OutputType>Exe</OutputType>
+    <_FunctionsSkipCleanOutput>true</_FunctionsSkipCleanOutput>
+    <RootNamespace>GreenEnergyHub.TimeSeries.MessageReceiver</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-    <PackageReference Include="Microsoft.Azure.WebJobs.Extensions.EventHubs" Version="4.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
-    <PackageReference Include="Microsoft.NET.Sdk.Functions" Version="3.0.12" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.12" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.0.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="host.json">
@@ -38,8 +41,6 @@ limitations under the License.
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj" />
-    <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
     <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Infrastructure\GreenEnergyHub.TimeSeries.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.CodeAnalysis;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
-using GreenEnergyHub.TimeSeries.MessageReceiver;
-using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using NodaTime;
-
-[assembly: FunctionsStartup(typeof(Startup))]
 
 namespace GreenEnergyHub.TimeSeries.MessageReceiver
 {
-    public class Startup : FunctionsStartup
+    public static class Program
     {
-        public override void Configure([NotNull] IFunctionsHostBuilder builder)
+        public static void Main()
         {
-            builder.Services.AddScoped(typeof(IClock), _ => SystemClock.Instance);
+            var host = new HostBuilder()
+                .ConfigureFunctionsWorkerDefaults()
+                .ConfigureServices(ConfigureServices)
+                .Build();
 
-            ConfigureMessaging(builder);
+            host.Run();
         }
 
-        private static void ConfigureMessaging(IFunctionsHostBuilder builder)
+        private static void ConfigureServices(HostBuilderContext hostBuilderContext, IServiceCollection serviceCollection)
         {
-            builder.Services
-                .AddMessaging()
-                .AddMessageExtractor<TimeSeriesCommand>();
+            serviceCollection.AddScoped(typeof(IClock), _ => SystemClock.Instance);
+            serviceCollection.AddLogging();
+            serviceCollection.AddMessaging().AddMessageExtractor<TimeSeriesCommand>();
         }
     }
 }
