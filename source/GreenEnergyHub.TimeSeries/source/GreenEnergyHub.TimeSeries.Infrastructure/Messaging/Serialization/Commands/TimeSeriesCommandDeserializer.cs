@@ -31,13 +31,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
 
             var command = await _timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
 
-            return await Task.FromResult(command).ConfigureAwait(false);
+            return command;
         }
 
-        private Domain.Notification.TimeSeriesCommand GetTimeSeriesCommandExample()
+        private TimeSeriesCommand GetTimeSeriesCommandExample()
         {
             var correlationId = _correlationContext.CorrelationId;
-            var command = new Domain.Notification.TimeSeriesCommand(correlationId)
+            var command = new TimeSeriesCommand(correlationId)
             {
                 Document = new Document()
                 {
