@@ -16,9 +16,10 @@ using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
     public class TimeSeriesCommandConverter : DocumentConverter
     {
@@ -33,7 +34,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeS
         {
             var correlationId = _correlationContext.CorrelationId;
 
-            var command = new Domain.Notification.TimeSeriesCommand(correlationId)
+            var command = new TimeSeriesCommand(correlationId)
             {
                 Document = document,
             };

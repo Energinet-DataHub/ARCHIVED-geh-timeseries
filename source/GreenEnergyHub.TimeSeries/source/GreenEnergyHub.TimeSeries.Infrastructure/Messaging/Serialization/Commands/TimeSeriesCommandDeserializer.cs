@@ -8,7 +8,7 @@ using GreenEnergyHub.TimeSeries.Domain.Common;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using NodaTime;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
     public class TimeSeriesCommandDeserializer : MessageDeserializer
     {

@@ -15,7 +15,7 @@
 using GreenEnergyHub.Json;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration

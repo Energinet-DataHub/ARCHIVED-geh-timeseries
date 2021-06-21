@@ -15,7 +15,7 @@
 using System.Diagnostics.CodeAnalysis;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.TimeSeriesCommand;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using GreenEnergyHub.TimeSeries.MessageReceiver;
 using Microsoft.Azure.Functions.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection;

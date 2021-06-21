@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Common;
+using NodaTime;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
@@ -114,6 +115,10 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Recipient.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                }
+                else if (reader.Is(DocumentConverterConstants.CreatedDateTime, ns))
+                {
+                    document.CreatedDateTime = Instant.FromDateTimeUtc(reader.ReadElementContentAsDateTime());
                 }
                 else if (reader.IsElement())
                 {
