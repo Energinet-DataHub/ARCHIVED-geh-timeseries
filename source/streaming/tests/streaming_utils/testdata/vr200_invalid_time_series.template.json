@@ -2,18 +2,17 @@
   "document": {
     "id": "hId2020-12-01T13:16:29.330Z",
     "requestDate": "2020-12-15T13:15:11.8349163Z",
-    "Type": "E66",
     "createdDateTime": "2020-12-01T13:16:29.33Z",
     "sender": {
       "id": "8100000000030",
-      "Type": "MDR"
+      "businessProcessRole": 4
     },
     "recipient": {
       "id": "5790001330552",
-      "Type": null
+      "businessProcessRole": 3
     },
-    "ProcessType": "D42",
-    "MarketServiceCategory_Kind": "23"
+    "industryClassification": 1,
+    "businessReasonCode": 4
   },
   "MktActivityRecord_Status": "9",
   "series": {

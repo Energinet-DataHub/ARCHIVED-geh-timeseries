@@ -36,16 +36,15 @@ class SchemaFactory:
     message_body_schema: StructType = StructType() \
         .add("document", StructType()
              .add("id", StringType(), False)
-             .add("Type", StringType(), False)
              .add("createdDateTime", TimestampType(), False)
              .add("sender", StructType()
                   .add("id", StringType(), False)
-                  .add("Type", StringType(), False), False)
+                  .add("businessProcessRole", StringType(), False), False)
              .add("recipient", StructType()
                   .add("id", StringType(), False)
-                  .add("Type", StringType(), True), False)
-             .add("ProcessType", StringType(), False)
-             .add("MarketServiceCategory_Kind", StringType(), False), False) \
+                  .add("businessProcessRole", StringType(), True), False)
+             .add("businessReasonCode", StringType(), False)
+             .add("industryClassification", StringType(), False), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
         .add("correlationId", StringType(), False) \
         .add("series", StructType()
@@ -105,9 +104,9 @@ class SchemaFactory:
         .add("document_id", StringType(), False) \
         .add("createdDateTime", TimestampType(), False) \
         .add("sender_id", StringType(), False) \
-        .add("ProcessType", StringType(), False) \
-        .add("sender_Type", StringType(), False) \
-        .add("MarketServiceCategory_Kind", StringType(), False) \
+        .add("businessReasonCode", StringType(), False) \
+        .add("sender_businessProcessRole", StringType(), False) \
+        .add("industryClassification", StringType(), False) \
         .add("series_id", StringType(), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
         .add("product", StringType(), False) \

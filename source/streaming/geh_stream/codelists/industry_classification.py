@@ -11,12 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .business_process_role import BusinessProcessRole
-from .business_reason_code import BusinessReasonCode
-from .connection_state import ConnectionState
-from .industry_classification import IndustryClassification
-from .measure_unit import MeasureUnit
-from .metering_point_type import MeteringPointType
-from .quality import Quality
-from .resolution_duration import ResolutionDuration
-from .settlement_method import SettlementMethod
+from enum import Enum
+
+
+class IndustryClassification(Enum):
+    unknown = 0
+    electricity = 1

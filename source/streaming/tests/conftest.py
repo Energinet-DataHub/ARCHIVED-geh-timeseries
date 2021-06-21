@@ -126,19 +126,18 @@ def time_series_json_factory():
     {{
         "document": {{
             "id": "c",
-            "Type": "x",
             "createdDateTime": "{0}",
             "requestDate": "x",
             "sender": {{
                 "id": "x",
-                "Type": "x"
+                "type": "x"
             }},
             "recipient": {{
                 "id": "x",
-                "Type": "x"
+                "type": "x"
             }},
-            "ProcessType": "e",
-            "MarketServiceCategory_Kind": "x"
+            "businessReasonCode": "e",
+            "industryClassification": "x"
         }},
         "MktActivityRecord_Status": "h",
         "correlationId": "a",
@@ -267,9 +266,9 @@ def valid_atomic_value_schema():
         StructField("series_unit", StringType(), False),
         StructField("series_meteringPointType", StringType(), False),
         StructField("series_settlementMethod", StringType(), False),
-        StructField("document_ProcessType", StringType(), False),
-        StructField("document_recipient_Type", StringType(), False),
-        StructField("document_MarketServiceCategory_Kind", StringType(), False),
+        StructField("document_businessReasonCode", StringType(), False),
+        StructField("document_recipient_businessProcessRole", StringType(), False),
+        StructField("document_industryClassification", StringType(), False),
         StructField("DistributionList", ArrayType(StringType()), False),
         StructField("series_point_quantity", SchemaFactory.quantity_type, False),
         StructField("series_point_quality", StringType(), False),
@@ -298,9 +297,9 @@ def invalid_time_series_schema():
         StructField("IsTimeSeriesValid", BooleanType(), False),
         StructField("correlationId", StringType(), False),
         StructField("document_sender_id", StringType(), False),
-        StructField("document_sender_Type", StringType(), False),
+        StructField("document_sender_businessProcessRole", StringType(), False),
         StructField("document_id", StringType(), False),
-        StructField("document_ProcessType", StringType(), False),
+        StructField("document_businessReasonCode", StringType(), False),
         StructField("VR-245-1-Is-Valid", BooleanType(), False),
         StructField("VR-250-Is-Valid", BooleanType(), False),
         StructField("VR-251-Is-Valid", BooleanType(), False),

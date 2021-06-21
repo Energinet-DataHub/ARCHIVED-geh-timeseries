@@ -6,14 +6,14 @@
       "createdDateTime": "2021-06-17T11:41:28.8448257Z",
       "sender": {
           "id": "8100000000030",
-          "businessProcessRole": 4 // document/sender/Type
+          "businessProcessRole": 4
       },
       "recipient": {
           "id": "5790001330552",
           "businessProcessRole": 3
       },
-      "industryClassification": 1, // document/MarketServiceCategory_Kind
-      "businessReasonCode": 2 // document/ProcessType
+      "industryClassification": 1,
+      "businessReasonCode": 2
   },
   "series": {
       "id": "b5521829-3a5c-4b52-a2b1-79e600a90b2b",
@@ -174,7 +174,7 @@
       ]
   },
   "transaction": {
-      "mrid": "9c259ed6bcf44512903275eeae43d371"
+      "id": "9c259ed6bcf44512903275eeae43d371"
   },
   "correlationId": "0f6f82c5-90e2-49e5-be7a-8e9062fb3a92"
 }
