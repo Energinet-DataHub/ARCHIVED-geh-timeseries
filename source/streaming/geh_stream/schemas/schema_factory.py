@@ -47,7 +47,6 @@ class SchemaFactory:
              .add("ProcessType", StringType(), False)
              .add("MarketServiceCategory_Kind", StringType(), False), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
-        .add("QuantityMeasurementUnit_Name", StringType(), False) \
         .add("correlationId", StringType(), False) \
         .add("series", StructType()
              .add("id", StringType(), False)
@@ -55,6 +54,7 @@ class SchemaFactory:
              .add("product", StringType(), False)
              .add("meteringPointType", StringType(), False)
              .add("settlementMethod", StringType(), True)
+             .add("unit", StringType(), False)
              .add("resolution", StringType(), False)
              .add("startDateTime", TimestampType(), False)
              .add("endDateTime", TimestampType(), False)
@@ -81,7 +81,7 @@ class SchemaFactory:
         .add("ServiceCategory_Kind", StringType(), False) \
         .add("meteringPointType", StringType(), False) \
         .add("settlementMethod", StringType(), False) \
-        .add("QuantityMeasurementUnit_Name", StringType(), False) \
+        .add("unit", StringType(), False) \
         .add("product", StringType(), False) \
         .add("Technology", StringType(), True) \
         .add("OutMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
@@ -111,7 +111,7 @@ class SchemaFactory:
         .add("series_id", StringType(), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
         .add("product", StringType(), False) \
-        .add("QuantityMeasurementUnit_Name", StringType(), False) \
+        .add("unit", StringType(), False) \
         .add("meteringPointType", StringType(), False) \
         .add("settlementMethod", StringType(), True) \
         .add("meteringPointId", StringType(), False) \

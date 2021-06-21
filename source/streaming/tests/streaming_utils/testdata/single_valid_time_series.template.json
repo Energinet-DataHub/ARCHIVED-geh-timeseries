@@ -16,13 +16,13 @@
     "MarketServiceCategory_Kind": "23"
   },
   "MktActivityRecord_Status": "9",
-  "QuantityMeasurementUnit_Name": "KWH",
   "series": {
     "id": "transaction_id_of_valid_message",
     "meteringPointId": "571313180000000005",
     "product": "8716867000030",
     "meteringPointType": "E17",
     "settlementMethod": "D01",
+    "unit": 1,
     "resolution": "PT1H",
     "startDateTime": "2020-11-20T23:00:00Z",
     "endDateTime": "2020-11-21T23:00:00Z",

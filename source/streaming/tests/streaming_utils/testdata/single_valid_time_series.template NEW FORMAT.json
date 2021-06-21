@@ -2,7 +2,7 @@
   "document": {
       "id": "d8e6623d-a7b5-42d5-86e0-3e08a3be538a",
       "requestDate": "2020-12-31T23:00:00Z",
-      "type": 1, // document/Type?
+      "type": 1,
       "createdDateTime": "2021-06-17T11:41:28.8448257Z",
       "sender": {
           "id": "8100000000030",

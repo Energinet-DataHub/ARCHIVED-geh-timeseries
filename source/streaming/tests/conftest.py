@@ -98,7 +98,7 @@ def master_data_factory(spark, master_schema):
             "ServiceCategory_Kind": ["l"],
             "meteringPointType": [metering_point_type],
             "settlementMethod": [settlement_method],
-            "QuantityMeasurementUnit_Name": ["o"],
+            "unit": ["o"],
             "product": ["p"],
             "Technology": [technology],
             "OutMeteringGridArea_Domain_Owner_mRID": [outmeteringgridownerarea_domain_mrid],
@@ -141,7 +141,6 @@ def time_series_json_factory():
             "MarketServiceCategory_Kind": "x"
         }},
         "MktActivityRecord_Status": "h",
-        "QuantityMeasurementUnit_Name": "j",
         "correlationId": "a",
         "series": {{
             "id": "g",
@@ -149,6 +148,7 @@ def time_series_json_factory():
             "product": "i",
             "meteringPointType": "{1}",
             "settlementMethod": "x",
+            "unit": "j",
             "resolution": "x",
             "startDateTime": "{0}",
             "endDateTime": "{0}",
@@ -264,7 +264,7 @@ def valid_atomic_value_schema():
         StructField("series_meteringPointId", StringType(), False),
         StructField("MeterReadingPeriodicity", StringType(), False),
         StructField("series_product", StringType(), False),
-        StructField("QuantityMeasurementUnit_Name", StringType(), False),
+        StructField("series_unit", StringType(), False),
         StructField("series_meteringPointType", StringType(), False),
         StructField("series_settlementMethod", StringType(), False),
         StructField("document_ProcessType", StringType(), False),

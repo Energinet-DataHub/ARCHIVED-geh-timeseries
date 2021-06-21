@@ -38,6 +38,6 @@ class Validator:
                         & col("VR-611-Is-Valid")
                         & col("VR-612-Is-Valid")) \
             .drop(col("pd.series_meteringPointType")) \
-            .drop(col("pd.QuantityMeasurementUnit_Name")) \
+            .drop(col("pd.series_unit")) \
             .drop(col("pd.series_product")) \
             .drop(col("pd.series_settlementMethod"))

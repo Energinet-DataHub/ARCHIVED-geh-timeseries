@@ -14,8 +14,13 @@
 from enum import Enum
 
 
-class SettlementMethod(Enum):
+class MeasureUnit(Enum):
     unknown = 0,
-    profiled = 1 # This will be received as E01 in ebiX
-    non_profiled = 2 # This will be received as E02 in ebiX
-    flex = 3 # This will be received as D01 in ebiX
+    kiloWattHour = 1 # Received as KWH in ebiX
+    megaWattHour = 2 # Received as MWH in ebiX
+    kiloWatt = 3 # Received as KWT in ebiX
+    megaWatt = 4 # Received as MAW in ebiX
+    kiloVarHour = 5 # Received as K3 in ebiX
+    megaVar = 6 # Received as Z03 in ebiX
+    tariff = 7 # Received as Z14 in ebiX
+    tonne = 8 # Received as TNE in ebiX

@@ -124,7 +124,7 @@ def test_enricher_adds_settlement_method(enriched_data):
 
 
 def test_enricher_adds_quantity_measurement_unit_Name(enriched_data):
-    assert has_column(enriched_data, "md.QuantityMeasurementUnit_Name")
+    assert has_column(enriched_data, "md.unit")
 
 
 def test_enricher_adds_product(enriched_data):

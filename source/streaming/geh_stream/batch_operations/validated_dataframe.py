@@ -52,7 +52,7 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("Parent_Domain_mRID"),
                 col("document_MarketServiceCategory_Kind").alias("ServiceCategory_Kind"),
                 col("series_settlementMethod"),
-                col("QuantityMeasurementUnit_Name"),
+                col("unit"),
                 col("series_product"),
 
                 year("series_point_observationTime").alias("year"),
