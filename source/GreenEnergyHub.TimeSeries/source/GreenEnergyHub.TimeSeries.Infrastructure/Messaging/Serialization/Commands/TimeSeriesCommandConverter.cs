@@ -58,6 +58,11 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.Id = content;
                 }
+                else if (reader.Is(TimeSeriesCommandConstants.Product, TimeSeriesCommandConstants.Namespace))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    series.Product = ProductMapper.Map(content);
+                }
             }
 
             return series;

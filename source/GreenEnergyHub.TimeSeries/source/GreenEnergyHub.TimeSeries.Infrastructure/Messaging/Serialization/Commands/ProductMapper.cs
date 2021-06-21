@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using GreenEnergyHub.TimeSeries.Domain.Notification;
+
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    public static class TimeSeriesCommandConstants
+    public static class ProductMapper
     {
-        public const string Namespace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
-
-        public const string Series = "Series";
-
-        public const string Id = "mRID";
-
-        public const string Product = "product";
+        public static Product Map(string value)
+        {
+            return value switch
+            {
+                "8716867000030" => Product.EnergyActive,
+                "8716867000047" => Product.EnergyReactive,
+                "8716867000016" => Product.PowerActive,
+                "8716867000023" => Product.PowerReactive,
+                "5790001330606" => Product.FuelQuantity,
+                "5790001330590" => Product.Tariff,
+                _ => Product.Unknown,
+            };
+        }
     }
 }
