@@ -33,11 +33,6 @@ env:
   PROJECT_NAME: 'time${{ github.event.number }}'
   RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
   ENVIRONMENT_SHORT: u
-  CSPROJ_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.MessageReceiver/GreenEnergyHub.TimeSeries.MessageReceiver.csproj'
-  SOLUTION_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/GreenEnergyHub.TimeSeries.sln'
-  DOTNET_VERSION: '3.1'
-  AZURE_FUNCTIONAPP_NAME: 'message-receiver'
-  REPOSITORY_NAME: Energinet-DataHub/geh-timeseries
 
 jobs:
 # Helps to determine if no changes are made to infrastructure or this workflow.
