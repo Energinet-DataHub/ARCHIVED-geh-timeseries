@@ -14,12 +14,12 @@
 from enum import Enum
 
 
-class MarketEvaluationPointType(Enum):
-    ve_production = "D01"
-    analysis = "D02"
-    surplus_production_group = "D04"
-    own_production = "D09"
-    reactive_energy = "D20"
-    consumption = "E17"
-    production = "E18"
-    exchange = "E20"
+class MeteringPointType(Enum):
+    consumption = 1 # E17 in ebIX
+    production = 2 # E18 in ebIX
+    exchange = 3 # E20 in ebIX
+    ve_production = 4 # D01 in ebIX
+    analysis = 5 # D02 in ebIX
+    surplus_production_group = 6 # D04 in ebIX
+    own_production = 11 # D09 in ebIX
+    exchange_reactive_energy = 20 # D20 in ebIX

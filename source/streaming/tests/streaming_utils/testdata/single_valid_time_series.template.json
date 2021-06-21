@@ -20,11 +20,10 @@
   "MktActivityRecord_Status": "9",
   "Product": "8716867000030",
   "QuantityMeasurementUnit_Name": "KWH",
-  "MarketEvaluationPointType": "E17",
   "SettlementMethod": "D01",
-  "MarketEvaluationPoint_mRID": "571313180000000005",
-  "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087",
+  "meteringPointId": "571313180000000005",
   "series": {
+    "meteringPointType": "E17",
     "resolution": "PT1H",
     "startDateTime": "2020-11-20T23:00:00Z",
     "endDateTime": "2020-11-21T23:00:00Z",
@@ -38,6 +37,7 @@
     ]
   },
   "transaction": {
-    "mRID": "fc13ba2cf048432a951f260ecafb60d4"
-  }
+    "id": "fc13ba2cf048432a951f260ecafb60d4"
+  },
+  "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087"
 }

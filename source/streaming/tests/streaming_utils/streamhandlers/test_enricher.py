@@ -38,14 +38,14 @@ timestamp_far_future = pd.Timestamp(time_far_future, unit='s')
 @pytest.fixture(scope="class")
 def enriched_data(parsed_data_factory, master_data_factory):
     parsed_data = parsed_data_factory([
-        dict(market_evaluation_point_mrid="1", quantity=1.0, observation_time=timestamp_now),
+        dict(metering_point_id="1", quantity=1.0, observation_time=timestamp_now),
         # Not matched because it's outside the master data valid period
-        dict(market_evaluation_point_mrid="1", quantity=2.0, observation_time=timestamp_far_future),
+        dict(metering_point_id="1", quantity=2.0, observation_time=timestamp_far_future),
         # Not matched because no master data exists for this market evalution point
-        dict(market_evaluation_point_mrid="2", quantity=3.0, observation_time=timestamp_now)
+        dict(metering_point_id="2", quantity=3.0, observation_time=timestamp_now)
     ])
     denormalized_parsed_data = denormalize_parsed_data(parsed_data)
-    master_data = master_data_factory(dict(market_evaluation_point_mrid="1"))
+    master_data = master_data_factory(dict(metering_point_id="1"))
     return Enricher.enrich(denormalized_parsed_data, master_data)
 
 
@@ -115,8 +115,8 @@ def test_enricher_adds_service_category_kind(enriched_data):
     assert has_column(enriched_data, "md.ServiceCategory_Kind")
 
 
-def test_enricher_adds_market_evaluation_point_type(enriched_data):
-    assert has_column(enriched_data, "md.MarketEvaluationPointType")
+def test_enricher_adds_metering_point_type(enriched_data):
+    assert has_column(enriched_data, "md.meteringPointType")
 
 
 def test_enricher_adds_settlement_method(enriched_data):

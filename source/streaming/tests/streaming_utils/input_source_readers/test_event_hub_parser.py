@@ -75,10 +75,10 @@ def parsed_data(event_hub_message_df, json_body_message_schema):
 
 # Check that the nested json is parsed correctly
 def test_parse_event_hub_message_returns_correct_nested_columns(parsed_data_factory):
-    market_evaluation_point_mrid = "mrid123"
-    parsed_data = parsed_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid))
+    metering_point_id = "mrid123"
+    parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id))
     print(parsed_data.first())
-    assert parsed_data.first().MarketEvaluationPoint_mRID == market_evaluation_point_mrid
+    assert parsed_data.first().meteringPointId == metering_point_id
 
 
 # Check that resulting DataFrame has expected schema

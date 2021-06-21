@@ -35,7 +35,7 @@ Test example:
 
 ```python
 def test_valid_from_is_inclusive(enriched_data_factory):
-    enriched_data = enriched_data_factory(market_evaluation_point_mrid="1", observation_time=valid_from1)
+    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
     assert enriched_data.first().Technology == "1"
 ```
 

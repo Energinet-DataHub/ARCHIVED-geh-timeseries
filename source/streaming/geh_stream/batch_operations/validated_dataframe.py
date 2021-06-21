@@ -28,7 +28,7 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
     timer = watch.start_sub_timer(store_points_of_valid_time_series.__name__)
     batch_df \
         .filter(col("IsTimeSeriesValid") == lit(True)) \
-        .select(col("MarketEvaluationPoint_mRID"),
+        .select(col("meteringPointId"),
                 col("series_point_observationTime").alias("time"),
                 col("series_point_quantity").alias("quantity"),
                 col("correlationId"),
@@ -40,7 +40,7 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("document_sender_Type").alias("sender_Type"),
                 col("TimeSeries_mRID"),
                 col("MktActivityRecord_Status"),
-                col("MarketEvaluationPointType"),
+                col("meteringPointType"),
                 col("series_point_quality").alias("quality"),
                 col("MeterReadingPeriodicity"),
                 col("MeteringMethod"),

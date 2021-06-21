@@ -51,11 +51,11 @@ class SchemaFactory:
         .add("MktActivityRecord_Status", StringType(), False) \
         .add("Product", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
-        .add("MarketEvaluationPointType", StringType(), False) \
         .add("SettlementMethod", StringType(), True) \
-        .add("MarketEvaluationPoint_mRID", StringType(), False) \
+        .add("meteringPointId", StringType(), False) \
         .add("correlationId", StringType(), False) \
         .add("series", StructType()
+             .add("meteringPointType", StringType(), False)
              .add("resolution", StringType(), False)
              .add("startDateTime", TimestampType(), False)
              .add("endDateTime", TimestampType(), False)
@@ -67,7 +67,7 @@ class SchemaFactory:
 
     # ValidFrom and ValidTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
-        .add("MarketEvaluationPoint_mRID", StringType(), False) \
+        .add("meteringPointId", StringType(), False) \
         .add("ValidFrom", TimestampType(), False) \
         .add("ValidTo", TimestampType(), True) \
         .add("MeterReadingPeriodicity", StringType(), False) \
@@ -80,7 +80,7 @@ class SchemaFactory:
         .add("OutMeteringGridArea_Domain_mRID", StringType(), False) \
         .add("Parent_Domain_mRID", StringType(), False) \
         .add("ServiceCategory_Kind", StringType(), False) \
-        .add("MarketEvaluationPointType", StringType(), False) \
+        .add("meteringPointType", StringType(), False) \
         .add("SettlementMethod", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
         .add("Product", StringType(), False) \
@@ -114,9 +114,9 @@ class SchemaFactory:
         .add("MktActivityRecord_Status", StringType(), False) \
         .add("Product", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
-        .add("MarketEvaluationPointType", StringType(), False) \
+        .add("meteringPointType", StringType(), False) \
         .add("SettlementMethod", StringType(), True) \
-        .add("MarketEvaluationPoint_mRID", StringType(), False) \
+        .add("meteringPointId", StringType(), False) \
         .add("quantity", quantity_type, True) \
         .add("quality", StringType(), True) \
         .add("observationTime", TimestampType(), False) \

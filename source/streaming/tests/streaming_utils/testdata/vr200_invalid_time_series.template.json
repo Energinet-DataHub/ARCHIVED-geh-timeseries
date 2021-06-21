@@ -20,9 +20,9 @@
   "MktActivityRecord_Status": "9",
   "Product": "8716867000030",
   "QuantityMeasurementUnit_Name": "KWH",
-  "MarketEvaluationPointType": "E17",
+  "meteringPointType": "E17",
   "SettlementMethod": "D01",
-  "MarketEvaluationPoint_mRID": "non-existing mRID 123498hhkjwer8",
+  "meteringPointId": "non-existing mRID 123498hhkjwer8",
   "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087",
   "series": {
     "resolution": "PT1H",

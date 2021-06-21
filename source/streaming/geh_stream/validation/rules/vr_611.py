@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql.functions import col
-from geh_stream.codelists import SettlementMethod, MarketEvaluationPointType
+from geh_stream.codelists import SettlementMethod, MeteringPointType
 
 
 # VR.611
@@ -31,7 +31,7 @@ def validate_vr_611(df):
                     (
                         # Expression for the exact situation where the violation is determined to have occurred
                         col("pd.series_point_quantity").isNotNull()
-                        & (col("md.MarketEvaluationPointType") == MarketEvaluationPointType.consumption.value)
+                        & (col("md.meteringPointType") == MeteringPointType.consumption.value)
                         & (col("md.SettlementMethod") == SettlementMethod.non_profiled.value)
                         & (col("pd.series_point_quantity") >= consumptionLimit)
                     ))

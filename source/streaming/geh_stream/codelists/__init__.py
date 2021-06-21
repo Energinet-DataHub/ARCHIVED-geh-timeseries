@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .market_evaluation_point_type import MarketEvaluationPointType
+from .metering_point_type import MeteringPointType
 from .quality import Quality
 from .settlement_method import SettlementMethod
 from .resolution_duration import ResolutionDuration

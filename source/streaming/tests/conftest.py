@@ -28,7 +28,7 @@ import time
 import uuid
 
 
-from geh_stream.codelists import MarketEvaluationPointType, Quality
+from geh_stream.codelists import MeteringPointType, Quality
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.dataframelib import flatten_df
@@ -70,10 +70,10 @@ def master_schema():
 @pytest.fixture(scope="session")
 def master_data_factory(spark, master_schema):
 
-    def __create_pandas(market_evaluation_point_mrid="mepm",
+    def __create_pandas(metering_point_id="mepm",
                         valid_from=timestamp_past,
                         valid_to=timestamp_future,
-                        market_evaluation_point_type="mept",
+                        metering_point_type="mept",
                         marketparticipant_mrid="mm",
                         meteringgridarea_domain_mrid="mdm",
                         inmeteringgridarea_domain_mrid="idm",
@@ -83,7 +83,7 @@ def master_data_factory(spark, master_schema):
                         settlement_method="sm",
                         technology="tech"):
         return pd.DataFrame({
-            'MarketEvaluationPoint_mRID': [market_evaluation_point_mrid],
+            'meteringPointId': [metering_point_id],
             "ValidFrom": [valid_from],
             "ValidTo": [valid_to],
             "MeterReadingPeriodicity": ["a"],
@@ -96,7 +96,7 @@ def master_data_factory(spark, master_schema):
             "OutMeteringGridArea_Domain_mRID": [outmeteringgridarea_domain_mrid],
             "Parent_Domain_mRID": ["j"],
             "ServiceCategory_Kind": ["l"],
-            "MarketEvaluationPointType": [market_evaluation_point_type],
+            "meteringPointType": [metering_point_type],
             "SettlementMethod": [settlement_method],
             "QuantityMeasurementUnit_Name": ["o"],
             "Product": ["p"],
@@ -119,7 +119,7 @@ def master_data_factory(spark, master_schema):
 
 @pytest.fixture(scope="session")
 def time_series_json_factory():
-    def factory(market_evaluation_point_mrid="mepm",
+    def factory(metering_point_id="mepm",
                 quantity=1.0,
                 observation_time=timestamp_now):
         json_str = """
@@ -145,9 +145,9 @@ def time_series_json_factory():
         "MktActivityRecord_Status": "h",
         "Product": "i",
         "QuantityMeasurementUnit_Name": "j",
-        "MarketEvaluationPointType": "{1}",
+        "meteringPointType": "{1}",
         "SettlementMethod": "x",
-        "MarketEvaluationPoint_mRID": "{4}",
+        "meteringPointId": "{4}",
         "correlationId": "a",
         "series": {{
             "resolution": "x",
@@ -164,10 +164,10 @@ def time_series_json_factory():
         }}
     }}
     """.format(timestamp_now.isoformat() + "Z",
-               MarketEvaluationPointType.consumption.value,
+               MeteringPointType.consumption.value,
                quantity,
                Quality.as_read.value,
-               market_evaluation_point_mrid,
+               metering_point_id,
                observation_time)
         return json_str
 
@@ -204,9 +204,9 @@ def parsed_data_factory(spark, parsed_schema, time_series_json_factory):
 
 @pytest.fixture(scope="session")
 def enriched_data_factory(parsed_data_factory, master_data_factory):
-    def creator(market_evaluation_point_mrid="mepm",
+    def creator(metering_point_id="mepm",
                 quantity=1.0,
-                market_evaluation_point_type="m",
+                metering_point_type="m",
                 settlement_method="n",
                 technology="tech",
                 meteringgridarea_domain_mrid="101",
@@ -216,17 +216,17 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
                 outmeteringgridarea_domain_mrid="4",
                 outmeteringgridownerarea_domain_mrid="5",
                 do_fail_enrichment=False):
-        parsed_data = parsed_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid, quantity=quantity))
+        parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id, quantity=quantity))
         denormalized_parsed_data = denormalize_parsed_data(parsed_data)
 
         # Should join find a matching master data record or not?
         # If so use a non matching mRID for the master data record.
         if do_fail_enrichment:
-            non_matching_market_evaluation_point_mrid = str(uuid.uuid4())
-            market_evaluation_point_mrid = non_matching_market_evaluation_point_mrid
+            non_matching_metering_point_id = str(uuid.uuid4())
+            metering_point_id = non_matching_metering_point_id
 
-        master_data = master_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid,
-                                               market_evaluation_point_type=market_evaluation_point_type,
+        master_data = master_data_factory(dict(metering_point_id=metering_point_id,
+                                               metering_point_type=metering_point_type,
                                                marketparticipant_mrid=marketparticipant_mrid,
                                                meteringgridarea_domain_mrid=meteringgridarea_domain_mrid,
                                                inmeteringgridarea_domain_mrid=inmeteringgridarea_domain_mrid,
@@ -262,11 +262,11 @@ def valid_atomic_value_schema():
     return StructType([
         StructField("IsTimeSeriesValid", BooleanType(), False),
         StructField("correlationId", StringType(), False),
-        StructField("MarketEvaluationPoint_mRID", StringType(), False),
+        StructField("meteringPointId", StringType(), False),
         StructField("MeterReadingPeriodicity", StringType(), False),
         StructField("Product", StringType(), False),
         StructField("QuantityMeasurementUnit_Name", StringType(), False),
-        StructField("MarketEvaluationPointType", StringType(), False),
+        StructField("meteringPointType", StringType(), False),
         StructField("SettlementMethod", StringType(), False),
         StructField("document_ProcessType", StringType(), False),
         StructField("document_recipient_Type", StringType(), False),

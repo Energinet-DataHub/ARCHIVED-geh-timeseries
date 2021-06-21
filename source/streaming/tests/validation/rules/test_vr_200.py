@@ -20,6 +20,6 @@ def test_vr_200_is_valid(enriched_data):
     assert validated_data.first()["VR-200-Is-Valid"]
 
 
-def test_vr_200_is_invalid_when_market_evaluation_point_is_missing(non_enriched_data):
+def test_vr_200_is_invalid_when_metering_point_is_missing(non_enriched_data):
     validated_data = validate_vr_200(non_enriched_data)
     assert not validated_data.first()["VR-200-Is-Valid"]

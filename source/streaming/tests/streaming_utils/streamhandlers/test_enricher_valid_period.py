@@ -41,8 +41,8 @@ def master_data(master_data_factory):
     which interval was used in enrichment.
     """
     return master_data_factory([
-        dict(market_evaluation_point_mrid="1", valid_from=valid_from1, valid_to=valid_to1, technology="1"),
-        dict(market_evaluation_point_mrid="1", valid_from=valid_to1, valid_to=valid_to2, technology="2")
+        dict(metering_point_id="1", valid_from=valid_from1, valid_to=valid_to1, technology="1"),
+        dict(metering_point_id="1", valid_from=valid_to1, valid_to=valid_to2, technology="2")
     ])
 
 
@@ -56,14 +56,14 @@ def enriched_data_factory(master_data, parsed_data_factory):
 
 
 def test_valid_from_is_inclusive(enriched_data_factory):
-    enriched_data = enriched_data_factory(market_evaluation_point_mrid="1", observation_time=valid_from1)
+    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
     print(str(enriched_data.first()))
     assert enriched_data.first().Technology == "1"
 
 
 def test_valid_to_is_exclusive(enriched_data_factory):
     # Act
-    enriched_data = enriched_data_factory(market_evaluation_point_mrid="1", observation_time=valid_to1)
+    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_to1)
 
     # Assert: Only one of the intervals was used in join (previously we had an error where the time series point
     # multiplied because it was matched by both the end of first interval and beginning of second interval).
