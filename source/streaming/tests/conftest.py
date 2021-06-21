@@ -97,9 +97,9 @@ def master_data_factory(spark, master_schema):
             "Parent_Domain_mRID": ["j"],
             "ServiceCategory_Kind": ["l"],
             "meteringPointType": [metering_point_type],
-            "SettlementMethod": [settlement_method],
+            "settlementMethod": [settlement_method],
             "QuantityMeasurementUnit_Name": ["o"],
-            "Product": ["p"],
+            "product": ["p"],
             "Technology": [technology],
             "OutMeteringGridArea_Domain_Owner_mRID": [outmeteringgridownerarea_domain_mrid],
             "InMeteringGridArea_Domain_Owner_mRID": [inmeteringgridownerarea_domain_mrid],
@@ -124,8 +124,6 @@ def time_series_json_factory():
                 observation_time=timestamp_now):
         json_str = """
     {{
-        "TimeSeries_mRID": "g",
-        "MessageReference": "b",
         "document": {{
             "id": "c",
             "Type": "x",
@@ -143,13 +141,14 @@ def time_series_json_factory():
             "MarketServiceCategory_Kind": "x"
         }},
         "MktActivityRecord_Status": "h",
-        "Product": "i",
         "QuantityMeasurementUnit_Name": "j",
-        "meteringPointType": "{1}",
-        "SettlementMethod": "x",
-        "meteringPointId": "{4}",
         "correlationId": "a",
         "series": {{
+            "id": "g",
+            "meteringPointId": "{4}",
+            "product": "i",
+            "meteringPointType": "{1}",
+            "settlementMethod": "x",
             "resolution": "x",
             "startDateTime": "{0}",
             "endDateTime": "{0}",
@@ -262,12 +261,12 @@ def valid_atomic_value_schema():
     return StructType([
         StructField("IsTimeSeriesValid", BooleanType(), False),
         StructField("correlationId", StringType(), False),
-        StructField("meteringPointId", StringType(), False),
+        StructField("series_meteringPointId", StringType(), False),
         StructField("MeterReadingPeriodicity", StringType(), False),
-        StructField("Product", StringType(), False),
+        StructField("series_product", StringType(), False),
         StructField("QuantityMeasurementUnit_Name", StringType(), False),
-        StructField("meteringPointType", StringType(), False),
-        StructField("SettlementMethod", StringType(), False),
+        StructField("series_meteringPointType", StringType(), False),
+        StructField("series_settlementMethod", StringType(), False),
         StructField("document_ProcessType", StringType(), False),
         StructField("document_recipient_Type", StringType(), False),
         StructField("document_MarketServiceCategory_Kind", StringType(), False),
@@ -295,12 +294,12 @@ def invalid_time_series_schema():
     Invalid time series schema to send
     """
     return StructType([
-        StructField("TimeSeries_mRID", StringType(), False),
+        StructField("series_id", StringType(), False),
         StructField("IsTimeSeriesValid", BooleanType(), False),
         StructField("correlationId", StringType(), False),
         StructField("document_sender_id", StringType(), False),
         StructField("document_sender_Type", StringType(), False),
-        StructField("document_mRID", StringType(), False),
+        StructField("document_id", StringType(), False),
         StructField("document_ProcessType", StringType(), False),
         StructField("VR-245-1-Is-Valid", BooleanType(), False),
         StructField("VR-250-Is-Valid", BooleanType(), False),

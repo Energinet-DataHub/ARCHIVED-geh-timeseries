@@ -34,8 +34,6 @@ class SchemaFactory:
     quantity_type = DecimalType(18, 3)
 
     message_body_schema: StructType = StructType() \
-        .add("mRID", StringType(), False) \
-        .add("MessageReference", StringType(), False) \
         .add("document", StructType()
              .add("id", StringType(), False)
              .add("Type", StringType(), False)
@@ -49,13 +47,14 @@ class SchemaFactory:
              .add("ProcessType", StringType(), False)
              .add("MarketServiceCategory_Kind", StringType(), False), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
-        .add("Product", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
-        .add("SettlementMethod", StringType(), True) \
-        .add("meteringPointId", StringType(), False) \
         .add("correlationId", StringType(), False) \
         .add("series", StructType()
+             .add("id", StringType(), False)
+             .add("meteringPointId", StringType(), False)
+             .add("product", StringType(), False)
              .add("meteringPointType", StringType(), False)
+             .add("settlementMethod", StringType(), True)
              .add("resolution", StringType(), False)
              .add("startDateTime", TimestampType(), False)
              .add("endDateTime", TimestampType(), False)
@@ -81,9 +80,9 @@ class SchemaFactory:
         .add("Parent_Domain_mRID", StringType(), False) \
         .add("ServiceCategory_Kind", StringType(), False) \
         .add("meteringPointType", StringType(), False) \
-        .add("SettlementMethod", StringType(), False) \
+        .add("settlementMethod", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
-        .add("Product", StringType(), False) \
+        .add("product", StringType(), False) \
         .add("Technology", StringType(), True) \
         .add("OutMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
         .add("InMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
@@ -103,19 +102,18 @@ class SchemaFactory:
 
     parquet_schema: StructType = StructType() \
         .add("correlationId", StringType(), False) \
-        .add("MessageReference", StringType(), False) \
         .add("document_id", StringType(), False) \
         .add("createdDateTime", TimestampType(), False) \
         .add("sender_id", StringType(), False) \
         .add("ProcessType", StringType(), False) \
         .add("sender_Type", StringType(), False) \
         .add("MarketServiceCategory_Kind", StringType(), False) \
-        .add("TimeSeries_mRID", StringType(), False) \
+        .add("series_id", StringType(), False) \
         .add("MktActivityRecord_Status", StringType(), False) \
-        .add("Product", StringType(), False) \
+        .add("product", StringType(), False) \
         .add("QuantityMeasurementUnit_Name", StringType(), False) \
         .add("meteringPointType", StringType(), False) \
-        .add("SettlementMethod", StringType(), True) \
+        .add("settlementMethod", StringType(), True) \
         .add("meteringPointId", StringType(), False) \
         .add("quantity", quantity_type, True) \
         .add("quality", StringType(), True) \

@@ -21,26 +21,25 @@ import geh_stream.dataframelib as D
 
 
 def add_time_series_validation_status_column(batch_df: DataFrame):
-    return batch_df.withColumn("IsTimeSeriesValid", F.min(col("IsTimeSeriesPointValid")).over(Window.partitionBy("TimeSeries_mRID")))
+    return batch_df.withColumn("IsTimeSeriesValid", F.min(col("IsTimeSeriesPointValid")).over(Window.partitionBy("series_id")))
 
 
 def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_path, watch: MonitoredStopwatch):
     timer = watch.start_sub_timer(store_points_of_valid_time_series.__name__)
     batch_df \
         .filter(col("IsTimeSeriesValid") == lit(True)) \
-        .select(col("meteringPointId"),
+        .select(col("series_meteringPointId"),
                 col("series_point_observationTime").alias("time"),
                 col("series_point_quantity").alias("quantity"),
                 col("correlationId"),
-                col("MessageReference"),
                 col("document_id"),
-                col("document_CreatedDateTime").alias("CreatedDateTime"),
+                col("document_createdDateTime").alias("CreatedDateTime"),
                 col("document_sender_id").alias("sender_id"),
                 col("document_ProcessType").alias("ProcessType"),
                 col("document_sender_Type").alias("sender_Type"),
-                col("TimeSeries_mRID"),
+                col("series_id"),
                 col("MktActivityRecord_Status"),
-                col("meteringPointType"),
+                col("series_meteringPointType"),
                 col("series_point_quality").alias("quality"),
                 col("MeterReadingPeriodicity"),
                 col("MeteringMethod"),
@@ -52,9 +51,9 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("OutMeteringGridArea_Domain_mRID"),
                 col("Parent_Domain_mRID"),
                 col("document_MarketServiceCategory_Kind").alias("ServiceCategory_Kind"),
-                col("SettlementMethod"),
+                col("series_settlementMethod"),
                 col("QuantityMeasurementUnit_Name"),
-                col("Product"),
+                col("series_product"),
 
                 year("series_point_observationTime").alias("year"),
                 month("series_point_observationTime").alias("month"),

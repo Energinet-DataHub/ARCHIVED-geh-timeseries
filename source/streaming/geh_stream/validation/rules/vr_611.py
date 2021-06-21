@@ -32,6 +32,6 @@ def validate_vr_611(df):
                         # Expression for the exact situation where the violation is determined to have occurred
                         col("pd.series_point_quantity").isNotNull()
                         & (col("md.meteringPointType") == MeteringPointType.consumption.value)
-                        & (col("md.SettlementMethod") == SettlementMethod.non_profiled.value)
+                        & (col("md.settlementMethod") == SettlementMethod.non_profiled.value)
                         & (col("pd.series_point_quantity") >= consumptionLimit)
                     ))

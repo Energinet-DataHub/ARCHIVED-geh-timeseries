@@ -1,6 +1,5 @@
 {
   "mRID": "mRID_of_valid_message", // /series/id
-  "MessageReference": "mId2020-12-01T13:16:29.330Z", // removed
   "MarketDocument": { // document
     "mRID": "hId2020-12-01T13:16:29.330Z", // document/id
     "Type": "E66", // /document/type (enum)
@@ -24,7 +23,7 @@
   "Product": "8716867000030", // /series/product
   "QuantityMeasurementUnit_Name": "KWH", // /series/unit (enum)
   "meteringPointType": "E17", // /series/meteringPointType (enum)
-  "SettlementMethod": "D01", // /series/settlementMethod (enum)
+  "settlementMethod": "D01", // /series/settlementMethod (enum)
   "meteringPointId": "571313180000000005", // /series/meteringPointId
   "CorrelationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087", // correlationId
   "Period": { // removed

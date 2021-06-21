@@ -1,6 +1,4 @@
 {
-  "mRID": "mRID_of_invalid_message",
-  "MessageReference": "mId2020-12-01T13:16:29.330Z",
   "document": {
     "id": "hId2020-12-01T13:16:29.330Z",
     "requestDate": "2020-12-15T13:15:11.8349163Z",
@@ -18,13 +16,13 @@
     "MarketServiceCategory_Kind": "23"
   },
   "MktActivityRecord_Status": "9",
-  "Product": "8716867000030",
   "QuantityMeasurementUnit_Name": "KWH",
-  "meteringPointType": "E17",
-  "SettlementMethod": "D01",
-  "meteringPointId": "non-existing mRID 123498hhkjwer8",
-  "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087",
   "series": {
+    "id": "transaction_id_of_invalid_message",
+    "meteringPointId": "non-existing metering point id 123498hhkjwer8",
+    "product": "8716867000030",
+    "meteringPointType": "E17",
+    "settlementMethod": "D01",
     "resolution": "PT1H",
     "startDateTime": "2020-11-20T23:00:00Z",
     "endDateTime": "2020-11-21T23:00:00Z",
@@ -39,5 +37,6 @@
   },
   "transaction": {
     "id": "fc13ba2cf048432a951f260ecafb60d4"
-  }
+  },
+  "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087"
 }

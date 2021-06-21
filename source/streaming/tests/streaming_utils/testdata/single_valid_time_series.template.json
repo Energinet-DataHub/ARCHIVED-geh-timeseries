@@ -1,6 +1,4 @@
 {
-  "mRID": "mRID_of_valid_message",
-  "MessageReference": "mId2020-12-01T13:16:29.330Z",
   "document": {
     "id": "hId2020-12-01T13:16:29.330Z",
     "Type": "E66",
@@ -18,12 +16,13 @@
     "MarketServiceCategory_Kind": "23"
   },
   "MktActivityRecord_Status": "9",
-  "Product": "8716867000030",
   "QuantityMeasurementUnit_Name": "KWH",
-  "SettlementMethod": "D01",
-  "meteringPointId": "571313180000000005",
   "series": {
+    "id": "transaction_id_of_valid_message",
+    "meteringPointId": "571313180000000005",
+    "product": "8716867000030",
     "meteringPointType": "E17",
+    "settlementMethod": "D01",
     "resolution": "PT1H",
     "startDateTime": "2020-11-20T23:00:00Z",
     "endDateTime": "2020-11-21T23:00:00Z",

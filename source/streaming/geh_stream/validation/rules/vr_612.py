@@ -30,6 +30,6 @@ def validate_vr_612(df):
                     (
                         col("pd.series_point_quantity").isNotNull()
                         & (col("md.meteringPointType") == MeteringPointType.consumption.value)
-                        & (col("md.SettlementMethod") == SettlementMethod.flex_settled.value)
+                        & (col("md.settlementMethod") == SettlementMethod.flex_settled.value)
                         & (col("pd.series_point_quantity") >= consumptionLimit)
                     ))

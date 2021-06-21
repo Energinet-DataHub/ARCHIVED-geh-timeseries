@@ -120,7 +120,7 @@ def test_enricher_adds_metering_point_type(enriched_data):
 
 
 def test_enricher_adds_settlement_method(enriched_data):
-    assert has_column(enriched_data, "md.SettlementMethod")
+    assert has_column(enriched_data, "md.settlementMethod")
 
 
 def test_enricher_adds_quantity_measurement_unit_Name(enriched_data):
