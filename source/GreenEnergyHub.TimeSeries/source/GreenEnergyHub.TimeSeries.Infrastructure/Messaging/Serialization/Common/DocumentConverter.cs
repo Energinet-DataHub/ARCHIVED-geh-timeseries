@@ -29,7 +29,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
 
             var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
 
-            return await Task.FromResult(message).ConfigureAwait(false);
+            return message;
         }
 
         protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Document document);
@@ -56,7 +56,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
 
             await ParseFieldsAsync(reader, document).ConfigureAwait(false);
 
-            return await Task.FromResult(document).ConfigureAwait(false);
+            return document;
         }
 
         private static async Task ParseFieldsAsync(XmlReader reader, Document document)
