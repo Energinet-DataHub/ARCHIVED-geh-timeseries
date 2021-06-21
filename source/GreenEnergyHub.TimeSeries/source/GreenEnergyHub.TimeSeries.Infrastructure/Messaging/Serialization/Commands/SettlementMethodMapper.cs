@@ -12,13 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification
+using GreenEnergyHub.TimeSeries.Domain.Notification;
+
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    public enum SettlementMethod
+    public static class SettlementMethodMapper
     {
-        Unknown = 0,
-        Profiled = 1,
-        NonProfiled = 2,
-        Flex = 3,
+        public static SettlementMethod Map(string value)
+        {
+            return value switch
+            {
+                "D01" => SettlementMethod.Flex,
+                "E01" => SettlementMethod.Profiled,
+                "E02" => SettlementMethod.NonProfiled,
+                _ => SettlementMethod.Unknown,
+            };
+        }
     }
 }

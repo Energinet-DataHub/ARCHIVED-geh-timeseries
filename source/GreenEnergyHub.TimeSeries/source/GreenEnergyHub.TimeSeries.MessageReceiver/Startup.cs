@@ -12,8 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
+using GreenEnergyHub.Iso8601;
 using GreenEnergyHub.Messaging.Transport;
+using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using GreenEnergyHub.TimeSeries.MessageReceiver;
@@ -31,6 +34,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         {
             builder.Services.AddScoped(typeof(IClock), _ => SystemClock.Instance);
 
+            ConfigureIso8601Services(builder.Services);
             ConfigureMessaging(builder);
         }
 
@@ -39,6 +43,18 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             builder.Services.AddScoped<TimeSeriesCommandConverter>();
             builder.Services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             builder.Services.AddMessaging();
+        }
+
+        private static void ConfigureIso8601Services(IServiceCollection services)
+        {
+            const string timeZoneIdString = "LOCAL_TIMEZONENAME";
+            var timeZoneId = Environment.GetEnvironmentVariable(timeZoneIdString) ??
+                             throw new ArgumentNullException(
+                                 timeZoneIdString,
+                                 "does not exist in configuration settings");
+            var timeZoneConfiguration = new Iso8601ConversionConfiguration(timeZoneId);
+            services.AddSingleton<IIso8601ConversionConfiguration>(timeZoneConfiguration);
+            services.AddSingleton<IIso8601Durations, Iso8601Durations>();
         }
     }
 }

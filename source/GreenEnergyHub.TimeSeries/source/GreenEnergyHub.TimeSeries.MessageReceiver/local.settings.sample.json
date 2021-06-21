@@ -1,8 +1,9 @@
 {
    "IsEncrypted": false,
-   "Values": {
+  "Values": {
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
-    }
+    "LOCAL_TIMEZONENAME": "Europe/Copenhagen"
+  }
 }

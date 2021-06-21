@@ -14,14 +14,42 @@
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    public static class TimeSeriesCommandConstants
+    internal static class TimeSeriesCommandConstants
     {
-        public const string Namespace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
+        internal const string Namespace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
 
-        public const string Series = "Series";
+        internal const string Series = "Series";
 
-        public const string Id = "mRID";
+        internal const string Id = "mRID";
 
-        public const string Product = "product";
+        internal const string Product = "product";
+
+        internal const string MeteringPointId = "marketEvaluationPoint.mRID";
+
+        internal const string MeteringPointType = "marketEvaluationPoint.type";
+
+        internal const string SettlementMethod = "marketEvaluationPoint.settlementMethod";
+
+        internal const string RegistrationDateTime = "registration_DateAndOrTime.dateTime";
+
+        internal const string Unit = "measure_Unit.name";
+
+        internal const string Period = "Period";
+
+        internal const string Resolution = "resolution";
+
+        internal const string TimeInterval = "timeInterval";
+
+        internal const string StartDateTime = "start";
+
+        internal const string EndDateTime = "end";
+
+        internal const string Point = "Point";
+
+        internal const string Position = "position";
+
+        internal const string Quantity = "quantity";
+
+        internal const string Quality = "quality";
     }
 }

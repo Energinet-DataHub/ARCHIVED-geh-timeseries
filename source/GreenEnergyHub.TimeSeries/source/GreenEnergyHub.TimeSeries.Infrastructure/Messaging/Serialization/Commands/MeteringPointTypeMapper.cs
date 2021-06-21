@@ -12,13 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Notification
+using GreenEnergyHub.TimeSeries.Domain.Notification;
+
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    public enum SettlementMethod
+    public static class MeteringPointTypeMapper
     {
-        Unknown = 0,
-        Profiled = 1,
-        NonProfiled = 2,
-        Flex = 3,
+        public static MeteringPointType Map(string value)
+        {
+            return value switch
+            {
+                "E17" => MeteringPointType.Consumption,
+                "E18" => MeteringPointType.Production,
+                "E20" => MeteringPointType.Exchange,
+                // TODO: Extend list with the remaining mp types
+                _ => MeteringPointType.Unknown,
+            };
+        }
     }
 }

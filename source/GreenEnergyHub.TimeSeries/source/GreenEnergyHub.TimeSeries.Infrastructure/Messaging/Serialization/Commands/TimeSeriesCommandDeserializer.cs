@@ -25,9 +25,9 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
 
         public override async Task<IInboundMessage> FromBytesAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            await using MemoryStream stream = new MemoryStream(data);
+            await using var stream = new MemoryStream(data);
 
-            using XmlReader reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
+            using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
 
             var command = await _timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
 
