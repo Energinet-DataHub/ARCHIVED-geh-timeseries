@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
@@ -30,7 +31,9 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
             _correlationContext = correlationContext;
         }
 
-        protected override async Task<IInboundMessage> ConvertSpecializedContentAsync(XmlReader reader, Document document)
+        protected override async Task<IInboundMessage> ConvertSpecializedContentAsync(
+            [NotNull]XmlReader reader,
+            Document document)
         {
             var correlationId = _correlationContext.CorrelationId;
 
@@ -39,7 +42,25 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                 Document = document,
             };
 
-            return await Task.FromResult(command).ConfigureAwait(false);
+            command.Series = await ParseSeriesAsync(reader).ConfigureAwait(false);
+
+            return command;
+        }
+
+        private static async Task<Series> ParseSeriesAsync(XmlReader reader)
+        {
+            var series = new Series();
+
+            while (await reader.ReadAsync().ConfigureAwait(false))
+            {
+                if (reader.Is(TimeSeriesCommandConstants.Id, TimeSeriesCommandConstants.Namespace))
+                {
+                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
+                    series.Id = content;
+                }
+            }
+
+            return series;
         }
     }
 }
