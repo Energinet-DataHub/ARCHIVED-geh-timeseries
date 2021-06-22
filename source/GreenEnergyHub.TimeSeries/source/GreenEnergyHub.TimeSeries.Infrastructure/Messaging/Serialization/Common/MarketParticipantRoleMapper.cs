@@ -27,6 +27,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                 "EZ" => MarketParticipantRole.SystemOperator,
                 "MDR" => MarketParticipantRole.MeteredDataResponsible,
                 "STS" => MarketParticipantRole.EnergyAgency,
+                "DGL" => MarketParticipantRole.MeteredDataAdministrator,
                 _ => MarketParticipantRole.Unknown
             };
         }
