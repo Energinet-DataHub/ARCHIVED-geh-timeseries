@@ -25,7 +25,6 @@ name: PR Environment - Setup
 on:
   pull_request:
     branches:
-      - main
   workflow_dispatch: {}
 
 env:
@@ -197,8 +196,8 @@ jobs:
     if: ${{ needs.streaming_pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     env:
-      WHEEL_STORAGE_NAME: 'enrgtwheels'
-      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: 'time${{ github.event.number }}uwheels'
+      WHEEL_STORAGE_ADDRESS: https://times${{ github.event.number }}uwheels.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
     environment:
       name: rg-DataHub-Testing-U
