@@ -22,7 +22,7 @@ on:
 env:
   CSPROJ_FILE_PATH: source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.MessageReceiver/GreenEnergyHub.TimeSeries.MessageReceiver.csproj
   SOLUTION_FILE_PATH: source/GreenEnergyHub.TimeSeries/GreenEnergyHub.TimeSeries.sln
-  DOTNET_VERSION: '3.1'
+  DOTNET_VERSION: '5.0'
 
 jobs:
   pre_job:
