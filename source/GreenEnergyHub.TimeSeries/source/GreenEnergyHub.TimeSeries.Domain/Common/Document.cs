@@ -29,7 +29,7 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
         /// <summary>
         ///  Point in time set by the TimeSeries domain
         /// </summary>
-        public Instant RequestDate { get; set; } = SystemClock.Instance.GetCurrentInstant();
+        public Instant RequestDateTime { get; set; } = SystemClock.Instance.GetCurrentInstant();
 
         public DocumentType Type { get; set; }
 

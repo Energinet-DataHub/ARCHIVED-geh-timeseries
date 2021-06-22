@@ -56,7 +56,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                     CreatedDateTime = SystemClock.Instance.GetCurrentInstant(),
                     BusinessReasonCode = BusinessReasonCode.PeriodicMetering,
                     IndustryClassification = IndustryClassification.Electricity,
-                    RequestDate = Instant.FromUtc(2020, 12, 31, 23, 00),
+                    RequestDateTime = Instant.FromUtc(2020, 12, 31, 23, 00),
                 },
                 Series = new Series()
                 {
