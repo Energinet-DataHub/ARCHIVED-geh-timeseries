@@ -26,11 +26,13 @@ limitations under the License.
     </PropertyGroup>
 
     <ItemGroup>
-      <None Remove="TestFiles\Valid_Hourly_TimeSeries_CIM.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnexpectedValidCimContent.xml" />
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="TestFiles\Valid_Hourly_TimeSeries_CIM.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnexpectedValidCimContent.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
     </ItemGroup>
 
     <ItemGroup>
