@@ -24,7 +24,7 @@ using Moq;
 using Xunit;
 using Xunit.Categories;
 
-namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure
+namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
 {
     [UnitTest]
     public class MessageDispatcherTests
