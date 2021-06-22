@@ -91,11 +91,6 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
                 }
-                else if (reader.Is(DocumentConverterConstants.IndustryClassification, ns))
-                {
-                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    document.IndustryClassification = IndustryClassificationMapper.Map(content);
-                }
                 else if (reader.Is(DocumentConverterConstants.SenderId, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
