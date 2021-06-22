@@ -25,6 +25,7 @@ name: PR Environment - Setup
 on:
   pull_request:
     branches:
+    - TEMPDISABLED
   workflow_dispatch: {}
 
 env:
