@@ -11,11 +11,11 @@
     <createdDateTime>2021-06-21T10:23:40.149Z</createdDateTime>
     <Series>
         <mRID>tId_Valid_001</mRID>
-        <product>8716867000030</product>
         <marketEvaluationPoint.mRID>578032999778756222</marketEvaluationPoint.mRID>
         <marketEvaluationPoint.type>E17</marketEvaluationPoint.type>
         <marketEvaluationPoint.settlementMethod>D01</marketEvaluationPoint.settlementMethod>
         <registration_DateAndOrTime.dateTime>2021-06-21T10:23:40.150Z</registration_DateAndOrTime.dateTime>
+        <product>8716867000030</product>
         <measure_Unit.name>KWH</measure_Unit.name>
         <Period>
             <resolution>PT1H</resolution>
