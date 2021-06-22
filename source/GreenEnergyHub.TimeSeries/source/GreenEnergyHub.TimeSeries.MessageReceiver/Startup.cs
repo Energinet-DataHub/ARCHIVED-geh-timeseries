@@ -17,6 +17,7 @@ using System.Diagnostics.CodeAnalysis;
 using GreenEnergyHub.Iso8601;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
+using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using GreenEnergyHub.TimeSeries.MessageReceiver;
@@ -42,7 +43,8 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         {
             builder.Services.AddScoped<TimeSeriesCommandConverter>();
             builder.Services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
-            builder.Services.AddMessaging();
+            builder.Services.AddMessaging()
+                .AddMessageDispatcher<TimeSeriesCommand>();
         }
 
         private static void ConfigureIso8601Services(IServiceCollection services)

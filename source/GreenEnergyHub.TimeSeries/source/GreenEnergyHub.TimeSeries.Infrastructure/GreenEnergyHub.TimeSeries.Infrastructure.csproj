@@ -31,8 +31,4 @@ limitations under the License.
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Messaging\NewFolder\" />
-    </ItemGroup>
-
 </Project>
