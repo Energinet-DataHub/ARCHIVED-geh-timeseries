@@ -36,32 +36,35 @@ class SchemaFactory:
     message_body_schema: StructType = StructType() \
         .add("document", StructType()
              .add("id", StringType(), False)
+             .add("requestDateTime", TimestampType(), False)
+             .add("type", IntegerType(), False)
              .add("createdDateTime", TimestampType(), False)
              .add("sender", StructType()
                   .add("id", StringType(), False)
-                  .add("businessProcessRole", StringType(), False), False)
+                  .add("businessProcessRole", IntegerType(), False), False)
              .add("recipient", StructType()
                   .add("id", StringType(), False)
-                  .add("businessProcessRole", StringType(), True), False)
-             .add("businessReasonCode", StringType(), False)
-             .add("industryClassification", StringType(), False), False) \
-        .add("MktActivityRecord_Status", StringType(), False) \
-        .add("correlationId", StringType(), False) \
+                  .add("businessProcessRole", IntegerType(), True), False)
+             .add("businessReasonCode", IntegerType(), False), False) \
         .add("series", StructType()
              .add("id", StringType(), False)
              .add("meteringPointId", StringType(), False)
-             .add("product", StringType(), False)
-             .add("meteringPointType", StringType(), False)
-             .add("settlementMethod", StringType(), True)
-             .add("unit", StringType(), False)
-             .add("resolution", StringType(), False)
+             .add("meteringPointType", IntegerType(), False)
+             .add("settlementMethod", IntegerType(), True)
+             .add("registrationDateTime", TimestampType(), False)
+             .add("product", IntegerType(), False)
+             .add("unit", IntegerType(), False)
+             .add("resolution", IntegerType(), False)
              .add("startDateTime", TimestampType(), False)
              .add("endDateTime", TimestampType(), False)
              .add("points", ArrayType(StructType()
                   .add("position", IntegerType(), False)
+                  .add("observationTime", TimestampType(), False)
                   .add("quantity", quantity_type, False)
-                  .add("quality", StringType(), False)
-                  .add("observationTime", TimestampType(), False), True), False), False)
+                  .add("quality", IntegerType(), False), True), False), False) \
+        .add("transaction", StructType()
+            .add("mRID", StringType(), False), False) \
+        .add("correlationId", StringType(), False)
 
     # ValidFrom and ValidTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
@@ -79,9 +82,9 @@ class SchemaFactory:
         .add("Parent_Domain_mRID", StringType(), False) \
         .add("ServiceCategory_Kind", StringType(), False) \
         .add("meteringPointType", StringType(), False) \
-        .add("settlementMethod", StringType(), False) \
-        .add("unit", StringType(), False) \
-        .add("product", StringType(), False) \
+        .add("settlementMethod", IntegerType(), False) \
+        .add("unit", IntegerType(), False) \
+        .add("product", IntegerType(), False) \
         .add("Technology", StringType(), True) \
         .add("OutMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
         .add("InMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
@@ -90,7 +93,7 @@ class SchemaFactory:
     distribution_list_schema: ArrayType = ArrayType(
         StructType([
             StructField("mRID", StringType(), False),
-            StructField("role", StringType(), False)]))
+            StructField("role", IntegerType(), False)]))
 
     parsed_schema = copy.deepcopy(message_body_schema) \
         .add("EventHubEnqueueTime", TimestampType(), True)
@@ -106,9 +109,7 @@ class SchemaFactory:
         .add("sender_id", StringType(), False) \
         .add("businessReasonCode", StringType(), False) \
         .add("sender_businessProcessRole", StringType(), False) \
-        .add("industryClassification", StringType(), False) \
         .add("series_id", StringType(), False) \
-        .add("MktActivityRecord_Status", StringType(), False) \
         .add("product", StringType(), False) \
         .add("unit", StringType(), False) \
         .add("meteringPointType", StringType(), False) \

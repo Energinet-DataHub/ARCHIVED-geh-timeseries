@@ -14,8 +14,11 @@
 from enum import Enum
 
 
-class Quality(Enum):
-    calculated = "D01"
-    revised = "36"
-    estimated = "56"
-    as_read = "E01"
+class Product(Enum):
+    unknown = 0
+    tariff = 1
+    fuel_quantity = 2
+    power_active = 3
+    power_reactive = 4
+    energy_active = 5
+    energy_reactive = 6

@@ -20,7 +20,7 @@ import pytest
 from pyspark import SparkConf
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, lit, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, DecimalType, TimestampType, BooleanType
+from pyspark.sql.types import StructType, StructField, StringType, ArrayType, DecimalType, IntegerType, TimestampType, BooleanType
 import pandas as pd
 from decimal import Decimal
 from datetime import datetime
@@ -28,7 +28,7 @@ import time
 import uuid
 
 
-from geh_stream.codelists import MeteringPointType, Quality
+from geh_stream.codelists import MeasureUnit, MeteringPointType, QuantityQuality, Product, SettlementMethod
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.dataframelib import flatten_df
@@ -73,14 +73,14 @@ def master_data_factory(spark, master_schema):
     def __create_pandas(metering_point_id="mepm",
                         valid_from=timestamp_past,
                         valid_to=timestamp_future,
-                        metering_point_type="mept",
+                        metering_point_type=MeteringPointType.consumption.value,
                         marketparticipant_mrid="mm",
                         meteringgridarea_domain_mrid="mdm",
                         inmeteringgridarea_domain_mrid="idm",
                         inmeteringgridownerarea_domain_mrid="idm",
                         outmeteringgridarea_domain_mrid="odm",
                         outmeteringgridownerarea_domain_mrid="odm",
-                        settlement_method="sm",
+                        settlement_method=SettlementMethod.flex.value,
                         technology="tech"):
         return pd.DataFrame({
             'meteringPointId': [metering_point_id],
@@ -98,8 +98,8 @@ def master_data_factory(spark, master_schema):
             "ServiceCategory_Kind": ["l"],
             "meteringPointType": [metering_point_type],
             "settlementMethod": [settlement_method],
-            "unit": ["o"],
-            "product": ["p"],
+            "unit": [MeasureUnit.kilo_watt_hour.value],
+            "product": [Product.energy_active.value],
             "Technology": [technology],
             "OutMeteringGridArea_Domain_Owner_mRID": [outmeteringgridownerarea_domain_mrid],
             "InMeteringGridArea_Domain_Owner_mRID": [inmeteringgridownerarea_domain_mrid],
@@ -123,50 +123,57 @@ def time_series_json_factory():
                 quantity=1.0,
                 observation_time=timestamp_now):
         json_str = """
-    {{
-        "document": {{
-            "id": "c",
-            "createdDateTime": "{0}",
-            "requestDate": "x",
-            "sender": {{
-                "id": "x",
-                "type": "x"
-            }},
-            "recipient": {{
-                "id": "x",
-                "type": "x"
-            }},
-            "businessReasonCode": "e",
-            "industryClassification": "x"
-        }},
-        "MktActivityRecord_Status": "h",
-        "correlationId": "a",
-        "series": {{
-            "id": "g",
-            "meteringPointId": "{4}",
-            "product": "i",
-            "meteringPointType": "{1}",
-            "settlementMethod": "x",
-            "unit": "j",
-            "resolution": "x",
-            "startDateTime": "{0}",
-            "endDateTime": "{0}",
-            "points": [
-                {{
-                    "position": 1,
-                    "quantity": "{2}",
-                    "quality": "{3}",
-                    "observationTime": "{5}"
-                }}
-            ]
-        }}
-    }}
-    """.format(timestamp_now.isoformat() + "Z",
+            {{
+                "document": {{
+                    "id": "c",
+                    "requestDateTime": "{7}",
+                    "type": 1,
+                    "createdDateTime": "{0}",
+                    "sender": {{
+                        "id": "x",
+                        "businessProcessRole": 4
+                    }},
+                    "recipient": {{
+                        "id": "x",
+                        "businessProcessRole": 3
+                    }},
+                    "businessReasonCode": 2
+                }},
+                "series": {{
+                    "id": "g",
+                    "meteringPointId": "{4}",
+                    "product": 5,
+                    "meteringPointType": "{1}",
+                    "settlementMethod": {6},
+                    "registrationDateTime": "{8}",
+                    "unit": 1,
+                    "resolution": 2,
+                    "startDateTime": "{0}",
+                    "endDateTime": "{0}",
+                    "points": [
+                        {{
+                            "position": 1,
+                            "observationTime": "{5}",
+                            "quantity": "{2}",
+                            "quality": {3}
+                        }}
+                    ]
+                }},
+                "transaction": {{
+                    "mRID": "x"
+                }},
+                "correlationId": "a"
+            }}
+        """.format(timestamp_now.isoformat() + "Z",
                MeteringPointType.consumption.value,
                quantity,
-               Quality.as_read.value,
+               QuantityQuality.measured.value,
                metering_point_id,
-               observation_time)
+               observation_time,
+               SettlementMethod.flex.value,
+               timestamp_now,
+               timestamp_now)
+        print(json_str)
         return json_str
 
     return factory
@@ -204,8 +211,8 @@ def parsed_data_factory(spark, parsed_schema, time_series_json_factory):
 def enriched_data_factory(parsed_data_factory, master_data_factory):
     def creator(metering_point_id="mepm",
                 quantity=1.0,
-                metering_point_type="m",
-                settlement_method="n",
+                metering_point_type=MeteringPointType.consumption.value,
+                settlement_method=SettlementMethod.flex.value,
                 technology="tech",
                 meteringgridarea_domain_mrid="101",
                 marketparticipant_mrid="11",
@@ -264,14 +271,13 @@ def valid_atomic_value_schema():
         StructField("MeterReadingPeriodicity", StringType(), False),
         StructField("series_product", StringType(), False),
         StructField("series_unit", StringType(), False),
-        StructField("series_meteringPointType", StringType(), False),
-        StructField("series_settlementMethod", StringType(), False),
+        StructField("series_meteringPointType", IntegerType(), False),
+        StructField("series_settlementMethod", IntegerType(), False),
         StructField("document_businessReasonCode", StringType(), False),
         StructField("document_recipient_businessProcessRole", StringType(), False),
-        StructField("document_industryClassification", StringType(), False),
         StructField("DistributionList", ArrayType(StringType()), False),
         StructField("series_point_quantity", SchemaFactory.quantity_type, False),
-        StructField("series_point_quality", StringType(), False),
+        StructField("series_point_quality", IntegerType(), False),
         StructField("series_point_observationTime", TimestampType(), False),
         StructField("document_createdDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)

@@ -14,6 +14,10 @@
 from enum import Enum
 
 
-class IndustryClassification(Enum):
-    unknown = 0
-    electricity = 1
+class QuantityQuality(Enum):
+    unknown = 0,
+    measured = 1 # Received as E01 in ebiX
+    revised = 2 # Received as 36 in ebiX
+    estimated = 3 # Received as 56 in ebiX
+    quantity_missing = 4 # Received in separate boolean field in ebiX
+    calculated = 5 # Received as D01 in ebiX
