@@ -18,8 +18,8 @@ using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GreenEnergyHub.TimeSeries.MessageReceiver
@@ -33,23 +33,25 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         private const string FunctionName = "TimeSeriesHttpTrigger";
         private readonly ICorrelationContext _correlationContext;
         private readonly MessageExtractor<TimeSeriesCommand> _messageExtractor;
+        private readonly ILogger _log;
 
         public TimeSeriesHttpTrigger(
             ICorrelationContext correlationContext,
-            MessageExtractor<TimeSeriesCommand> messageExtractor)
+            MessageExtractor<TimeSeriesCommand> messageExtractor,
+            [NotNull] ILoggerFactory loggerFactory)
         {
             _correlationContext = correlationContext;
             _messageExtractor = messageExtractor;
+            _log = loggerFactory.CreateLogger(nameof(TimeSeriesHttpTrigger));
         }
 
-        [FunctionName(FunctionName)]
+        [Function(FunctionName)]
         public async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
-            [NotNull] HttpRequest req,
-            [NotNull] ExecutionContext context,
-            ILogger log)
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post")]
+            [NotNull] HttpRequestData req,
+            [NotNull] FunctionContext context)
         {
-            log.LogInformation("Function {FunctionName} started to process a request with a body of size {SizeOfBody}", FunctionName, req.Body.Length);
+            _log.LogInformation("Function {FunctionName} started to process a request with a body of size {SizeOfBody}", FunctionName, req.Body.Length);
 
             SetupCorrelationContext(context);
 
@@ -63,9 +65,9 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             return command;
         }
 
-        private void SetupCorrelationContext(ExecutionContext context)
+        private void SetupCorrelationContext(FunctionContext context)
         {
-            _correlationContext.CorrelationId = context.InvocationId.ToString();
+            _correlationContext.CorrelationId = context.InvocationId;
         }
     }
 }

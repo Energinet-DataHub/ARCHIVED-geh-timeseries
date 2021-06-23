@@ -23,7 +23,7 @@ IF /I not "%doBuild%" == "n" (
 rem All (but the last) deployments are opened in separate windows in order to execute in parallel
 
 IF /I not "%deployMessageReceiver%" == "n" (
-    pushd source\GreenEnergyHub.TimeSeries.MessageReceiver\bin\Release\netcoreapp3.1
+    pushd source\GreenEnergyHub.TimeSeries.MessageReceiver\bin\Release\net5.0
     start "Deploy: Message Receiver" cmd /c "func azure functionapp publish azfun-message-receiver-tseries-%organization%-s & pause"
     popd
 )
