@@ -28,6 +28,7 @@ module "azfun_message_receiver" {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE          = true
     FUNCTIONS_WORKER_RUNTIME                     = "dotnet"
     LOCAL_TIMEZONENAME                           = local.LOCAL_TIMEZONENAME
+	TIMESERIES_QUEUE_TOPIC                       = module.evh_receivedqueue.name
     TIMESERIES_QUEUE_URL                         = "${module.evhnm_received_queue.name}.servicebus.windows.net:9093"
     TIMESERIES_QUEUE_CONNECTION_STRING           = module.evhar_receivedqueue_sender.primary_connection_string
   }
