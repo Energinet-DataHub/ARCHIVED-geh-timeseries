@@ -67,7 +67,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 
         public MessagingRegistrator AddEventHubMessageDispatcher<TOutboundMessage>(
             string eventHubQueue,
-            string eventHubPassword)
+            string eventHubPassword,
+            string eventHubTopic)
             where TOutboundMessage : IOutboundMessage
         {
             _services.AddScoped<IMessageDispatcher<TOutboundMessage>, MessageDispatcher<TOutboundMessage>>();
@@ -89,7 +90,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
                     };
                     var producer = new KafkaProducerFactory(kafkaConfiguration);
                     var instance = new KafkaDispatcher(producer);
-                    return new KafkaDispatcher<TOutboundMessage>(instance);
+                    return new KafkaDispatcher<TOutboundMessage>(instance, eventHubTopic);
                 });
 
             return this;

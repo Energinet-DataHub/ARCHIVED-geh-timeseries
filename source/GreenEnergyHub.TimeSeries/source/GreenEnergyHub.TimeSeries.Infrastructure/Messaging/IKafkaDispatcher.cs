@@ -28,8 +28,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         where TOutboundMessage : IOutboundMessage
     {
         /// <summary>
-        /// An instance of a ServiceBusSender
+        /// An instance of a the kafka dispatcher
         /// </summary>
         KafkaDispatcher Instance { get; }
+
+        /// <summary>
+        /// The topic to use in Kafka
+        /// </summary>
+        string Topic { get; }
     }
 }

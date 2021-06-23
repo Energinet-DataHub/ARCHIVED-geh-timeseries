@@ -28,11 +28,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         where TOutboundMessage : IOutboundMessage
     {
         private readonly IKafkaDispatcher _kafkaDispatcher;
+        private readonly string _topic;
 
         public EventHubChannel(
             [NotNull] IKafkaDispatcher<TOutboundMessage> kafkaDispatcher)
         {
             _kafkaDispatcher = kafkaDispatcher.Instance;
+            _topic = kafkaDispatcher.Topic;
         }
 
         /// <summary>
@@ -44,7 +46,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         protected override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
             var message = System.Text.Encoding.UTF8.GetString(data);
-            await _kafkaDispatcher.DispatchAsync(message, "Test");
+            await _kafkaDispatcher.DispatchAsync(message, _topic).ConfigureAwait(false);
         }
     }
 }

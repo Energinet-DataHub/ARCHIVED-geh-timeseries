@@ -54,13 +54,19 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
                                    throw new ArgumentNullException(
                                        eventHubPasswordString,
                                        "does not exist in configuration settings");
+            const string eventHubTopicString = "TIMESERIES_QUEUE_TOPIC";
+            var eventHubTopic = Environment.GetEnvironmentVariable(eventHubTopicString) ??
+                                   throw new ArgumentNullException(
+                                       eventHubTopicString,
+                                       "does not exist in configuration settings");
 
             builder.Services.AddScoped<TimeSeriesCommandConverter>();
             builder.Services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             builder.Services.AddMessaging()
                 .AddEventHubMessageDispatcher<TimeSeriesCommand>(
                     eventHubQueue,
-                    eventHubPassword);
+                    eventHubPassword,
+                    eventHubTopic);
         }
 
         private static void ConfigureIso8601Services(IServiceCollection services)
