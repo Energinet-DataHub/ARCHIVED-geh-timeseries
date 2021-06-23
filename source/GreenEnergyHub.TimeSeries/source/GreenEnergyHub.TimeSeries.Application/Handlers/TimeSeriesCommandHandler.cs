@@ -20,9 +20,19 @@ namespace GreenEnergyHub.TimeSeries.Application.Handlers
 {
     public class TimeSeriesCommandHandler : ITimeSeriesCommandHandler
     {
-        public Task<TimeSeriesCommandResult> HandleAsync(TimeSeriesCommand command)
+        private readonly IMessageDispatcher<TimeSeriesCommand> _messageDispatcher;
+
+        public TimeSeriesCommandHandler(
+            IMessageDispatcher<TimeSeriesCommand> messageDispatcher)
         {
-            throw new System.NotImplementedException();
+            _messageDispatcher = messageDispatcher;
+        }
+
+        public async Task<TimeSeriesCommandResult> HandleAsync(TimeSeriesCommand command)
+        {
+            await _messageDispatcher.DispatchAsync(command).ConfigureAwait(false);
+
+            return TimeSeriesCommandResult.CreateSuccess();
         }
     }
 }
