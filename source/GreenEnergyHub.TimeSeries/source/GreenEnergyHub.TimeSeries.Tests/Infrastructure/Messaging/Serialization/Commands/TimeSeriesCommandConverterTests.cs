@@ -44,7 +44,8 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             [NotNull] TimeSeriesCommandConverter timeSeriesCommandConverter)
         {
             // Arrange
-            var correlationId = SetCorrelationId(context);
+            var correlationId = Guid.NewGuid().ToString();
+            context.Setup(c => c.CorrelationId).Returns(correlationId);
 
             SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
 
@@ -137,13 +138,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal(QuantityQuality.Measured, result.Series.Points[0].Quality);
 
             await Task.CompletedTask.ConfigureAwait(false);
-        }
-
-
-        private static void SetCorrelationId(Mock<ICorrelationContext> context)
-        {
-            var correlationId = Guid.NewGuid().ToString();
-            context.Setup(c => c.CorrelationId).Returns(correlationId);
         }
 
         private static void SetObservationTime(Mock<IIso8601Durations> iso8601Durations, string isoDate)
