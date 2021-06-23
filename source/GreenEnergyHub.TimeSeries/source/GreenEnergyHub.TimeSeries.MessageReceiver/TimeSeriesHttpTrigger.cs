@@ -63,7 +63,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             var result = await _commandHandler.HandleAsync(command).ConfigureAwait(false);
             result.CorrelationId = _correlationContext.CorrelationId;
 
-            return new OkObjectResult(command);
+            return new OkObjectResult(result);
         }
 
         private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(byte[] message)
