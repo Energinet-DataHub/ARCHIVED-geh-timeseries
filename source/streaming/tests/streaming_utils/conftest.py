@@ -51,7 +51,7 @@ def master_data(spark):
     # dtype=str to prevent pandas from inferring types, which e.g. causes some strings to be parsed as floats and displayed in scientific notation
     master_data_pd = pd.read_csv(testdata_dir + "master-data.csv",
                                  sep=";",
-                                 parse_dates=["ValidFrom", "ValidTo"],
+                                 parse_dates=["validFrom", "validTo"],
                                  dtype=str)
 
     # Convert selected columns to 
@@ -60,7 +60,7 @@ def master_data(spark):
     master_data_pd['product'] = master_data_pd['product'].astype('int')
 
     # Remove the meta column. The column is added in test csv file to let developers explain the data in the rows.
-    master_data_pd.drop(columns=["Meta"], inplace=True)
+    master_data_pd.drop(columns=["meta"], inplace=True)
 
     master_data = spark.createDataFrame(master_data_pd, schema=master_data_schema)
     return master_data

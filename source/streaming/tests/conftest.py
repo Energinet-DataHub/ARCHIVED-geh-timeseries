@@ -74,36 +74,15 @@ def master_data_factory(spark, master_schema):
                         valid_from=timestamp_past,
                         valid_to=timestamp_future,
                         metering_point_type=MeteringPointType.consumption.value,
-                        marketparticipant_mrid="mm",
-                        meteringgridarea_domain_mrid="mdm",
-                        inmeteringgridarea_domain_mrid="idm",
-                        inmeteringgridownerarea_domain_mrid="idm",
-                        outmeteringgridarea_domain_mrid="odm",
-                        outmeteringgridownerarea_domain_mrid="odm",
-                        settlement_method=SettlementMethod.flex.value,
-                        technology="tech"):
+                        settlement_method=SettlementMethod.flex.value):
         return pd.DataFrame({
             'meteringPointId': [metering_point_id],
-            "ValidFrom": [valid_from],
-            "ValidTo": [valid_to],
-            "MeterReadingPeriodicity": ["a"],
-            "MeteringMethod": ["b"],
-            "MeteringGridArea_Domain_mRID": [meteringgridarea_domain_mrid],
-            "ConnectionState": ["e"],
-            "EnergySupplier_MarketParticipant_mRID": [marketparticipant_mrid],
-            "BalanceResponsibleParty_MarketParticipant_mRID": ["f"],
-            "InMeteringGridArea_Domain_mRID": [inmeteringgridarea_domain_mrid],
-            "OutMeteringGridArea_Domain_mRID": [outmeteringgridarea_domain_mrid],
-            "Parent_Domain_mRID": ["j"],
-            "ServiceCategory_Kind": ["l"],
+            "validFrom": [valid_from],
+            "validTo": [valid_to],
             "meteringPointType": [metering_point_type],
             "settlementMethod": [settlement_method],
             "unit": [MeasureUnit.kilo_watt_hour.value],
-            "product": [Product.energy_active.value],
-            "Technology": [technology],
-            "OutMeteringGridArea_Domain_Owner_mRID": [outmeteringgridownerarea_domain_mrid],
-            "InMeteringGridArea_Domain_Owner_mRID": [inmeteringgridownerarea_domain_mrid],
-            "DistributionList": [[]]})
+            "product": [Product.energy_active.value]})
 
     def factory(arg):
         if not isinstance(arg, list):
@@ -173,7 +152,6 @@ def time_series_json_factory():
                SettlementMethod.flex.value,
                timestamp_now,
                timestamp_now)
-        print(json_str)
         return json_str
 
     return factory
@@ -213,13 +191,6 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
                 quantity=1.0,
                 metering_point_type=MeteringPointType.consumption.value,
                 settlement_method=SettlementMethod.flex.value,
-                technology="tech",
-                meteringgridarea_domain_mrid="101",
-                marketparticipant_mrid="11",
-                inmeteringgridarea_domain_mrid="2",
-                inmeteringgridownerarea_domain_mrid="3",
-                outmeteringgridarea_domain_mrid="4",
-                outmeteringgridownerarea_domain_mrid="5",
                 do_fail_enrichment=False):
         parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id, quantity=quantity))
         denormalized_parsed_data = denormalize_parsed_data(parsed_data)
@@ -232,14 +203,7 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
 
         master_data = master_data_factory(dict(metering_point_id=metering_point_id,
                                                metering_point_type=metering_point_type,
-                                               marketparticipant_mrid=marketparticipant_mrid,
-                                               meteringgridarea_domain_mrid=meteringgridarea_domain_mrid,
-                                               inmeteringgridarea_domain_mrid=inmeteringgridarea_domain_mrid,
-                                               inmeteringgridownerarea_domain_mrid=inmeteringgridownerarea_domain_mrid,
-                                               outmeteringgridarea_domain_mrid=outmeteringgridarea_domain_mrid,
-                                               outmeteringgridownerarea_domain_mrid=outmeteringgridownerarea_domain_mrid,
-                                               settlement_method=settlement_method,
-                                               technology=technology))
+                                               settlement_method=settlement_method))
         return Enricher.enrich(denormalized_parsed_data, master_data)
     return creator
 
@@ -268,14 +232,12 @@ def valid_atomic_value_schema():
         StructField("IsTimeSeriesValid", BooleanType(), False),
         StructField("correlationId", StringType(), False),
         StructField("series_meteringPointId", StringType(), False),
-        StructField("MeterReadingPeriodicity", StringType(), False),
         StructField("series_product", StringType(), False),
         StructField("series_unit", StringType(), False),
         StructField("series_meteringPointType", IntegerType(), False),
         StructField("series_settlementMethod", IntegerType(), False),
         StructField("document_businessReasonCode", StringType(), False),
         StructField("document_recipient_businessProcessRole", StringType(), False),
-        StructField("DistributionList", ArrayType(StringType()), False),
         StructField("series_point_quantity", SchemaFactory.quantity_type, False),
         StructField("series_point_quality", IntegerType(), False),
         StructField("series_point_observationTime", TimestampType(), False),

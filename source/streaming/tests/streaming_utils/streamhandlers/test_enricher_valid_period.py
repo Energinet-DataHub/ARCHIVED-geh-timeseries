@@ -16,6 +16,7 @@ import time
 from datetime import datetime, timedelta
 import pytest
 
+from geh_stream.codelists import SettlementMethod
 from geh_stream.streaming_utils import parse_enrich_and_validate_time_series_as_points
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.streaming_utils.streamhandlers import denormalize_parsed_data
@@ -37,12 +38,12 @@ valid_to2 = __create_time_stamp(offset_time, 120)
 @pytest.fixture(scope="class")
 def master_data(master_data_factory):
     """
-    Create two master data intervals. Column 'technology' is arbitrary selected as a flag to make it indetifyable,
+    Create two master data intervals. Column 'settlement_method' is arbitrary selected as a flag to make it indetifyable,
     which interval was used in enrichment.
     """
     return master_data_factory([
-        dict(metering_point_id="1", valid_from=valid_from1, valid_to=valid_to1, technology="1"),
-        dict(metering_point_id="1", valid_from=valid_to1, valid_to=valid_to2, technology="2")
+        dict(metering_point_id="1", valid_from=valid_from1, valid_to=valid_to1, settlement_method=SettlementMethod.profiled.value),
+        dict(metering_point_id="1", valid_from=valid_to1, valid_to=valid_to2, settlement_method=SettlementMethod.flex.value)
     ])
 
 
@@ -58,7 +59,7 @@ def enriched_data_factory(master_data, parsed_data_factory):
 def test_valid_from_is_inclusive(enriched_data_factory):
     enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
     print(str(enriched_data.first()))
-    assert enriched_data.first().Technology == "1"
+    assert enriched_data.first().settlementMethod == SettlementMethod.profiled.value
 
 
 def test_valid_to_is_exclusive(enriched_data_factory):
@@ -71,4 +72,4 @@ def test_valid_to_is_exclusive(enriched_data_factory):
 
     # Assert: The time series point was matched with the second interval (when it matches both the end of first
     # interval and the begining of the second interval).
-    assert enriched_data.first().Technology == "2"
+    assert enriched_data.first().settlementMethod == SettlementMethod.flex.value

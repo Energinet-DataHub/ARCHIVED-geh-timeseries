@@ -23,7 +23,6 @@ csv_read_config = {
 }
 
 master_data_schema = SchemaFactory.get_instance(SchemaNames.Master)
-distribution_list_schema = SchemaFactory.get_instance(SchemaNames.DistributionList)
 
 
 def read_master_data_from_csv(spark: SparkSession, master_data_storage_path: str) -> DataFrame:
@@ -35,9 +34,8 @@ def read_master_data_from_csv(spark: SparkSession, master_data_storage_path: str
         .load(master_data_storage_path)
 
     master_data = master_data \
-        .withColumn("ValidTo",
-                    coalesce(col("ValidTo"), lit("9999-12-31").cast("timestamp"))) \
-        .withColumn("DistributionList", from_json("DistributionList", distribution_list_schema))
+        .withColumn("validTo",
+                    coalesce(col("validTo"), lit("9999-12-31").cast("timestamp")))
 
     master_data.printSchema()
     master_data.show(truncate=False)

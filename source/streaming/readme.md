@@ -34,9 +34,8 @@ By providing default values for columns also allow tests to have to specify valu
 Test example:
 
 ```python
-def test_valid_from_is_inclusive(enriched_data_factory):
-    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
-    assert enriched_data.first().Technology == "1"
+def test_enricher_adds_metering_point_type(enriched_data):
+    assert has_column(enriched_data, "md.meteringPointType")
 ```
 
 ## Package Wheel

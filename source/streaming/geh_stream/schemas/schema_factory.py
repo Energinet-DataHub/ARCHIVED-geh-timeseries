@@ -69,31 +69,12 @@ class SchemaFactory:
     # ValidFrom and ValidTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
         .add("meteringPointId", StringType(), False) \
-        .add("ValidFrom", TimestampType(), False) \
-        .add("ValidTo", TimestampType(), True) \
-        .add("MeterReadingPeriodicity", StringType(), False) \
-        .add("MeteringMethod", StringType(), False) \
-        .add("MeteringGridArea_Domain_mRID", StringType(), True) \
-        .add("ConnectionState", StringType(), True) \
-        .add("EnergySupplier_MarketParticipant_mRID", StringType(), True) \
-        .add("BalanceResponsibleParty_MarketParticipant_mRID", StringType(), True) \
-        .add("InMeteringGridArea_Domain_mRID", StringType(), False) \
-        .add("OutMeteringGridArea_Domain_mRID", StringType(), False) \
-        .add("Parent_Domain_mRID", StringType(), False) \
-        .add("ServiceCategory_Kind", StringType(), False) \
+        .add("validFrom", TimestampType(), False) \
+        .add("validTo", TimestampType(), True) \
         .add("meteringPointType", StringType(), False) \
         .add("settlementMethod", IntegerType(), False) \
         .add("unit", IntegerType(), False) \
-        .add("product", IntegerType(), False) \
-        .add("Technology", StringType(), True) \
-        .add("OutMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
-        .add("InMeteringGridArea_Domain_Owner_mRID", StringType(), False) \
-        .add("DistributionList", StringType(), False)
-
-    distribution_list_schema: ArrayType = ArrayType(
-        StructType([
-            StructField("mRID", StringType(), False),
-            StructField("role", IntegerType(), False)]))
+        .add("product", IntegerType(), False)
 
     parsed_schema = copy.deepcopy(message_body_schema) \
         .add("EventHubEnqueueTime", TimestampType(), True)
@@ -117,18 +98,7 @@ class SchemaFactory:
         .add("meteringPointId", StringType(), False) \
         .add("quantity", quantity_type, True) \
         .add("quality", StringType(), True) \
-        .add("observationTime", TimestampType(), False) \
-        .add("MeteringMethod", StringType(), True) \
-        .add("MeterReadingPeriodicity", StringType(), True) \
-        .add("MeteringGridArea_Domain_mRID", StringType(), False) \
-        .add("ConnectionState", StringType(), False) \
-        .add("EnergySupplier_MarketParticipant_mRID", StringType(), False) \
-        .add("BalanceResponsibleParty_MarketParticipant_mRID", StringType(), False) \
-        .add("InMeteringGridArea_Domain_mRID", StringType(), True) \
-        .add("OutMeteringGridArea_Domain_mRID", StringType(), True) \
-        .add("Parent_Domain_mRID", StringType(), True) \
-        .add("ServiceCategory_Kind", StringType(), True) \
-        .add("Technology", StringType(), True)
+        .add("observationTime", TimestampType(), False)
 
     # For right now, this is the simplest solution for getting master/parsed data
     # This should be improved
@@ -142,7 +112,5 @@ class SchemaFactory:
             return SchemaFactory.message_body_schema
         elif schema_name is SchemaNames.Parquet:
             return SchemaFactory.parquet_schema
-        elif schema_name is SchemaNames.DistributionList:
-            return SchemaFactory.distribution_list_schema
         else:
             return None

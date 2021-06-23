@@ -30,10 +30,6 @@ def vr200_invalid_time_series_point(parsed_data_from_json_file_factory, master_d
     return time_series_points.first()
 
 
-def test_valid_time_series_first_point_has_enriched_data(valid_time_series_point):
-    assert valid_time_series_point.EnergySupplier_MarketParticipant_mRID == "8100000000108"
-
-
 def test_valid_time_series_first_point_has_streaming_data(valid_time_series_point):
     assert valid_time_series_point.series_id == "transaction_id_of_valid_message"
 
