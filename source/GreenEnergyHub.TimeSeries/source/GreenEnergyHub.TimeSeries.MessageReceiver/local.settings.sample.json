@@ -4,6 +4,8 @@
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
-    "LOCAL_TIMEZONENAME": "Europe/Copenhagen"
+    "LOCAL_TIMEZONENAME": "Europe/Copenhagen",
+    "TIMESERIES_QUEUE_URL": "<Insert URL for event hub queue for time series commands>",
+    "TIMESERIES_QUEUE_CONNECTION_STRING": "<Insert connection string for event hub queue for time series commands>"
   }
 }

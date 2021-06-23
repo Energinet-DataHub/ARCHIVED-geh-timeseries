@@ -65,7 +65,9 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             return this;
         }
 
-        public MessagingRegistrator AddMessageDispatcher<TOutboundMessage>()
+        public MessagingRegistrator AddEventHubMessageDispatcher<TOutboundMessage>(
+            string eventHubQueue,
+            string eventHubPassword)
             where TOutboundMessage : IOutboundMessage
         {
             _services.AddScoped<IMessageDispatcher<TOutboundMessage>, MessageDispatcher<TOutboundMessage>>();
@@ -76,14 +78,14 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
                 {
                     var kafkaConfiguration = new KafkaConfiguration
                     {
-                        BoostrapServers = "TESTME123",
-                        SaslMechanism = "Plain",
-                        SaslUsername = "$ConnectionString",
-                        SaslPassword = "TESTME123",
-                        SecurityProtocol = "SaslSsl",
-                        SslCaLocation = "C:\\cacert\\cacert.pem",
-                        MessageTimeoutMs = 1000,
-                        MessageSendMaxRetries = 5,
+                        BoostrapServers = eventHubQueue,
+                        SaslMechanism = KafkaConstants.SaslMechanism,
+                        SaslUsername = KafkaConstants.SaslUsername,
+                        SaslPassword = eventHubPassword,
+                        SecurityProtocol = KafkaConstants.SecurityProtocol,
+                        SslCaLocation = KafkaConstants.SslCaLocation,
+                        MessageTimeoutMs = KafkaConstants.MessageTimeoutMs,
+                        MessageSendMaxRetries = KafkaConstants.MessageSendMaxRetries,
                     };
                     var producer = new KafkaProducerFactory(kafkaConfiguration);
                     var instance = new KafkaDispatcher(producer);
@@ -92,27 +94,5 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 
             return this;
         }
-
-        /*_services.AddSingleton<>(sp =>
-        {
-            var configuration = sp.GetRequiredService<IConfiguration>();
-            var kaftaConfiguration = new KafkaConfiguration
-            {
-                BoostrapServers = configuration.GetValue<string>("TIMESERIES_QUEUE_URL"),
-                SaslMechanism = configuration.GetValue<string>("KAFKA_SASL_MECHANISM"),
-                SaslUsername = configuration.GetValue<string>("KAFKA_USERNAME"),
-                SaslPassword = configuration.GetValue<string>("TIMESERIES_QUEUE_CONNECTION_STRING"),
-                SecurityProtocol = configuration.GetValue<string>("KAFKA_SECURITY_PROTOCOL"),
-                SslCaLocation =
-                    Environment.ExpandEnvironmentVariables(configuration.GetValue<string>("KAFKA_SSL_CA_LOCATION")),
-                MessageTimeoutMs = configuration.GetValue<int>("KAFKA_MESSAGE_TIMEOUT_MS"),
-                MessageSendMaxRetries = configuration.GetValue<int>("KAFKA_MESSAGE_SEND_MAX_RETRIES"),
-            };
-            string messageQueueTopic = configuration.GetValue<string>("TIMESERIES_QUEUE_TOPIC");
-            return new TimeSeriesMessageQueueDispatcher(
-                new KafkaDispatcher(new KafkaProducerFactory(kaftaConfiguration)),
-                sp.GetRequiredService<IJsonSerializer>(),
-                messageQueueTopic);
-        });*/
     }
 }
