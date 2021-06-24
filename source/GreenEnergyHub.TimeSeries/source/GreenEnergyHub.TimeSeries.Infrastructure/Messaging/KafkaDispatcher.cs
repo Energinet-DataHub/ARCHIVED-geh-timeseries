@@ -26,13 +26,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
     public class KafkaDispatcher<TOutboundMessage> : IKafkaDispatcher<TOutboundMessage>
         where TOutboundMessage : IOutboundMessage
     {
-        public KafkaDispatcher(KafkaDispatcher instance, string topic)
+        public KafkaDispatcher(IKafkaDispatcher instance, string topic)
         {
             Instance = instance;
             Topic = topic;
         }
 
-        public KafkaDispatcher Instance { get; }
+        public IKafkaDispatcher Instance { get; }
 
         public string Topic { get; }
     }

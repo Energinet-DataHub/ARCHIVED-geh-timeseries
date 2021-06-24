@@ -30,7 +30,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         /// <summary>
         /// An instance of a the kafka dispatcher
         /// </summary>
-        KafkaDispatcher Instance { get; }
+        IKafkaDispatcher Instance { get; }
 
         /// <summary>
         /// The topic to use in Kafka
