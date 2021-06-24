@@ -19,7 +19,6 @@ using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Application.Handlers;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
@@ -69,11 +68,16 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             return new OkObjectResult(result);
         }
 
-        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(Stream stream)
+        private static async Task<byte[]> ConvertStreamToBytesAsync(Stream stream)
         {
             using var ms = new MemoryStream();
             await stream.CopyToAsync(ms).ConfigureAwait(false);
-            var message = ms.ToArray();
+            return ms.ToArray();
+        }
+
+        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(Stream stream)
+        {
+            var message = await ConvertStreamToBytesAsync(stream).ConfigureAwait(false);
             var command = (TimeSeriesCommand)await _messageExtractor.ExtractAsync(message).ConfigureAwait(false);
 
             return command;
@@ -83,5 +87,6 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         {
             _correlationContext.CorrelationId = context.InvocationId;
         }
+
     }
 }
