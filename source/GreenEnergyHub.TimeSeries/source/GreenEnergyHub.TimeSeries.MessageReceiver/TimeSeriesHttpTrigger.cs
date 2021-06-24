@@ -87,6 +87,5 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         {
             _correlationContext.CorrelationId = context.InvocationId;
         }
-
     }
 }
