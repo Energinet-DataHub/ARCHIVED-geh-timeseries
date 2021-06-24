@@ -89,7 +89,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
 
         [Theory]
         [InlineAutoMoqData]
-        public async Task ConvertAsync_WhenCalledWithValidTimeSeriesContainingUnexpectedCimContent_ReturnsParsedObject(
+        public async Task ConvertAsync_WhenCalledWithValidTimeSeriesContainingUnusedCimContent_ReturnsParsedObject(
             [NotNull][Frozen] Mock<ICorrelationContext> context,
             [NotNull][Frozen] Mock<IIso8601Durations> iso8601Durations,
             [NotNull] TimeSeriesCommandConverter timeSeriesCommandConverter)
@@ -100,7 +100,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
 
             SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
 
-            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithUnexpectedValidCimContent.xml");
+            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml");
             using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
 
             // Act

@@ -28,12 +28,12 @@ limitations under the License.
     <ItemGroup>
       <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
       <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_withoutQualityElements.xml" />
-      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnexpectedValidCimContent.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
     </ItemGroup>
 
     <ItemGroup>
       <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithoutQualityElements.xml" />
-      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnexpectedValidCimContent.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
       <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
     </ItemGroup>
 
