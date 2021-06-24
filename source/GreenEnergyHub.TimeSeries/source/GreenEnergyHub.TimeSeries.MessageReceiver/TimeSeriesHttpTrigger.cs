@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Application.Handlers;
@@ -21,6 +22,7 @@ using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GreenEnergyHub.TimeSeries.MessageReceiver
@@ -52,14 +54,14 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         [Function(FunctionName)]
         public async Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
-            [NotNull] byte[] message,
+            [NotNull] HttpRequestData req,
             [NotNull] FunctionContext context)
         {
             _log.LogInformation("Function {FunctionName} started to process a request", FunctionName);
 
             SetupCorrelationContext(context);
 
-            var command = await GetTimeSeriesCommandAsync(message).ConfigureAwait(false);
+            var command = await GetTimeSeriesCommandAsync(req.Body).ConfigureAwait(false);
 
             var result = await _commandHandler.HandleAsync(command).ConfigureAwait(false);
             result.CorrelationId = _correlationContext.CorrelationId;
@@ -67,8 +69,11 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             return new OkObjectResult(result);
         }
 
-        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(byte[] message)
+        private async Task<TimeSeriesCommand> GetTimeSeriesCommandAsync(Stream stream)
         {
+            using var ms = new MemoryStream();
+            await stream.CopyToAsync(ms).ConfigureAwait(false);
+            var message = ms.ToArray();
             var command = (TimeSeriesCommand)await _messageExtractor.ExtractAsync(message).ConfigureAwait(false);
 
             return command;

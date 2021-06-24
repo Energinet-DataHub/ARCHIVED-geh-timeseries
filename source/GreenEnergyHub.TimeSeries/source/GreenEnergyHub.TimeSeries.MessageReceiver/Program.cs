@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics;
 using GreenEnergyHub.Iso8601;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Application.Handlers;
@@ -76,6 +77,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         private static void ConfigureIso8601Services(IServiceCollection services)
         {
             const string timeZoneIdString = "LOCAL_TIMEZONENAME";
+            var variables = Environment.GetEnvironmentVariables();
             var timeZoneId = Environment.GetEnvironmentVariable(timeZoneIdString) ??
                              throw new ArgumentNullException(
                                  timeZoneIdString,
