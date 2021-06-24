@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <NotifyValidatedMeasureData_MarketDocument xmlns="urn:ebix:org:NotifyValidatedMeasureData:1:0">
     <mRID>DocId_Valid_003</mRID>
     <type>E66</type>

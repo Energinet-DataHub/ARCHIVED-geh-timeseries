@@ -22,7 +22,6 @@ using JetBrains.Annotations;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
 {
-    // TODO BJARKE: Unit tests
     public class MessageExtractor<TInboundMessage> : MessageExtractor
         where TInboundMessage : IInboundMessage
     {

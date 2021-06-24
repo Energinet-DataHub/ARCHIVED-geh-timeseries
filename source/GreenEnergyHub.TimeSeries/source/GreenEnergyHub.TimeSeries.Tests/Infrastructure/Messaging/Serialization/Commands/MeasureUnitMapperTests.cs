@@ -33,6 +33,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("TNE", MeasureUnit.Tonne)]
         [InlineData("", MeasureUnit.Unknown)]
         [InlineData("DoesNotExist", MeasureUnit.Unknown)]
+        [InlineData(null, MeasureUnit.Unknown)]
         public void Map_WhenGivenInput_MapsToCorrectEnum(string unit, MeasureUnit expected)
         {
             var actual = MeasureUnitMapper.Map(unit);

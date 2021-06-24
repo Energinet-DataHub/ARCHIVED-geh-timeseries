@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<?xml version="1.0" encoding="utf-8"?>
 <!--This is a valid CIM XML TimeSeries although it contains unexpected, valid, CIM elements. Our parser must be able to process this anyways-->
 <NotifyValidatedMeasureData_MarketDocument xmlns="urn:ebix:org:NotifyValidatedMeasureData:1:0">
     <mRID>DocId_Valid_002</mRID>

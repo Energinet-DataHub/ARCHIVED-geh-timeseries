@@ -57,8 +57,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
         public async Task ExtractAsync_WhenGivenByteArray_CallsDeserializerAndReturnsResult(
             [Frozen] [NotNull] Mock<JsonMessageDeserializer<IInboundMessage>> deserializer,
             [NotNull] byte[] data,
-            [NotNull] IInboundMessage message,
-            [NotNull] MessageExtractor<IInboundMessage> sut)
+            [NotNull] IInboundMessage message)
         {
             // Arrange
             byte[]? deserializeBytes = null;
@@ -69,6 +68,8 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
                 .Returns(Task.FromResult(message))
                 .Callback<byte[], CancellationToken>(
                     (calledData, _) => deserializeBytes = calledData);
+
+            var sut = new MessageExtractor<IInboundMessage>(deserializer.Object);
 
             // Act
             var result = await sut.ExtractAsync(data).ConfigureAwait(false);
@@ -94,9 +95,9 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
         [InlineAutoMoqData]
         public async Task ExtractAsync_WhenGivenStream_CallsDeserializerAndReturnsResult(
             [Frozen] [NotNull] Mock<JsonMessageDeserializer<IInboundMessage>> deserializer,
-            [NotNull] IInboundMessage message,
-            [NotNull] MessageExtractor<IInboundMessage> sut)
+            [NotNull] IInboundMessage message)
         {
+            // Arrange
             await using var stream = new MemoryStream();
 
             var calledDeserializer = false;
@@ -107,6 +108,8 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
                 .Returns(Task.FromResult(message))
                 .Callback<byte[], CancellationToken>(
                     (_, _) => calledDeserializer = true);
+
+            var sut = new MessageExtractor<IInboundMessage>(deserializer.Object);
 
             // Act
             var result = await sut.ExtractAsync(stream).ConfigureAwait(false);
