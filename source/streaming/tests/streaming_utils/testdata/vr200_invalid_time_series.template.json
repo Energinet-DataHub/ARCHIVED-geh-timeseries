@@ -28,7 +28,7 @@
     "points": [
       {
         "position": 1,
-        "observationTime": "2020-11-12T23:00:00Z",
+        "observationDateTime": "2020-11-12T23:00:00Z",
         "quantity": 1.337,
         "quality": 1
       }

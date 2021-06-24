@@ -48,15 +48,15 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("series_startDateTime"),
                 col("series_endDateTime"),
                 col("series_point_position"),
-                col("series_point_observationTime"),
+                col("series_point_observationDateTime"),
                 col("series_point_quantity"),
                 col("series_point_quality"),
                 col("transaction_mRID"),
                 col("correlationId"),
 
-                year("series_point_observationTime").alias("year"),
-                month("series_point_observationTime").alias("month"),
-                dayofmonth("series_point_observationTime").alias("day")) \
+                year("series_point_observationDateTime").alias("year"),
+                month("series_point_observationDateTime").alias("month"),
+                dayofmonth("series_point_observationDateTime").alias("day")) \
         .repartition("year", "month", "day") \
         .write \
         .partitionBy("year", "month", "day") \
@@ -64,3 +64,41 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
         .mode("append") \
         .save(output_delta_lake_path)
     timer.stop_timer()
+
+
+def log_invalid_time_series(batched_time_series_points: DataFrame, telemetry_client):
+    invalid_time_series_points = batched_time_series_points \
+        .filter(col("IsTimeSeriesValid") == lit(False)) \
+        .select(col("document_id"),
+                col("document_requestDateTime"),
+                col("document_type"),
+                col("document_createdDateTime"),
+                col("document_sender_id"),
+                col("document_sender_businessProcessRole"),
+                col("document_recipient_id"),
+                col("document_recipient_businessProcessRole"),
+                col("document_businessReasonCode"),
+                col("series_id"),
+                col("series_meteringPointId"),
+                col("series_product"),
+                col("series_meteringPointType"),
+                col("series_settlementMethod"),
+                col("series_registrationDateTime"),
+                col("series_unit"),
+                col("series_resolution"),
+                col("series_startDateTime"),
+                col("series_endDateTime"),
+                col("series_point_position"),
+                col("series_point_observationDateTime"),
+                col("series_point_quantity"),
+                col("series_point_quality"),
+                col("transaction_mRID"),
+                col("correlationId"),
+                col("IsTimeSeriesValid"),
+                col("VR-200-Is-Valid"),
+                col("VR-245-1-Is-Valid"),
+                col("VR-250-Is-Valid"),
+                col("VR-251-Is-Valid"),
+                col("VR-611-Is-Valid"),
+                col("VR-612-Is-Valid"))
+    invalid_time_series_points.show()

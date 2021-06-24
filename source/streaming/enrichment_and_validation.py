@@ -145,6 +145,9 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
         # Make valid time series points available to aggregations (by storing in Delta lake)
         batch_operations.store_points_of_valid_time_series(batched_time_series_points, output_delta_lake_path, watch)
 
+        # Log invalid time series points
+        batch_operations.log_invalid_time_series(batched_time_series_points, telemetry_client)
+
         batch_count = batch_operations.get_rows_in_batch(batched_time_series_points, watch)
 
         watch.stop_timer(batch_count)
@@ -160,6 +163,7 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
         batch_operations.track_batch_back_to_original_correlation_requests(batched_time_series_points, batch_info, args.telemetry_instrumentation_key)
 
         batched_time_series_points.unpersist()
+        print("Batch details:", batch_info)
 
     except Exception as err:
         # Make sure the exception is not accidently tracked on the last used parent

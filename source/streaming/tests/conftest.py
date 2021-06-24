@@ -130,7 +130,7 @@ def time_series_json_factory():
                     "points": [
                         {{
                             "position": 1,
-                            "observationTime": "{5}",
+                            "observationDateTime": "{5}",
                             "quantity": "{2}",
                             "quality": {3}
                         }}
@@ -239,7 +239,7 @@ def valid_atomic_value_schema():
         StructField("document_recipient_businessProcessRole", StringType(), False),
         StructField("series_point_quantity", SchemaFactory.quantity_type, False),
         StructField("series_point_quality", IntegerType(), False),
-        StructField("series_point_observationTime", TimestampType(), False),
+        StructField("series_point_observationDateTime", TimestampType(), False),
         StructField("document_createdDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)
     ])

@@ -59,7 +59,7 @@ class SchemaFactory:
              .add("endDateTime", TimestampType(), False)
              .add("points", ArrayType(StructType()
                   .add("position", IntegerType(), False)
-                  .add("observationTime", TimestampType(), False)
+                  .add("observationDateTime", TimestampType(), False)
                   .add("quantity", quantity_type, False)
                   .add("quality", IntegerType(), False), True), False), False) \
         .add("transaction", StructType()
