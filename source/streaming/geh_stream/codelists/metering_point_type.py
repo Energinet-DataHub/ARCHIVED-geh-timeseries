@@ -22,4 +22,5 @@ class MeteringPointType(Enum):
     analysis = 5 # D02 in ebIX
     surplus_production_group = 6 # D04 in ebIX
     own_production = 11 # D09 in ebIX
+    electrical_heating = 16 # D14 in ebIX
     exchange_reactive_energy = 20 # D20 in ebIX
