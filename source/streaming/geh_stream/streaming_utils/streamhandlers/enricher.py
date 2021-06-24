@@ -20,14 +20,13 @@ class Enricher:
     @staticmethod
     def enrich(parsed_data: DataFrame, master_data: DataFrame):
         # Enrich time series points with master data by joining on metering point id and valid period.
-        # ValidFrom is inclusive while ValidTo is exclusive.
+        # validFrom is inclusive while validTo is exclusive.
         joined_data = parsed_data.alias("pd") \
             .join(master_data.alias("md"),
                   (col("pd.series_meteringPointId") == col("md.meteringPointId"))
-                  & (col("pd.series_point_observationTime") >= col("md.ValidFrom"))
-                  & (col("pd.series_point_observationTime") < col("md.ValidTo")), how="left")
+                  & (col("pd.series_point_observationTime") >= col("md.validFrom"))
+                  & (col("pd.series_point_observationTime") < col("md.validTo")), how="left")
 
         # Remove column that are only needed in order to be able to do the join
         return joined_data \
-            .drop(parsed_data["series_meteringPointId"]) \
-            .drop(master_data["ValidFrom"]).drop(master_data["ValidTo"])
+            .drop(master_data["validFrom"]).drop(master_data["validTo"])

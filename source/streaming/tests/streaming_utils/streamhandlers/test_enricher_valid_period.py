@@ -31,7 +31,7 @@ offset_time = datetime.now()
 
 # Simulate two master data intervals (with different data)
 valid_from1 = __create_time_stamp(offset_time, 0)
-valid_to1 = __create_time_stamp(offset_time, 60)  # ValidTo of first interval and ValidFrom of second interval
+valid_to1 = __create_time_stamp(offset_time, 60)  # validTo of first interval and validFrom of second interval
 valid_to2 = __create_time_stamp(offset_time, 120)
 
 

@@ -56,8 +56,6 @@ def master_data(spark):
 
     # Convert selected columns to 
     master_data_pd['settlementMethod'] = master_data_pd['settlementMethod'].astype('int')
-    master_data_pd['unit'] = master_data_pd['unit'].astype('int')
-    master_data_pd['product'] = master_data_pd['product'].astype('int')
 
     # Remove the meta column. The column is added in test csv file to let developers explain the data in the rows.
     master_data_pd.drop(columns=["meta"], inplace=True)

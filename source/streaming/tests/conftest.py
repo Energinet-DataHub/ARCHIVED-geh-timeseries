@@ -80,9 +80,7 @@ def master_data_factory(spark, master_schema):
             "validFrom": [valid_from],
             "validTo": [valid_to],
             "meteringPointType": [metering_point_type],
-            "settlementMethod": [settlement_method],
-            "unit": [MeasureUnit.kilo_watt_hour.value],
-            "product": [Product.energy_active.value]})
+            "settlementMethod": [settlement_method]})
 
     def factory(arg):
         if not isinstance(arg, list):
@@ -223,6 +221,7 @@ date_time_formatting_string = "%Y-%m-%dT%H:%M:%S%z"
 default_obs_time = datetime.strptime("2020-01-01T00:00:00+0000", date_time_formatting_string)
 
 
+# TODO: What is this? Should probably be either removed or refactored (or at least updated).
 @pytest.fixture(scope="module")
 def valid_atomic_value_schema():
     """
@@ -246,6 +245,7 @@ def valid_atomic_value_schema():
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def valid_atomic_values_for_actors_sample_df(spark, valid_atomic_value_schema):
     structureData = [
@@ -276,6 +276,7 @@ def invalid_time_series_schema():
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def invalid_atomic_values_for_actors_sample_df(spark, invalid_time_series_schema):
     structureData = [
@@ -285,6 +286,7 @@ def invalid_atomic_values_for_actors_sample_df(spark, invalid_time_series_schema
     return df2
 
 
+# TODO: Seems brittle
 @pytest.fixture(scope="module")
 def validation_results_schema():
     """
@@ -299,6 +301,7 @@ def validation_results_schema():
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def validation_results_values_for_actors_sample_df(spark, validation_results_schema):
     structureData = [

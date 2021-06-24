@@ -23,6 +23,6 @@ def validate_vr_245_1(df):
                     ~
                     (
                         (col("md.meteringPointType") == MeteringPointType.consumption.value)
-                        & col("series_point_quantity").isNotNull()
-                        & (col("series_point_quantity") < 0)
+                        & col("pd.series_point_quantity").isNotNull()
+                        & (col("pd.series_point_quantity") < 0)
                     ))

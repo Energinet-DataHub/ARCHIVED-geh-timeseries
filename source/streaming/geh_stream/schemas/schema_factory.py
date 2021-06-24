@@ -66,15 +66,13 @@ class SchemaFactory:
             .add("mRID", StringType(), False), False) \
         .add("correlationId", StringType(), False)
 
-    # ValidFrom and ValidTo are not to be included in outputs from the time series point streaming process
+    # validFrom and validTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
         .add("meteringPointId", StringType(), False) \
         .add("validFrom", TimestampType(), False) \
         .add("validTo", TimestampType(), True) \
         .add("meteringPointType", StringType(), False) \
-        .add("settlementMethod", IntegerType(), False) \
-        .add("unit", IntegerType(), False) \
-        .add("product", IntegerType(), False)
+        .add("settlementMethod", IntegerType(), False)
 
     parsed_schema = copy.deepcopy(message_body_schema) \
         .add("EventHubEnqueueTime", TimestampType(), True)
@@ -84,21 +82,21 @@ class SchemaFactory:
     make_all_nullable(parsed_schema)
 
     parquet_schema: StructType = StructType() \
-        .add("correlationId", StringType(), False) \
+        .add("document_correlationId", StringType(), False) \
         .add("document_id", StringType(), False) \
-        .add("createdDateTime", TimestampType(), False) \
-        .add("sender_id", StringType(), False) \
-        .add("businessReasonCode", StringType(), False) \
-        .add("sender_businessProcessRole", StringType(), False) \
+        .add("document_createdDateTime", TimestampType(), False) \
+        .add("document_sender_id", StringType(), False) \
+        .add("document_businessReasonCode", StringType(), False) \
+        .add("document_sender_businessProcessRole", StringType(), False) \
         .add("series_id", StringType(), False) \
-        .add("product", StringType(), False) \
-        .add("unit", StringType(), False) \
-        .add("meteringPointType", StringType(), False) \
-        .add("settlementMethod", StringType(), True) \
-        .add("meteringPointId", StringType(), False) \
-        .add("quantity", quantity_type, True) \
-        .add("quality", StringType(), True) \
-        .add("observationTime", TimestampType(), False)
+        .add("series_meteringPointId", StringType(), False) \
+        .add("series_meteringPointType", StringType(), False) \
+        .add("series_product", StringType(), False) \
+        .add("series_unit", StringType(), False) \
+        .add("series_settlementMethod", StringType(), True) \
+        .add("series_point_quantity", quantity_type, True) \
+        .add("series_point_quality", StringType(), True) \
+        .add("series_point_observationDateTime", TimestampType(), False)
 
     # For right now, this is the simplest solution for getting master/parsed data
     # This should be improved
