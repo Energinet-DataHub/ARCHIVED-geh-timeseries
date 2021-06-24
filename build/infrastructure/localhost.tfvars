@@ -1,0 +1,6 @@
+environment         = "s"
+organisation        = "bjm"
+resource_group_name = "rg-DH3-BJM-S"
+project             = "time"
+tenant_id           = "f7619355-6c67-4100-9a78-1847f30742e2"
+spn_object_id       = "3e48e871-3693-414b-90c9-8556fad401f5"

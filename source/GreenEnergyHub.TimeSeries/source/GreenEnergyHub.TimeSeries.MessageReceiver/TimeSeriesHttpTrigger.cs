@@ -20,8 +20,7 @@ using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Extensions.Http;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.Logging;
 
 namespace GreenEnergyHub.TimeSeries.MessageReceiver
@@ -36,25 +35,27 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         private readonly ICorrelationContext _correlationContext;
         private readonly MessageExtractor _messageExtractor;
         private readonly ITimeSeriesCommandHandler _commandHandler;
+        private readonly ILogger _log;
 
         public TimeSeriesHttpTrigger(
             ICorrelationContext correlationContext,
             MessageExtractor messageExtractor,
-            ITimeSeriesCommandHandler commandHandler)
+            ITimeSeriesCommandHandler commandHandler,
+            [NotNull] ILoggerFactory loggerFactory)
         {
             _correlationContext = correlationContext;
             _messageExtractor = messageExtractor;
             _commandHandler = commandHandler;
+            _log = loggerFactory.CreateLogger(nameof(TimeSeriesHttpTrigger));
         }
 
-        [FunctionName(FunctionName)]
+        [Function(FunctionName)]
         public async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
             [NotNull] byte[] message,
-            [NotNull] ExecutionContext context,
-            ILogger log)
+            [NotNull] FunctionContext context)
         {
-            log.LogInformation("Function {FunctionName} started to process a request", FunctionName);
+            _log.LogInformation("Function {FunctionName} started to process a request", FunctionName);
 
             SetupCorrelationContext(context);
 
@@ -73,9 +74,9 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             return command;
         }
 
-        private void SetupCorrelationContext(ExecutionContext context)
+        private void SetupCorrelationContext(FunctionContext context)
         {
-            _correlationContext.CorrelationId = context.InvocationId.ToString();
+            _correlationContext.CorrelationId = context.InvocationId;
         }
     }
 }

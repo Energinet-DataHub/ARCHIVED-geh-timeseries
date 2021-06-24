@@ -1,0 +1,44 @@
+name: 'Install Databricks CLI and Connect to Cluster'
+description: 'Configures Databricks CLI to connecto to workspace. Note: expects Python to be installed on a runner.'
+inputs:
+  workspace-url: 
+    description: 'databricks workspace url'
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - run: |
+          wsId=$(az resource show \
+          --resource-type Microsoft.Databricks/workspaces \
+          -g "${{env.RESOURCE_GROUP_NAME}}" \
+          -n "dbw-${{ env.PROJECT_NAME }}-${{ env.ORGANISATION_NAME }}-${{ env.ENVIRONMENT_SHORT }}" \
+          --query id -o tsv)
+
+          getToken () {
+            token_response=$(curl -X GET \
+            https://login.microsoftonline.com/${{env.ARM_TENANT_ID}}/oauth2/token \
+            -H 'Content-Type: application/x-www-form-urlencoded' \
+            -d "grant_type=client_credentials&client_id=${{ env.ARM_CLIENT_ID }}&resource=$1&client_secret=${{ env.ARM_CLIENT_SECRET }}"
+                        )
+            jq .access_token -r <<< "$token_response"
+          }
+
+          # Get a token for the global Databricks application. This value is fixed and never changes.
+          token=$(getToken 2ff814a6-3304-4ab8-85cb-cd0e6f879c1d)
+
+          # Get a token for the Azure management API
+          azToken=$(getToken https://management.core.windows.net/)
+
+          # Use both tokens in Databricks API call
+          out=$(curl -s https://${{ inputs.workspace-url }}/api/2.0/clusters/list \
+          -H "Authorization: Bearer $token" \
+          -H "X-Databricks-Azure-SP-Management-Token:$azToken" \
+          -H "X-Databricks-Azure-Workspace-Resource-Id:$wsId")
+          echo "DATABRICKS_AAD_TOKEN=$token" >> $GITHUB_ENV
+      shell: bash
+    - run: pip install --upgrade databricks-cli
+      shell: bash
+    - run: | 
+        set -x
+        databricks configure --host "https://${{ inputs.workspace-url }}" --aad-token
+      shell: bash  
