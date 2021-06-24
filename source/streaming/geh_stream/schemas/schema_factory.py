@@ -81,8 +81,8 @@ class SchemaFactory:
     #       (in event_hub_parser.py) causes all to be nullable regardless of the schema
     make_all_nullable(parsed_schema)
 
+    # TODO: This doesn't seem to be in use as errors in the schema doesn't seem to break anything
     parquet_schema: StructType = StructType() \
-        .add("document_correlationId", StringType(), False) \
         .add("document_id", StringType(), False) \
         .add("document_createdDateTime", TimestampType(), False) \
         .add("document_sender_id", StringType(), False) \
@@ -94,9 +94,11 @@ class SchemaFactory:
         .add("series_product", StringType(), False) \
         .add("series_unit", StringType(), False) \
         .add("series_settlementMethod", StringType(), True) \
+        .add("series_point_position", quantity_type, True) \
+        .add("series_point_observationDateTime", TimestampType(), False) \
         .add("series_point_quantity", quantity_type, True) \
         .add("series_point_quality", StringType(), True) \
-        .add("series_point_observationDateTime", TimestampType(), False)
+        .add("correlationId", StringType(), False)
 
     # For right now, this is the simplest solution for getting master/parsed data
     # This should be improved
