@@ -81,7 +81,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal(24, result.Series.Points.Count);
             Assert.Equal(1, result.Series.Points[0].Position);
             Assert.Equal(0.337m, result.Series.Points[0].Quantity);
-            Assert.Equal(InstantPattern.ExtendedIso.Parse("2021-06-27T22:00:00Z").Value, result.Series.Points[0].ObservationTime);
+            Assert.Equal(InstantPattern.ExtendedIso.Parse("2021-06-27T22:00:00Z").Value, result.Series.Points[0].ObservationDateTime);
             Assert.Equal(QuantityQuality.Measured, result.Series.Points[0].Quality);
 
             await Task.CompletedTask.ConfigureAwait(false);

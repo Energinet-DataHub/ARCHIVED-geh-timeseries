@@ -94,7 +94,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                     Position = i,
                     Quantity = i,
                     Quality = QuantityQuality.Measured,
-                    ObservationTime = time,
+                    ObservationDateTime = time,
                 };
                 command.Series.Points.Add(point);
             }
