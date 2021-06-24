@@ -23,7 +23,7 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
         /// </summary>
         public int Position { get; set; }
 
-        public Instant ObservationTime { get; set; }
+        public Instant ObservationDateTime { get; set; }
 
         public decimal Quantity { get; set; }
 

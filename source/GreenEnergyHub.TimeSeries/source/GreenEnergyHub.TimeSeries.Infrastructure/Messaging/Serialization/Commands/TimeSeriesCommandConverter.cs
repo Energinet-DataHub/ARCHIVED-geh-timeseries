@@ -174,7 +174,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                 }
                 else if (reader.Is(TimeSeriesCommandConstants.Point, TimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
                 {
-                    point.ObservationTime = _iso8601Durations.AddDuration(
+                    point.ObservationDateTime = _iso8601Durations.AddDuration(
                         series.StartDateTime,
                         TimeSeriesResolutionMapper.Map(series.Resolution),
                         point.Position - 1);

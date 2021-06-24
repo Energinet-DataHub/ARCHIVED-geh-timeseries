@@ -15,7 +15,19 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("PT15M", TimeSeriesResolution.QuarterOfHour)]
         [InlineData("", TimeSeriesResolution.Unknown)]
         [InlineData("DoesNotExist", TimeSeriesResolution.Unknown)]
-        public void Map_WhenGivenInput_MapsToCorrectEnum(string input, TimeSeriesResolution expected)
+        public void Map_WhenGivenStringInput_MapsToCorrectEnum(string input, TimeSeriesResolution expected)
+        {
+            var actual = TimeSeriesResolutionMapper.Map(input);
+            Assert.Equal(actual, expected);
+        }
+
+        [Theory]
+        [InlineData(TimeSeriesResolution.Day, "P1D")]
+        [InlineData(TimeSeriesResolution.Hour, "PT1H")]
+        [InlineData(TimeSeriesResolution.Month, "P1M")]
+        [InlineData(TimeSeriesResolution.QuarterOfHour, "PT15M")]
+        [InlineData(TimeSeriesResolution.Unknown, "")]
+        public void Map_WhenGivenEnumInput_MapsToCorrectString(TimeSeriesResolution input, string expected)
         {
             var actual = TimeSeriesResolutionMapper.Map(input);
             Assert.Equal(actual, expected);
