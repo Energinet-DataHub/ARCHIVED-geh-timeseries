@@ -21,3 +21,4 @@ class BusinessProcessRole(Enum):
     system_operator = 3
     metered_data_responsible = 4
     energy_agency = 5
+    metered_data_administrator = 6
