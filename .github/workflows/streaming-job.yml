@@ -100,7 +100,7 @@ jobs:
         ]
     env:
       WHEEL_STORAGE_NAME: '${{ env.PROJECT_NAME }}${{ matrix.environment.short }}'
-      WHEEL_STORAGE_ADDRESS: https://time${{ github.event.number }}uwheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_ADDRESS: https://{{ WHEEL_STORAGE_NAME }}{{ github.event.number }}.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
@@ -208,7 +208,8 @@ jobs:
     environment:
       name: ${{ matrix.environment.long }}
     env:
-      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: '${{ env.PROJECT_NAME }}${{ matrix.environment.short }}'
+      WHEEL_STORAGE_ADDRESS: https://{{ WHEEL_STORAGE_NAME }}{{ github.event.number }}.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
 
     steps:
