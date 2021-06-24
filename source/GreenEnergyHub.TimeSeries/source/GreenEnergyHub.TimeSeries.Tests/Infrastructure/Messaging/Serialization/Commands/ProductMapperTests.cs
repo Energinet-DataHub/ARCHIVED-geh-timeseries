@@ -31,6 +31,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("5790001330590", Product.Tariff)]
         [InlineData("", Product.Unknown)]
         [InlineData("DoesNotExist", Product.Unknown)]
+        [InlineData(null, Product.Unknown)]
         public void Map_WhenGivenInput_MapsToCorrectEnum(string input, Product expected)
         {
             var actual = ProductMapper.Map(input);

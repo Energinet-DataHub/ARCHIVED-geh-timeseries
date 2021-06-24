@@ -46,6 +46,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("D99", MeteringPointType.InternalUse)]
         [InlineData("", MeteringPointType.Unknown)]
         [InlineData("DoesNotExist", MeteringPointType.Unknown)]
+        [InlineData(null, MeteringPointType.Unknown)]
         public void Map_WhenGivenInput_MapsToCorrectEnum(string input, MeteringPointType expected)
         {
             var actual = MeteringPointTypeMapper.Map(input);

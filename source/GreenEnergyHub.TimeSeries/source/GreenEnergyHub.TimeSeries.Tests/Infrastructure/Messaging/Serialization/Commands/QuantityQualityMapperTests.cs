@@ -30,6 +30,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("36", QuantityQuality.Revised)]
         [InlineData("", QuantityQuality.Unknown)]
         [InlineData("DoesNotExist", QuantityQuality.Unknown)]
+        [InlineData(null, QuantityQuality.Unknown)]
         public void Map_WhenGivenInput_MapsToCorrectEnum(string input, QuantityQuality expected)
         {
             var actual = QuantityQualityMapper.Map(input);

@@ -28,6 +28,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
         [InlineData("E01", SettlementMethod.Profiled)]
         [InlineData("", SettlementMethod.Unknown)]
         [InlineData("DoesNotExist", SettlementMethod.Unknown)]
+        [InlineData(null, SettlementMethod.Unknown)]
         public void Map_WhenGivenInput_ToCorrectEnum(string input, SettlementMethod expected)
         {
             var actual = SettlementMethodMapper.Map(input);
