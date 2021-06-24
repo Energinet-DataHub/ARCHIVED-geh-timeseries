@@ -198,7 +198,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WHEEL_STORAGE_NAME: 'time${{ github.event.number }}uwheels'
-      WHEEL_STORAGE_ADDRESS: https://${{ env.WHEEL_STORAGE_NAME }}.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_ADDRESS: https://time${{ github.event.number }}uwheels.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
     environment:
       name: rg-DataHub-Testing-U
@@ -282,7 +282,7 @@ jobs:
       name: rg-DataHub-Testing-U
     env:
       WHEEL_STORAGE_NAME: 'time${{ github.event.number }}uwheels'
-      WHEEL_STORAGE_ADDRESS: https://${{ env.WHEEL_STORAGE_NAME }}.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_ADDRESS: https://time${{ github.event.number }}uwheels.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
 
     steps:
