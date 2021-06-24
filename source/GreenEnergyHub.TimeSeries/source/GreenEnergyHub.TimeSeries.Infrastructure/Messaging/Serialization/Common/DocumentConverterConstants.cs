@@ -14,7 +14,7 @@
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    internal class DocumentConverterConstants
+    internal static class DocumentConverterConstants
     {
         internal const string Id = "mRID";
 

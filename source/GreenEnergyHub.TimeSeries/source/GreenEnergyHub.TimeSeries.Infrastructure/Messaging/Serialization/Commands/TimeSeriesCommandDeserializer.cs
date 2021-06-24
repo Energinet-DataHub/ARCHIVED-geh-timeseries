@@ -26,14 +26,10 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
 {
     public class TimeSeriesCommandDeserializer : MessageDeserializer
     {
-        private readonly ICorrelationContext _correlationContext;
         private readonly TimeSeriesCommandConverter _timeSeriesCommandConverter;
 
-        public TimeSeriesCommandDeserializer(
-            ICorrelationContext correlationContext,
-            TimeSeriesCommandConverter timeSeriesCommandConverter)
+        public TimeSeriesCommandDeserializer(TimeSeriesCommandConverter timeSeriesCommandConverter)
         {
-            _correlationContext = correlationContext;
             _timeSeriesCommandConverter = timeSeriesCommandConverter;
         }
 
