@@ -77,7 +77,6 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         private static void ConfigureIso8601Services(IServiceCollection services)
         {
             const string timeZoneIdString = "LOCAL_TIMEZONENAME";
-            var variables = Environment.GetEnvironmentVariables();
             var timeZoneId = Environment.GetEnvironmentVariable(timeZoneIdString) ??
                              throw new ArgumentNullException(
                                  timeZoneIdString,
