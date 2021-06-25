@@ -21,6 +21,7 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
         MegaWattHour = 2,
         KiloWatt = 3,
         MegaWatt = 4,
+        // A question has been raised to the SME group about the relevancy of the enums below in the time series domain. For now they remain here.
         KiloVarHour = 5,
         MegaVar = 6,
         Tariff = 7,

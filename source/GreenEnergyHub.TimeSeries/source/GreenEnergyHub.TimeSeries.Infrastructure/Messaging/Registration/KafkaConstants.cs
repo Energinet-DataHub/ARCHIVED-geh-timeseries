@@ -14,6 +14,11 @@
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 {
+    /// <summary>
+    /// Variables needed for establishing EventHub connection via Kafka.
+    /// For the time being they are hardcoded. Later, they are expected to be retrieved elsewhere.
+    /// For more info, <see href="https://docs.confluent.io/platform/current/clients/confluent-kafka-dotnet/_site/api/Confluent.Kafka.ProducerConfig.html#properties">Kafka properties</see>
+    /// </summary>
     public static class KafkaConstants
     {
         public const string SaslMechanism = "Plain";
