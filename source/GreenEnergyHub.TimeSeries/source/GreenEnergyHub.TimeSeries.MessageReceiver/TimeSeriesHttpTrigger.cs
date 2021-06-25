@@ -52,7 +52,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
 
         [Function(FunctionName)]
         public async Task<IActionResult> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Function, "post", Route = null)]
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)]
             [NotNull] HttpRequestData req,
             [NotNull] FunctionContext context)
         {
