@@ -45,7 +45,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
         /// <summary>
         /// Register services required to resolve a <see cref="IMessageDispatcher{TInboundMessage}"/>.
         /// </summary>
-        public MessagingRegistrator AddMessageDispatcher<TOutboundMessage>(
+        public MessagingRegistrator AddServiceBusMessageDispatcher<TOutboundMessage>(
             string serviceBusConnectionString,
             string serviceBusTopicName)
             where TOutboundMessage : IOutboundMessage
@@ -65,7 +65,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             return this;
         }
 
-        public MessagingRegistrator AddEventHubMessageDispatcher<TOutboundMessage>(
+        public MessagingRegistrator AddKafkaMessageDispatcher<TOutboundMessage>(
             string eventHubQueue,
             string eventHubPassword,
             string eventHubTopic)

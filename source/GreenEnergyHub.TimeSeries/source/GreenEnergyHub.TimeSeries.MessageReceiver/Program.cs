@@ -68,7 +68,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             services.AddScoped<TimeSeriesCommandConverter>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             services.AddMessaging()
-                .AddEventHubMessageDispatcher<TimeSeriesCommand>(
+                .AddKafkaMessageDispatcher<TimeSeriesCommand>(
                     eventHubQueue,
                     eventHubPassword,
                     eventHubTopic);
