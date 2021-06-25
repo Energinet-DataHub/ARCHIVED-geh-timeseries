@@ -32,7 +32,7 @@ namespace GreenEnergyHub.TimeSeries.Application.Handlers
         {
             await _messageDispatcher.DispatchAsync(command).ConfigureAwait(false);
 
-            return TimeSeriesCommandResult.CreateSuccess();
+            return TimeSeriesCommandResult.CreateSuccess(command);
         }
     }
 }

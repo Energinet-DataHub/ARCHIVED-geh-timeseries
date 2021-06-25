@@ -12,17 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+
+#pragma warning disable 8618
+
 namespace GreenEnergyHub.TimeSeries.Domain.Notification.Result
 {
     public class TimeSeriesCommandResult
     {
         public bool IsSucceeded { get; set; }
 
-        public string? CorrelationId { get; set; }
+        public string CorrelationId { get; set; }
 
-        public static TimeSeriesCommandResult CreateSuccess()
+        public static TimeSeriesCommandResult CreateSuccess([NotNull] TimeSeriesCommand command)
         {
-            return new () { IsSucceeded = true };
+            return new ()
+            {
+                IsSucceeded = true,
+                CorrelationId = command.CorrelationId,
+            };
         }
     }
 }

@@ -63,7 +63,6 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             var command = await GetTimeSeriesCommandAsync(req.Body).ConfigureAwait(false);
 
             var result = await _commandHandler.HandleAsync(command).ConfigureAwait(false);
-            result.CorrelationId = _correlationContext.CorrelationId;
 
             return new OkObjectResult(result);
         }
