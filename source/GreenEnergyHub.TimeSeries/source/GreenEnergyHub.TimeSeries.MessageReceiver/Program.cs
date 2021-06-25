@@ -49,21 +49,9 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
 
         private static void ConfigureMessaging(IServiceCollection services)
         {
-            const string eventHubQueueString = "TIMESERIES_QUEUE_URL";
-            var eventHubQueue = Environment.GetEnvironmentVariable(eventHubQueueString) ??
-                                 throw new ArgumentNullException(
-                                     eventHubQueueString,
-                                     "does not exist in configuration settings");
-            const string eventHubPasswordString = "TIMESERIES_QUEUE_CONNECTION_STRING";
-            var eventHubPassword = Environment.GetEnvironmentVariable(eventHubPasswordString) ??
-                                   throw new ArgumentNullException(
-                                       eventHubPasswordString,
-                                       "does not exist in configuration settings");
-            const string eventHubTopicString = "TIMESERIES_QUEUE_TOPIC";
-            var eventHubTopic = Environment.GetEnvironmentVariable(eventHubTopicString) ??
-                                   throw new ArgumentNullException(
-                                       eventHubTopicString,
-                                       "does not exist in configuration settings");
+            var eventHubQueue = GetEnvironmentSetting("TIMESERIES_QUEUE_URL");
+            var eventHubPassword = GetEnvironmentSetting("TIMESERIES_QUEUE_CONNECTION_STRING");
+            var eventHubTopic = GetEnvironmentSetting("TIMESERIES_QUEUE_TOPIC");
 
             services.AddScoped<TimeSeriesCommandConverter>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
@@ -76,14 +64,18 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
 
         private static void ConfigureIso8601Services(IServiceCollection services)
         {
-            const string timeZoneIdString = "LOCAL_TIMEZONENAME";
-            var timeZoneId = Environment.GetEnvironmentVariable(timeZoneIdString) ??
-                             throw new ArgumentNullException(
-                                 timeZoneIdString,
-                                 "does not exist in configuration settings");
+            var timeZoneId = GetEnvironmentSetting("LOCAL_TIMEZONENAME");
             var timeZoneConfiguration = new Iso8601ConversionConfiguration(timeZoneId);
             services.AddSingleton<IIso8601ConversionConfiguration>(timeZoneConfiguration);
             services.AddSingleton<IIso8601Durations, Iso8601Durations>();
+        }
+
+        private static string GetEnvironmentSetting(string settingString)
+        {
+            return Environment.GetEnvironmentVariable(settingString) ??
+                throw new ArgumentNullException(
+                    settingString,
+                    "does not exist in configuration settings");
         }
     }
 }
