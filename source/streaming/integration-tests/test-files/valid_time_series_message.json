@@ -1,0 +1,755 @@
+{
+    "document": {
+        "id": "DocId2021-06-22T13:57:45.194Z",
+        "requestDateTime": "2021-06-22T13:57:46.5917008Z",
+        "type": 1,
+        "createdDateTime": "2021-06-22T13:57:45.194Z",
+        "sender": {
+            "id": "8100000000030",
+            "businessProcessRole": 4
+        },
+        "recipient": {
+            "id": "5790001330552",
+            "businessProcessRole": 3
+        },
+        "businessReasonCode": 4
+    },
+    "series": {
+        "id": "tId2021-06-22T13:57:45.194Z",
+        "meteringPointId": "571313180000000005",
+        "meteringPointType": 1,
+        "settlementMethod": 1,
+        "registrationDateTime": "2021-06-22T13:57:45.194Z",
+        "product": 5,
+        "unit": 1,
+        "resolution": 2,
+        "startDateTime": "2021-06-27T22:00:00Z",
+        "endDateTime": "2021-06-28T22:00:00Z",
+        "points": [
+            {
+                "position": 1,
+                "observationDateTime": "2021-06-27T22:00:00Z",
+                "quantity": 0.337,
+                "quality": 1
+            },
+            {
+                "position": 2,
+                "observationDateTime": "2021-06-27T22:15:00Z",
+                "quantity": 1.683,
+                "quality": 5
+            },
+            {
+                "position": 3,
+                "observationDateTime": "2021-06-27T22:30:00Z",
+                "quantity": 2.016,
+                "quality": 3
+            },
+            {
+                "position": 4,
+                "observationDateTime": "2021-06-27T22:45:00Z",
+                "quantity": 3.895,
+                "quality": 2
+            },
+            {
+                "position": 5,
+                "observationDateTime": "2021-06-27T23:00:00Z",
+                "quantity": 4.124,
+                "quality": 0
+            },
+            {
+                "position": 6,
+                "observationDateTime": "2021-06-27T23:15:00Z",
+                "quantity": 5.754,
+                "quality": 0
+            },
+            {
+                "position": 7,
+                "observationDateTime": "2021-06-27T23:30:00Z",
+                "quantity": 6.895,
+                "quality": 0
+            },
+            {
+                "position": 8,
+                "observationDateTime": "2021-06-27T23:45:00Z",
+                "quantity": 7.895,
+                "quality": 0
+            },
+            {
+                "position": 9,
+                "observationDateTime": "2021-06-28T00:00:00Z",
+                "quantity": 8.756,
+                "quality": 0
+            },
+            {
+                "position": 10,
+                "observationDateTime": "2021-06-28T00:15:00Z",
+                "quantity": 9.002,
+                "quality": 0
+            },
+            {
+                "position": 11,
+                "observationDateTime": "2021-06-28T00:30:00Z",
+                "quantity": 10.650,
+                "quality": 0
+            },
+            {
+                "position": 12,
+                "observationDateTime": "2021-06-28T00:45:00Z",
+                "quantity": 11.248,
+                "quality": 0
+            },
+            {
+                "position": 13,
+                "observationDateTime": "2021-06-28T01:00:00Z",
+                "quantity": 12.677,
+                "quality": 0
+            },
+            {
+                "position": 14,
+                "observationDateTime": "2021-06-28T01:15:00Z",
+                "quantity": 13.845,
+                "quality": 0
+            },
+            {
+                "position": 15,
+                "observationDateTime": "2021-06-28T01:30:00Z",
+                "quantity": 14.902,
+                "quality": 0
+            },
+            {
+                "position": 16,
+                "observationDateTime": "2021-06-28T01:45:00Z",
+                "quantity": 15.379,
+                "quality": 0
+            },
+            {
+                "position": 17,
+                "observationDateTime": "2021-06-28T02:00:00Z",
+                "quantity": 16.508,
+                "quality": 0
+            },
+            {
+                "position": 18,
+                "observationDateTime": "2021-06-28T02:15:00Z",
+                "quantity": 17.657,
+                "quality": 0
+            },
+            {
+                "position": 19,
+                "observationDateTime": "2021-06-28T02:30:00Z",
+                "quantity": 18.018,
+                "quality": 0
+            },
+            {
+                "position": 20,
+                "observationDateTime": "2021-06-28T02:45:00Z",
+                "quantity": 19.019,
+                "quality": 0
+            },
+            {
+                "position": 21,
+                "observationDateTime": "2021-06-28T03:00:00Z",
+                "quantity": 20.020,
+                "quality": 0
+            },
+            {
+                "position": 22,
+                "observationDateTime": "2021-06-28T03:15:00Z",
+                "quantity": 21.021,
+                "quality": 0
+            },
+            {
+                "position": 23,
+                "observationDateTime": "2021-06-28T03:30:00Z",
+                "quantity": 22.022,
+                "quality": 0
+            },
+            {
+                "position": 24,
+                "observationDateTime": "2021-06-28T03:45:00Z",
+                "quantity": 23.023,
+                "quality": 0
+            },
+            {
+                "position": 25,
+                "observationDateTime": "2021-06-28T04:00:00Z",
+                "quantity": 24.024,
+                "quality": 0
+            },
+            {
+                "position": 26,
+                "observationDateTime": "2021-06-28T04:15:00Z",
+                "quantity": 25.025,
+                "quality": 0
+            },
+            {
+                "position": 27,
+                "observationDateTime": "2021-06-28T04:30:00Z",
+                "quantity": 26.026,
+                "quality": 0
+            },
+            {
+                "position": 28,
+                "observationDateTime": "2021-06-28T04:45:00Z",
+                "quantity": 27.027,
+                "quality": 0
+            },
+            {
+                "position": 29,
+                "observationDateTime": "2021-06-28T05:00:00Z",
+                "quantity": 28.028,
+                "quality": 0
+            },
+            {
+                "position": 30,
+                "observationDateTime": "2021-06-28T05:15:00Z",
+                "quantity": 29.029,
+                "quality": 0
+            },
+            {
+                "position": 31,
+                "observationDateTime": "2021-06-28T05:30:00Z",
+                "quantity": 30.030,
+                "quality": 0
+            },
+            {
+                "position": 32,
+                "observationDateTime": "2021-06-28T05:45:00Z",
+                "quantity": 31.031,
+                "quality": 0
+            },
+            {
+                "position": 33,
+                "observationDateTime": "2021-06-28T06:00:00Z",
+                "quantity": 32.032,
+                "quality": 0
+            },
+            {
+                "position": 34,
+                "observationDateTime": "2021-06-28T06:15:00Z",
+                "quantity": 33.033,
+                "quality": 0
+            },
+            {
+                "position": 35,
+                "observationDateTime": "2021-06-28T06:30:00Z",
+                "quantity": 34.034,
+                "quality": 0
+            },
+            {
+                "position": 36,
+                "observationDateTime": "2021-06-28T06:45:00Z",
+                "quantity": 35.035,
+                "quality": 0
+            },
+            {
+                "position": 37,
+                "observationDateTime": "2021-06-28T07:00:00Z",
+                "quantity": 36.036,
+                "quality": 0
+            },
+            {
+                "position": 38,
+                "observationDateTime": "2021-06-28T07:15:00Z",
+                "quantity": 37.037,
+                "quality": 0
+            },
+            {
+                "position": 39,
+                "observationDateTime": "2021-06-28T07:30:00Z",
+                "quantity": 38.038,
+                "quality": 0
+            },
+            {
+                "position": 40,
+                "observationDateTime": "2021-06-28T07:45:00Z",
+                "quantity": 39.039,
+                "quality": 0
+            },
+            {
+                "position": 41,
+                "observationDateTime": "2021-06-28T08:00:00Z",
+                "quantity": 40.040,
+                "quality": 0
+            },
+            {
+                "position": 42,
+                "observationDateTime": "2021-06-28T08:15:00Z",
+                "quantity": 41.041,
+                "quality": 0
+            },
+            {
+                "position": 43,
+                "observationDateTime": "2021-06-28T08:30:00Z",
+                "quantity": 42.042,
+                "quality": 0
+            },
+            {
+                "position": 44,
+                "observationDateTime": "2021-06-28T08:45:00Z",
+                "quantity": 43.043,
+                "quality": 0
+            },
+            {
+                "position": 45,
+                "observationDateTime": "2021-06-28T09:00:00Z",
+                "quantity": 44.044,
+                "quality": 0
+            },
+            {
+                "position": 46,
+                "observationDateTime": "2021-06-28T09:15:00Z",
+                "quantity": 45.045,
+                "quality": 0
+            },
+            {
+                "position": 47,
+                "observationDateTime": "2021-06-28T09:30:00Z",
+                "quantity": 46.046,
+                "quality": 0
+            },
+            {
+                "position": 48,
+                "observationDateTime": "2021-06-28T09:45:00Z",
+                "quantity": 47.047,
+                "quality": 0
+            },
+            {
+                "position": 49,
+                "observationDateTime": "2021-06-28T10:00:00Z",
+                "quantity": 48.048,
+                "quality": 0
+            },
+            {
+                "position": 50,
+                "observationDateTime": "2021-06-28T10:15:00Z",
+                "quantity": 49.049,
+                "quality": 0
+            },
+            {
+                "position": 51,
+                "observationDateTime": "2021-06-28T10:30:00Z",
+                "quantity": 50.050,
+                "quality": 0
+            },
+            {
+                "position": 52,
+                "observationDateTime": "2021-06-28T10:45:00Z",
+                "quantity": 51.051,
+                "quality": 0
+            },
+            {
+                "position": 53,
+                "observationDateTime": "2021-06-28T11:00:00Z",
+                "quantity": 52.052,
+                "quality": 0
+            },
+            {
+                "position": 54,
+                "observationDateTime": "2021-06-28T11:15:00Z",
+                "quantity": 53.053,
+                "quality": 0
+            },
+            {
+                "position": 55,
+                "observationDateTime": "2021-06-28T11:30:00Z",
+                "quantity": 54.054,
+                "quality": 0
+            },
+            {
+                "position": 56,
+                "observationDateTime": "2021-06-28T11:45:00Z",
+                "quantity": 55.055,
+                "quality": 0
+            },
+            {
+                "position": 57,
+                "observationDateTime": "2021-06-28T12:00:00Z",
+                "quantity": 56.056,
+                "quality": 0
+            },
+            {
+                "position": 58,
+                "observationDateTime": "2021-06-28T12:15:00Z",
+                "quantity": 57.057,
+                "quality": 0
+            },
+            {
+                "position": 59,
+                "observationDateTime": "2021-06-28T12:30:00Z",
+                "quantity": 58.058,
+                "quality": 0
+            },
+            {
+                "position": 60,
+                "observationDateTime": "2021-06-28T12:45:00Z",
+                "quantity": 59.059,
+                "quality": 0
+            },
+            {
+                "position": 61,
+                "observationDateTime": "2021-06-28T13:00:00Z",
+                "quantity": 60.060,
+                "quality": 0
+            },
+            {
+                "position": 62,
+                "observationDateTime": "2021-06-28T13:15:00Z",
+                "quantity": 61.061,
+                "quality": 0
+            },
+            {
+                "position": 63,
+                "observationDateTime": "2021-06-28T13:30:00Z",
+                "quantity": 62.062,
+                "quality": 0
+            },
+            {
+                "position": 64,
+                "observationDateTime": "2021-06-28T13:45:00Z",
+                "quantity": 63.063,
+                "quality": 0
+            },
+            {
+                "position": 65,
+                "observationDateTime": "2021-06-28T14:00:00Z",
+                "quantity": 64.064,
+                "quality": 0
+            },
+            {
+                "position": 66,
+                "observationDateTime": "2021-06-28T14:15:00Z",
+                "quantity": 65.065,
+                "quality": 0
+            },
+            {
+                "position": 67,
+                "observationDateTime": "2021-06-28T14:30:00Z",
+                "quantity": 66.066,
+                "quality": 0
+            },
+            {
+                "position": 68,
+                "observationDateTime": "2021-06-28T14:45:00Z",
+                "quantity": 67.067,
+                "quality": 0
+            },
+            {
+                "position": 69,
+                "observationDateTime": "2021-06-28T15:00:00Z",
+                "quantity": 68.068,
+                "quality": 0
+            },
+            {
+                "position": 70,
+                "observationDateTime": "2021-06-28T15:15:00Z",
+                "quantity": 69.069,
+                "quality": 0
+            },
+            {
+                "position": 71,
+                "observationDateTime": "2021-06-28T15:30:00Z",
+                "quantity": 70.070,
+                "quality": 0
+            },
+            {
+                "position": 72,
+                "observationDateTime": "2021-06-28T15:45:00Z",
+                "quantity": 71.071,
+                "quality": 0
+            },
+            {
+                "position": 73,
+                "observationDateTime": "2021-06-28T16:00:00Z",
+                "quantity": 72.072,
+                "quality": 0
+            },
+            {
+                "position": 74,
+                "observationDateTime": "2021-06-28T16:15:00Z",
+                "quantity": 73.073,
+                "quality": 0
+            },
+            {
+                "position": 75,
+                "observationDateTime": "2021-06-28T16:30:00Z",
+                "quantity": 74.074,
+                "quality": 0
+            },
+            {
+                "position": 76,
+                "observationDateTime": "2021-06-28T16:45:00Z",
+                "quantity": 75.075,
+                "quality": 0
+            },
+            {
+                "position": 77,
+                "observationDateTime": "2021-06-28T17:00:00Z",
+                "quantity": 76.076,
+                "quality": 0
+            },
+            {
+                "position": 78,
+                "observationDateTime": "2021-06-28T17:15:00Z",
+                "quantity": 77.077,
+                "quality": 0
+            },
+            {
+                "position": 79,
+                "observationDateTime": "2021-06-28T17:30:00Z",
+                "quantity": 78.078,
+                "quality": 0
+            },
+            {
+                "position": 80,
+                "observationDateTime": "2021-06-28T17:45:00Z",
+                "quantity": 79.079,
+                "quality": 0
+            },
+            {
+                "position": 81,
+                "observationDateTime": "2021-06-28T18:00:00Z",
+                "quantity": 80.080,
+                "quality": 0
+            },
+            {
+                "position": 82,
+                "observationDateTime": "2021-06-28T18:15:00Z",
+                "quantity": 81.081,
+                "quality": 0
+            },
+            {
+                "position": 83,
+                "observationDateTime": "2021-06-28T18:30:00Z",
+                "quantity": 82.082,
+                "quality": 0
+            },
+            {
+                "position": 84,
+                "observationDateTime": "2021-06-28T18:45:00Z",
+                "quantity": 83.083,
+                "quality": 0
+            },
+            {
+                "position": 85,
+                "observationDateTime": "2021-06-28T19:00:00Z",
+                "quantity": 84.084,
+                "quality": 0
+            },
+            {
+                "position": 86,
+                "observationDateTime": "2021-06-28T19:15:00Z",
+                "quantity": 85.085,
+                "quality": 0
+            },
+            {
+                "position": 87,
+                "observationDateTime": "2021-06-28T19:30:00Z",
+                "quantity": 86.086,
+                "quality": 0
+            },
+            {
+                "position": 88,
+                "observationDateTime": "2021-06-28T19:45:00Z",
+                "quantity": 87.087,
+                "quality": 0
+            },
+            {
+                "position": 89,
+                "observationDateTime": "2021-06-28T20:00:00Z",
+                "quantity": 88.088,
+                "quality": 0
+            },
+            {
+                "position": 90,
+                "observationDateTime": "2021-06-28T20:15:00Z",
+                "quantity": 89.089,
+                "quality": 0
+            },
+            {
+                "position": 91,
+                "observationDateTime": "2021-06-28T20:30:00Z",
+                "quantity": 90.090,
+                "quality": 0
+            },
+            {
+                "position": 92,
+                "observationDateTime": "2021-06-28T20:45:00Z",
+                "quantity": 91.091,
+                "quality": 0
+            },
+            {
+                "position": 93,
+                "observationDateTime": "2021-06-28T21:00:00Z",
+                "quantity": 92.092,
+                "quality": 0
+            },
+            {
+                "position": 94,
+                "observationDateTime": "2021-06-28T21:15:00Z",
+                "quantity": 93.093,
+                "quality": 0
+            },
+            {
+                "position": 95,
+                "observationDateTime": "2021-06-28T21:30:00Z",
+                "quantity": 94.094,
+                "quality": 0
+            },
+            {
+                "position": 96,
+                "observationDateTime": "2021-06-28T21:45:00Z",
+                "quantity": 95.095,
+                "quality": 0
+            },
+            {
+                "position": 1,
+                "observationDateTime": "2021-06-27T22:00:00Z",
+                "quantity": 0.337,
+                "quality": 1
+            },
+            {
+                "position": 2,
+                "observationDateTime": "2021-06-27T23:00:00Z",
+                "quantity": 1.683,
+                "quality": 5
+            },
+            {
+                "position": 3,
+                "observationDateTime": "2021-06-28T00:00:00Z",
+                "quantity": 2.016,
+                "quality": 3
+            },
+            {
+                "position": 4,
+                "observationDateTime": "2021-06-28T01:00:00Z",
+                "quantity": 3.895,
+                "quality": 2
+            },
+            {
+                "position": 5,
+                "observationDateTime": "2021-06-28T02:00:00Z",
+                "quantity": 4.124,
+                "quality": 0
+            },
+            {
+                "position": 6,
+                "observationDateTime": "2021-06-28T03:00:00Z",
+                "quantity": 5.754,
+                "quality": 0
+            },
+            {
+                "position": 7,
+                "observationDateTime": "2021-06-28T04:00:00Z",
+                "quantity": 6.895,
+                "quality": 0
+            },
+            {
+                "position": 8,
+                "observationDateTime": "2021-06-28T05:00:00Z",
+                "quantity": 7.895,
+                "quality": 0
+            },
+            {
+                "position": 9,
+                "observationDateTime": "2021-06-28T06:00:00Z",
+                "quantity": 8.756,
+                "quality": 0
+            },
+            {
+                "position": 10,
+                "observationDateTime": "2021-06-28T07:00:00Z",
+                "quantity": 9.002,
+                "quality": 0
+            },
+            {
+                "position": 11,
+                "observationDateTime": "2021-06-28T08:00:00Z",
+                "quantity": 10.650,
+                "quality": 0
+            },
+            {
+                "position": 12,
+                "observationDateTime": "2021-06-28T09:00:00Z",
+                "quantity": 11.248,
+                "quality": 0
+            },
+            {
+                "position": 13,
+                "observationDateTime": "2021-06-28T10:00:00Z",
+                "quantity": 12.677,
+                "quality": 0
+            },
+            {
+                "position": 14,
+                "observationDateTime": "2021-06-28T11:00:00Z",
+                "quantity": 13.845,
+                "quality": 0
+            },
+            {
+                "position": 15,
+                "observationDateTime": "2021-06-28T12:00:00Z",
+                "quantity": 14.902,
+                "quality": 0
+            },
+            {
+                "position": 16,
+                "observationDateTime": "2021-06-28T13:00:00Z",
+                "quantity": 15.379,
+                "quality": 0
+            },
+            {
+                "position": 17,
+                "observationDateTime": "2021-06-28T14:00:00Z",
+                "quantity": 16.508,
+                "quality": 0
+            },
+            {
+                "position": 18,
+                "observationDateTime": "2021-06-28T15:00:00Z",
+                "quantity": 17.657,
+                "quality": 0
+            },
+            {
+                "position": 19,
+                "observationDateTime": "2021-06-28T16:00:00Z",
+                "quantity": 18.018,
+                "quality": 0
+            },
+            {
+                "position": 20,
+                "observationDateTime": "2021-06-28T17:00:00Z",
+                "quantity": 19.019,
+                "quality": 0
+            },
+            {
+                "position": 21,
+                "observationDateTime": "2021-06-28T18:00:00Z",
+                "quantity": 20.020,
+                "quality": 0
+            },
+            {
+                "position": 22,
+                "observationDateTime": "2021-06-28T19:00:00Z",
+                "quantity": 21.021,
+                "quality": 0
+            },
+            {
+                "position": 23,
+                "observationDateTime": "2021-06-28T20:00:00Z",
+                "quantity": 22.022,
+                "quality": 0
+            },
+            {
+                "position": 24,
+                "observationDateTime": "2021-06-28T21:00:00Z",
+                "quantity": 23.023,
+                "quality": 0
+            }
+        ]
+    },
+    "transaction": {
+        "mrid": "91b5ec48790f4837950f3209966e0f1a"
+    },
+    "correlationId": "WILL BE REPLACED BY INTEGRATION TEST"
+}
