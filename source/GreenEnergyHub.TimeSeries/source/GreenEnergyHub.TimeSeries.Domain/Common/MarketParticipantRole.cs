@@ -25,5 +25,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.Common
         SystemOperator = 3,
         MeteredDataResponsible = 4,
         EnergyAgency = 5,
+        MeteredDataAdministrator = 6,
     }
 }
