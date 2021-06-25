@@ -14,7 +14,13 @@
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    internal static class TimeSeriesCommandConstants
+    /// <summary>
+    /// Strings used in CIM/XML for elements, namespaces or attributes that we need to
+    /// use when parsing a XML document
+    ///
+    /// This class is specifically used for string specific to the time series command messages
+    /// </summary>
+    internal static class CimTimeSeriesCommandConstants
     {
         internal const string Namespace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
 

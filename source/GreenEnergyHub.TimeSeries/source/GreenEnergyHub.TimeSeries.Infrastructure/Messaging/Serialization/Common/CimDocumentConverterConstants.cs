@@ -14,7 +14,14 @@
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
 {
-    internal static class DocumentConverterConstants
+    /// <summary>
+    /// Strings used in CIM/XML for elements, namespaces or attributes that we need to
+    /// use when parsing a XML document
+    ///
+    /// This class is responsible for string that are used in the document area of the XML
+    /// which is shared between multiple CIM/XML document types
+    /// </summary>
+    internal static class CimDocumentConverterConstants
     {
         internal const string Id = "mRID";
 

@@ -76,47 +76,47 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commo
                     rootElement = reader.LocalName;
                     ns = reader.NamespaceURI;
                 }
-                else if (reader.Is(DocumentConverterConstants.Id, ns))
+                else if (reader.Is(CimDocumentConverterConstants.Id, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Id = content;
                 }
-                else if (reader.Is(DocumentConverterConstants.Type, ns))
+                else if (reader.Is(CimDocumentConverterConstants.Type, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Type = DocumentTypeMapper.Map(content);
                 }
-                else if (reader.Is(DocumentConverterConstants.BusinessReasonCode, ns))
+                else if (reader.Is(CimDocumentConverterConstants.BusinessReasonCode, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
                 }
-                else if (reader.Is(DocumentConverterConstants.IndustryClassification, ns))
+                else if (reader.Is(CimDocumentConverterConstants.IndustryClassification, ns))
                 {
                     // We do not actually use this field, but we need to handle it non-the-less
                     continue;
                 }
-                else if (reader.Is(DocumentConverterConstants.SenderId, ns))
+                else if (reader.Is(CimDocumentConverterConstants.SenderId, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Sender.Id = content;
                 }
-                else if (reader.Is(DocumentConverterConstants.SenderBusinessProcessRole, ns))
+                else if (reader.Is(CimDocumentConverterConstants.SenderBusinessProcessRole, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
                 }
-                else if (reader.Is(DocumentConverterConstants.RecipientId, ns))
+                else if (reader.Is(CimDocumentConverterConstants.RecipientId, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Recipient.Id = content;
                 }
-                else if (reader.Is(DocumentConverterConstants.RecipientBusinessProcessRole, ns))
+                else if (reader.Is(CimDocumentConverterConstants.RecipientBusinessProcessRole, ns))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     document.Recipient.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
                 }
-                else if (reader.Is(DocumentConverterConstants.CreatedDateTime, ns))
+                else if (reader.Is(CimDocumentConverterConstants.CreatedDateTime, ns))
                 {
                     document.CreatedDateTime = Instant.FromDateTimeUtc(reader.ReadElementContentAsDateTime());
                 }

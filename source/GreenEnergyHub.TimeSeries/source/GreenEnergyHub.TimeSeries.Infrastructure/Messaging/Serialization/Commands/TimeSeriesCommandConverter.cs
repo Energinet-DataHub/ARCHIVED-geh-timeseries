@@ -61,41 +61,41 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
 
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
-                if (reader.Is(TimeSeriesCommandConstants.Id, TimeSeriesCommandConstants.Namespace))
+                if (reader.Is(CimTimeSeriesCommandConstants.Id, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.Id = content;
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.MeteringPointId, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.MeteringPointId, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.MeteringPointId = content;
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.MeteringPointType, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.MeteringPointType, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.MeteringPointType = MeteringPointTypeMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.SettlementMethod, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.SettlementMethod, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.SettlementMethod = SettlementMethodMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.RegistrationDateTime, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.RegistrationDateTime, CimTimeSeriesCommandConstants.Namespace))
                 {
                     series.RegistrationDateTime = Instant.FromDateTimeUtc(reader.ReadElementContentAsDateTime());
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Product, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Product, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.Product = ProductMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Unit, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Unit, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.Unit = MeasureUnitMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Period, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Period, CimTimeSeriesCommandConstants.Namespace))
                 {
                     await ParsePeriodAsync(reader, series).ConfigureAwait(false);
                 }
@@ -108,21 +108,21 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
         {
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
-                if (reader.Is(TimeSeriesCommandConstants.Resolution, TimeSeriesCommandConstants.Namespace))
+                if (reader.Is(CimTimeSeriesCommandConstants.Resolution, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     series.Resolution = TimeSeriesResolutionMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.TimeInterval, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.TimeInterval, CimTimeSeriesCommandConstants.Namespace))
                 {
                     await ParseTimeIntervalAsync(reader, series).ConfigureAwait(false);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Point, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Point, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var point = await ParsePointAsync(reader, series).ConfigureAwait(false);
                     series.Points.Add(point);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Period, TimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Period, CimTimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
                 {
                     break;
                 }
@@ -135,15 +135,15 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
         {
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
-                if (reader.Is(TimeSeriesCommandConstants.StartDateTime, TimeSeriesCommandConstants.Namespace))
+                if (reader.Is(CimTimeSeriesCommandConstants.StartDateTime, CimTimeSeriesCommandConstants.Namespace))
                 {
                     series.StartDateTime = Instant.FromDateTimeUtc(reader.ReadElementContentAsDateTime());
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.EndDateTime, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.EndDateTime, CimTimeSeriesCommandConstants.Namespace))
                 {
                     series.EndDateTime = Instant.FromDateTimeUtc(reader.ReadElementContentAsDateTime());
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.TimeInterval, TimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
+                else if (reader.Is(CimTimeSeriesCommandConstants.TimeInterval, CimTimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
                 {
                     break;
                 }
@@ -157,22 +157,22 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
 
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
-                if (reader.Is(TimeSeriesCommandConstants.Position, TimeSeriesCommandConstants.Namespace))
+                if (reader.Is(CimTimeSeriesCommandConstants.Position, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     point.Position = int.Parse(content, CultureInfo.InvariantCulture);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Quantity, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Quantity, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     point.Quantity = decimal.Parse(content, CultureInfo.InvariantCulture);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Quality, TimeSeriesCommandConstants.Namespace))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Quality, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
                     point.Quality = QuantityQualityMapper.Map(content);
                 }
-                else if (reader.Is(TimeSeriesCommandConstants.Point, TimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
+                else if (reader.Is(CimTimeSeriesCommandConstants.Point, CimTimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
                 {
                     point.ObservationDateTime = _iso8601Durations.AddDuration(
                         series.StartDateTime,
