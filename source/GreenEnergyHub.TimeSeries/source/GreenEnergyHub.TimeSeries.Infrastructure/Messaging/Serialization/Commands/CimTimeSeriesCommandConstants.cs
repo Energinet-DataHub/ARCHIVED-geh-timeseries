@@ -22,6 +22,9 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
     /// </summary>
     internal static class CimTimeSeriesCommandConstants
     {
+        /// <summary>
+        /// The CIM namespace for now includes ebix in the naming. This has been raised to the CIM group, but remains as is for now
+        /// </summary>
         internal const string Namespace = "urn:ebix:org:NotifyValidatedMeasureData:1:0";
 
         internal const string Series = "Series";
