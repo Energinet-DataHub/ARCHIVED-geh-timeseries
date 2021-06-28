@@ -212,7 +212,7 @@ jobs:
       WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
       RESOURCE_GROUP_NAME: ${{ matrix.environment.long }}
-
+      ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     steps:
 
       - name: Checkout code
