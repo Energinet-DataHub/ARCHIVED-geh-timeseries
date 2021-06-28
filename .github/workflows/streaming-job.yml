@@ -18,6 +18,7 @@ on:
     branches:
       - main
   workflow_dispatch:
+
 env:
   ORGANISATION_NAME: endk
   PROJECT_NAME: tseries
