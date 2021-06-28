@@ -100,7 +100,7 @@ jobs:
         ]
     env:
       WHEEL_STORAGE_NAME: 'tseries${{ matrix.environment.short }}'
-      WHEEL_STORAGE_ADDRESS: https://${{ env.PROJECT_NAME }}${{ matrix.environment.short }}.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
