@@ -27,8 +27,6 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 
         public const string SecurityProtocol = "SaslSsl";
 
-        public const string SslCaLocation = "C:\\cacert\\cacert.pem";
-
         public const int MessageTimeoutMs = 1000;
 
         public const int MessageSendMaxRetries = 5;
