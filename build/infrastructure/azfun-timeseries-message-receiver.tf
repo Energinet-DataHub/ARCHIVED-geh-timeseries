@@ -26,7 +26,12 @@ module "azfun_message_receiver" {
     WEBSITE_ENABLE_SYNC_UPDATE_SITE              = true
     WEBSITE_RUN_FROM_PACKAGE                     = 1
     WEBSITES_ENABLE_APP_SERVICE_STORAGE          = true
-    FUNCTIONS_WORKER_RUNTIME                     = "dotnet"
+    FUNCTIONS_WORKER_RUNTIME                     = "dotnet-isolated"
+    CACERT_PATH                                  = var.cacert_path
+    LOCAL_TIMEZONENAME                           = local.LOCAL_TIMEZONENAME
+    TIMESERIES_QUEUE_TOPIC                       = module.evh_receivedqueue.name
+    TIMESERIES_QUEUE_URL                         = "${module.evhnm_received_queue.name}.servicebus.windows.net:9093"
+    TIMESERIES_QUEUE_CONNECTION_STRING           = module.evhar_receivedqueue_sender.primary_connection_string
   }
   dependencies                              = [
     module.appi.dependent_on,

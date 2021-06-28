@@ -15,6 +15,7 @@
 using GreenEnergyHub.Json;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
@@ -27,6 +28,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             services.AddScoped<MessageExtractor>();
             services.AddScoped<MessageSerializer, JsonMessageSerializer>();
             services.AddScoped<IJsonOutboundMapperFactory, DefaultJsonMapperFactory>();
+            services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             services.AddSingleton<IJsonSerializer, GreenEnergyHub.TimeSeries.Core.Json.JsonSerializer>();
 
             return new MessagingRegistrator(services);

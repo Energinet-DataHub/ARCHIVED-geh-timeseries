@@ -16,7 +16,7 @@ limitations under the License.
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <Nullable>enable</Nullable>
         <IsPackable>false</IsPackable>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -24,6 +24,18 @@ limitations under the License.
         <LangVersion>9</LangVersion>
         <OutputType>Library</OutputType>
     </PropertyGroup>
+
+    <ItemGroup>
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_withoutQualityElements.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithoutQualityElements.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
+    </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj" />
@@ -43,6 +55,10 @@ limitations under the License.
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
         <PackageReference Include="coverlet.collector" Version="3.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Infrastructure\Messaging\Serialization\Common\" />
     </ItemGroup>
 
 </Project>

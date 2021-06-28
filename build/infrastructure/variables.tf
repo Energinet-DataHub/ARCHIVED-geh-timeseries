@@ -45,6 +45,11 @@ variable "streaming_container_name" {
   default = "messagedata"
 }
 
+variable "cacert_path" {
+  type = string
+  description   = "Path to the ca certificate"
+}
+
 # TODO BJARKE: From green-energy-hub-archived repo
 # variable "current_spn_id" {
 #   type          = string

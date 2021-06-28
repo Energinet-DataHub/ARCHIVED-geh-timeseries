@@ -17,13 +17,14 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
     public enum MeasureUnit
     {
         Unknown = 0,
-        KiloWattHour = 1, // Received as KWH in ebiX
-        MegaWattHour = 2, // Received as MWH in ebiX
-        KiloWatt = 3, // Received as KWT in ebiX
-        MegaWatt = 4, // Received as MAW in ebiX
-        KiloVarHour = 5, // Received as K3 in ebiX
-        MegaVar = 6, // Received as Z03 in ebiX
-        Tariff = 7, // Received as Z14 in ebiX
-        Tonne = 8, // Received as TNE in ebiX
+        KiloWattHour = 1,
+        MegaWattHour = 2,
+        KiloWatt = 3,
+        MegaWatt = 4,
+        // A question has been raised to the SME group about the relevancy of the enums below in the time series domain. For now they remain here.
+        KiloVarHour = 5,
+        MegaVar = 6,
+        Tariff = 7,
+        Tonne = 8,
     }
 }

@@ -14,6 +14,7 @@
 
 using Azure.Messaging.ServiceBus;
 using GreenEnergyHub.Messaging.Transport;
+using GreenEnergyHub.Queues.Kafka;
 using GreenEnergyHub.TimeSeries.Application;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,7 +45,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
         /// <summary>
         /// Register services required to resolve a <see cref="IMessageDispatcher{TInboundMessage}"/>.
         /// </summary>
-        public MessagingRegistrator AddMessageDispatcher<TOutboundMessage>(
+        public MessagingRegistrator AddServiceBusMessageDispatcher<TOutboundMessage>(
             string serviceBusConnectionString,
             string serviceBusTopicName)
             where TOutboundMessage : IOutboundMessage
@@ -59,6 +60,38 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
                     var client = new ServiceBusClient(serviceBusConnectionString);
                     var instance = client.CreateSender(serviceBusTopicName);
                     return new ServiceBusSender<TOutboundMessage>(instance);
+                });
+
+            return this;
+        }
+
+        public MessagingRegistrator AddKafkaMessageDispatcher<TOutboundMessage>(
+            string eventHubQueue,
+            string eventHubPassword,
+            string eventHubTopic,
+            string cacertPath)
+            where TOutboundMessage : IOutboundMessage
+        {
+            _services.AddScoped<IMessageDispatcher<TOutboundMessage>, MessageDispatcher<TOutboundMessage>>();
+            _services.AddScoped<Channel<TOutboundMessage>, EventHubChannel<TOutboundMessage>>();
+
+            _services.AddSingleton<IKafkaDispatcher<TOutboundMessage>>(
+                _ =>
+                {
+                    var kafkaConfiguration = new KafkaConfiguration
+                    {
+                        BoostrapServers = eventHubQueue,
+                        SaslMechanism = KafkaConstants.SaslMechanism,
+                        SaslUsername = KafkaConstants.SaslUsername,
+                        SaslPassword = eventHubPassword,
+                        SecurityProtocol = KafkaConstants.SecurityProtocol,
+                        SslCaLocation = cacertPath,
+                        MessageTimeoutMs = KafkaConstants.MessageTimeoutMs,
+                        MessageSendMaxRetries = KafkaConstants.MessageSendMaxRetries,
+                    };
+                    var producer = new KafkaProducerFactory(kafkaConfiguration);
+                    var instance = new KafkaDispatcher(producer);
+                    return new KafkaDispatcher<TOutboundMessage>(instance, eventHubTopic);
                 });
 
             return this;
