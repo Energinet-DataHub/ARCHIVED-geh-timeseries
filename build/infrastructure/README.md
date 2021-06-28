@@ -109,6 +109,12 @@ The object ID should now be displayed as the first column in the result.
 
 This ID is the value you need for `object_id` (hint: it looks like a `GUID`)
 
+### `cacert_path`
+
+This variable has to be filled with the location of the ca certificate in the environment you are deploying to.
+
+Usually this is `c:\\cacert\\cacert.pem`
+
 ## Prerequisites
 
 ### Installing `Azure CLI`

@@ -45,6 +45,11 @@ variable "streaming_container_name" {
   default = "messagedata"
 }
 
+variable "cacert_path" {
+  type = string
+  default = "c:\\cacert\cacert.pem"
+}
+
 # TODO BJARKE: From green-energy-hub-archived repo
 # variable "current_spn_id" {
 #   type          = string
