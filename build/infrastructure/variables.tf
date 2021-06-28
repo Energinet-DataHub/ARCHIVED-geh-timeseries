@@ -47,7 +47,7 @@ variable "streaming_container_name" {
 
 variable "cacert_path" {
   type = string
-  default = "c:\\cacert\cacert.pem"
+  description   = "Path to the ca certificate"
 }
 
 # TODO BJARKE: From green-energy-hub-archived repo
