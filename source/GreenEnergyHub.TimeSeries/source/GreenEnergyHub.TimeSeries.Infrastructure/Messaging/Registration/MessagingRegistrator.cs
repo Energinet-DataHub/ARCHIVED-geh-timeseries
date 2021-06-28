@@ -68,7 +68,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
         public MessagingRegistrator AddKafkaMessageDispatcher<TOutboundMessage>(
             string eventHubQueue,
             string eventHubPassword,
-            string eventHubTopic)
+            string eventHubTopic,
+            string cacertPath)
             where TOutboundMessage : IOutboundMessage
         {
             _services.AddScoped<IMessageDispatcher<TOutboundMessage>, MessageDispatcher<TOutboundMessage>>();
@@ -84,7 +85,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
                         SaslUsername = KafkaConstants.SaslUsername,
                         SaslPassword = eventHubPassword,
                         SecurityProtocol = KafkaConstants.SecurityProtocol,
-                        SslCaLocation = KafkaConstants.SslCaLocation,
+                        SslCaLocation = cacertPath,
                         MessageTimeoutMs = KafkaConstants.MessageTimeoutMs,
                         MessageSendMaxRetries = KafkaConstants.MessageSendMaxRetries,
                     };

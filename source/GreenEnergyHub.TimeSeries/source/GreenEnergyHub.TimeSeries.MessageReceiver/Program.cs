@@ -52,6 +52,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
             var eventHubQueue = GetEnvironmentSetting("TIMESERIES_QUEUE_URL");
             var eventHubPassword = GetEnvironmentSetting("TIMESERIES_QUEUE_CONNECTION_STRING");
             var eventHubTopic = GetEnvironmentSetting("TIMESERIES_QUEUE_TOPIC");
+            var cacertPath = GetEnvironmentSetting("CACERT_PATH");
 
             services.AddScoped<TimeSeriesCommandConverter>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
@@ -59,7 +60,8 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
                 .AddKafkaMessageDispatcher<TimeSeriesCommand>(
                     eventHubQueue,
                     eventHubPassword,
-                    eventHubTopic);
+                    eventHubTopic,
+                    cacertPath);
         }
 
         private static void ConfigureIso8601Services(IServiceCollection services)
