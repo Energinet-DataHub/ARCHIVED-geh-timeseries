@@ -198,7 +198,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       WHEEL_STORAGE_NAME: 'time${{ github.event.number }}wheels'
-      WHEEL_STORAGE_ADDRESS: https://time${{ github.event.number }}wheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_ADDRESS: 'https://time${{ github.event.number }}wheels.blob.core.windows.net/wheels/'
       WHEEL_CONTAINER_NAME: 'wheels'
     environment:
       name: rg-DataHub-Testing-U
