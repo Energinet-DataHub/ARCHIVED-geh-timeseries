@@ -99,8 +99,8 @@ jobs:
           }
         ]
     env:
-      WHEEL_STORAGE_NAME: '${{ env.PROJECT_NAME }}${{ matrix.environment.short }}'
-      WHEEL_STORAGE_ADDRESS: https://${{ env.PROJECT_NAME }}${{ matrix.environment.short }}.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: 'tseries${{ matrix.environment.short }}'
+      WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
@@ -208,8 +208,8 @@ jobs:
     environment:
       name: ${{ matrix.environment.long }}
     env:
-      WHEEL_STORAGE_NAME: '${{ env.PROJECT_NAME }}${{ matrix.environment.short }}'
-      WHEEL_STORAGE_ADDRESS: https://${{ env.PROJECT_NAME }}${{ matrix.environment.short }}.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: 'tseries${{ matrix.environment.short }}'
+      WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
       RESOURCE_GROUP_NAME: ${{ matrix.environment.long }}
 
