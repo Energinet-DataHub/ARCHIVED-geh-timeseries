@@ -35,7 +35,9 @@ jobs:
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
+          dotnet add package Microsoft.CodeAnalysis.NetAnalyzers --version 5.0.3
           dotnet tool update dotnet-sonarscanner --global
+
 
       - name: Build and analyze
         env:
