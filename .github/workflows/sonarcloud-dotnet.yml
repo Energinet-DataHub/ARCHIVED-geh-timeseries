@@ -36,7 +36,7 @@ jobs:
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
           dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
-          echo ${{ GITHUB_ACTION_PATH }}          
+          echo ${{ $GITHUB_ACTION_PATH }}          
 
       - name: Build and analyze
         env:
