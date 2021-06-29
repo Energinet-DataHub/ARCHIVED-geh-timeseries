@@ -35,7 +35,7 @@ jobs:
         shell: powershell
         run: |
           New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+          dotnet tool update dotnet-sonarscanner --tool-path .\.github\utilities\sonarcloud
 
       - name: Build and analyze
         env:
@@ -43,6 +43,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"geh-timeseries-dotnet" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /s:".\\.github\\utilities\\sonarcloud\\sonarcloud.dotnet.xml"
+          .\.github\utilities\sonarcloud\dotnet-sonarscanner begin /k:"geh-timeseries-dotnet" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /s:"SonarQube.Analysis.xml"
           dotnet build ${{ env.SOLUTION_PATH }} --configuration Release
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          .\.github\utilities\sonarcloud\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
