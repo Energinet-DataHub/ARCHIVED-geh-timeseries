@@ -45,6 +45,6 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         shell: powershell
         run: |
-          dotnet-sonarscanner begin /k:"geh-timeseries-dotnet" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /s:"D:\\a\\geh-timeseries\\geh-timeseries\\.github\\utilities\\sonarcloud\\SonarQube.Analysis.xml"
+          dotnet-sonarscanner begin /k:"geh-timeseries-dotnet" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.projectBaseDir="D:\\a\\geh-timeseries\\geh-timeseries\\source" /s:"D:\\a\\geh-timeseries\\geh-timeseries\\.github\\utilities\\sonarcloud\\SonarQube.Analysis.xml"
           dotnet build ${{ env.SOLUTION_PATH }} --configuration Release
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
