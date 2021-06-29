@@ -12,6 +12,8 @@ on:
 env:
   SOLUTION_PATH: 'source\GreenEnergyHub.TimeSeries\GreenEnergyHub.TimeSeries.sln'
   DOTNET_VERSION: '5.0.x'
+  SONARCLOUD_KEY: 'geh-timeseries-dotnet'
+  SOURCE_PATH_ON_BUILDMACHINE: 'D:\a\geh-timeseries\geh-timeseries\source' # We have to be speficic with this path to get around a .NET 5.0 issue in SonarCLoud
 jobs:
   build:
     name: Build
@@ -45,6 +47,6 @@ jobs:
       - name: Build and analyze
         shell: powershell
         run: |
-          dotnet-sonarscanner begin /k:"geh-timeseries-dotnet" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.projectBaseDir=".\source" /d:sonar.host.url="https://sonarcloud.io"
+          dotnet-sonarscanner begin /k:"${{ env.SONARCLOUD_KEY }}" /o:"energinet-datahub" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.projectBaseDir="${{ env.SOURCE_PATH_ON_BUILDMACHINE }}" /d:sonar.host.url="https://sonarcloud.io"
           dotnet build ${{ env.SOLUTION_PATH }} --configuration Release
           dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
