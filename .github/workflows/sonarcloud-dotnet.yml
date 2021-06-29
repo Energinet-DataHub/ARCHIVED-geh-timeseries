@@ -20,12 +20,16 @@ jobs:
       - name: Setup .NET 3.1 environment
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '3.1.x'
-       
+          dotnet-version: '3.1.x'      
+      
       - name: Setup .NET ${{ env.DOTNET_VERSION }} environment
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
+          
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
 
       - name: Install SonarCloud scanner
         shell: powershell
