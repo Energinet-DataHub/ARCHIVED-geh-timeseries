@@ -6,7 +6,7 @@
     "createdDateTime": "2020-12-01T13:16:29.33Z",
     "sender": {
       "id": "8100000000030",
-      "businessProcessRole": 4
+      "businessProcessRole": 6
     },
     "recipient": {
       "id": "5790001330552",
