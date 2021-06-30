@@ -15,8 +15,8 @@ from enum import Enum
 
 
 class BusinessReasonCode(Enum):
-    unknown = 0,
-    continuous_meter_reading = 1 # This will be received as D06 i ebiX
-    periodic_metering = 2 # This will be received as E23 in ebiX
-    historical_data = 3 # This will be received as E30 in ebiX
-    periodic_flex_metering = 4 # This will be received as D42 in ebiX
+    unknown = 0
+    continuous_meter_reading = 1
+    periodic_metering = 2
+    historical_data = 3
+    periodic_flex_metering = 4

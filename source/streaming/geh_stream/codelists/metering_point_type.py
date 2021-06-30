@@ -15,12 +15,12 @@ from enum import Enum
 
 
 class MeteringPointType(Enum):
-    consumption = 1 # E17 in ebIX
-    production = 2 # E18 in ebIX
-    exchange = 3 # E20 in ebIX
-    ve_production = 4 # D01 in ebIX
-    analysis = 5 # D02 in ebIX
-    surplus_production_group = 6 # D04 in ebIX
-    own_production = 11 # D09 in ebIX
-    electrical_heating = 16 # D14 in ebIX
-    exchange_reactive_energy = 20 # D20 in ebIX
+    consumption = 1
+    production = 2
+    exchange = 3
+    ve_production = 4
+    analysis = 5
+    surplus_production_group = 6
+    own_production = 11
+    electrical_heating = 16
+    exchange_reactive_energy = 20

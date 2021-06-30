@@ -15,12 +15,12 @@ from enum import Enum
 
 
 class MeasureUnit(Enum):
-    unknown = 0,
-    kilo_watt_hour = 1 # Received as KWH in ebiX
-    mega_watt_hour = 2 # Received as MWH in ebiX
-    kilo_watt = 3 # Received as KWT in ebiX
-    mega_watt = 4 # Received as MAW in ebiX
-    kilo_var_hour = 5 # Received as K3 in ebiX
-    mega_var = 6 # Received as Z03 in ebiX
-    tariff = 7 # Received as Z14 in ebiX
-    tonne = 8 # Received as TNE in ebiX
+    unknown = 0
+    kilo_watt_hour = 1
+    mega_watt_hour = 2
+    kilo_watt = 3
+    mega_watt = 4
+    kilo_var_hour = 5
+    mega_var = 6
+    tariff = 7
+    tonne = 8

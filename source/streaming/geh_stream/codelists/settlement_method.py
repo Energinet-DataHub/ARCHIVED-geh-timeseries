@@ -15,7 +15,7 @@ from enum import Enum
 
 
 class SettlementMethod(Enum):
-    unknown = 0,
-    profiled = 1 # This will be received as E01 in ebiX
-    non_profiled = 2 # This will be received as E02 in ebiX
-    flex = 3 # This will be received as D01 in ebiX
+    unknown = 0
+    profiled = 1
+    non_profiled = 2
+    flex = 3
