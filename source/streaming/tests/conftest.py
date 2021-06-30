@@ -194,7 +194,7 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
         denormalized_parsed_data = denormalize_parsed_data(parsed_data)
 
         # Should join find a matching master data record or not?
-        # If so use a non matching mRID for the master data record.
+        # If so use a non matching metering point id for the master data record.
         if do_fail_enrichment:
             non_matching_metering_point_id = str(uuid.uuid4())
             metering_point_id = non_matching_metering_point_id
