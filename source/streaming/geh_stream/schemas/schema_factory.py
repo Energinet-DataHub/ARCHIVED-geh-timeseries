@@ -94,7 +94,7 @@ class SchemaFactory:
         .add("series_product", StringType(), False) \
         .add("series_unit", StringType(), False) \
         .add("series_settlementMethod", StringType(), True) \
-        .add("series_point_position", quantity_type, True) \
+        .add("series_point_position", IntegerType(), True) \
         .add("series_point_observationDateTime", TimestampType(), False) \
         .add("series_point_quantity", quantity_type, True) \
         .add("series_point_quality", StringType(), True) \
