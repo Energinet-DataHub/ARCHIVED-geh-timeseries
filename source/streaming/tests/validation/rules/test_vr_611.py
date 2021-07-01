@@ -36,7 +36,7 @@ from geh_stream.validation.rules.vr_611 import validate_vr_611
         pytest.param(
             1E5,
             MeteringPointType.production.value,
-            SettlementMethod.non_profiled.value,
+            SettlementMethod.unknown.value,
             True,
             id="valid when exceeding limit because it's not a consumption metering point"
         ),
