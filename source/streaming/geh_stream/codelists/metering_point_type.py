@@ -14,9 +14,13 @@
 from enum import Enum
 
 
-class ResolutionDuration(Enum):
-    unknown = 0
-    quarter_of_hour = 1
-    hour = 2
-    day = 3
-    month = 4
+class MeteringPointType(Enum):
+    consumption = 1
+    production = 2
+    exchange = 3
+    ve_production = 4
+    analysis = 5
+    surplus_production_group = 6
+    own_production = 11
+    electrical_heating = 16
+    exchange_reactive_energy = 20

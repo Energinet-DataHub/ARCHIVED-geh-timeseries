@@ -11,5 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .PostOfficeMessage import PostOfficeMessage
-from .AggregationResults import AggregationResults
+from enum import Enum
+
+
+class BusinessProcessRole(Enum):
+    unknown = 0
+    energy_supplier = 1
+    grid_access_provider = 2
+    system_operator = 3
+    metered_data_responsible = 4
+    energy_agency = 5
+    metered_data_administrator = 6

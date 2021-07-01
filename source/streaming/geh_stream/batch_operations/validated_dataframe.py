@@ -21,44 +21,42 @@ import geh_stream.dataframelib as D
 
 
 def add_time_series_validation_status_column(batch_df: DataFrame):
-    return batch_df.withColumn("IsTimeSeriesValid", F.min(col("IsTimeSeriesPointValid")).over(Window.partitionBy("TimeSeries_mRID")))
+    return batch_df.withColumn("IsTimeSeriesValid", F.min(col("IsTimeSeriesPointValid")).over(Window.partitionBy("series_id")))
 
 
 def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_path, watch: MonitoredStopwatch):
     timer = watch.start_sub_timer(store_points_of_valid_time_series.__name__)
     batch_df \
         .filter(col("IsTimeSeriesValid") == lit(True)) \
-        .select(col("MarketEvaluationPoint_mRID"),
-                col("Period_Point_Time").alias("Time"),
-                col("Period_Point_Quantity").alias("Quantity"),
-                col("CorrelationId"),
-                col("MessageReference"),
-                col("MarketDocument_mRID"),
-                col("MarketDocument_CreatedDateTime").alias("CreatedDateTime"),
-                col("MarketDocument_SenderMarketParticipant_mRID").alias("SenderMarketParticipant_mRID"),
-                col("MarketDocument_ProcessType").alias("ProcessType"),
-                col("MarketDocument_SenderMarketParticipant_Type").alias("SenderMarketParticipantMarketRole_Type"),
-                col("TimeSeries_mRID"),
-                col("MktActivityRecord_Status"),
-                col("MarketEvaluationPointType"),
-                col("Period_Point_Quality").alias("Quality"),
-                col("MeterReadingPeriodicity"),
-                col("MeteringMethod"),
-                col("MeteringGridArea_Domain_mRID"),
-                col("ConnectionState"),
-                col("EnergySupplier_MarketParticipant_mRID"),
-                col("BalanceResponsibleParty_MarketParticipant_mRID"),
-                col("InMeteringGridArea_Domain_mRID"),
-                col("OutMeteringGridArea_Domain_mRID"),
-                col("Parent_Domain_mRID"),
-                col("MarketDocument_MarketServiceCategory_Kind").alias("ServiceCategory_Kind"),
-                col("SettlementMethod"),
-                col("QuantityMeasurementUnit_Name"),
-                col("Product"),
+        .select(col("document_id"),
+                col("document_requestDateTime"),
+                col("document_type"),
+                col("document_createdDateTime"),
+                col("document_sender_id"),
+                col("document_sender_businessProcessRole"),
+                col("document_recipient_id"),
+                col("document_recipient_businessProcessRole"),
+                col("document_businessReasonCode"),
+                col("series_id"),
+                col("series_meteringPointId"),
+                col("series_meteringPointType"),
+                col("series_settlementMethod"),
+                col("series_registrationDateTime"),
+                col("series_product"),
+                col("series_unit"),
+                col("series_resolution"),
+                col("series_startDateTime"),
+                col("series_endDateTime"),
+                col("series_point_position"),
+                col("series_point_observationDateTime"),
+                col("series_point_quantity"),
+                col("series_point_quality"),
+                col("transaction_mRID"),
+                col("correlationId"),
 
-                year("Period_Point_Time").alias("year"),
-                month("Period_Point_Time").alias("month"),
-                dayofmonth("Period_Point_Time").alias("day")) \
+                year("series_point_observationDateTime").alias("year"),
+                month("series_point_observationDateTime").alias("month"),
+                dayofmonth("series_point_observationDateTime").alias("day")) \
         .repartition("year", "month", "day") \
         .write \
         .partitionBy("year", "month", "day") \
@@ -66,3 +64,41 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
         .mode("append") \
         .save(output_delta_lake_path)
     timer.stop_timer()
+
+
+def log_invalid_time_series(batched_time_series_points: DataFrame, telemetry_client):
+    invalid_time_series_points = batched_time_series_points \
+        .filter(col("IsTimeSeriesValid") == lit(False)) \
+        .select(col("document_id"),
+                col("document_requestDateTime"),
+                col("document_type"),
+                col("document_createdDateTime"),
+                col("document_sender_id"),
+                col("document_sender_businessProcessRole"),
+                col("document_recipient_id"),
+                col("document_recipient_businessProcessRole"),
+                col("document_businessReasonCode"),
+                col("series_id"),
+                col("series_meteringPointId"),
+                col("series_meteringPointType"),
+                col("series_settlementMethod"),
+                col("series_registrationDateTime"),
+                col("series_product"),
+                col("series_unit"),
+                col("series_resolution"),
+                col("series_startDateTime"),
+                col("series_endDateTime"),
+                col("series_point_position"),
+                col("series_point_observationDateTime"),
+                col("series_point_quantity"),
+                col("series_point_quality"),
+                col("transaction_mRID"),
+                col("correlationId"),
+                col("IsTimeSeriesValid"),
+                col("VR-200-Is-Valid"),
+                col("VR-245-1-Is-Valid"),
+                col("VR-250-Is-Valid"),
+                col("VR-251-Is-Valid"),
+                col("VR-611-Is-Valid"),
+                col("VR-612-Is-Valid"))
+    invalid_time_series_points.show()

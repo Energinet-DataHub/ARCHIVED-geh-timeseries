@@ -37,7 +37,5 @@ class Validator:
                         & col("VR-251-Is-Valid")
                         & col("VR-611-Is-Valid")
                         & col("VR-612-Is-Valid")) \
-            .drop(col("pd.MarketEvaluationPointType")) \
-            .drop(col("pd.QuantityMeasurementUnit_Name")) \
-            .drop(col("pd.Product")) \
-            .drop(col("pd.SettlementMethod"))
+            .drop(col("md.meteringPointType")) \
+            .drop(col("md.settlementMethod"))

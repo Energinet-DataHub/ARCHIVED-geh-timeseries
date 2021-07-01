@@ -11,12 +11,14 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
-from abc import ABC
-import json
+from enum import Enum
 
 
-class PostOfficeMessage(ABC):
-
-    def toJSON(self):
-        return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+class Product(Enum):
+    unknown = 0
+    tariff = 1
+    fuel_quantity = 2
+    power_active = 3
+    power_reactive = 4
+    energy_active = 5
+    energy_reactive = 6

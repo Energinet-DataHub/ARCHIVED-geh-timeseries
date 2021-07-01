@@ -14,8 +14,9 @@
 from enum import Enum
 
 
-class Quality(Enum):
-    calculated = "D01"
-    revised = "36"
-    estimated = "56"
-    as_read = "E01"
+class BusinessReasonCode(Enum):
+    unknown = 0
+    continuous_meter_reading = 1
+    periodic_metering = 2
+    historical_data = 3
+    periodic_flex_metering = 4

@@ -11,13 +11,9 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import copy
 import pytest
 import pandas as pd
-from pyspark import SparkConf
-from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.types import BinaryType, LongType, StringType, StructField, StructType, TimestampType
-from pyspark.sql.functions import col, lit
+from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
 import time
 
 from geh_stream.streaming_utils.input_source_readers.event_hub_parser import EventHubParser
@@ -75,10 +71,9 @@ def parsed_data(event_hub_message_df, json_body_message_schema):
 
 # Check that the nested json is parsed correctly
 def test_parse_event_hub_message_returns_correct_nested_columns(parsed_data_factory):
-    market_evaluation_point_mrid = "mrid123"
-    parsed_data = parsed_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid))
-    print(parsed_data.first())
-    assert parsed_data.first().MarketEvaluationPoint_mRID == market_evaluation_point_mrid
+    metering_point_id = "id123"
+    parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id))
+    assert parsed_data.first().series.meteringPointId == metering_point_id
 
 
 # Check that resulting DataFrame has expected schema

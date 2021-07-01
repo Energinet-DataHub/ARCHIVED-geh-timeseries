@@ -14,12 +14,13 @@
 from enum import Enum
 
 
-class MarketEvaluationPointType(Enum):
-    ve_production = "D01"
-    analysis = "D02"
-    surplus_production_group = "D04"
-    own_production = "D09"
-    reactive_energy = "D20"
-    consumption = "E17"
-    production = "E18"
-    exchange = "E20"
+class MeasureUnit(Enum):
+    unknown = 0
+    kilo_watt_hour = 1
+    mega_watt_hour = 2
+    kilo_watt = 3
+    mega_watt = 4
+    kilo_var_hour = 5
+    mega_var = 6
+    tariff = 7
+    tonne = 8

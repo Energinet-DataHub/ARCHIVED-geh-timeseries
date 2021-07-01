@@ -14,9 +14,10 @@
 from enum import Enum
 
 
-class ResolutionDuration(Enum):
+class QuantityQuality(Enum):
     unknown = 0
-    quarter_of_hour = 1
-    hour = 2
-    day = 3
-    month = 4
+    measured = 1
+    revised = 2
+    estimated = 3
+    quantity_missing = 4
+    calculated = 5

@@ -20,7 +20,7 @@ import pytest
 from pyspark import SparkConf
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, lit, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, DecimalType, TimestampType, BooleanType
+from pyspark.sql.types import StructType, StructField, StringType, ArrayType, DecimalType, IntegerType, TimestampType, BooleanType
 import pandas as pd
 from decimal import Decimal
 from datetime import datetime
@@ -28,7 +28,7 @@ import time
 import uuid
 
 
-from geh_stream.codelists import MarketEvaluationPointType, Quality
+from geh_stream.codelists import MeasureUnit, MeteringPointType, QuantityQuality, Product, SettlementMethod
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.dataframelib import flatten_df
@@ -70,40 +70,17 @@ def master_schema():
 @pytest.fixture(scope="session")
 def master_data_factory(spark, master_schema):
 
-    def __create_pandas(market_evaluation_point_mrid="mepm",
+    def __create_pandas(metering_point_id="mepm",
                         valid_from=timestamp_past,
                         valid_to=timestamp_future,
-                        market_evaluation_point_type="mept",
-                        marketparticipant_mrid="mm",
-                        meteringgridarea_domain_mrid="mdm",
-                        inmeteringgridarea_domain_mrid="idm",
-                        inmeteringgridownerarea_domain_mrid="idm",
-                        outmeteringgridarea_domain_mrid="odm",
-                        outmeteringgridownerarea_domain_mrid="odm",
-                        settlement_method="sm",
-                        technology="tech"):
+                        metering_point_type=MeteringPointType.consumption.value,
+                        settlement_method=SettlementMethod.flex.value):
         return pd.DataFrame({
-            'MarketEvaluationPoint_mRID': [market_evaluation_point_mrid],
-            "ValidFrom": [valid_from],
-            "ValidTo": [valid_to],
-            "MeterReadingPeriodicity": ["a"],
-            "MeteringMethod": ["b"],
-            "MeteringGridArea_Domain_mRID": [meteringgridarea_domain_mrid],
-            "ConnectionState": ["e"],
-            "EnergySupplier_MarketParticipant_mRID": [marketparticipant_mrid],
-            "BalanceResponsibleParty_MarketParticipant_mRID": ["f"],
-            "InMeteringGridArea_Domain_mRID": [inmeteringgridarea_domain_mrid],
-            "OutMeteringGridArea_Domain_mRID": [outmeteringgridarea_domain_mrid],
-            "Parent_Domain_mRID": ["j"],
-            "ServiceCategory_Kind": ["l"],
-            "MarketEvaluationPointType": [market_evaluation_point_type],
-            "SettlementMethod": [settlement_method],
-            "QuantityMeasurementUnit_Name": ["o"],
-            "Product": ["p"],
-            "Technology": [technology],
-            "OutMeteringGridArea_Domain_Owner_mRID": [outmeteringgridownerarea_domain_mrid],
-            "InMeteringGridArea_Domain_Owner_mRID": [inmeteringgridownerarea_domain_mrid],
-            "DistributionList": [[]]})
+            'meteringPointId': [metering_point_id],
+            "validFrom": [valid_from],
+            "validTo": [valid_to],
+            "meteringPointType": [metering_point_type],
+            "settlementMethod": [settlement_method]})
 
     def factory(arg):
         if not isinstance(arg, list):
@@ -119,56 +96,60 @@ def master_data_factory(spark, master_schema):
 
 @pytest.fixture(scope="session")
 def time_series_json_factory():
-    def factory(market_evaluation_point_mrid="mepm",
+    def factory(metering_point_id="mepm",
                 quantity=1.0,
                 observation_time=timestamp_now):
         json_str = """
-    {{
-        "TimeSeries_mRID": "g",
-        "MessageReference": "b",
-        "MarketDocument": {{
-            "mRID": "c",
-            "Type": "x",
-            "CreatedDateTime": "{0}",
-            "SenderMarketParticipant": {{
-                "mRID": "x",
-                "Type": "x"
-            }},
-            "RecipientMarketParticipant": {{
-                "mRID": {{
-                    "value": "x"
+            {{
+                "document": {{
+                    "id": "c",
+                    "requestDateTime": "{7}",
+                    "type": 1,
+                    "createdDateTime": "{0}",
+                    "sender": {{
+                        "id": "x",
+                        "businessProcessRole": 4
+                    }},
+                    "recipient": {{
+                        "id": "x",
+                        "businessProcessRole": 3
+                    }},
+                    "businessReasonCode": 2
                 }},
-                "Type": "x"
-            }},
-            "ProcessType": "e",
-            "MarketServiceCategory_Kind": "x"
-        }},
-        "MktActivityRecord_Status": "h",
-        "Product": "i",
-        "QuantityMeasurementUnit_Name": "j",
-        "MarketEvaluationPointType": "{1}",
-        "SettlementMethod": "x",
-        "MarketEvaluationPoint_mRID": "{4}",
-        "CorrelationId": "a",
-        "Period": {{
-            "Resolution": "x",
-            "TimeInterval_Start": "{0}",
-            "TimeInterval_End": "{0}",
-            "Points": [
-                {{
-                    "Quantity": "{2}",
-                    "Quality": "{3}",
-                    "Time": "{5}"
-                }}
-            ]
-        }}
-    }}
-    """.format(timestamp_now.isoformat() + "Z",
-               MarketEvaluationPointType.consumption.value,
+                "series": {{
+                    "id": "g",
+                    "meteringPointId": "{4}",
+                    "product": 5,
+                    "meteringPointType": "{1}",
+                    "settlementMethod": {6},
+                    "registrationDateTime": "{8}",
+                    "unit": 1,
+                    "resolution": 2,
+                    "startDateTime": "{0}",
+                    "endDateTime": "{0}",
+                    "points": [
+                        {{
+                            "position": 1,
+                            "observationDateTime": "{5}",
+                            "quantity": "{2}",
+                            "quality": {3}
+                        }}
+                    ]
+                }},
+                "transaction": {{
+                    "mRID": "x"
+                }},
+                "correlationId": "a"
+            }}
+        """.format(timestamp_now.isoformat() + "Z",
+               MeteringPointType.consumption.value,
                quantity,
-               Quality.as_read.value,
-               market_evaluation_point_mrid,
-               observation_time)
+               QuantityQuality.measured.value,
+               metering_point_id,
+               observation_time,
+               SettlementMethod.flex.value,
+               timestamp_now,
+               timestamp_now)
         return json_str
 
     return factory
@@ -204,37 +185,23 @@ def parsed_data_factory(spark, parsed_schema, time_series_json_factory):
 
 @pytest.fixture(scope="session")
 def enriched_data_factory(parsed_data_factory, master_data_factory):
-    def creator(market_evaluation_point_mrid="mepm",
+    def creator(metering_point_id="mepm",
                 quantity=1.0,
-                market_evaluation_point_type="m",
-                settlement_method="n",
-                technology="tech",
-                meteringgridarea_domain_mrid="101",
-                marketparticipant_mrid="11",
-                inmeteringgridarea_domain_mrid="2",
-                inmeteringgridownerarea_domain_mrid="3",
-                outmeteringgridarea_domain_mrid="4",
-                outmeteringgridownerarea_domain_mrid="5",
+                metering_point_type=MeteringPointType.consumption.value,
+                settlement_method=SettlementMethod.flex.value,
                 do_fail_enrichment=False):
-        parsed_data = parsed_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid, quantity=quantity))
+        parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id, quantity=quantity))
         denormalized_parsed_data = denormalize_parsed_data(parsed_data)
 
         # Should join find a matching master data record or not?
-        # If so use a non matching mRID for the master data record.
+        # If so use a non matching metering point id for the master data record.
         if do_fail_enrichment:
-            non_matching_market_evaluation_point_mrid = str(uuid.uuid4())
-            market_evaluation_point_mrid = non_matching_market_evaluation_point_mrid
+            non_matching_metering_point_id = str(uuid.uuid4())
+            metering_point_id = non_matching_metering_point_id
 
-        master_data = master_data_factory(dict(market_evaluation_point_mrid=market_evaluation_point_mrid,
-                                               market_evaluation_point_type=market_evaluation_point_type,
-                                               marketparticipant_mrid=marketparticipant_mrid,
-                                               meteringgridarea_domain_mrid=meteringgridarea_domain_mrid,
-                                               inmeteringgridarea_domain_mrid=inmeteringgridarea_domain_mrid,
-                                               inmeteringgridownerarea_domain_mrid=inmeteringgridownerarea_domain_mrid,
-                                               outmeteringgridarea_domain_mrid=outmeteringgridarea_domain_mrid,
-                                               outmeteringgridownerarea_domain_mrid=outmeteringgridownerarea_domain_mrid,
-                                               settlement_method=settlement_method,
-                                               technology=technology))
+        master_data = master_data_factory(dict(metering_point_id=metering_point_id,
+                                               metering_point_type=metering_point_type,
+                                               settlement_method=settlement_method))
         return Enricher.enrich(denormalized_parsed_data, master_data)
     return creator
 
@@ -254,6 +221,7 @@ date_time_formatting_string = "%Y-%m-%dT%H:%M:%S%z"
 default_obs_time = datetime.strptime("2020-01-01T00:00:00+0000", date_time_formatting_string)
 
 
+# TODO: What is this? Should probably be either removed or refactored (or at least updated).
 @pytest.fixture(scope="module")
 def valid_atomic_value_schema():
     """
@@ -261,25 +229,23 @@ def valid_atomic_value_schema():
     """
     return StructType([
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
-        StructField("MarketEvaluationPoint_mRID", StringType(), False),
-        StructField("MeterReadingPeriodicity", StringType(), False),
-        StructField("Product", StringType(), False),
-        StructField("QuantityMeasurementUnit_Name", StringType(), False),
-        StructField("MarketEvaluationPointType", StringType(), False),
-        StructField("SettlementMethod", StringType(), False),
-        StructField("MarketDocument_ProcessType", StringType(), False),
-        StructField("MarketDocument_RecipientMarketParticipant_Type", StringType(), False),
-        StructField("MarketDocument_MarketServiceCategory_Kind", StringType(), False),
-        StructField("DistributionList", ArrayType(StringType()), False),
-        StructField("Period_Point_Quantity", SchemaFactory.quantity_type, False),
-        StructField("Period_Point_Quality", StringType(), False),
-        StructField("Period_Point_Time", TimestampType(), False),
-        StructField("MarketDocument_CreatedDateTime", TimestampType(), False),
+        StructField("correlationId", StringType(), False),
+        StructField("series_meteringPointId", StringType(), False),
+        StructField("series_product", StringType(), False),
+        StructField("series_unit", StringType(), False),
+        StructField("series_meteringPointType", IntegerType(), False),
+        StructField("series_settlementMethod", IntegerType(), False),
+        StructField("document_businessReasonCode", StringType(), False),
+        StructField("document_recipient_businessProcessRole", StringType(), False),
+        StructField("series_point_quantity", SchemaFactory.quantity_type, False),
+        StructField("series_point_quality", IntegerType(), False),
+        StructField("series_point_observationDateTime", TimestampType(), False),
+        StructField("document_createdDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def valid_atomic_values_for_actors_sample_df(spark, valid_atomic_value_schema):
     structureData = [
@@ -295,13 +261,13 @@ def invalid_time_series_schema():
     Invalid time series schema to send
     """
     return StructType([
-        StructField("TimeSeries_mRID", StringType(), False),
+        StructField("series_id", StringType(), False),
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
-        StructField("MarketDocument_SenderMarketParticipant_mRID", StringType(), False),
-        StructField("MarketDocument_SenderMarketParticipant_Type", StringType(), False),
-        StructField("MarketDocument_mRID", StringType(), False),
-        StructField("MarketDocument_ProcessType", StringType(), False),
+        StructField("correlationId", StringType(), False),
+        StructField("document_sender_id", StringType(), False),
+        StructField("document_sender_businessProcessRole", StringType(), False),
+        StructField("document_id", StringType(), False),
+        StructField("document_businessReasonCode", StringType(), False),
         StructField("VR-245-1-Is-Valid", BooleanType(), False),
         StructField("VR-250-Is-Valid", BooleanType(), False),
         StructField("VR-251-Is-Valid", BooleanType(), False),
@@ -310,6 +276,7 @@ def invalid_time_series_schema():
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def invalid_atomic_values_for_actors_sample_df(spark, invalid_time_series_schema):
     structureData = [
@@ -319,6 +286,7 @@ def invalid_atomic_values_for_actors_sample_df(spark, invalid_time_series_schema
     return df2
 
 
+# TODO: Seems brittle
 @pytest.fixture(scope="module")
 def validation_results_schema():
     """
@@ -333,6 +301,7 @@ def validation_results_schema():
     ])
 
 
+# TODO: What is this? Should probably be either removed or refactored.
 @pytest.fixture(scope="module")
 def validation_results_values_for_actors_sample_df(spark, validation_results_schema):
     structureData = [

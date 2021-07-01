@@ -30,8 +30,7 @@ def read_time_series_streaming_data(spark: SparkSession, input_eh_conf: dict) ->
     raw_data.printSchema()
 
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-    parsed_data = EventHubParser.parse(raw_data, message_schema) \
-        .withColumnRenamed("mRID", "TimeSeries_mRID")
+    parsed_data = EventHubParser.parse(raw_data, message_schema)
 
     print("Parsed stream schema:")
     parsed_data.printSchema()

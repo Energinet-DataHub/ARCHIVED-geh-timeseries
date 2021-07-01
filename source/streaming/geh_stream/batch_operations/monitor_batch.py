@@ -76,6 +76,6 @@ def track_batch_back_to_original_correlation_requests(time_series_points_df: Dat
                              because the function will be serialized and sent to all worker nodes."""
 
     time_series_points_df \
-        .groupBy("CorrelationId") \
+        .groupBy("correlationId") \
         .count() \
         .foreach(track_function)
