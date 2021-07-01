@@ -54,7 +54,7 @@ def master_data(spark):
                                  parse_dates=["validFrom", "validTo"],
                                  dtype=str)
 
-    # Convert selected columns to 
+    # Convert selected columns to int
     master_data_pd['settlementMethod'] = master_data_pd['settlementMethod'].astype('int')
 
     # Remove the meta column. The column is added in test csv file to let developers explain the data in the rows.
