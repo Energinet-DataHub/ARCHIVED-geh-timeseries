@@ -142,14 +142,14 @@ def time_series_json_factory():
                 "correlationId": "a"
             }}
         """.format(timestamp_now.isoformat() + "Z",
-               MeteringPointType.consumption.value,
-               quantity,
-               QuantityQuality.measured.value,
-               metering_point_id,
-               observation_time,
-               SettlementMethod.flex.value,
-               timestamp_now,
-               timestamp_now)
+                   MeteringPointType.consumption.value,
+                   quantity,
+                   QuantityQuality.measured.value,
+                   metering_point_id,
+                   observation_time,
+                   SettlementMethod.flex.value,
+                   timestamp_now,
+                   timestamp_now)
         return json_str
 
     return factory
