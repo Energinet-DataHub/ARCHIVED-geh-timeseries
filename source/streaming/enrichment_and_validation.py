@@ -46,7 +46,7 @@ p.add('--output-path', type=str, required=False, default="delta/meter-data/",
 p.add('--input-eh-connection-string', type=str, required=True,
       help='Input Event Hub connection string', env_var='GEH_STREAMING_INPUT_EH_CONNECTION_STRING')
 p.add('--max-events-per-trigger', type=int, required=False, default=10000,
-      help='Metering points to read per trrigger interval')
+      help='Metering points to read per trigger interval')
 p.add('--trigger-interval', type=str, required=False, default='1 second',
       help='Trigger interval to generate streaming batches (format: N seconds)')
 p.add('--streaming-checkpoint-path', type=str, required=False, default="checkpoints/streaming",
