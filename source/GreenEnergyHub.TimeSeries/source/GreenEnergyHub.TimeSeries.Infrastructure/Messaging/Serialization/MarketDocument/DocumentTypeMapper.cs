@@ -12,19 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Common
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
+
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.MarketDocument
 {
-    /// <summary>
-    /// IMPORTANT: This is used in transport so the numbers matters.
-    /// </summary>
-    public enum MarketParticipantRole
+    public static class DocumentTypeMapper
     {
-        Unknown = 0,
-        EnergySupplier = 1,
-        GridAccessProvider = 2,
-        SystemOperator = 3,
-        MeteredDataResponsible = 4,
-        EnergyAgency = 5,
-        MeteredDataAdministrator = 6,
+        public static DocumentType Map(string value)
+        {
+            return value switch
+            {
+                "E66" => DocumentType.NotifyValidatedMeasureData,
+                _ => DocumentType.Unknown
+            };
+        }
     }
 }

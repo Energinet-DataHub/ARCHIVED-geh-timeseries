@@ -20,7 +20,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using AutoFixture.Xunit2;
 using GreenEnergyHub.Iso8601;
-using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;

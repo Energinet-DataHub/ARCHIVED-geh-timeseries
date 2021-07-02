@@ -12,15 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Domain.Common;
-using GreenEnergyHub.TimeSeries.Domain.Notification;
-using NodaTime;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
