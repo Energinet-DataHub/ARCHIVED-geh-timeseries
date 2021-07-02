@@ -16,10 +16,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 using NodaTime;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.MarketDocument
 {
     public abstract class DocumentConverter
     {

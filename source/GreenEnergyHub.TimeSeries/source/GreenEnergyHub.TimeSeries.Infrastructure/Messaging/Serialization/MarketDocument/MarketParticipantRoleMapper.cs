@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.MarketDocument
 {
     public static class MarketParticipantRoleMapper
     {

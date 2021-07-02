@@ -12,16 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Threading.Tasks;
 using System.Xml;
 using GreenEnergyHub.Iso8601;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Domain.Common;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.MarketDocument;
 using NodaTime;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands

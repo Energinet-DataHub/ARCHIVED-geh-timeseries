@@ -11,20 +11,14 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
-using GreenEnergyHub.TimeSeries.Domain.Common;
-
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Common
+namespace GreenEnergyHub.TimeSeries.Domain.MarketDocument
 {
-    public static class DocumentTypeMapper
+    /// <summary>
+    /// IndustryClassification indicates the industry context. E.g. if a time series is related to electricity.
+    /// </summary>
+    public enum IndustryClassification
     {
-        public static DocumentType Map(string value)
-        {
-            return value switch
-            {
-                "E66" => DocumentType.NotifyValidatedMeasureData,
-                _ => DocumentType.Unknown
-            };
-        }
+        Unknown = 0,
+        Electricity = 1,
     }
 }
