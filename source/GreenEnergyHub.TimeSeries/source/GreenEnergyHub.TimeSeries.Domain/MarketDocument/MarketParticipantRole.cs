@@ -11,14 +11,20 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-namespace GreenEnergyHub.TimeSeries.Domain.Common
+
+namespace GreenEnergyHub.TimeSeries.Domain.MarketDocument
 {
     /// <summary>
-    /// IndustryClassification indicates the industry context. E.g. if a time series is related to electricity.
+    /// IMPORTANT: This is used in transport so the numbers matters.
     /// </summary>
-    public enum IndustryClassification
+    public enum MarketParticipantRole
     {
         Unknown = 0,
-        Electricity = 1,
+        EnergySupplier = 1,
+        GridAccessProvider = 2,
+        SystemOperator = 3,
+        MeteredDataResponsible = 4,
+        EnergyAgency = 5,
+        MeteredDataAdministrator = 6,
     }
 }

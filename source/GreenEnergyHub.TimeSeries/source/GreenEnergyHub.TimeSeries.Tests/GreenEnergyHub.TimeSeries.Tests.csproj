@@ -56,9 +56,4 @@ limitations under the License.
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
         <PackageReference Include="coverlet.collector" Version="3.0.3" />
     </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Infrastructure\Messaging\Serialization\Common\" />
-    </ItemGroup>
-
 </Project>

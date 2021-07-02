@@ -12,36 +12,26 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using NodaTime;
 #pragma warning disable 8618
-
-namespace GreenEnergyHub.TimeSeries.Domain.Common
+namespace GreenEnergyHub.TimeSeries.Domain.MarketDocument
 {
     // Non-nullable member is uninitialized is ignored
     // Only properties which is allowed to be null is nullable
-    public class Document
+
+    /// <summary>
+    /// A market participant, e.g. a metered data responsible, whom may submit a time series.
+    /// </summary>
+    public class MarketParticipant
     {
         /// <summary>
-        /// An ID provided by the sender.
+        /// Contains an ID that identifies the Market Participants. In Denmark this would be the GLN number or EIC code.
         /// </summary>
         public string Id { get; set; }
 
         /// <summary>
-        ///  Point in time set by the TimeSeries domain
+        /// Contains the role a market participant uses when initiating and communicating with Green Energy Hub
+        /// about a specific business process, e.g. Metered Data Responsible use 'MDR' when sending a time series.
         /// </summary>
-        public Instant RequestDateTime { get; set; } = SystemClock.Instance.GetCurrentInstant();
-
-        public DocumentType Type { get; set; }
-
-        /// <summary>
-        /// A point in time provided by the sender
-        /// </summary>
-        public Instant CreatedDateTime { get; set; }
-
-        public MarketParticipant Sender { get; set; }
-
-        public MarketParticipant Recipient { get; set; }
-
-        public BusinessReasonCode BusinessReasonCode { get; set; }
+        public MarketParticipantRole BusinessProcessRole { get; set; }
     }
 }

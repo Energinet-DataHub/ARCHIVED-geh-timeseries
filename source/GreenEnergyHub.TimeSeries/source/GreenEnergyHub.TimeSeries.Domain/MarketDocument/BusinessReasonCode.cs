@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace GreenEnergyHub.TimeSeries.Domain.Common
+namespace GreenEnergyHub.TimeSeries.Domain.MarketDocument
 {
     /// <summary>
     /// BusinessReasonCode indicates the intended business context.
