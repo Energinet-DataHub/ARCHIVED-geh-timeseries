@@ -20,7 +20,7 @@ on:
     paths:
       - source/streaming/**
       - .github/workflows/streaming-job.yml
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 env:
   ORGANISATION_NAME: endk
