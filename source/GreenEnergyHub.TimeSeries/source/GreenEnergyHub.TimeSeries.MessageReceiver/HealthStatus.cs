@@ -14,9 +14,9 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
 
 namespace GreenEnergyHub.TimeSeries.MessageReceiver
@@ -36,7 +36,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         [Function(nameof(HealthStatus))]
         public Task<IActionResult> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = null)]
-            [NotNull] HttpRequest req,
+            [NotNull] HttpRequestData req,
             [NotNull] FunctionContext context)
         {
             _log.LogInformation("Health Status API invoked");
