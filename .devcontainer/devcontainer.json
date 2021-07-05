@@ -22,7 +22,9 @@
 		"ms-python.python",
 		"littlefoxteam.vscode-python-test-adapter",
 		"hbenl.vscode-test-explorer",
-		"kevinglasson.cornflakes-linter"
+		"kevinglasson.cornflakes-linter",
+		"eamodio.gitlens",
+		"ms-python.vscode-pylance"
 	],
 
 	"containerEnv": {
