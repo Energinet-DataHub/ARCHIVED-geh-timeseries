@@ -65,6 +65,9 @@ if unknown_args:
 # %% Create or get Spark session
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
+from datetime import datetime, timezone
+
+print(datetime.now(timezone.utc))
 
 spark_conf = SparkConf(loadDefaults=True) \
     .set('fs.azure.account.key.{0}.dfs.core.windows.net'.format(args.storage_account_name),
@@ -207,7 +210,7 @@ def log(message):
 # can be done in less than 30 seconds.
 
 blob_service = BlobService(args.storage_account_name, args.storage_account_key, args.storage_container_name)
-blob_master_data_version = blob_service.get_blob_poperties(args.master_data_path).last_modified
+blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
 spark_master_data_version = blob_master_data_version
 is_master_data_blob_newer = True
 
@@ -228,7 +231,7 @@ while True:
         # wait despite that the streaming has already stopped.
         execution.awaitTermination(4.5 * 60)
 
-        blob_master_data_version = blob_service.get_blob_poperties(args.master_data_path).last_modified
+        blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
         is_master_data_blob_newer = blob_master_data_version > spark_master_data_version
 
         if is_master_data_blob_newer:
@@ -262,3 +265,5 @@ while True:
     finally:
         if is_master_data_blob_newer:
             master_data_df.unpersist()
+
+# %%
