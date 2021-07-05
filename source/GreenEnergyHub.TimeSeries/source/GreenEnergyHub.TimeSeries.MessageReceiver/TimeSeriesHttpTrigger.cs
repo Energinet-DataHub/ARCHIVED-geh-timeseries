@@ -31,6 +31,7 @@ namespace GreenEnergyHub.TimeSeries.MessageReceiver
         /// <summary>
         /// The name of the function.
         /// Function name affects the URL and thus possibly dependent infrastructure.
+        /// Newline just for fun.
         /// </summary>
         private const string FunctionName = "TimeSeriesHttpTrigger";
         private readonly ICorrelationContext _correlationContext;
