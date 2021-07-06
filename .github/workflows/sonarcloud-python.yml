@@ -8,6 +8,9 @@ on:
       - .github/workflows/sonarcloud-python.yml
   pull_request:
     types: [opened, synchronize, reopened]
+    paths:
+      - source/streaming/**
+      - .github/workflows/sonarcloud-python.yml
 jobs:
   sonarcloud:
     name: SonarCloud
