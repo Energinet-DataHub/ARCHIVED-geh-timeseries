@@ -4,21 +4,14 @@ on:
     branches:
       - main
     paths:
-      - source/GreenEnergyHub.TimeSeries/**
-      - source/iso8601/**
-      - source/messaging/**
-      - source/queues/**
-      - source/Shared/**
+      - source/**
+      - '!source/streaming/**'
       - .github/workflows/sonarcloud-dotnet.yml
   pull_request:
     types: [opened, synchronize, reopened]
     paths:
       - source/**
-      - source/GreenEnergyHub.TimeSeries/**
-      - source/iso8601/**
-      - source/messaging/**
-      - source/queues/**
-      - source/Shared/**
+      - '!source/streaming/**'
       - .github/workflows/sonarcloud-dotnet.yml
 env:
   SOLUTION_PATH: 'source\GreenEnergyHub.TimeSeries\GreenEnergyHub.TimeSeries.sln'
