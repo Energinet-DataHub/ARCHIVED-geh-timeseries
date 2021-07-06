@@ -1,4 +1,4 @@
-#FKT 24 Feb 2021: Fixed to specefic version because of build errors
+#FKT 24 Feb 2021: Fixed to specific version because of build errors
 FROM jupyter/scipy-notebook:016833b15ceb 
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
