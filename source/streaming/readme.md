@@ -27,7 +27,7 @@ Follow this guide to set up your Timeseries streaming development environment:
         * master-data-path: Path to master-data.csv in storage container (master-data/master-data.csv)
         * input-eh-connection-string: Connectionstring to `evhnm-received-queue-` Event Hub queue
         * telemetry-instrumentation-key: Instrumentation key (GUID) to `appi-` Time Series Application Insights
- * Run the `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
+* Use `Ctrl + Shift + p` and run `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
 
 Debug or run streaming:
  * Hit `F5`
