@@ -31,7 +31,7 @@ def vr200_invalid_time_series_point(parsed_data_from_json_file_factory, master_d
 
 
 def test_valid_time_series_first_point_has_streaming_data(valid_time_series_point):
-    assert valid_time_series_point.series_id == "transaction_id_of_valid_message"
+    assert valid_time_series_point.Series_Id == "transaction_id_of_valid_message"
 
 
 def test_valid_time_series_first_point_is_valid(valid_time_series_point):
@@ -44,4 +44,4 @@ def test_vr200_invalid_time_series_first_point_is_invalid(vr200_invalid_time_ser
 
 
 def test_valid_time_series_first_point_has_observation_time(valid_time_series_point):
-    assert valid_time_series_point.series_point_observationDateTime.isoformat() + "Z" == "2020-11-12T23:00:00Z"
+    assert valid_time_series_point.Series_Point_ObservationDateTime.isoformat() + "Z" == "2020-11-12T23:00:00Z"

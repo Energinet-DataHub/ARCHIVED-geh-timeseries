@@ -1,41 +1,41 @@
 {
-  "document": {
-    "id": "hId2020-12-01T13:16:29.330Z",
-    "requestDateTime": "2020-12-15T13:15:11.8349163Z",
-    "type": 1,
-    "createdDateTime": "2020-12-01T13:16:29.33Z",
-    "sender": {
-      "id": "8100000000030",
-      "businessProcessRole": 6
+  "Document": {
+    "Id": "hId2020-12-01T13:16:29.330Z",
+    "RequestDateTime": "2020-12-15T13:15:11.8349163Z",
+    "Type": 1,
+    "CreatedDateTime": "2020-12-01T13:16:29.33Z",
+    "Sender": {
+      "Id": "8100000000030",
+      "BusinessProcessRole": 6
     },
-    "recipient": {
-      "id": "5790001330552",
-      "businessProcessRole": 3
+    "Recipient": {
+      "Id": "5790001330552",
+      "BusinessProcessRole": 3
     },
-    "businessReasonCode": 4
+    "BusinessReasonCode": 4
   },
-  "series": {
-    "id": "transaction_id_of_invalid_message",
-    "meteringPointId": "non-existing metering point id 123498hhkjwer8",
-    "meteringPointType": 1,
-    "settlementMethod": 3,
-    "registrationDateTime": "2021-06-17T11:41:28.8457326Z",
-    "product": 5,
-    "unit": 1,
-    "resolution": 2,
-    "startDateTime": "2020-11-20T23:00:00Z",
-    "endDateTime": "2020-11-21T23:00:00Z",
-    "points": [
+  "Series": {
+    "Id": "transaction_id_of_invalid_message",
+    "MeteringPointId": "non-existing metering point id 123498hhkjwer8",
+    "MeteringPointType": 1,
+    "SettlementMethod": 3,
+    "RegistrationDateTime": "2021-06-17T11:41:28.8457326Z",
+    "Product": 5,
+    "Unit": 1,
+    "Resolution": 2,
+    "StartDateTime": "2020-11-20T23:00:00Z",
+    "EndDateTime": "2020-11-21T23:00:00Z",
+    "Points": [
       {
-        "position": 1,
-        "observationDateTime": "2020-11-12T23:00:00Z",
-        "quantity": 1.337,
-        "quality": 1
+        "Position": 1,
+        "ObservationDateTime": "2020-11-12T23:00:00Z",
+        "Quantity": 1.337,
+        "Quality": 1
       }
     ]
   },
-  "transaction": {
-    "mRID": "fc13ba2cf048432a951f260ecafb60d4"
+  "Transaction": {
+    "MRID": "fc13ba2cf048432a951f260ecafb60d4"
   },
-  "correlationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087"
+  "CorrelationId": "66a28f7f-a8bc-4091-a870-0f54fccc6087"
 }
