@@ -101,45 +101,45 @@ def time_series_json_factory():
                 observation_time=timestamp_now):
         json_str = """
             {{
-                "document": {{
-                    "id": "c",
-                    "requestDateTime": "{7}",
-                    "type": 1,
-                    "createdDateTime": "{0}",
-                    "sender": {{
-                        "id": "x",
-                        "businessProcessRole": 4
+                "Document": {{
+                    "Id": "c",
+                    "RequestDateTime": "{7}",
+                    "Type": 1,
+                    "CreatedDateTime": "{0}",
+                    "Sender": {{
+                        "Id": "x",
+                        "BusinessProcessRole": 4
                     }},
-                    "recipient": {{
-                        "id": "x",
-                        "businessProcessRole": 3
+                    "Recipient": {{
+                        "Id": "x",
+                        "BusinessProcessRole": 3
                     }},
-                    "businessReasonCode": 2
+                    "BusinessReasonCode": 2
                 }},
-                "series": {{
-                    "id": "g",
-                    "meteringPointId": "{4}",
-                    "product": 5,
-                    "meteringPointType": "{1}",
-                    "settlementMethod": {6},
-                    "registrationDateTime": "{8}",
-                    "unit": 1,
-                    "resolution": 2,
-                    "startDateTime": "{0}",
-                    "endDateTime": "{0}",
-                    "points": [
+                "Series": {{
+                    "Id": "g",
+                    "MeteringPointId": "{4}",
+                    "Product": 5,
+                    "MeteringPointType": "{1}",
+                    "SettlementMethod": {6},
+                    "RegistrationDateTime": "{8}",
+                    "Unit": 1,
+                    "Resolution": 2,
+                    "StartDateTime": "{0}",
+                    "EndDateTime": "{0}",
+                    "Points": [
                         {{
-                            "position": 1,
-                            "observationDateTime": "{5}",
-                            "quantity": "{2}",
-                            "quality": {3}
+                            "Position": 1,
+                            "ObservationDateTime": "{5}",
+                            "Quantity": "{2}",
+                            "Quality": {3}
                         }}
                     ]
                 }},
-                "transaction": {{
-                    "mRID": "x"
+                "Transaction": {{
+                    "MRID": "x"
                 }},
-                "correlationId": "a"
+                "CorrelationId": "a"
             }}
         """.format(timestamp_now.isoformat() + "Z",
                    MeteringPointType.consumption.value,
@@ -229,18 +229,18 @@ def valid_atomic_value_schema():
     """
     return StructType([
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("correlationId", StringType(), False),
-        StructField("series_meteringPointId", StringType(), False),
-        StructField("series_product", StringType(), False),
-        StructField("series_unit", StringType(), False),
-        StructField("series_meteringPointType", IntegerType(), False),
-        StructField("series_settlementMethod", IntegerType(), False),
-        StructField("document_businessReasonCode", StringType(), False),
-        StructField("document_recipient_businessProcessRole", StringType(), False),
-        StructField("series_point_quantity", SchemaFactory.quantity_type, False),
-        StructField("series_point_quality", IntegerType(), False),
-        StructField("series_point_observationDateTime", TimestampType(), False),
-        StructField("document_createdDateTime", TimestampType(), False),
+        StructField("CorrelationId", StringType(), False),
+        StructField("Series_MeteringPointId", StringType(), False),
+        StructField("Series_Product", StringType(), False),
+        StructField("Series_Unit", StringType(), False),
+        StructField("Series_MeteringPointType", IntegerType(), False),
+        StructField("Series_SettlementMethod", IntegerType(), False),
+        StructField("Document_BusinessReasonCode", StringType(), False),
+        StructField("Document_Recipient_BusinessProcessRole", StringType(), False),
+        StructField("Series_Point_Quantity", SchemaFactory.quantity_type, False),
+        StructField("Series_Point_Quality", IntegerType(), False),
+        StructField("Series_Point_ObservationDateTime", TimestampType(), False),
+        StructField("Document_CreatedDateTime", TimestampType(), False),
         StructField("EventHubEnqueueTime", TimestampType(), False)
     ])
 
@@ -261,13 +261,13 @@ def invalid_time_series_schema():
     Invalid time series schema to send
     """
     return StructType([
-        StructField("series_id", StringType(), False),
+        StructField("Series_Id", StringType(), False),
         StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("correlationId", StringType(), False),
-        StructField("document_sender_id", StringType(), False),
-        StructField("document_sender_businessProcessRole", StringType(), False),
-        StructField("document_id", StringType(), False),
-        StructField("document_businessReasonCode", StringType(), False),
+        StructField("CorrelationId", StringType(), False),
+        StructField("Document_Sender_Id", StringType(), False),
+        StructField("Document_Sender_BusinessProcessRole", StringType(), False),
+        StructField("Document_Id", StringType(), False),
+        StructField("Document_BusinessReasonCode", StringType(), False),
         StructField("VR-245-1-Is-Valid", BooleanType(), False),
         StructField("VR-250-Is-Valid", BooleanType(), False),
         StructField("VR-251-Is-Valid", BooleanType(), False),
