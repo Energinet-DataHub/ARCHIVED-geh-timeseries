@@ -17,35 +17,20 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+    paths:
+      - source/streaming/**
+      - .github/workflows/streaming-job.yml
+  workflow_dispatch: {}
 
 env:
   ORGANISATION_NAME: endk
   PROJECT_NAME: tseries
 
 jobs:
-  pre_job:
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - name: Should skip?
-        id: skip_check
-        uses: fkirc/skip-duplicate-actions@v1.4.0
-        with:
-          github_token: ${{ github.token }}
-          paths: '[
-            "source/streaming/**",
-            ".github/workflows/streaming-job.yml"
-          ]'
-
   # Execute static checks (flake8) and unit tests.
   streaming_job_ci:
     runs-on: ubuntu-latest
     name: flake8 and unit test
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -71,8 +56,6 @@ jobs:
   #   This job is a candidate for splitting into the ci and cd jobs.
   wheel_build_publish:
     name: Build and Publish Wheel File
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -179,7 +162,7 @@ jobs:
 
   streaming_job_cd:
     name: Deploy databricks cluster and create job
-    needs: [streaming_job_ci]
+    needs: streaming_job_ci
     runs-on: ubuntu-latest
     strategy:
       matrix:
