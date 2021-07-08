@@ -1,0 +1,25 @@
+flags:
+  businesslogic:
+    paths:
+      - source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.Application/
+      - source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.Domain/
+      - source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.Core/
+  infrastructure:
+    paths:
+      - source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.Infrastructure/
+      - source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.MessageReceiver/
+
+coverage:
+  status:
+    project:
+      default:
+        flags:
+          - businesslogic
+          - infrastructure
+      businesslogic:
+        flags:
+          - businesslogic
+      infrastructure:
+        flags:
+          - infrastructure
+
