@@ -82,7 +82,59 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal(1, result.Series.Points[0].Position);
             Assert.Equal(0.337m, result.Series.Points[0].Quantity);
             Assert.Equal(InstantPattern.ExtendedIso.Parse("2021-06-27T22:00:00Z").Value, result.Series.Points[0].ObservationDateTime);
-            Assert.Equal(QuantityQuality.Measured, result.Series.Points[0].Quality);
+            Assert.Equal(Quality.Measured, result.Series.Points[0].Quality);
+
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task ConvertAsync_WhenCalledWithValidTimeSeriesWithQuantityMissingFirstPosition_ReturnsParsedObject(
+            [NotNull][Frozen] Mock<ICorrelationContext> context,
+            [NotNull][Frozen] Mock<IIso8601Durations> iso8601Durations,
+            [NotNull] TimeSeriesCommandConverter timeSeriesCommandConverter)
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid().ToString();
+            context.Setup(c => c.CorrelationId).Returns(correlationId);
+
+            SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
+
+            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithQuantityMissingFirstPosition.xml"); // change
+            using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
+
+            // Act
+            var result = (TimeSeriesCommand)await timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
+
+            // Assert
+            Assert.Equal(Quality.QuantityMissing, result.Series.Points[0].Quality);
+            Assert.Equal(Quality.Measured, result.Series.Points[1].Quality);
+
+            await Task.CompletedTask.ConfigureAwait(false);
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task ConvertAsync_WhenCalledWithValidTimeSeriesWithoutQualityElements_ReturnsParsedObjectWithQualityMeasured(
+            [NotNull][Frozen] Mock<ICorrelationContext> context,
+            [NotNull][Frozen] Mock<IIso8601Durations> iso8601Durations,
+            [NotNull] TimeSeriesCommandConverter timeSeriesCommandConverter)
+        {
+            // Arrange
+            var correlationId = Guid.NewGuid().ToString();
+            context.Setup(c => c.CorrelationId).Returns(correlationId);
+
+            SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
+
+            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithoutQualityElements.xml");
+            using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
+
+            // Act
+            var result = (TimeSeriesCommand)await timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
+
+            // Assert
+            Assert.Equal(24, result.Series.Points.Count);
+            Assert.Equal(Quality.Measured, result.Series.Points[0].Quality);
 
             await Task.CompletedTask.ConfigureAwait(false);
         }
@@ -110,32 +162,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal("DocId_Valid_002", result.Document.Id);
             Assert.Equal("tId_Valid_002", result.Series.Id);
             Assert.Equal(24, result.Series.Points.Count);
-
-            await Task.CompletedTask.ConfigureAwait(false);
-        }
-
-        [Theory]
-        [InlineAutoMoqData]
-        public async Task ConvertAsync_WhenCalledWithValidTimeSeriesWithoutQualityElements_ReturnsParsedObjectWithQualityMeasured(
-            [NotNull][Frozen] Mock<ICorrelationContext> context,
-            [NotNull][Frozen] Mock<IIso8601Durations> iso8601Durations,
-            [NotNull] TimeSeriesCommandConverter timeSeriesCommandConverter)
-        {
-            // Arrange
-            var correlationId = Guid.NewGuid().ToString();
-            context.Setup(c => c.CorrelationId).Returns(correlationId);
-
-            SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
-
-            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithoutQualityElements.xml");
-            using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
-
-            // Act
-            var result = (TimeSeriesCommand)await timeSeriesCommandConverter.ConvertAsync(reader).ConfigureAwait(false);
-
-            // Assert
-            Assert.Equal(24, result.Series.Points.Count);
-            Assert.Equal(QuantityQuality.Measured, result.Series.Points[0].Quality);
 
             await Task.CompletedTask.ConfigureAwait(false);
         }
