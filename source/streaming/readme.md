@@ -17,6 +17,7 @@ Follow this guide to set up your Timeseries streaming development environment:
 	* indent-rainbow
 	* Python (with Jupyter and Pylance)
 	* vscode-icons or Material Icon Theme
+    * Test Explorer UI
  * Setup your environment:
     * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
     * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
@@ -25,7 +26,7 @@ Follow this guide to set up your Timeseries streaming development environment:
         * storage-account-key: Account key of your `data` data storage
         * storage-container-name: Storage container name in your `data` data storage
         * master-data-path: Path to master-data.csv in storage container (master-data/master-data.csv)
-        * input-eh-connection-string: Connectionstring to `evhnm-received-queue-` Event Hub queue
+        * input-eh-connection-string: Connectionstring to `evhnm-received-queue-` Event Hub queue including EntityPath (`;EntityPath=evh-received-queue`)
         * telemetry-instrumentation-key: Instrumentation key (GUID) to `appi-` Time Series Application Insights
 * Use `Ctrl + Shift + p` and run `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
 
