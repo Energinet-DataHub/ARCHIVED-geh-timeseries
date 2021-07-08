@@ -1,5 +1,35 @@
 # Python Environment
 
+## Set up development environment
+
+Follow this guide to set up your Timeseries streaming development environment:
+
+ * Install Docker for Windows and use WSL based engine
+ * Clone Timeseries repository
+ * Open `geh-timeseries` folder in Visual Studio Code
+ * Install extensions:
+    * Azure Account
+	* Azure Event Hub
+	* Docker
+	* Remote - Containers
+	* GitLens
+	* indent-rainbow
+	* Python (with Jupyter and Pylance)
+	* vscode-icons
+ * Setup your environment:
+    * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
+    * Insert your own settings in `launch.json`.
+ * Run the `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
+
+Debug or run streaming:
+ * Hit `F5`
+ * Hit `Ctrl + F5`
+
+Tips and tricks for developing in Visual Studio Code:
+ * [Navigation](https://code.visualstudio.com/docs/editor/editingevolved)
+ * [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense)
+ * [Debugging](https://code.visualstudio.com/docs/editor/debugging)
+
 ## Source Code
 
 Source code is mainly located in folder `geh_stream`. This folder also constitutes the functionality of the `geh_stream` [wheel](https://pythonwheels.com/) package.
@@ -7,6 +37,9 @@ Source code is mainly located in folder `geh_stream`. This folder also constitut
 ## Unit test with Pytest
 
 [Pytest](https://pytest.org/) is used for unit testing.
+
+Unit tests can be debugged or run in the `Testing` tab in the left menu (using Python Test Explorer for Visual Studio Code).
+You can debug or run either all tests, tests in a pytest-file or a single pytest using the `Debug` or `Run` icon for each element.
 
 ### Testing PySpark using fixture factories
 
