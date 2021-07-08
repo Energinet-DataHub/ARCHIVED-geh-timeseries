@@ -100,7 +100,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
 
             SetObservationTime(iso8601Durations, "2021-06-27T22:00:00Z");
 
-            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithQuantityMissingFirstPosition.xml"); // change
+            var stream = GetEmbeddedResource("GreenEnergyHub.TimeSeries.Tests.TestFiles.Valid_Hourly_CIM_TimeSeries_WithQuantityMissingFirstPosition.xml");
             using var reader = XmlReader.Create(stream, new XmlReaderSettings { Async = true });
 
             // Act
