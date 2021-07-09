@@ -4,11 +4,11 @@
 
 Follow this guide to set up your Time Series streaming development environment:
 
- * Install [Python](https://www.python.org/downloads)
- * Install Docker for Windows and use WSL based engine
- * Clone `geh-timeseries` repository
- * Open `geh-timeseries` folder in Visual Studio Code
- * Install extensions:
+* Install [Python](https://www.python.org/downloads)
+* Install Docker for Windows and use WSL based engine
+* Clone `geh-timeseries` repository
+* Open `geh-timeseries` folder in Visual Studio Code
+* Install extensions:
     * Azure Account
 	* Azure Event Hub Explorer
 	* Docker
@@ -18,7 +18,7 @@ Follow this guide to set up your Time Series streaming development environment:
 	* Python (with Jupyter and Pylance)
 	* vscode-icons or Material Icon Theme
     * Test Explorer UI
- * Setup your environment:
+* Setup your environment:
     * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
     * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
     * No need to change settings in `settings.json`
@@ -32,13 +32,13 @@ Follow this guide to set up your Time Series streaming development environment:
 * Use `Ctrl + Shift + p` and run `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
 
 Debug or run streaming:
- * Hit `F5`
- * Hit `Ctrl + F5`
+* Hit `F5`
+* Hit `Ctrl + F5`
 
 Tips and tricks for developing in Visual Studio Code:
- * [Navigation](https://code.visualstudio.com/docs/editor/editingevolved)
- * [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense)
- * [Debugging](https://code.visualstudio.com/docs/editor/debugging)
+* [Navigation](https://code.visualstudio.com/docs/editor/editingevolved)
+* [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense)
+* [Debugging](https://code.visualstudio.com/docs/editor/debugging)
 
 ## Source Code
 
