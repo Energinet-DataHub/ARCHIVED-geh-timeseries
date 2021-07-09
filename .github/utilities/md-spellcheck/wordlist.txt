@@ -11,9 +11,11 @@ Energinet
 FluentValidation
 geh
 github
+GitLens
 GreenEnergyHub
 hardcoded
 IaC
+Jupyter
 mergeable
 MPL
 namespace
@@ -21,6 +23,7 @@ NRules
 NuGet
 POCO
 proto
+Pylance
 pytest
 pytests
 PySpark
@@ -30,4 +33,7 @@ src
 Terraform
 TimeSeries
 TODO
+UI
 Url
+vscode
+WSL

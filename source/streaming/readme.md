@@ -2,11 +2,11 @@
 
 ## Set up development environment
 
-Follow this guide to set up your Timeseries streaming development environment:
+Follow this guide to set up your Time Series streaming development environment:
 
  * Install [Python](https://www.python.org/downloads)
  * Install Docker for Windows and use WSL based engine
- * Clone Timeseries repository
+ * Clone `geh-timeseries` repository
  * Open `geh-timeseries` folder in Visual Studio Code
  * Install extensions:
     * Azure Account
@@ -19,9 +19,8 @@ Follow this guide to set up your Timeseries streaming development environment:
 	* vscode-icons or Material Icon Theme
     * Test Explorer UI
  * Setup your environment:
-    * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/
+    * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
     * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
-    Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
     * No need to change settings in `settings.json`
     * Insert your own settings in `launch.json`:
         * storage-account-name: Account name of your `data` data storage
