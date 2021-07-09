@@ -1,6 +1,7 @@
 # Words to be ignored by spell checker
 Architechtural
 composable
+Connectionstring
 csv
 Databricks
 dataflow

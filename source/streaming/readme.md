@@ -10,16 +10,16 @@ Follow this guide to set up your Time Series streaming development environment:
 * Open `geh-timeseries` folder in Visual Studio Code
 * Install extensions:
     * Azure Account
-	* Azure Event Hub Explorer
-	* Docker
-	* Remote - Containers
-	* GitLens
-	* indent-rainbow
-	* Python (with Jupyter and Pylance)
-	* vscode-icons or Material Icon Theme
+    * Azure Event Hub Explorer
+    * Docker
+    * Remote - Containers
+    * GitLens
+    * indent-rainbow
+    * Python (with Jupyter and Pylance)
+    * vscode-icons or Material Icon Theme
     * Test Explorer UI
 * Setup your environment:
-    * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
+    * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com    Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
     * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
     * No need to change settings in `settings.json`
     * Insert your own settings in `launch.json`:
