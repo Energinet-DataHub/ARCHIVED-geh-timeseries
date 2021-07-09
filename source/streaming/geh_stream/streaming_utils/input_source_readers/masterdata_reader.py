@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import coalesce, lit, col, from_json
+from pyspark.sql.functions import coalesce, lit, col
 
 from geh_stream.schemas import SchemaFactory, SchemaNames
 

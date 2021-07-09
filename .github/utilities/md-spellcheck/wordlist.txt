@@ -1,6 +1,8 @@
 # Words to be ignored by spell checker
 Architechtural
 composable
+Connectionstring
+csv
 Databricks
 dataflow
 dataflows
@@ -8,12 +10,16 @@ dataflows
 deserialize
 DTO
 Energinet
+EntityPath
 FluentValidation
 geh
 github
+GitLens
 GreenEnergyHub
+GUID
 hardcoded
 IaC
+Jupyter
 mergeable
 MPL
 namespace
@@ -21,6 +27,7 @@ NRules
 NuGet
 POCO
 proto
+Pylance
 pytest
 pytests
 PySpark
@@ -30,4 +37,8 @@ src
 Terraform
 TimeSeries
 TODO
+UI
 Url
+vscode
+witout
+WSL

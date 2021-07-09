@@ -1,5 +1,47 @@
 # Python Environment
 
+## Set up development environment
+
+Follow this guide to set up your Time Series streaming development environment:
+
+* Install [Python](https://www.python.org/downloads)
+* Install Docker for Windows and use WSL based engine
+* Clone `geh-timeseries` repository
+* Open `geh-timeseries` folder in Visual Studio Code
+* Install extensions:
+    * Azure Account
+    * Azure Event Hub Explorer
+    * Docker
+    * Remote - Containers
+    * GitLens
+    * indent-rainbow
+    * Python (with Jupyter and Pylance)
+    * vscode-icons or Material Icon Theme
+    * Test Explorer UI
+* Setup your environment:
+    * Make sure you have deployed Time Series infrastructure to Azure development environment (preferably developer sandbox), by following this [guide](https://github.com/Energinet-DataHub/geh-timeseries/blob/main/build/infrastructure/README.md)
+    * Navigate to the `.vscode` folder in the `geh-timeseries` folder and make your own copy of `launch.json.sample` and `settings.json.sample` witout the `.sample` extension
+    * No need to change settings in `settings.json`
+    * Insert your own settings in `launch.json`:
+        * storage-account-name: Account name of your `data` data storage
+        * storage-account-key: Account key of your `data` data storage
+        * storage-container-name: Storage container name in your `data` data storage
+        * master-data-path: Path to master-data.csv in storage container (master-data/master-data.csv)
+        * input-eh-connection-string: Connectionstring to `evhnm-received-queue-` Event Hub queue including EntityPath (`;EntityPath=evh-received-queue`)
+        * telemetry-instrumentation-key: Instrumentation key (GUID) to `appi-` Time Series Application Insights
+* Use `Ctrl + Shift + p` and run `Remote-Containers: Open Folder in Container...` command and select the `geh-timeseries` folder
+
+Debug or run streaming:
+
+* Hit `F5`
+* Hit `Ctrl + F5`
+
+Tips and tricks for developing in Visual Studio Code:
+
+* [Navigation](https://code.visualstudio.com/docs/editor/editingevolved)
+* [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense)
+* [Debugging](https://code.visualstudio.com/docs/editor/debugging)
+
 ## Source Code
 
 Source code is mainly located in folder `geh_stream`. This folder also constitutes the functionality of the `geh_stream` [wheel](https://pythonwheels.com/) package.
@@ -7,6 +49,9 @@ Source code is mainly located in folder `geh_stream`. This folder also constitut
 ## Unit test with Pytest
 
 [Pytest](https://pytest.org/) is used for unit testing.
+
+Unit tests can be debugged or run in the `Testing` tab in the left menu (using Python Test Explorer for Visual Studio Code).
+You can debug or run either all tests, tests in a pytest-file or a single pytest using the `Debug` or `Run` icon for each element.
 
 ### Testing PySpark using fixture factories
 

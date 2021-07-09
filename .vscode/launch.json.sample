@@ -1,0 +1,27 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/source/streaming/enrichment_and_validation.py",
+            "console": "integratedTerminal",
+			"args":[
+                "--storage-account-name", "<storage-account-name>",
+                "--storage-account-key","<storage-account-key>",
+                "--storage-container-name", "<storage-container-name>",
+                "--master-data-path", "<master-data-path>",
+                "--input-eh-connection-string", "<input-eh-connection-string>",
+                "--telemetry-instrumentation-key", "<telemetry-instrumentation-key>"
+            ]
+        },
+        {
+            "name": "Python: Attach container",
+            "type": "python",
+            "request": "attach",
+            "port": 3000,
+            "host": "localhost"
+        }
+    ]
+}
