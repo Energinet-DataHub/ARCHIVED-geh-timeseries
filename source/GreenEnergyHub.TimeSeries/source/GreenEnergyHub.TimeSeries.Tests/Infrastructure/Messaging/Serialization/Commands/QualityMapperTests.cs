@@ -20,20 +20,20 @@ using Xunit.Categories;
 namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization.Commands
 {
     [UnitTest]
-    public class QuantityQualityMapperTests
+    public class QualityMapperTests
     {
         [Theory]
-        [InlineData("D01", QuantityQuality.Calculated)]
-        [InlineData("56", QuantityQuality.Estimated)]
-        [InlineData("E01", QuantityQuality.Measured)]
-        [InlineData("D99", QuantityQuality.QuantityMissing)]
-        [InlineData("36", QuantityQuality.Revised)]
-        [InlineData("", QuantityQuality.Unknown)]
-        [InlineData("DoesNotExist", QuantityQuality.Unknown)]
-        [InlineData(null, QuantityQuality.Unknown)]
-        public void Map_WhenGivenInput_MapsToCorrectEnum(string input, QuantityQuality expected)
+        [InlineData("D01", Quality.Calculated)]
+        [InlineData("56", Quality.Estimated)]
+        [InlineData("E01", Quality.Measured)]
+        [InlineData("A02", Quality.QuantityMissing)]
+        [InlineData("36", Quality.Revised)]
+        [InlineData("", Quality.Unknown)]
+        [InlineData("DoesNotExist", Quality.Unknown)]
+        [InlineData(null, Quality.Unknown)]
+        public void Map_WhenGivenInput_MapsToCorrectEnum(string input, Quality expected)
         {
-            var actual = QuantityQualityMapper.Map(input);
+            var actual = QualityMapper.Map(input);
             Assert.Equal(actual, expected);
         }
     }

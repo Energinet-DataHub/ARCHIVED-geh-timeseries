@@ -16,18 +16,18 @@ using GreenEnergyHub.TimeSeries.Domain.Notification;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands
 {
-    public static class QuantityQualityMapper
+    public static class QualityMapper
     {
-        public static QuantityQuality Map(string value)
+        public static Quality Map(string value)
         {
             return value switch
             {
-                "E01" => QuantityQuality.Measured,
-                "56" => QuantityQuality.Estimated,
-                "36" => QuantityQuality.Revised,
-                "D01" => QuantityQuality.Calculated,
-                "D99" => QuantityQuality.QuantityMissing, // D99 is probably not the correct quantity missing code.
-                _ => QuantityQuality.Unknown,
+                "E01" => Quality.Measured,
+                "56" => Quality.Estimated,
+                "36" => Quality.Revised,
+                "D01" => Quality.Calculated,
+                "A02" => Quality.QuantityMissing,
+                _ => Quality.Unknown,
             };
         }
     }

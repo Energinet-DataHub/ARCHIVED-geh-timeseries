@@ -14,13 +14,13 @@
 
 namespace GreenEnergyHub.TimeSeries.Domain.Notification
 {
-    public enum QuantityQuality
+    public enum Quality
     {
         Unknown = 0,
-        Measured = 1, // Received as E01 in ebiX
-        Revised = 2, // Received as 36 in ebiX
-        Estimated = 3, // Received as 56 in ebiX
-        QuantityMissing = 4, // Received in separate boolean field in ebiX
-        Calculated = 5, // Received as D01 in ebiX
+        Measured = 1, // Received as E01 in ebIX
+        Revised = 2, // Received as 36 in ebIX
+        Estimated = 3, // Received as 56 in ebIX
+        QuantityMissing = 4, // Received in separate boolean field in ebIX / Received as A02 in CIM
+        Calculated = 5, // Received as D01 in ebIX
     }
 }

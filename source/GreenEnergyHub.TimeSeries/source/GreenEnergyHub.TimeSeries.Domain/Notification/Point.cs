@@ -27,6 +27,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
 
         public decimal Quantity { get; set; }
 
-        public QuantityQuality Quality { get; set; }
+        public Quality Quality { get; set; }
     }
 }

@@ -152,7 +152,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
         private async Task<Point> ParsePointAsync(XmlReader reader, Series series)
         {
             // The CIM xml element 'quality' may be skipped and if so, the point's quality must default to 'Measured'
-            var point = new Point() { Quality = QuantityQuality.Measured };
+            var point = new Point() { Quality = Quality.Measured };
 
             while (await reader.ReadAsync().ConfigureAwait(false))
             {
@@ -169,7 +169,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Comma
                 else if (reader.Is(CimTimeSeriesCommandConstants.Quality, CimTimeSeriesCommandConstants.Namespace))
                 {
                     var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    point.Quality = QuantityQualityMapper.Map(content);
+                    point.Quality = QualityMapper.Map(content);
                 }
                 else if (reader.Is(CimTimeSeriesCommandConstants.Point, CimTimeSeriesCommandConstants.Namespace, XmlNodeType.EndElement))
                 {
