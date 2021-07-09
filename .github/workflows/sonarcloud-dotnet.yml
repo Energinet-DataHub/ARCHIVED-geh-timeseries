@@ -18,6 +18,7 @@ env:
   DOTNET_VERSION: '5.0.x'
   SONAR_PROJECTKEY: 'geh-timeseries-dotnet'
   SOURCE_PATH_ON_BUILDMACHINE: 'D:\a\geh-timeseries\geh-timeseries\source' # We have to be speficic with this path to get around a .NET 5.0 issue in SonarCLoud
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 jobs:
   build:
     name: Build
