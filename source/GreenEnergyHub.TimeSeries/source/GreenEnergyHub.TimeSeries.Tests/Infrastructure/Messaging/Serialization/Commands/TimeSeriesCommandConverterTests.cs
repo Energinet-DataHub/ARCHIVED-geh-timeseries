@@ -72,7 +72,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal("578032999778756222", result.Series.MeteringPointId);
             Assert.Equal(MeteringPointType.Consumption, result.Series.MeteringPointType);
             Assert.Equal(SettlementMethod.Flex, result.Series.SettlementMethod);
-            // Registration...
+            Assert.Equal(InstantPattern.ExtendedIso.Parse("2021-06-21T10:23:40.150Z").Value, result.Series.RegistrationDateTime);
             Assert.Equal(MeasureUnit.KiloWattHour, result.Series.Unit);
             Assert.Equal(TimeSeriesResolution.Hour, result.Series.Resolution);
             Assert.Equal(InstantPattern.ExtendedIso.Parse("2021-06-27T22:00:00Z").Value, result.Series.StartDateTime);
