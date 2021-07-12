@@ -22,9 +22,14 @@ hardcoded
 IaC
 IntegrationEventContract
 Jupyter
+kVArh
+KWT
 mergeable
 MeteringPointId
 MPL
+MVAr
+MWH
+MWh
 namespace
 NRules
 NuGet
@@ -45,6 +50,7 @@ TimeSeriesEndDateTime
 TimeSeriesId
 TimeSeriesPoint
 TimeSeriesStartDateTime
+TNE
 TODO
 UI
 Url
