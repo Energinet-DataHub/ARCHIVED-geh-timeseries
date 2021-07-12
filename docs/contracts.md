@@ -10,7 +10,7 @@
 
 ## IntegrationEventContract.proto
 
-Time Series Domain related integration events
+Time Series Domain related integration events are documented here.
 
 Note: Correlation Id is expected to be available on integration events as part of their meta data and for that reason it is not reflected below.
 
@@ -24,11 +24,11 @@ Represents an accepted time series, covering both originals as well as updates.
 | ----- | ---- | ----- | ----------- |
 | TimeSeriesId | string | required | A unique time series identifier |
 | MeteringPointId | string | required | A unique metering point identifier |
-| TimeSeriesStartDateTime | TimeStamp | required | In UTC. Time interval covering the entire time series period, where the starting point equals the earliest observation date time in the list of time series points |
-| TimeSeriesEndDateTime | TimeStamp | required | In UTC. Time interval covering the entire time series period, where the end point equals the latest observation date time in the list of time series points |
+| TimeSeriesStartDateTime | Timestamp | required | In UTC. Time interval covering the entire time series period, where the starting point equals the earliest observation date time in the list of time series points |
+| TimeSeriesEndDateTime | Timestamp | required | In UTC. Time interval covering the entire time series period, where the end point equals the latest observation date time in the list of time series points |
 | Points | [TimeSeriesPoint](#.TimeSeriesPoint) | required | A list of time series points |
 
-The Timestamp type is documented [here](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#timestamp).
+The Timestamp type is documented [here](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#Timestamp).
 
 <a name=".TimeSeriesPoint"></a>
 
