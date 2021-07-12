@@ -24,8 +24,8 @@ Represents an accepted time series, covering both originals as well as updates.
 | ----- | ---- | ----- | ----------- |
 | TimeSeriesId | string | required | A unique time series identifier |
 | MeteringPointId | string | required | A unique metering point identifier |
-| TimeSeriesStartDateTime | Timestamp | required | In UTC. Time interval covering the entire time series period, where the starting point equals the earliest observation date time in the list of time series points |
-| TimeSeriesEndDateTime | Timestamp | required | In UTC. Time interval covering the entire time series period, where the end point equals the latest observation date time in the list of time series points |
+| TimeSeriesStartDateTime | Timestamp | required | In UTC. The start of the time series period. The start equals the observation date time of the earliest point in the time series list |
+| TimeSeriesEndDateTime | Timestamp | required | In UTC. The end of the time series period. The end is to be considered an up to (excluding) date time which equals the end of the latest point in the time series list. This will be a calculated value taking the latest point's observation time and adding a single duration equal to the metering point's resolution, e.g. 15 minutes |
 | Points | [TimeSeriesPoint](#.TimeSeriesPoint) | required | A list of time series points |
 
 The Timestamp type is documented [here](https://developers.google.com/protocol-buffers/docs/reference/google.protobuf#Timestamp).
