@@ -17,16 +17,21 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
+using AutoFixture.Xunit2;
 using FluentAssertions;
 using GreenEnergyHub.Json;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Domain.Messages;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
+using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
+using GreenEnergyHub.TimeSeries.TestCore;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using Xunit;
 using Xunit.Categories;
 
@@ -83,6 +88,35 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
 
             // Assert
             actual.Should().BeEquivalentTo(expected);
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task FromBytesAsync_WhenCalledWithMessage_UsesJsonDeserializerToReturnResult(
+            [NotNull] [Frozen] Mock<IJsonSerializer> serializer,
+            [NotNull] byte[] data,
+            [NotNull] Mock<IInboundMessage> message,
+            [NotNull] JsonMessageDeserializer<IInboundMessage> sut)
+        {
+            // Arrange
+            var deserialized = false;
+            serializer.Setup(
+                    s => s.DeserializeAsync(
+                        It.IsAny<Stream>(),
+                        It.IsAny<Type>()))
+                .Returns(
+                    new ValueTask<object>(
+                        await Task.FromResult(message.Object)
+                            .ConfigureAwait(false)))
+                .Callback<Stream, Type>(
+                    (_, _) => deserialized = true);
+
+            // Act
+            var result = await sut.FromBytesAsync(data).ConfigureAwait(false);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.True(deserialized);
         }
 
         /// <summary>
