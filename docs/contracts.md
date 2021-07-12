@@ -39,5 +39,5 @@ Represents a single time series measurement also known as point.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | ObservationDateTime | Timestamp | required | In UTC. The date and time of a time series point |
-| Quantity | decimal(?,?) | required | Quantity of a specific type of energy |
+| Quantity | decimal | required | Quantity of a specific type of energy. Note: 3 decimals for K3 (kVArh) and KWH (kWh) and KWT (kW) and TNE (Tonne), 6 decimals for MAW (MW) and MWH (MWh) and Z03 (MVAr) |
 | Quality | enum | required | Indicates the quality of a specific quantity in a time series, e.g. estimated, measured, etc. |
