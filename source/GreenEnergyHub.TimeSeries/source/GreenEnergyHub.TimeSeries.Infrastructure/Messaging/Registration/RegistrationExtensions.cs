@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using Energinet.DataHub.TimeSeries.InternalContracts;
+using GreenEnergyHub.Json;
 using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
@@ -28,6 +29,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             services.AddScoped<MessageExtractor>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
             services.SendProtobuf<TimeSeriesCommandDomain>();
+            services.AddSingleton<IJsonSerializer, GreenEnergyHub.TimeSeries.Core.Json.JsonSerializer>();
 
             return new MessagingRegistrator(services);
         }
