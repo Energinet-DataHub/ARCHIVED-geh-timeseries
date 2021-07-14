@@ -19,23 +19,15 @@ namespace GreenEnergyHub.Queues.Kafka
     /// <summary>
     /// Kafka based message queue dispatcher
     /// </summary>
-    public interface IKafkaDispatcher
+    public interface IKafkaBinaryDispatcher
     {
         /// <summary>
-        /// Dispatches a message.
+        /// Dispatches <see cref="data"/>
         /// </summary>
-        /// <param name="message">The message to dispatch.</param>
-        /// <param name="topic">The Kafka topic to dispatch the message on.</param>
-        /// <returns>Task</returns>
-        Task DispatchAsync(string message, string topic);
-
-        /// <summary>
-        /// Dispatches a <see cref="MessageEnvelope"/>
-        /// </summary>
-        /// <param name="messageEnvelope"></param>
+        /// <param name="data"></param>
         /// <param name="topic"></param>
         /// <returns>Task</returns>
-        Task DispatchAsync(MessageEnvelope messageEnvelope, string topic);
+        Task DispatchAsync(byte[] data, string topic);
 
         /// <summary>
         /// Disposes instance

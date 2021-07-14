@@ -27,14 +27,14 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
     public class EventHubChannel<TOutboundMessage> : Channel<TOutboundMessage>
         where TOutboundMessage : IOutboundMessage
     {
-        private readonly IKafkaDispatcher _kafkaDispatcher;
+        private readonly IKafkaBinaryDispatcher _kafkaBinaryDispatcher;
         private readonly string _topic;
 
         public EventHubChannel(
-            [NotNull] IKafkaDispatcher<TOutboundMessage> kafkaDispatcher)
+            [NotNull] IKafkaBinaryDispatcher<TOutboundMessage> kafkaBinaryDispatcher)
         {
-            _kafkaDispatcher = kafkaDispatcher.Instance;
-            _topic = kafkaDispatcher.Topic;
+            _kafkaBinaryDispatcher = kafkaBinaryDispatcher.Instance;
+            _topic = kafkaBinaryDispatcher.Topic;
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         /// <returns>The task sending the data to the EventHub</returns>
         protected override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            await _kafkaDispatcher.DispatchAsync(data, _topic).ConfigureAwait(false);
+            await _kafkaBinaryDispatcher.DispatchAsync(data, _topic).ConfigureAwait(false);
         }
     }
 }

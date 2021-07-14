@@ -13,25 +13,24 @@
 // limitations under the License.
 
 using System;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Confluent.Kafka;
 
 namespace GreenEnergyHub.Queues.Kafka
 {
-    public class KafkaDispatcher : IDisposable, IKafkaDispatcher
+    public class KafkaBinaryDispatcher : IDisposable, IKafkaBinaryDispatcher
     {
-        private readonly IProducer<Null, string> _producer;
+        private readonly IProducer<Null, byte[]> _producer;
         private bool _disposed;
 
-        public KafkaDispatcher(IKafkaProducerFactory producerFactory)
+        public KafkaBinaryDispatcher(IKafkaProducerFactory producerFactory)
         {
             if (producerFactory is null)
             {
                 throw new ArgumentNullException(nameof(producerFactory));
             }
 
-            _producer = producerFactory.Build();
+            _producer = producerFactory.BuildBinary();
         }
 
         public void Dispose()
@@ -40,22 +39,9 @@ namespace GreenEnergyHub.Queues.Kafka
             GC.SuppressFinalize(this);
         }
 
-        public async Task DispatchAsync(string message, string topic)
+        public async Task DispatchAsync(byte[] data, string topic)
         {
-            var producerMessage = CreateProducerMessage(message);
-            var deliveryResult = await _producer.ProduceAsync(topic, producerMessage).ConfigureAwait(false);
-
-            EnsureDelivered(deliveryResult);
-        }
-
-        public async Task DispatchAsync(MessageEnvelope messageEnvelope, string topic)
-        {
-            if (messageEnvelope == null)
-            {
-                throw new ArgumentNullException(nameof(messageEnvelope));
-            }
-
-            var producerMessage = CreateProducerMessage(messageEnvelope);
+            var producerMessage = CreateProducerMessage(data);
             var deliveryResult = await _producer.ProduceAsync(topic, producerMessage).ConfigureAwait(false);
 
             EnsureDelivered(deliveryResult);
@@ -76,24 +62,15 @@ namespace GreenEnergyHub.Queues.Kafka
             _disposed = true;
         }
 
-        private static Message<Null, string> CreateProducerMessage(MessageEnvelope messageEnvelope)
+        private static Message<Null, byte[]> CreateProducerMessage(byte[] data)
         {
-            var payload = JsonSerializer.Serialize(messageEnvelope);
-            return new Message<Null, string>()
+            return new Message<Null, byte[]>()
             {
-                Value = payload,
+                Value = data,
             };
         }
 
-        private static Message<Null, string> CreateProducerMessage(string message)
-        {
-            return new Message<Null, string>()
-            {
-                Value = message,
-            };
-        }
-
-        private static void EnsureDelivered(DeliveryResult<Null, string> deliveryResult)
+        private static void EnsureDelivered(DeliveryResult<Null, byte[]> deliveryResult)
         {
             if (deliveryResult.Status != PersistenceStatus.Persisted)
             {
