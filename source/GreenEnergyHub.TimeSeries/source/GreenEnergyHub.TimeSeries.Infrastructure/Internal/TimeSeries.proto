@@ -34,8 +34,7 @@ message TimeSeriesCommandDomain {
 
 message MarketParticipantDomain {
     string id = 1;
-    string name = 2;
-    string market_participant_role = 3;
+    string market_participant_role = 2;
 }
 
 message Point {
@@ -46,7 +45,7 @@ message Point {
 }
 
 /**
- * Represents a TimeSeries
+ * Represents a TimeSeries Document
  */
 message DocumentDomain {
   string id = 1;
@@ -55,23 +54,22 @@ message DocumentDomain {
   string created_date_time = 4;
   MarketParticipantDomain sender = 5;
   MarketParticipantDomain recipient = 6;
-  string industry_classification = 7;
-  string business_reason_code = 8;
+  string business_reason_code = 7;
 }
 
 /**
- * Represents a TimeSeries
+ * Represents TimeSeries Series
  */
 message SeriesDomain {
-  string id = 1; // Contains a unique ID for the specific link, provided by the sender.
-  string metering_point_id = 2; //
-  string metering_point_type = 3; //
-  string settlement_method = 4; //
-  string registration_date_time = 5; //
-  string product = 6; //
-  string measure_unit = 7; //
-  string time_series_resolution = 8; //
-  string start_date_time = 9; //
-  string end_date_time = 10; //
-  repeated Point points = 11; //
+  string id = 1;
+  string metering_point_id = 2;
+  string metering_point_type = 3;
+  string settlement_method = 4;
+  string registration_date_time = 5;
+  string product = 6;
+  string measure_unit = 7;
+  string time_series_resolution = 8;
+  string start_date_time = 9;
+  string end_date_time = 10;
+  repeated Point points = 11;
 }

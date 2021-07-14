@@ -25,10 +25,28 @@ limitations under the License.
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\..\messaging\source\GreenEnergyHub.Messaging.Protobuf.Integration.ServiceCollection\GreenEnergyHub.Messaging.Protobuf.Integration.ServiceCollection.csproj" />
+      <ProjectReference Include="..\..\..\messaging\source\GreenEnergyHub.Messaging.Protobuf\GreenEnergyHub.Messaging.Protobuf.csproj" />
       <ProjectReference Include="..\..\..\queues\source\GreenEnergyHub.Queues.Kafka\GreenEnergyHub.Queues.Kafka.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Core\GreenEnergyHub.TimeSeries.Core.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
     </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.17.3" />
+    <PackageReference Include="Grpc.Tools" Version="2.37.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="**/*.proto">
+      <GrpcServices>None</GrpcServices>
+      <Access>Public</Access>
+      <ProtoCompile>True</ProtoCompile>
+      <CompileOutputs>True</CompileOutputs>
+      <OutputDir>obj\Debug\net5.0\</OutputDir>
+      <Generator>MSBuild:Compile</Generator>
+    </Protobuf>
+  </ItemGroup>
+  
 </Project>

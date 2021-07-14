@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GreenEnergyHub.Json;
+using Energinet.DataHub.TimeSeries.InternalContracts;
+using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,10 +26,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
         {
             services.AddScoped<ICorrelationContext, CorrelationContext>();
             services.AddScoped<MessageExtractor>();
-            services.AddScoped<MessageSerializer, JsonMessageSerializer>();
-            services.AddScoped<IJsonOutboundMapperFactory, DefaultJsonMapperFactory>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
-            services.AddSingleton<IJsonSerializer, GreenEnergyHub.TimeSeries.Core.Json.JsonSerializer>();
+            services.SendProtobuf<TimeSeriesCommandDomain>();
 
             return new MessagingRegistrator(services);
         }
