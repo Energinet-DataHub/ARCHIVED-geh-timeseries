@@ -45,8 +45,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
         /// <returns>The task sending the data to the EventHub</returns>
         protected override async Task WriteAsync(byte[] data, CancellationToken cancellationToken = default)
         {
-            var message = System.Text.Encoding.UTF8.GetString(data);
-            await _kafkaDispatcher.DispatchAsync(message, _topic).ConfigureAwait(false);
+            await _kafkaDispatcher.DispatchAsync(data, _topic).ConfigureAwait(false);
         }
     }
 }

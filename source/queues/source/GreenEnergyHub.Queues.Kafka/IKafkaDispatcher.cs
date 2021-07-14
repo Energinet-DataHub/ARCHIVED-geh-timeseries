@@ -38,6 +38,14 @@ namespace GreenEnergyHub.Queues.Kafka
         Task DispatchAsync(MessageEnvelope messageEnvelope, string topic);
 
         /// <summary>
+        /// Dispatches <see cref="data"/>
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="topic"></param>
+        /// <returns>Task</returns>
+        Task DispatchAsync(byte[] data, string topic);
+
+        /// <summary>
         /// Disposes instance
         /// </summary>
         void Dispose();

@@ -22,10 +22,10 @@ namespace GreenEnergyHub.Queues.Kafka
     public class KafkaDispatcher : IDisposable, IKafkaDispatcher
     {
         private readonly IProducer<Null, string> _producer;
+        private readonly IProducer<Null, byte[]> _binaryProducer;
         private bool _disposed;
 
-        public KafkaDispatcher(
-            IKafkaProducerFactory producerFactory)
+        public KafkaDispatcher(IKafkaProducerFactory producerFactory)
         {
             if (producerFactory is null)
             {
@@ -33,6 +33,7 @@ namespace GreenEnergyHub.Queues.Kafka
             }
 
             _producer = producerFactory.Build();
+            _binaryProducer = producerFactory.BuildBinary();
         }
 
         public void Dispose()
@@ -45,6 +46,14 @@ namespace GreenEnergyHub.Queues.Kafka
         {
             var producerMessage = CreateProducerMessage(message);
             var deliveryResult = await _producer.ProduceAsync(topic, producerMessage).ConfigureAwait(false);
+
+            EnsureDelivered(deliveryResult);
+        }
+
+        public async Task DispatchAsync(byte[] data, string topic)
+        {
+            var producerMessage = CreateProducerMessage(data);
+            var deliveryResult = await _binaryProducer.ProduceAsync(topic, producerMessage).ConfigureAwait(false);
 
             EnsureDelivered(deliveryResult);
         }
@@ -72,6 +81,7 @@ namespace GreenEnergyHub.Queues.Kafka
             if (disposing)
             {
                 _producer.Dispose();
+                _binaryProducer.Dispose();
             }
 
             _disposed = true;
@@ -94,7 +104,23 @@ namespace GreenEnergyHub.Queues.Kafka
             };
         }
 
+        private static Message<Null, byte[]> CreateProducerMessage(byte[] data)
+        {
+            return new Message<Null, byte[]>()
+            {
+                Value = data,
+            };
+        }
+
         private static void EnsureDelivered(DeliveryResult<Null, string> deliveryResult)
+        {
+            if (deliveryResult.Status != PersistenceStatus.Persisted)
+            {
+                throw new MessageQueueException("Failed to dispatch request to inbound queue.");
+            }
+        }
+
+        private static void EnsureDelivered(DeliveryResult<Null, byte[]> deliveryResult)
         {
             if (deliveryResult.Status != PersistenceStatus.Persisted)
             {
