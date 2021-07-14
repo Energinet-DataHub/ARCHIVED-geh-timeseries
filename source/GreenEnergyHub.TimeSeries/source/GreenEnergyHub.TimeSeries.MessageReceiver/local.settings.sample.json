@@ -1,5 +1,5 @@
 {
-   "IsEncrypted": false,
+  "IsEncrypted": false,
   "Values": {
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
@@ -8,6 +8,6 @@
     "LOCAL_TIMEZONENAME": "Europe/Copenhagen",
     "TIMESERIES_QUEUE_CONNECTION_STRING": "<Insert connection string for event hub queue for time series commands>",
     "TIMESERIES_QUEUE_TOPIC": "<Insert name of topic for time series commands>",
-    "TIMESERIES_QUEUE_URL": "<Insert URL for event hub queue for time series commands>",
+    "TIMESERIES_QUEUE_URL": "<Insert URL for event hub queue for time series commands>"
   }
 }
