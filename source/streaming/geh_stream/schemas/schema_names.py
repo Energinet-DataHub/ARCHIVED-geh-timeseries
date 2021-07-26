@@ -19,4 +19,3 @@ class SchemaNames(enum.Enum):
     MessageBody = 2  # the schema of the json content of the message itself
     Parsed = 3  # the schema of the json content plus the Enqueued time from Event Hub
     Parquet = 4  # the schema of the enriched time series data stored in parquet format
-    DistributionList = 5  # the schema of the distribution list in the Master data

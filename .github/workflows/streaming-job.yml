@@ -17,35 +17,20 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
+    paths:
+      - source/streaming/**
+      - .github/workflows/streaming-job.yml
+  workflow_dispatch: {}
 
 env:
   ORGANISATION_NAME: endk
   PROJECT_NAME: tseries
 
 jobs:
-  pre_job:
-    runs-on: ubuntu-latest
-    outputs:
-      should_skip: ${{ steps.skip_check.outputs.should_skip }}
-    steps:
-      - name: Should skip?
-        id: skip_check
-        uses: fkirc/skip-duplicate-actions@v1.4.0
-        with:
-          github_token: ${{ github.token }}
-          paths: '[
-            "source/streaming/**",
-            ".github/workflows/streaming-job.yml"
-          ]'
-
   # Execute static checks (flake8) and unit tests.
   streaming_job_ci:
     runs-on: ubuntu-latest
     name: flake8 and unit test
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
-    
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -71,8 +56,6 @@ jobs:
   #   This job is a candidate for splitting into the ci and cd jobs.
   wheel_build_publish:
     name: Build and Publish Wheel File
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -99,8 +82,8 @@ jobs:
           }
         ]
     env:
-      WHEEL_STORAGE_NAME: 'enrgtwheels'
-      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: 'tseries${{ matrix.environment.short }}'
+      WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       WHEEL_CONTAINER_NAME: 'wheels'
       ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     environment:
@@ -179,7 +162,7 @@ jobs:
 
   streaming_job_cd:
     name: Deploy databricks cluster and create job
-    needs: [streaming_job_ci]
+    needs: streaming_job_ci
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -208,9 +191,11 @@ jobs:
     environment:
       name: ${{ matrix.environment.long }}
     env:
-      WHEEL_STORAGE_ADDRESS: https://enrgtwheels.blob.core.windows.net/wheels/
+      WHEEL_STORAGE_NAME: 'tseries${{ matrix.environment.short }}'
+      WHEEL_STORAGE_ADDRESS: https://tseries${{ matrix.environment.short }}.blob.core.windows.net/wheels/
       MAIN_PYTHON_FILE: "dbfs:/streaming/enrichment_and_validation.py"
-
+      RESOURCE_GROUP_NAME: ${{ matrix.environment.long }}
+      ENVIRONMENT_SHORT: ${{ matrix.environment.short }}
     steps:
 
       - name: Checkout code
@@ -291,7 +276,7 @@ jobs:
           echo "TF_VAR_environment=${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_resource_group_name=${{ matrix.environment.long }}" >> $GITHUB_ENV
-          echo "TF_VAR_storage_account_name=data${{ env.ORGANISATION_NAME }}${{ matrix.environment.short }}" >> $GITHUB_ENV
+          echo "TF_VAR_storage_account_name=data${{ env.PROJECT_NAME }}${{ env.ORGANISATION_NAME }}${{ matrix.environment.short }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
           echo "TF_VAR_python_main_file=${{ env.MAIN_PYTHON_FILE}}" >> $GITHUB_ENV

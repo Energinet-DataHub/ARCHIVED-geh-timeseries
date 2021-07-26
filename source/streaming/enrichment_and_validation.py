@@ -46,7 +46,7 @@ p.add('--output-path', type=str, required=False, default="delta/meter-data/",
 p.add('--input-eh-connection-string', type=str, required=True,
       help='Input Event Hub connection string', env_var='GEH_STREAMING_INPUT_EH_CONNECTION_STRING')
 p.add('--max-events-per-trigger', type=int, required=False, default=10000,
-      help='Metering points to read per trrigger interval')
+      help='Metering points to read per trigger interval')
 p.add('--trigger-interval', type=str, required=False, default='1 second',
       help='Trigger interval to generate streaming batches (format: N seconds)')
 p.add('--streaming-checkpoint-path', type=str, required=False, default="checkpoints/streaming",
@@ -65,6 +65,9 @@ if unknown_args:
 # %% Create or get Spark session
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
+from datetime import datetime, timezone
+
+print(datetime.now(timezone.utc))
 
 spark_conf = SparkConf(loadDefaults=True) \
     .set('fs.azure.account.key.{0}.dfs.core.windows.net'.format(args.storage_account_name),
@@ -145,6 +148,9 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
         # Make valid time series points available to aggregations (by storing in Delta lake)
         batch_operations.store_points_of_valid_time_series(batched_time_series_points, output_delta_lake_path, watch)
 
+        # Log invalid time series points
+        batch_operations.log_invalid_time_series(batched_time_series_points, telemetry_client)
+
         batch_count = batch_operations.get_rows_in_batch(batched_time_series_points, watch)
 
         watch.stop_timer(batch_count)
@@ -160,6 +166,7 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
         batch_operations.track_batch_back_to_original_correlation_requests(batched_time_series_points, batch_info, args.telemetry_instrumentation_key)
 
         batched_time_series_points.unpersist()
+        print("Batch details:", batch_info)
 
     except Exception as err:
         # Make sure the exception is not accidently tracked on the last used parent
@@ -203,7 +210,7 @@ def log(message):
 # can be done in less than 30 seconds.
 
 blob_service = BlobService(args.storage_account_name, args.storage_account_key, args.storage_container_name)
-blob_master_data_version = blob_service.get_blob_poperties(args.master_data_path).last_modified
+blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
 spark_master_data_version = blob_master_data_version
 is_master_data_blob_newer = True
 
@@ -224,7 +231,7 @@ while True:
         # wait despite that the streaming has already stopped.
         execution.awaitTermination(4.5 * 60)
 
-        blob_master_data_version = blob_service.get_blob_poperties(args.master_data_path).last_modified
+        blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
         is_master_data_blob_newer = blob_master_data_version > spark_master_data_version
 
         if is_master_data_blob_newer:
@@ -258,3 +265,5 @@ while True:
     finally:
         if is_master_data_blob_newer:
             master_data_df.unpersist()
+
+# %%

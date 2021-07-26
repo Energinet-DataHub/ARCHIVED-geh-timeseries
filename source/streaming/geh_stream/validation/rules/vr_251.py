@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql.functions import col
-from geh_stream.codelists import SettlementMethod, MarketEvaluationPointType
+from geh_stream.codelists import SettlementMethod, MeteringPointType
 
 
 # VR.251
@@ -26,7 +26,7 @@ def validate_vr_251(df):
         .withColumn("VR-251-Is-Valid",
                     ~
                     (
-                        (col("md.MarketEvaluationPointType") == MarketEvaluationPointType.exchange.value)
-                        & col("pd.Period_Point_Quantity").isNotNull()
-                        & (col("pd.Period_Point_Quantity") >= productionLimit)
+                        (col("md.meteringPointType") == MeteringPointType.exchange.value)
+                        & col("pd.series_point_quantity").isNotNull()
+                        & (col("pd.series_point_quantity") >= productionLimit)
                     ))

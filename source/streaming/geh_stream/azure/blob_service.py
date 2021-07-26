@@ -21,6 +21,6 @@ class BlobService:
         self.account_url = "https://{0}.blob.core.windows.net/".format(storage_account_name)
         self.blobService = BlobServiceClient(account_url=self.account_url, credential=storage_account_key)
 
-    def get_blob_poperties(self, blob_name):
+    def get_blob_properties(self, blob_name):
         blob_client = self.blobService.get_blob_client(self.storage_container_name, blob_name)
         return blob_client.get_blob_properties()

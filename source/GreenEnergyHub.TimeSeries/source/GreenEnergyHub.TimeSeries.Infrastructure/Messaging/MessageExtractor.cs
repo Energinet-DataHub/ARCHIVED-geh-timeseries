@@ -22,7 +22,6 @@ using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
 {
-    // TODO BJARKE: Unit tests
     public class MessageExtractor<TInboundMessage> : MessageExtractor
         where TInboundMessage : IInboundMessage
     {

@@ -1,0 +1,38 @@
+{
+    "python.testing.pytestArgs": [
+        "source"
+    ],
+    "python.testing.unittestEnabled": false,
+    "python.testing.nosetestsEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "git.autofetch": true,
+    "workbench.colorTheme": "Visual Studio Dark",
+	"workbench.colorCustomizations": {
+		"editor.selectionBackground": "#4d7f9c",
+		"editor.selectionForeground": "#4d7f9c",
+		"editor.selectionHighlightBackground": "#4d7f9c",
+		"editor.selectionHighlightForeground": "#000000"
+	},
+    "editor.suggestSelection": "first",
+    "cornflakes.linter.executablePath": "/usr/bin/flake8",
+    "python.linting.flake8Args": [
+        "--ignore=E501,F401,E402,W503"
+    ],
+    "python.languageServer": "Jedi",
+    "workbench.iconTheme": "vscode-icons",
+    "editor.detectIndentation": false,
+    "pythonTestExplorer.testFramework": "pytest",
+    "files.exclude": {
+        "**/__pycache__": true
+    },
+    "workbench.editorAssociations": {
+        "*.ipynb": "jupyter.notebook.ipynb"
+    },
+    "vsicons.dontShowNewVersionMessage": true,
+    "[python]": {
+        "gitlens.codeLens.symbolScopes": [
+            "!Module"
+        ],
+        "editor.wordBasedSuggestions": false
+    }
+}

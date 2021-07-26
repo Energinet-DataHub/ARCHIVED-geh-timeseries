@@ -26,6 +26,20 @@ limitations under the License.
     </PropertyGroup>
 
     <ItemGroup>
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_withoutQualityElements.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithQuantityMissingFirstPosition.xml" />
+      <None Remove="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithQuantityMissingFirstPosition.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithoutQualityElements.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries_WithUnusedCimContent.xml" />
+      <EmbeddedResource Include="TestFiles\Valid_Hourly_CIM_TimeSeries.xml" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
@@ -42,7 +56,6 @@ limitations under the License.
         <PackageReference Include="FluentAssertions" Version="5.10.3" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3" />
-        <PackageReference Include="coverlet.collector" Version="3.0.3" />
+        <PackageReference Include="coverlet.collector" Version="3.1.0" />
     </ItemGroup>
-
 </Project>

@@ -16,7 +16,7 @@ from pyspark.sql.functions import col
 
 # VR.200
 #
-# Market evaluation point must exist.
+# Metering Point must exist.
 def validate_vr_200(df):
     return df \
-        .withColumn("VR-200-Is-Valid", col("MarketEvaluationPoint_mRID").isNotNull())
+        .withColumn("VR-200-Is-Valid", col("md.meteringPointId").isNotNull())

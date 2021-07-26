@@ -15,6 +15,7 @@ from enum import Enum
 
 
 class SettlementMethod(Enum):
-    flex_settled = "D01"
-    profiled = "E01"
-    non_profiled = "E02"
+    unknown = 0
+    profiled = 1
+    non_profiled = 2
+    flex = 3

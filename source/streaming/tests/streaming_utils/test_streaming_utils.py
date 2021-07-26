@@ -30,12 +30,8 @@ def vr200_invalid_time_series_point(parsed_data_from_json_file_factory, master_d
     return time_series_points.first()
 
 
-def test_valid_time_series_first_point_has_enriched_data(valid_time_series_point):
-    assert valid_time_series_point.EnergySupplier_MarketParticipant_mRID == "8100000000108"
-
-
 def test_valid_time_series_first_point_has_streaming_data(valid_time_series_point):
-    assert valid_time_series_point.mRID == "tId2020-12-01T13:16:29.330Z"
+    assert valid_time_series_point.Series_Id == "transaction_id_of_valid_message"
 
 
 def test_valid_time_series_first_point_is_valid(valid_time_series_point):
@@ -48,4 +44,4 @@ def test_vr200_invalid_time_series_first_point_is_invalid(vr200_invalid_time_ser
 
 
 def test_valid_time_series_first_point_has_observation_time(valid_time_series_point):
-    assert valid_time_series_point.Period_Point_Time.isoformat() + "Z" == "2020-11-12T23:00:00Z"
+    assert valid_time_series_point.Series_Point_ObservationDateTime.isoformat() + "Z" == "2020-11-12T23:00:00Z"

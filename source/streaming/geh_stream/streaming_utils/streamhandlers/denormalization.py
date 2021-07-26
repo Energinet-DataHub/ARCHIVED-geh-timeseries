@@ -19,6 +19,6 @@ from geh_stream.dataframelib import flatten_df
 
 def denormalize_parsed_data(parsed_data: DataFrame) -> DataFrame:
     flattened_parsed_data = flatten_df(parsed_data)
-    exploded_data = flattened_parsed_data.select(col("*"), explode(col("Period_Points")).alias("Period_Point")) \
-                                         .drop("Period_Points")
+    exploded_data = flattened_parsed_data.select(col("*"), explode(col("Series_Points")).alias("Series_Point")) \
+                                         .drop("Series_Points")
     return flatten_df(exploded_data)

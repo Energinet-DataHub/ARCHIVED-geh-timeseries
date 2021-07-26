@@ -33,11 +33,13 @@ This sections documents the data flows to and from the time series domain.
 
 ## Domain Road Map
 
-No work planned in current program increment. However, future work will be planned including the following:
+In the current program increment (PI) the planned work is captured by the stated PI goals:
 
-1. Time Series is moved from current private repository to this public repository in order to become open source.
-2. Time series business processes is moved to its own domain, in order to ensure flexibility, independence of other domains, and stability.
-3. The domain supports the business processes listed above.
+1. Received time series are published, enabling the Aggregations domain to perform market settlement.
+2. Received time series are stored.
+3. It is possible to monitor the Time Series domain through a dashboard (to support working software).
+
+This is also the PI where Time Series is moved from current private repository to this public repository in order to become open source.
 
 ## Getting Started
 

@@ -23,15 +23,11 @@ def validated_data(spark, enriched_data):
 
 def test_validator_drops_cols_only_needed_for_validation(enriched_data, validated_data):
     # Start by testing existence just in order to catch potential renamings and thus preventing false succeesses
-    assert has_column(enriched_data, "pd.MarketEvaluationPointType")
-    assert has_column(enriched_data, "pd.QuantityMeasurementUnit_Name")
-    assert has_column(enriched_data, "pd.Product")
-    assert has_column(enriched_data, "pd.SettlementMethod")
+    assert has_column(enriched_data, "md.meteringPointType")
+    assert has_column(enriched_data, "md.settlementMethod")
 
-    assert not has_column(validated_data, "pd.MarketEvaluationPointType")
-    assert not has_column(validated_data, "pd.QuantityMeasurementUnit_Name")
-    assert not has_column(validated_data, "pd.Product")
-    assert not has_column(validated_data, "pd.SettlementMethod")
+    assert not has_column(validated_data, "md.meteringPointType")
+    assert not has_column(validated_data, "md.settlementMethod")
 
 
 def test_validator_adds_is_time_series_point_valid_col(validated_data):

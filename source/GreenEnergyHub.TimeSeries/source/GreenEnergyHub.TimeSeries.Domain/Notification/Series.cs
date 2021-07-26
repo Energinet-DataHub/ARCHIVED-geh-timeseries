@@ -31,8 +31,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
         /// </summary>
         public string Id { get; set; }
 
-        public Product Product { get; set; }
-
         public string MeteringPointId { get; set; }
 
         public MeteringPointType MeteringPointType { get; set; }
@@ -40,6 +38,8 @@ namespace GreenEnergyHub.TimeSeries.Domain.Notification
         public SettlementMethod? SettlementMethod { get; set; }
 
         public Instant RegistrationDateTime { get; set; }
+
+        public Product Product { get; set; }
 
         public MeasureUnit Unit { get; set; }
 
