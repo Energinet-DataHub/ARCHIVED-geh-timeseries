@@ -38,20 +38,15 @@ namespace GreenEnergyHub.TimeSeries.Tests.Application.Handlers
             [NotNull] TimeSeriesCommand command,
             [NotNull] TimeSeriesCommandHandler sut)
         {
-            // Arrange
-            var dispatched = false;
-            dispatcher.Setup(
-                    d => d.DispatchAsync(
-                        command,
-                        It.IsAny<CancellationToken>()))
-                .Callback<TimeSeriesCommand, CancellationToken>(
-                    (_, _) => dispatched = true);
-
             // Act
             var result = await sut.HandleAsync(command).ConfigureAwait(false);
 
             // Assert
-            Assert.True(dispatched);
+            dispatcher.Verify(
+                d => d.DispatchAsync(
+                    command,
+                    It.IsAny<CancellationToken>()),
+                Times.Once);
             Assert.NotNull(result);
             Assert.True(result.IsSucceeded);
         }

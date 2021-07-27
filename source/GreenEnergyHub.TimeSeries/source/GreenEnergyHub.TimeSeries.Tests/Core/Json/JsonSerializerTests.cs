@@ -44,7 +44,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Core.Json
             Assert.Equal(4, actual.NoSetter);
         }
 
-        [UsedImplicitly]
         private class Foo
         {
             public Foo(int noSetter)
@@ -58,7 +57,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Core.Json
             public int PrivateSetter
             {
                 get;
-                [UsedImplicitly]
                 private set;
             }
 

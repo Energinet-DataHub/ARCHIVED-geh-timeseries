@@ -17,7 +17,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.AutoMoq;
@@ -30,6 +29,7 @@ using GreenEnergyHub.TimeSeries.Domain.Messages;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
 using GreenEnergyHub.TimeSeries.TestCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
@@ -99,7 +99,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             [NotNull] JsonMessageDeserializer<IInboundMessage> sut)
         {
             // Arrange
-            var deserialized = false;
             serializer.Setup(
                     s => s.DeserializeAsync(
                         It.IsAny<Stream>(),
@@ -107,16 +106,18 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
                 .Returns(
                     new ValueTask<object>(
                         await Task.FromResult(message.Object)
-                            .ConfigureAwait(false)))
-                .Callback<Stream, Type>(
-                    (_, _) => deserialized = true);
+                            .ConfigureAwait(false)));
 
             // Act
             var result = await sut.FromBytesAsync(data).ConfigureAwait(false);
 
             // Assert
             Assert.NotNull(result);
-            Assert.True(deserialized);
+            serializer.Verify(
+                s => s.DeserializeAsync(
+                    It.IsAny<Stream>(),
+                    It.IsAny<Type>()),
+                Times.Once);
         }
 
         /// <summary>
