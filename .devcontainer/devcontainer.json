@@ -24,7 +24,8 @@
 		"hbenl.vscode-test-explorer",
 		"kevinglasson.cornflakes-linter",
 		"eamodio.gitlens",
-		"ms-python.vscode-pylance"
+		"ms-python.vscode-pylance",
+        "ms-azuretools.vscode-docker"
 	],
 
 	"containerEnv": {
