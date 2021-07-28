@@ -50,18 +50,7 @@ variable "cacert_path" {
   description   = "Path to the ca certificate"
 }
 
-# TODO BJARKE: From green-energy-hub-archived repo
-# variable "current_spn_id" {
-#   type          = string
-#   description   = "Service Principal ID of the connection used to deploy the code"
-# }
-
-# variable "current_spn_secret" {
-#   type          = string
-#   description   = "Service Principal secret of the connection used to deploy the code"
-# }
-
-# variable "current_subscription_id" {
-#   type          = string
-#   description   = "The ID of the subscription that the infrastructure code is deployed into"
-# }
+variable "notification_email" {
+  type          = string
+  description   = "Email address to send notifications to"
+}
