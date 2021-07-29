@@ -23,7 +23,7 @@ inputs:
 runs:
   using: composite
   steps:
-    # Try not to reference TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
+    # Avoid referencing TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
     # rather create duplicate ENV pipeline variable if needed to separate concerns
     - name: Set TF Vars
       shell: bash
