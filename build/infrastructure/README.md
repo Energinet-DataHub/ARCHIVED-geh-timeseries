@@ -127,6 +127,10 @@ This variable has to be filled with the location of the ca certificate in the en
 
 Usually this is `c:\\cacert\\cacert.pem`
 
+### `notification_email`
+
+The email address that should receive notifications of alerts raised by the infrastructure. Use your own for development.
+
 ## Prerequisites
 
 ### Installing `Azure CLI`
