@@ -22,10 +22,11 @@
 		"ms-python.python",
 		"littlefoxteam.vscode-python-test-adapter",
 		"hbenl.vscode-test-explorer",
-		"kevinglasson.cornflakes-linter",
+		"kevinglasson.cornflakes-linter", // Python linter
 		"eamodio.gitlens",
 		"ms-python.vscode-pylance",
-        "ms-azuretools.vscode-docker"
+		"zxh404.vscode-proto3", // Syntax highlighting of protobuf files,
+        "HashiCorp.terraform"
 	],
 
 	"containerEnv": {
