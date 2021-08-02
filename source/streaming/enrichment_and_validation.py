@@ -35,7 +35,7 @@ p.add('--storage-container-name', type=str, required=False, default='data',
       help='Azure Storage container name')
 
 # Master data (in storage account)
-p.add('--master-data-path', type=str, required=False, default="master-data/MasterData.csv",
+p.add('--master-data-path', type=str, required=False, default="master-data/master-data.csv",
       help='Path to master data storage location (csv) relative to container''s root')
 
 # Stored valid time series points (in storage account)
