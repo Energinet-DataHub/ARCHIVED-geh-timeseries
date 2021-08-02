@@ -29,10 +29,11 @@ on:
   workflow_dispatch: {}
 
 env:
-  ORGANISATION_NAME: endk
   PROJECT_NAME: 'time${{ github.event.number }}'
-  RESOURCE_GROUP_NAME: rg-DataHub-Testing-U
+  RESOURCE_GROUP_NAME: Development
   ENVIRONMENT_SHORT: u
+  TERRAFORM_BACKEND_FILE_PATH: './build/infrastructure/main/backend.tf'
+  TERRAFORM_WORKING_DIR_PATH: './build/infrastructure/main'
 
 jobs:
 # Helps to determine if no changes are made to infrastructure or this workflow.
@@ -74,91 +75,47 @@ jobs:
     if: ${{ needs.infra_pre_job.outputs.should_skip != 'true' || needs.streaming_pre_job.outputs.should_skip != 'true' }}
     runs-on: ubuntu-latest
     environment:
-      name: rg-DataHub-Testing-U
+      name: Development
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-
-      - name: Set Environment Secrets
-        run: |  
-          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
         with:
           terraform_wrapper: false
+          terraform_version: 1.0.1 # THIS NEEDS TO BE EQUAL TO THE VERSION DEFINED IN PROVIDERS.TF
+
+      - name: Set Custom TF Vars
+        shell: bash
+        run: |
+          echo "TF_VAR_spn_object_id=${{ secrets.AZURE_SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_tenant_id=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "TF_VAR_cacert_path=${{ secrets.CACERT_PATH }}" >> $GITHUB_ENV
+          echo "TF_VAR_notification_email=${{ secrets.NOTIFICATION_EMAIL }}" >> $GITHUB_ENV        
       
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - name: Terraform CD
+        uses: Energinet-DataHub/.github/.github/actions/terraform@main
         with:
-          python-version: '3.7' # Version range or exact version of a Python version to use, using SemVer's version range syntax
-          architecture: 'x64' # optional x64 or x86. Defaults to x64 if not specified
-
-      - name: Azure CLI Install and Login
-        uses: ./.github/actions/azure-cli-install-login
-
-      - name: Setup Authorization to pull TF modules
-        run: |
-          git config --local --remove-section http."https://github.com/"
-          git config --global url."https://foo:${{ secrets.PAT_TOKEN }}@github.com/Energinet-DataHub/geh-terraform-modules".insteadOf "https://github.com/Energinet-DataHub/geh-terraform-modules"
-      
-      - name: Check If Terraform State Storage exists
-        id: state-storage-exists
-        run: |
-          storage_exists=$(az storage account check-name --name 'tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}' | python3 -c "import sys, json; print(not json.load(sys.stdin)['nameAvailable'])")
-          echo "::set-output name=state-storage-exists::${storage_exists}"
-
-      # Create TF State Container if needed
-      - name: Create Terraform State Storage
-        run: |
-          storage_name="tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
-          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name $storage_name --sku Standard_LRS --encryption-services blob
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name $storage_name --query '[0].value' -o tsv)
-          az storage container create --name tfstate --account-name $storage_name --account-key $account_key
-        if: steps.state-storage-exists.outputs.state-storage-exists == 'False'
-
-      # Try not to reference TF_VAR variables in pipeline yml files, only values should be set and they should be read in terraform only
-      # rather create duplicate ENV pipeline vatiable if needed to separate concerns
-      - name: Set TF Vars
-        run: |
-          echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
-          echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_project=${{ env.PROJECT_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_tenant_id=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
-          echo "TF_VAR_spn_object_id=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
-          echo "TF_VAR_cacert_path=${{ secrets.CACERT_PATH}}" >> $GITHUB_ENV          
-
-      - name: Configure Terraform Backend
-        uses: ./.github/actions/configure-terraform-backend
-        with:
-          backend-file-path: "./build/infrastructure/backend.tf"
-          resource-group-name: "${{ env.RESOURCE_GROUP_NAME }}"
-          storage-account-name: "tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
-
-      - name: Terraform Init
-        working-directory: ./build/infrastructure
-        run: terraform init
-
-      - name: Terraform Plan
-        working-directory: ./build/infrastructure
-        run: terraform plan
-
-      - name: Terraform Apply
-        working-directory: ./build/infrastructure
-        run: terraform apply -no-color -auto-approve
-        continue-on-error: false
+          PROJECT_NAME: ${{ env.PROJECT_NAME }}
+          ORGANISATION_NAME: ${{ secrets.ORGANISATION_NAME }}
+          ENVIRONMENT_SHORT: ${{ env.ENVIRONMENT_SHORT }}
+          ENVIRONMENT_NAME: development
+          TERRAFORM_BACKEND_FILE_PATH: ${{ env.TERRAFORM_BACKEND_FILE_PATH }}
+          TERRAFORM_WORKING_DIR_PATH: ${{ env.TERRAFORM_WORKING_DIR_PATH }}
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+          AZURE_SPN_OBJECT_ID: ${{ secrets.AZURE_SPN_OBJECT_ID }}
+          AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
 
       - name: comment PR
         uses: unsplash/comment-on-pr@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          msg: "Congratulations! Your enviroment was successfully deployed into rg-DataHub-Testing-U (Resources will contain the name ${{ env.PROJECT_NAME }}). It will automatically be destroyed again when the PR is closed."
+          msg: "Congratulations! Your enviroment was successfully deployed into Development (Resources will contain the name ${{ env.PROJECT_NAME }}). It will automatically be destroyed again when the PR is closed."
           check_for_duplicate_msg: true  # OPTIONAL
 
   # Execute static checks (flake8) and unit tests.
@@ -202,7 +159,7 @@ jobs:
       WHEEL_STORAGE_ADDRESS: 'https://time${{ github.event.number }}wheels.blob.core.windows.net/wheels/'
       WHEEL_CONTAINER_NAME: 'wheels'
     environment:
-      name: rg-DataHub-Testing-U
+      name: Development
 
     steps:
       - name: Setup Python
@@ -216,11 +173,11 @@ jobs:
 
       - name: Set Environment Secrets
         run: |  
-          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.AZURE_SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.AZURE_SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
 
       - name: Azure CLI Install and Login
         uses: ./.github/actions/azure-cli-install-login
@@ -234,8 +191,8 @@ jobs:
       #Create Wheel Repository Container if needed
       - name: Create Wheel Repository Storage
         run: |
-          az storage account create --resource-group ${{ env.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          az storage account create --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --name ${{ env.WHEEL_STORAGE_NAME }} --sku Standard_LRS --encryption-services blob --min-tls-version TLS1_2
+          account_key=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage container create --name ${{ env.WHEEL_CONTAINER_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --account-key $account_key --public-access blob
         if: steps.wheel-storage-exists.outputs.wheel-storage-exists == 'False'
 
@@ -261,7 +218,7 @@ jobs:
       - name: Upload Wheel
         run: |
           version="${{ steps.next-wheel-file-version.outputs.next_version }}"
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "geh_stream-${version}-py3-none-any.whl" \
           --file "./source/streaming/dist/geh_stream-${version}-py3-none-any.whl" \
@@ -269,7 +226,7 @@ jobs:
 
       - name: Update Wheel Version file
         run: |
-          account_key=$(az storage account keys list --resource-group ${{ env.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
+          account_key=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ env.WHEEL_STORAGE_NAME }} --query '[0].value' -o tsv)
           az storage blob upload --account-name ${{ env.WHEEL_STORAGE_NAME }} --container-name ${{ env.WHEEL_CONTAINER_NAME }} \
           --name "${{ steps.wheel-version-file-name.outputs.filename }}" \
           --file "./source/streaming/VERSION" \
@@ -280,7 +237,7 @@ jobs:
     needs: wheel_build_publish
     runs-on: ubuntu-latest
     environment:
-      name: rg-DataHub-Testing-U
+      name: Development
     env:
       WHEEL_STORAGE_NAME: 'time${{ github.event.number }}wheels'
       WHEEL_STORAGE_ADDRESS: https://time${{ github.event.number }}wheels.blob.core.windows.net/wheels/
@@ -292,11 +249,11 @@ jobs:
 
       - name: Set Environment Secrets
         run: |  
-          echo "ARM_TENANT_ID=${{ secrets.TENANT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_ID=${{ secrets.SPN_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.SPN_OBJECT_ID }}" >> $GITHUB_ENV
-          echo "ARM_CLIENT_SECRET=${{ secrets.SPN_SECRET }}" >> $GITHUB_ENV
-          echo "ARM_SUBSCRIPTION_ID=${{ secrets.SUBSCRIPTION_ID }}" >> $GITHUB_ENV
+          echo "ARM_TENANT_ID=${{ secrets.AZURE_TENANT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_ID=${{ secrets.AZURE_SPN_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_OBJECT_ID=${{ secrets.AZURE_SPN_OBJECT_ID }}" >> $GITHUB_ENV
+          echo "ARM_CLIENT_SECRET=${{ secrets.AZURE_SPN_SECRET }}" >> $GITHUB_ENV
+          echo "ARM_SUBSCRIPTION_ID=${{ secrets.AZURE_SUBSCRIPTION_ID }}" >> $GITHUB_ENV
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v1.2.1
@@ -364,7 +321,7 @@ jobs:
         run: |
           echo "TF_VAR_environment=${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_organisation=${{ env.ORGANISATION_NAME }}" >> $GITHUB_ENV
-          echo "TF_VAR_resource_group_name=${{ env.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
+          echo "TF_VAR_resource_group_name=${{ secrets.RESOURCE_GROUP_NAME }}" >> $GITHUB_ENV
           echo "TF_VAR_storage_account_name=data${{ env.PROJECT_NAME }}${{ env.ORGANISATION_NAME }}${{ env.ENVIRONMENT_SHORT }}" >> $GITHUB_ENV
           echo "TF_VAR_keyvault_id=${{ steps.obtain-keyvault-id-name.outputs.keyvault-id }}" >> $GITHUB_ENV
           echo "TF_VAR_databricks_id=${{ steps.obtain-db-id-url.outputs.workspace-id }}" >> $GITHUB_ENV
@@ -374,7 +331,7 @@ jobs:
         uses: ./.github/actions/configure-terraform-backend
         with:
           backend-file-path: "./build/infrastructure/databricks_streaming_job/backend.tf"
-          resource-group-name: "${{ env.RESOURCE_GROUP_NAME }}"
+          resource-group-name: "${{ secrets.RESOURCE_GROUP_NAME }}"
           storage-account-name: "tfstate${{ env.PROJECT_NAME }}${{ env.ENVIRONMENT_SHORT }}"
 
       # Create streaming job

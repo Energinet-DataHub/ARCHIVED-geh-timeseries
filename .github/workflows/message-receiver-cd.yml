@@ -27,10 +27,7 @@ env:
   CSPROJ_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/source/GreenEnergyHub.TimeSeries.MessageReceiver/GreenEnergyHub.TimeSeries.MessageReceiver.csproj'
   SOLUTION_FILE_PATH: 'source/GreenEnergyHub.TimeSeries/GreenEnergyHub.TimeSeries.sln'
   DOTNET_VERSION: '5.0.202'
-  ORGANISATION_NAME: 'endk'
-  AZURE_FUNCTIONAPP_NAME: 'message-receiver'
-  PROJECT_NAME: tseries
-  REPOSITORY_NAME: Energinet-DataHub/geh-timeseries
+  AZURE_FUNCTIONAPP_BASE_NAME: 'azfun-message-receiver-${{ secrets.PROJECT_NAME }}-${{ secrets.ORGANISATION_NAME }}'
 
 jobs:
   build_messagereceiver:
@@ -44,17 +41,17 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.1.x'
-       
+        
       - name: Setup .NET ${{ env.DOTNET_VERSION }} environment
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
 
       - name: Build and test project
-        uses: ./.github/actions/dotnet-build-and-test
+        uses: Energinet-DataHub/.github/.github/actions/dotnet-build-and-test@main
         with:
           CSPROJ_FILE_PATH: ${{ env.CSPROJ_FILE_PATH }}
-          SOLUTION_FILE_PATH: ${{ env.SOLUTION_FILE_PATH }}
+          SOLUTION_FILE_PATH: ${{ env.SOLUTION_FILE_PATH }}
           OUTPUT_PATH: '${{ github.workspace }}/output'
 
       - name: Publish artifact
@@ -62,37 +59,13 @@ jobs:
         with:
           name: drop
           path: '${{ github.workspace }}/output'
-    
-  deploy_function:
-    name: Deploy function to ${{ matrix.environment.name }} - ${{ matrix.environment.long }}
+
+  deploy_messagereceiver_development:
+    name: Deploy function to Development
     needs: build_messagereceiver
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        environment: [
-          {
-            long: rg-DataHub-TimeSeries-U,
-            short: u,
-            name: Development
-          },
-          {
-            long: rg-DataHub-TimeSeries-T,
-            short: t,
-            name: Test
-          },
-          {
-            long: rg-DataHub-TimeSeries-B,
-            short: b,
-            name: Preprod
-          },
-          {
-            long: rg-DataHub-TimeSeries-P,
-            short: p,
-            name: Production
-          }
-        ]
     environment:
-      name: ${{ matrix.environment.long }}
+      name: Development
     steps:
       - name: Download artifact 
         uses: actions/download-artifact@v2
@@ -100,23 +73,133 @@ jobs:
           name: drop
           path: drop
 
-      - name: Setup Azure CLI
+      - name: Set Environment Secrets
         shell: bash
         run: |
-          curl -sL https://aka.ms/InstallAzureCLIDeb
-          sudo bash
-          az login --service-principal --username ${{ secrets.SPN_ID }} --password ${{ secrets.SPN_SECRET }} --tenant ${{ secrets.TENANT_ID }}
-          az account set --subscription ${{ secrets.SUBSCRIPTION_ID }}
+          echo "FUNCTIONAPP_NAME=${{ env.AZURE_FUNCTIONAPP_BASE_NAME }}-u" >> $GITHUB_ENV
 
       - name: Get function publish profile
         id: get-publish-profile
-        run: |
-          publish_profile=$(az webapp deployment list-publishing-profiles --name azfun-${{ env.AZURE_FUNCTIONAPP_NAME }}-${{ env.PROJECT_NAME }}-${{ env.ORGANISATION_NAME }}-${{ matrix.environment.short }} --resource-group ${{ matrix.environment.long }} --subscription ${{ secrets.SUBSCRIPTION_ID }} --xml)
-          echo "::set-output name=publish-profile::${publish_profile}"
-
-      - name: Deploy function
-        uses: Azure/functions-action@v1
+        uses: Energinet-DataHub/.github/.github/actions/get-publish-profile@main
         with:
-          app-name: "azfun-${{ env.AZURE_FUNCTIONAPP_NAME }}"
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+          AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+          AZURE_FUNCTIONAPP_NAME: ${{ env.FUNCTIONAPP_NAME }}
+  
+      - name: Deploy function
+        uses: Azure/functions-action@v1.3.2
+        with:
+          app-name: ${{ env.FUNCTIONAPP_NAME }}
+          package: ${{ github.workspace }}/drop
+          publish-profile: ${{ steps.get-publish-profile.outputs.publish-profile }}
+ 
+  deploy_messagereceiver_test:
+    name: Deploy function to Test
+    needs: deploy_messagereceiver_development
+    runs-on: ubuntu-latest
+    environment:
+      name: Test
+    steps:
+      - name: Download artifact 
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+          path: drop
+
+      - name: Set Environment Secrets
+        shell: bash
+        run: |
+          echo "FUNCTIONAPP_NAME=${{ env.AZURE_FUNCTIONAPP_BASE_NAME }}-t" >> $GITHUB_ENV
+
+      - name: Get function publish profile
+        id: get-publish-profile
+        uses: Energinet-DataHub/.github/.github/actions/get-publish-profile@main
+        with:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+          AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+          AZURE_FUNCTIONAPP_NAME: ${{ env.FUNCTIONAPP_NAME }}
+      
+      - name: Deploy function
+        uses: Azure/functions-action@v1.3.2
+        with:
+          app-name: ${{ env.FUNCTIONAPP_NAME }}
+          package: ${{ github.workspace }}/drop
+          publish-profile: ${{ steps.get-publish-profile.outputs.publish-profile }}
+ 
+  deploy_messagereceiver_preproduction:
+    name: Deploy function to Preproduction
+    needs: deploy_messagereceiver_test
+    runs-on: ubuntu-latest
+    environment:
+      name: Preproduction
+    steps:
+      - name: Download artifact 
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+          path: drop
+
+      - name: Set Environment Secrets
+        shell: bash
+        run: |
+          echo "FUNCTIONAPP_NAME=${{ env.AZURE_FUNCTIONAPP_BASE_NAME }}-b" >> $GITHUB_ENV
+
+      - name: Get function publish profile
+        id: get-publish-profile
+        uses: Energinet-DataHub/.github/.github/actions/get-publish-profile@main
+        with:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+          AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+          AZURE_FUNCTIONAPP_NAME: ${{ env.FUNCTIONAPP_NAME }}
+      
+      - name: Deploy function
+        uses: Azure/functions-action@v1.3.2
+        with:
+          app-name: ${{ env.FUNCTIONAPP_NAME }}
+          package: ${{ github.workspace }}/drop
+          publish-profile: ${{ steps.get-publish-profile.outputs.publish-profile }}
+ 
+  deploy_messagereceiver_production:
+    name: Deploy function to Production
+    needs: deploy_messagereceiver_preproduction
+    runs-on: ubuntu-latest
+    environment:
+      name: Production
+    steps:
+      - name: Download artifact 
+        uses: actions/download-artifact@v2
+        with:
+          name: drop
+          path: drop
+
+      - name: Set Environment Secrets
+        shell: bash
+        run: |
+          echo "FUNCTIONAPP_NAME=${{ env.AZURE_FUNCTIONAPP_BASE_NAME }}-p" >> $GITHUB_ENV
+
+      - name: Get function publish profile
+        id: get-publish-profile
+        uses: Energinet-DataHub/.github/.github/actions/get-publish-profile@main
+        with:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+          AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+          AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+          AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          AZURE_RG_NAME: ${{ secrets.AZURE_RG_NAME }}
+          AZURE_FUNCTIONAPP_NAME: ${{ env.FUNCTIONAPP_NAME }}
+      
+      - name: Deploy function
+        uses: Azure/functions-action@v1.3.2
+        with:
+          app-name: ${{ env.FUNCTIONAPP_NAME }}
           package: ${{ github.workspace }}/drop
           publish-profile: ${{ steps.get-publish-profile.outputs.publish-profile }}
