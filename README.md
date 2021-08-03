@@ -1,5 +1,6 @@
 # Time Series
 
+[![codecov](https://codecov.io/gh/Energinet-DataHub/geh-timeseries/branch/main/graph/badge.svg?token=GDF7UM3531)](https://codecov.io/gh/Energinet-DataHub/geh-timeseries)
 ## Intro
 
 The time series domain focuses primarily on receiving, validating, storing and distributing time series data to relevant market participants to be used for billing, etc.
