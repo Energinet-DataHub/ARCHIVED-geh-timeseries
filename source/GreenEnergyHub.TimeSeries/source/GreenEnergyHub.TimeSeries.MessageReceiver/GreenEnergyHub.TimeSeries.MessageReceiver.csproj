@@ -35,7 +35,7 @@ limitations under the License.
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
     <None Update="local.settings.sample.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </None>
   </ItemGroup>
