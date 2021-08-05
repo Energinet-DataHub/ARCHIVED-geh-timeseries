@@ -27,6 +27,9 @@ def read_testdata_file(file_name):
         return f.read()
 
 
+json_date_format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
+
+
 @pytest.fixture(scope="session")
 def parsed_data_from_json_file_factory(spark):
     """
@@ -39,7 +42,7 @@ def parsed_data_from_json_file_factory(spark):
         json_rdd = spark.sparkContext.parallelize([json_str])
         parsed_data = spark.read.json(json_rdd,
                                       schema=parsed_data_schema,
-                                      dateFormat=eventhub.json_date_format)
+                                      dateFormat=json_date_format)
         return parsed_data
 
     return factory

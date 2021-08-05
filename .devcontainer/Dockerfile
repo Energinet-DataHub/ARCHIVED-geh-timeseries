@@ -74,7 +74,7 @@ RUN conda install --quiet --yes --satisfied-skip-solve \
     'coverage=5.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.5.*' \
     && \
     conda install --quiet --yes --satisfied-skip-solve -c anaconda 'protobuf=3.14.*' && \
-    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus && \
+    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"

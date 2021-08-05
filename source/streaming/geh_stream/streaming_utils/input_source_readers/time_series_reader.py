@@ -12,27 +12,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.types import StructType
+from pyspark.sql.functions import col, explode
+from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 
 from geh_stream.schemas import SchemaFactory, SchemaNames
-from .event_hub_parser import EventHubParser
+from .protobuf_message_parser import ProtobufMessageParser
+from geh_stream.dataframelib import flatten_df
 
 
-def read_time_series_streaming_data(spark: SparkSession, input_eh_conf: dict) -> DataFrame:
-    raw_data = spark \
+def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> DataFrame:
+    # Get raw data as they are represented by the eventhubs provider
+    raw_stream = spark \
         .readStream \
         .format("eventhubs") \
         .options(**input_eh_conf) \
-        .option("inferSchema", True) \
         .load()
 
     print("Input stream schema:")
-    raw_data.printSchema()
+    raw_stream.printSchema()
 
+    # Parse data from protobuf messages
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-    parsed_data = EventHubParser.parse(raw_data, message_schema)
+    parsed_stream = ProtobufMessageParser.parse(raw_stream, message_schema)  # TODO: Schema is unused
 
-    print("Parsed stream schema:")
-    parsed_data.printSchema()
+    # Flatten structure because - in general - it's much easier to work with non-nested structures in Spark
+    flattened_stream = flatten_df(parsed_stream)
 
-    return parsed_data
+    # Explode time series into points - again because it's much easier to work with an also has the benefits
+    # that we can adjust names and types of the individual time series point properties
+    temp_time_series_point_stream = flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
+
+    # Adjust points to match schema SchemaFactory.message_body_schema
+    # TODO: Unit test that we end up with the expected schema
+    time_series_point_stream = (temp_time_series_point_stream.select(
+                                col("document_id").alias("document_id").cast(StringType()),
+                                col("document_request_date_time").alias("document_requestDateTime").cast(TimestampType()),
+                                col("document_type").alias("document_type").cast(IntegerType()),
+                                col("document_created_date_time").alias("document_createdDateTime").cast(TimestampType()),
+                                col("document_sender_id").alias("document_sender_id").cast(StringType()),
+                                col("document_sender_market_participant_role").alias("document_sender_businessProcessRole").cast(IntegerType()),  # TODO: Fix naming of market_participant_role
+                                col("document_recipient_id").alias("document_recipient_id").cast(StringType()),
+                                col("document_recipient_market_participant_role").alias("document_recipient_businessProcessRole").cast(IntegerType()),  # TODO: Fix naming of market_participant_role
+                                col("document_business_reason_code").alias("document_businessReasonCode").cast(IntegerType()),
+                                col("series_id").alias("series_id").cast(StringType()),
+                                col("series_metering_point_id").alias("series_meteringPointId").cast(StringType()),
+                                col("series_metering_point_type").alias("series_meteringPointType").cast(IntegerType()),
+                                col("series_settlement_method").alias("series_settlementMethod").cast(IntegerType()),
+                                col("series_registration_date_time").alias("series_registrationDateTime").cast(TimestampType()),
+                                col("series_product").alias("series_product").cast(IntegerType()),
+                                col("series_measure_unit").alias("series_unit").cast(IntegerType()),  # TODO: Align naming
+                                col("series_time_series_resolution").alias("series_resolution").cast(IntegerType()),  # TODO: Align naming
+                                col("series_start_date_time").alias("series_startDateTime").cast(TimestampType()),
+                                col("series_end_date_time").alias("series_endDateTime").cast(TimestampType()),
+                                col("series_point.position").alias("series_point_position").cast(IntegerType()),
+                                col("series_point.observation_date_time").alias("series_point_observationDateTime").cast(TimestampType()),
+                                # TODO: Don't hardcode type here
+                                col("series_point.quantity").alias("series_point_quantity").cast(DecimalType(3)),
+                                col("series_point.quality").alias("series_point_quality").cast(IntegerType()),
+                                col("correlation_id").alias("correlationId").cast(StringType())))
+
+    return time_series_point_stream

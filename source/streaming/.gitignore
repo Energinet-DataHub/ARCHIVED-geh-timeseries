@@ -8,3 +8,6 @@ coverage.json
 build/
 dist/
 geh_stream.egg-info/
+
+/* Ignore ProtoBuf generated files */
+*_pb2.py

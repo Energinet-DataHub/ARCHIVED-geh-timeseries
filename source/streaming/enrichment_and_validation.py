@@ -98,7 +98,7 @@ master_data_df = read_master_data_from_csv(spark, master_data_storage_path)
 # %% Read raw time series streaming data from input source
 import json
 
-from geh_stream.streaming_utils.input_source_readers import read_time_series_streaming_data
+from geh_stream.streaming_utils.input_source_readers import get_time_series_point_stream
 
 input_eh_starting_position = {
     "offset": "-1",         # starting from beginning of stream
@@ -117,7 +117,7 @@ input_eh_conf = {
 
 print("Input event hub config:", input_eh_conf)
 
-raw_streaming_data = read_time_series_streaming_data(spark, input_eh_conf)
+time_series_point_stream = get_time_series_point_stream(spark, input_eh_conf)
 
 # %% Telemetry
 from geh_stream.monitoring import Telemetry
@@ -126,32 +126,39 @@ telemetry_client = Telemetry.create_telemetry_client(args.telemetry_instrumentat
 
 # %% Process time series as points
 from pyspark.sql import DataFrame
+from pyspark.sql.types import StructType
 
-from geh_stream.streaming_utils import parse_enrich_and_validate_time_series_as_points
 from geh_stream.monitoring import MonitoredStopwatch
 import geh_stream.batch_operations as batch_operations
+from geh_stream.schemas.schema_factory import SchemaFactory, SchemaNames
+from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
+from geh_stream.validation import Validator
+from geh_stream.streaming_utils.streamhandlers.enricher import Enricher
 
-time_series_points = parse_enrich_and_validate_time_series_as_points(raw_streaming_data, master_data_df)
 
-
-def __process_data_frame(batched_time_series_points: DataFrame, _: int):
+def __process_data_frame(time_series_points_df: DataFrame, _: int):
     try:
+        time_series_points_df.show(truncate=False)  # TODO: Remove before squashing
+
         watch = MonitoredStopwatch.start_timer(telemetry_client, __process_data_frame.__name__)
+
+        time_series_points_df = Enricher.enrich(time_series_points_df, master_data_df)
+        time_series_points_df = Validator.add_validation_status_columns(time_series_points_df)
 
         # This validation cannot be done in the Validator due to the implementation.
         # It uses a Window, which can not be used in streaming without time.
-        batched_time_series_points = batch_operations.add_time_series_validation_status_column(batched_time_series_points)
+        time_series_points_df = batch_operations.add_time_series_validation_status_column(time_series_points_df)
 
-        # Cache the batch in order to avoid the risk of recalculation in each write operation
-        batched_time_series_points = batched_time_series_points.persist()
+        # Cache the batch in order to avoid the risk of recalculation
+        time_series_points_df = time_series_points_df.persist()
 
         # Make valid time series points available to aggregations (by storing in Delta lake)
-        batch_operations.store_points_of_valid_time_series(batched_time_series_points, output_delta_lake_path, watch)
+        batch_operations.store_points_of_valid_time_series(time_series_points_df, output_delta_lake_path, watch)
 
         # Log invalid time series points
-        batch_operations.log_invalid_time_series(batched_time_series_points, telemetry_client)
+        batch_operations.log_invalid_time_series(time_series_points_df, telemetry_client)
 
-        batch_count = batch_operations.get_rows_in_batch(batched_time_series_points, watch)
+        batch_count = batch_operations.get_rows_in_batch(time_series_points_df, watch)
 
         watch.stop_timer(batch_count)
 
@@ -163,9 +170,9 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
             "batch_duration_ms": watch.duration_ms
         }
 
-        batch_operations.track_batch_back_to_original_correlation_requests(batched_time_series_points, batch_info, args.telemetry_instrumentation_key)
+        batch_operations.track_batch_back_to_original_correlation_requests(time_series_points_df, batch_info, args.telemetry_instrumentation_key)
 
-        batched_time_series_points.unpersist()
+        time_series_points_df.unpersist()
         print("Batch details:", batch_info)
 
     except Exception as err:
@@ -184,7 +191,7 @@ def __process_data_frame(batched_time_series_points: DataFrame, _: int):
 # The trigger determines how often a batch is created and processed.
 output_delta_lake_path = BASE_STORAGE_PATH + args.output_path
 checkpoint_path = BASE_STORAGE_PATH + args.streaming_checkpoint_path
-out_stream = time_series_points \
+out_stream = time_series_point_stream \
     .writeStream \
     .option("checkpointLocation", checkpoint_path) \
     .trigger(processingTime=args.trigger_interval) \
@@ -215,7 +222,7 @@ spark_master_data_version = blob_master_data_version
 is_master_data_blob_newer = True
 
 failure_count = 0
-max_retry_count = 5
+max_retry_count = 0
 
 log("Starting streaming...")
 while True:

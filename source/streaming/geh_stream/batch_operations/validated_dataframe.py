@@ -51,7 +51,6 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
                 col("series_point_observationDateTime"),
                 col("series_point_quantity"),
                 col("series_point_quality"),
-                col("transaction_mRID"),
                 col("correlationId"),
 
                 year("series_point_observationDateTime").alias("year"),
@@ -92,7 +91,6 @@ def log_invalid_time_series(batched_time_series_points: DataFrame, telemetry_cli
                 col("series_point_observationDateTime"),
                 col("series_point_quantity"),
                 col("series_point_quality"),
-                col("transaction_mRID"),
                 col("correlationId"),
                 col("IsTimeSeriesValid"),
                 col("VR-200-Is-Valid"),

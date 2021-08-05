@@ -136,9 +136,6 @@ def time_series_json_factory():
                         }}
                     ]
                 }},
-                "Transaction": {{
-                    "MRID": "x"
-                }},
                 "CorrelationId": "a"
             }}
         """.format(timestamp_now.isoformat() + "Z",

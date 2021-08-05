@@ -62,8 +62,6 @@ class SchemaFactory:
                   .add("ObservationDateTime", TimestampType(), False)
                   .add("Quantity", quantity_type, False)
                   .add("Quality", IntegerType(), False), True), False), False) \
-        .add("Transaction", StructType()
-             .add("MRID", StringType(), False), False) \
         .add("CorrelationId", StringType(), False)
 
     # validFrom and validTo are not to be included in outputs from the time series point streaming process
