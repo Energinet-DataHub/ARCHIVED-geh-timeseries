@@ -30,7 +30,6 @@ def store_points_of_valid_time_series(batch_df: DataFrame, output_delta_lake_pat
         .filter(col("IsTimeSeriesValid") == lit(True)) \
         .select(col("document_id"),
                 col("document_requestDateTime"),
-                col("document_type"),
                 col("document_createdDateTime"),
                 col("document_sender_id"),
                 col("document_sender_businessProcessRole"),
@@ -70,7 +69,6 @@ def log_invalid_time_series(batched_time_series_points: DataFrame, telemetry_cli
         .filter(col("IsTimeSeriesValid") == lit(False)) \
         .select(col("document_id"),
                 col("document_requestDateTime"),
-                col("document_type"),
                 col("document_createdDateTime"),
                 col("document_sender_id"),
                 col("document_sender_businessProcessRole"),

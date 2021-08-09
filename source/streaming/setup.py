@@ -20,13 +20,13 @@ from subprocess import check_call
 
 
 def generate_proto_code():
-    proto_interface_dir = "./contracts/"
-    generated_src_dir = "generated/"
+    proto_interface_dir = "./../contracts/Internal/"
+    generated_src_dir = "contracts/"
     out_folder = "./geh_stream/"
 
-    os.makedirs(os.path.join(out_folder, generated_src_dir))
+    os.makedirs(os.path.join(out_folder, generated_src_dir), exist_ok=True)
     proto_it = pathlib.Path().glob(proto_interface_dir + "/**/*")
-    proto_path = "generated=" + proto_interface_dir
+    proto_path = "contracts=" + proto_interface_dir
     protos = [str(proto) for proto in proto_it if proto.is_file()]
     check_call(["protoc"] + protos + ["--python_out", out_folder, "--proto_path", proto_path])
 
@@ -56,6 +56,6 @@ setup(name='geh_stream',
       license='MIT',
       packages=find_packages(),
       cmdclass={
-        'develop': CustomDevelopCommand, # used for pip install -e ./
-       },
+           'develop': CustomDevelopCommand,  # used for pip install -e ./
+      },
       )

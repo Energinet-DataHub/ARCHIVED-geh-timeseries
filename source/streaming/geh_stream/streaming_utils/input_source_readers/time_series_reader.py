@@ -47,12 +47,11 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
     time_series_point_stream = (temp_time_series_point_stream.select(
                                 col("document_id").alias("document_id").cast(StringType()),
                                 col("document_request_date_time").alias("document_requestDateTime").cast(TimestampType()),
-                                col("document_type").alias("document_type").cast(IntegerType()),
                                 col("document_created_date_time").alias("document_createdDateTime").cast(TimestampType()),
                                 col("document_sender_id").alias("document_sender_id").cast(StringType()),
-                                col("document_sender_market_participant_role").alias("document_sender_businessProcessRole").cast(IntegerType()),  # TODO: Fix naming of market_participant_role
+                                col("document_sender_business_proces_role").alias("document_sender_businessProcessRole").cast(IntegerType()),
                                 col("document_recipient_id").alias("document_recipient_id").cast(StringType()),
-                                col("document_recipient_market_participant_role").alias("document_recipient_businessProcessRole").cast(IntegerType()),  # TODO: Fix naming of market_participant_role
+                                col("document_recipient_business_proces_role").alias("document_recipient_businessProcessRole").cast(IntegerType()),
                                 col("document_business_reason_code").alias("document_businessReasonCode").cast(IntegerType()),
                                 col("series_id").alias("series_id").cast(StringType()),
                                 col("series_metering_point_id").alias("series_meteringPointId").cast(StringType()),
@@ -60,8 +59,8 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_settlement_method").alias("series_settlementMethod").cast(IntegerType()),
                                 col("series_registration_date_time").alias("series_registrationDateTime").cast(TimestampType()),
                                 col("series_product").alias("series_product").cast(IntegerType()),
-                                col("series_measure_unit").alias("series_unit").cast(IntegerType()),  # TODO: Align naming
-                                col("series_time_series_resolution").alias("series_resolution").cast(IntegerType()),  # TODO: Align naming
+                                col("series_measure_unit").alias("series_unit").cast(IntegerType()),
+                                col("series_time_series_resolution").alias("series_resolution").cast(IntegerType()),
                                 col("series_start_date_time").alias("series_startDateTime").cast(TimestampType()),
                                 col("series_end_date_time").alias("series_endDateTime").cast(TimestampType()),
                                 col("series_point.position").alias("series_point_position").cast(IntegerType()),

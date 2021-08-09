@@ -22,16 +22,16 @@ from pyspark.sql.functions import udf, col
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
 
-from geh_stream.generated.TimeSeries_pb2 import TimeSeriesCommandDomain
+from geh_stream.contracts.TimeSeries_pb2 import TimeSeriesCommandContract
 
 
 def specific_message_bytes_to_row(pb_bytes):
-    msg = TimeSeriesCommandDomain.FromString(pb_bytes)
-    row = message_to_row(TimeSeriesCommandDomain().DESCRIPTOR, msg)
+    msg = TimeSeriesCommandContract.FromString(pb_bytes)
+    row = message_to_row(TimeSeriesCommandContract().DESCRIPTOR, msg)
     return row
 
 
-schema = schema_for(TimeSeriesCommandDomain().DESCRIPTOR)
+schema = schema_for(TimeSeriesCommandContract().DESCRIPTOR)
 specific_message_bytes_to_row_udf = udf(specific_message_bytes_to_row, schema)
 
 
