@@ -28,8 +28,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             services.AddScoped<ICorrelationContext, CorrelationContext>();
             services.AddScoped<MessageExtractor>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
-            services.SendProtobuf<TimeSeriesCommandDomain>();
-            services.AddSingleton<IJsonSerializer, GreenEnergyHub.TimeSeries.Core.Json.JsonSerializer>();
+            services.SendProtobuf<TimeSeriesCommandContract>();
+            services.AddSingleton<IJsonSerializer, Core.Json.JsonSerializer>();
 
             return new MessagingRegistrator(services);
         }

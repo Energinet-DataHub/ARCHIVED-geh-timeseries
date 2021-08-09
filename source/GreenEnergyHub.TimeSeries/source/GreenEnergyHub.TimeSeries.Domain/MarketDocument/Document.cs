@@ -32,8 +32,6 @@ namespace GreenEnergyHub.TimeSeries.Domain.MarketDocument
         /// </summary>
         public Instant RequestDateTime { get; set; } = SystemClock.Instance.GetCurrentInstant();
 
-        public DocumentType Type { get; set; }
-
         /// <summary>
         /// A point in time provided by the sender
         /// </summary>

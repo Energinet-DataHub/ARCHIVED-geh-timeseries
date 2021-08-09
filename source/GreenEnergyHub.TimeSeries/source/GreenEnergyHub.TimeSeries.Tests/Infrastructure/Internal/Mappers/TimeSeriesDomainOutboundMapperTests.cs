@@ -37,12 +37,14 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
             var mapper = new TimeSeriesCommandOutboundMapper();
 
             // Act
-            var converted = (TimeSeriesCommandDomain)mapper.Convert(timeSeriesCommand);
+            var converted = (TimeSeriesCommandContract)mapper.Convert(timeSeriesCommand);
 
             // Assert
             var timeSeriesDocument = timeSeriesCommand.Document;
             var timeSeriesSeries = timeSeriesCommand.Series;
             var convertedDocument = converted.Document;
+
+            Assert.Equal(timeSeriesCommand.Document.CreatedDateTime, converted.Document.CreatedDateTime);
 
             convertedDocument.Id.Should().BeEquivalentTo(timeSeriesDocument.Id);
             convertedDocument.Sender.Id.Should().BeEquivalentTo(timeSeriesDocument.Sender.Id);

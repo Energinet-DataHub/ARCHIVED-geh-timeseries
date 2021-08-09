@@ -1,10 +1,21 @@
-﻿using System;
-using System.Globalization;
+﻿// Copyright 2020 Energinet DataHub A/S
+//
+// Licensed under the Apache License, Version 2.0 (the "License2");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+using System;
 using System.Linq;
 using Energinet.DataHub.TimeSeries.InternalContracts;
 using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
-using Point = Energinet.DataHub.TimeSeries.InternalContracts.Point;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
 {
@@ -20,46 +31,45 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
             var document = obj.Document;
             var series = obj.Series;
 
-            return new TimeSeriesCommandDomain
+            return new TimeSeriesCommandContract
             {
-                Document = new DocumentDomain
+                Document = new DocumentContract
                 {
                     Id = document.Id,
-                    RequestDateTime = document.RequestDateTime.ToString(),
-                    Type = document.Type.ToString(),
-                    CreatedDateTime = document.CreatedDateTime.ToString(),
-                    Sender = new MarketParticipantDomain
+                    RequestDateTime = document.RequestDateTime,
+                    CreatedDateTime = document.CreatedDateTime,
+                    Sender = new MarketParticipantContract
                     {
                         Id = document.Sender.Id,
-                        MarketParticipantRole = document.Sender.BusinessProcessRole.ToString(),
+                        BusinessProcesRole = (BusinessProcessRoleContract)document.Sender.BusinessProcessRole,
                     },
-                    Recipient = new MarketParticipantDomain
+                    Recipient = new MarketParticipantContract
                     {
                         Id = document.Recipient.Id,
-                        MarketParticipantRole = document.Recipient.BusinessProcessRole.ToString(),
+                        BusinessProcesRole = (BusinessProcessRoleContract)document.Recipient.BusinessProcessRole,
                     },
-                    BusinessReasonCode = document.BusinessReasonCode.ToString(),
+                    BusinessReasonCode = (BusinessReasonCodeContract)document.BusinessReasonCode,
                 },
-                Series = new SeriesDomain
+                Series = new SeriesContract
                 {
                     Id = obj.Series.Id,
                     MeteringPointId = series.MeteringPointId,
-                    MeteringPointType = series.MeteringPointType.ToString(),
-                    SettlementMethod = series.SettlementMethod.ToString(),
-                    RegistrationDateTime = series.StartDateTime.ToString(),
-                    Product = series.Product.ToString(),
-                    MeasureUnit = series.Unit.ToString(),
-                    TimeSeriesResolution = series.Resolution.ToString(),
-                    StartDateTime = series.StartDateTime.ToString(),
-                    EndDateTime = series.EndDateTime.ToString(),
+                    MeteringPointType = (MeteringPointTypeContract)series.MeteringPointType,
+                    SettlementMethod = (SettlementMethodContract)series.SettlementMethod,
+                    RegistrationDateTime = series.StartDateTime,
+                    Product = (ProductContract)series.Product,
+                    MeasureUnit = (MeasureUnitContract)series.Unit,
+                    Resolution = (ResolutionContract)series.Resolution,
+                    StartDateTime = series.StartDateTime,
+                    EndDateTime = series.EndDateTime,
                     Points =
                     {
-                        obj.Series.Points.Select(p => new Point
+                        obj.Series.Points.Select(p => new PointContract
                         {
-                            Position = p.Position.ToString(CultureInfo.InvariantCulture),
-                            Quality = p.Quality.ToString(),
-                            Quantity = p.Quantity.ToString(CultureInfo.InvariantCulture),
-                            ObservationDateTime = p.ObservationDateTime.ToString(),
+                            Position = p.Position,
+                            Quality = (QualityContract)p.Quality,
+                            Quantity = p.Quantity,
+                            ObservationDateTime = p.ObservationDateTime,
                         }),
                     },
                 },
