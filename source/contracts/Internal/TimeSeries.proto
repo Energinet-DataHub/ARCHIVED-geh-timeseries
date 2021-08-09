@@ -20,6 +20,11 @@ syntax = "proto3";
 
 import "google/protobuf/timestamp.proto";
 
+/**
+ * Green Energy Hub type imports.
+ */
+import "Types/DecimalValue.proto";
+
 option csharp_namespace = "Energinet.DataHub.TimeSeries.InternalContracts";
 
 /**
@@ -39,7 +44,7 @@ message MarketParticipantContract {
 message PointContract {
   int32 position = 1;
   google.protobuf.Timestamp observation_date_time = 2;
-  string quantity = 3; // TODO: How do we manage a decimal(precision=18,scale=3) type in protobuf?
+  DecimalValue.DecimalValueContract quantity = 3;
   QualityContract quality = 4;
 }
 
