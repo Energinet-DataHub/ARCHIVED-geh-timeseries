@@ -152,6 +152,7 @@ enum SettlementMethodContract {
   SMC_Profiled = 1;
   SMC_NonProfiled = 2;
   SMC_Flex = 3;
+  SMC_Null = 999;
 }
 
 enum MeasureUnitContract {

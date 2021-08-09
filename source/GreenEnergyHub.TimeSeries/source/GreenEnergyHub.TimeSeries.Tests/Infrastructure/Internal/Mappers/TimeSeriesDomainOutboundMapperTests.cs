@@ -13,14 +13,15 @@
 // limitations under the License.
 
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using Energinet.DataHub.TimeSeries.InternalContracts;
 using FluentAssertions;
 using GreenEnergyHub.TestHelpers.FluentAssertionsExtensions;
+using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers;
 using GreenEnergyHub.TimeSeries.TestCore;
+using NodaTime;
 using Xunit;
 using Xunit.Categories;
 
@@ -34,6 +35,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
         public void Convert_WhenCalled_ShouldMapToProtobufWithCorrectValues([NotNull] TimeSeriesCommand timeSeriesCommand)
         {
             // Arrange
+            UpdateInstantsToValidTimes(timeSeriesCommand);
             var mapper = new TimeSeriesCommandOutboundMapper();
 
             // Act
@@ -44,17 +46,32 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
             var timeSeriesSeries = timeSeriesCommand.Series;
             var convertedDocument = converted.Document;
 
-            Assert.Equal(timeSeriesCommand.Document.CreatedDateTime, converted.Document.CreatedDateTime);
+            Assert.Equal(
+                timeSeriesDocument.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
+                converted.Document.CreatedDateTime);
 
             convertedDocument.Id.Should().BeEquivalentTo(timeSeriesDocument.Id);
             convertedDocument.Sender.Id.Should().BeEquivalentTo(timeSeriesDocument.Sender.Id);
             converted.Series.Id.Should().Be(timeSeriesSeries.Id);
-            converted.Series.Points.First().Position.Should()
-                .BeEquivalentTo(timeSeriesSeries.Points.First().Position.ToString(CultureInfo.InvariantCulture));
+            converted.Series.Points.First().Position.Should().Be(timeSeriesSeries.Points.First().Position);
 
             convertedDocument.Should().NotContainNullsOrEmptyEnumerables();
             timeSeriesSeries.Should().NotContainNullsOrEmptyEnumerables();
             timeSeriesDocument.Should().NotContainNullsOrEmptyEnumerables();
+        }
+
+        private static void UpdateInstantsToValidTimes([NotNull] TimeSeriesCommand timeSeriesCommand)
+        {
+            timeSeriesCommand.Document.CreatedDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(11));
+            timeSeriesCommand.Document.RequestDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10));
+            timeSeriesCommand.Series.RegistrationDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12));
+            timeSeriesCommand.Series.StartDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(42));
+            timeSeriesCommand.Series.EndDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12));
+
+            foreach (var point in timeSeriesCommand.Series.Points)
+            {
+                point.ObservationDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10));
+            }
         }
     }
 }

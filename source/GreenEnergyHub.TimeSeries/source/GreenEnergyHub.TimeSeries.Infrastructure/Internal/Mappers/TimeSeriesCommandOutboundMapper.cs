@@ -11,10 +11,12 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+
 using System;
 using System.Linq;
 using Energinet.DataHub.TimeSeries.InternalContracts;
 using GreenEnergyHub.Messaging.Protobuf;
+using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
@@ -36,8 +38,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
                 Document = new DocumentContract
                 {
                     Id = document.Id,
-                    RequestDateTime = document.RequestDateTime,
-                    CreatedDateTime = document.CreatedDateTime,
+                    RequestDateTime = document.RequestDateTime.ToTimestamp().TruncateToSeconds(),
+                    CreatedDateTime = document.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
                     Sender = new MarketParticipantContract
                     {
                         Id = document.Sender.Id,
@@ -55,21 +57,25 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
                     Id = obj.Series.Id,
                     MeteringPointId = series.MeteringPointId,
                     MeteringPointType = (MeteringPointTypeContract)series.MeteringPointType,
-                    SettlementMethod = (SettlementMethodContract)series.SettlementMethod,
-                    RegistrationDateTime = series.StartDateTime,
+
+                    SettlementMethod = series.SettlementMethod == null ?
+                        SettlementMethodContract.SmcNull :
+                        (SettlementMethodContract)series.SettlementMethod,
+                    RegistrationDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
                     Product = (ProductContract)series.Product,
                     MeasureUnit = (MeasureUnitContract)series.Unit,
                     Resolution = (ResolutionContract)series.Resolution,
-                    StartDateTime = series.StartDateTime,
-                    EndDateTime = series.EndDateTime,
+                    StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
+                    EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
                     Points =
                     {
                         obj.Series.Points.Select(p => new PointContract
                         {
                             Position = p.Position,
                             Quality = (QualityContract)p.Quality,
+
                             Quantity = p.Quantity,
-                            ObservationDateTime = p.ObservationDateTime,
+                            ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),
                         }),
                     },
                 },

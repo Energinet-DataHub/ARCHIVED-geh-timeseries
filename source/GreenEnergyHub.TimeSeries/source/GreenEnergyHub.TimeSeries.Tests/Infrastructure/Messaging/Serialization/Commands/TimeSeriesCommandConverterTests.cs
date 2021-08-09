@@ -59,7 +59,6 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging.Serialization
             Assert.Equal(correlationId, result.CorrelationId);
             // Document
             Assert.Equal("DocId_Valid_001", result.Document.Id);
-            Assert.Equal(DocumentType.NotifyValidatedMeasureData, result.Document.Type);
             Assert.Equal(BusinessReasonCode.PeriodicFlexMetering, result.Document.BusinessReasonCode);
             Assert.Equal("8100000000030", result.Document.Sender.Id);
             Assert.Equal(MarketParticipantRole.MeteredDataResponsible, result.Document.Sender.BusinessProcessRole);
