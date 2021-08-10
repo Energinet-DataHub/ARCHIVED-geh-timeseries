@@ -40,14 +40,14 @@ namespace DecimalValue
             return new DecimalValueContract(units, nanos);
         }
 
-        public DecimalValueContract ToDecimal(DecimalValueContract value)
+        public static DecimalValueContract FromDecimal(decimal value)
         {
-            throw new NotImplementedException();
+            return value;
         }
 
-        public DecimalValueContract ToDecimalValueContract(decimal value)
+        public decimal ToDecimal()
         {
-            throw new NotImplementedException();
+            return this;
         }
     }
 }
