@@ -14,8 +14,9 @@
 import sys
 
 # https://github.com/aroch/protobuf-dataframe
-from protodf import schema_for
-from protodf import message_to_row
+# from protodf import schema_for
+# from protodf import message_to_row
+from geh_stream.protodf import schema_for, message_to_row
 
 from pyspark import RDD, Row
 from pyspark.sql.functions import udf, col

@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col, explode
+from pyspark.sql.functions import col, explode, udf
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 
 from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
@@ -48,7 +48,6 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("document_id").alias("document_id").cast(StringType()),
                                 # TODO: Is there a prettier way to handle timestamp conversion - one that also expands to other (custom) types?
                                 col("document_request_date_time_seconds").alias("document_requestDateTime").cast(TimestampType()),  # Ignoring the nano part
-                                # to_dt(col("document_created_date_time_seconds"), col("document_created_date_time_nanos")).alias("xxx_document_created_date_time"),
                                 col("document_created_date_time_seconds").alias("document_createdDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("document_sender_id").alias("document_sender_id").cast(StringType()),
                                 col("document_sender_business_proces_role").alias("document_sender_businessProcessRole").cast(IntegerType()),
@@ -67,7 +66,7 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_end_date_time_seconds").alias("series_endDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("series_point.position").alias("series_point_position").cast(IntegerType()),
                                 col("series_point.observation_date_time.seconds").alias("series_point_observationDateTime").cast(TimestampType()),  # Ignoring the nano part
-                                col("series_point.quantity").alias("series_point_quantity").cast(quantity_type),
+                                to_quantity(col("series_point.quantity.units"), col("series_point.quantity.nanos")).alias("series_point_quantity"),
                                 col("series_point.quality").alias("series_point_quality").cast(IntegerType()),
                                 col("correlation_id").alias("correlationId").cast(StringType())))
 
@@ -75,3 +74,10 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
     time_series_point_stream.printSchema()
 
     return time_series_point_stream
+
+
+def __to_quantity(units, nanos):
+    return units + nanos / 1E-9
+
+
+to_quantity = udf(__to_quantity, quantity_type)
