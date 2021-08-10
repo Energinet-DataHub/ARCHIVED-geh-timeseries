@@ -15,7 +15,7 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, explode
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 
-from geh_stream.schemas import SchemaFactory, SchemaNames
+from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
 from .protobuf_message_parser import ProtobufMessageParser
 from geh_stream.dataframelib import flatten_df
 
@@ -46,8 +46,10 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
     # TODO: Unit test that we end up with the expected schema
     time_series_point_stream = (temp_time_series_point_stream.select(
                                 col("document_id").alias("document_id").cast(StringType()),
-                                col("document_request_date_time").alias("document_requestDateTime").cast(TimestampType()),
-                                col("document_created_date_time").alias("document_createdDateTime").cast(TimestampType()),
+                                # TODO: Is there a prettier way to handle timestamp conversion - one that also expands to other (custom) types?
+                                col("document_request_date_time_seconds").alias("document_requestDateTime").cast(TimestampType()),  # Ignoring the nano part
+                                # to_dt(col("document_created_date_time_seconds"), col("document_created_date_time_nanos")).alias("xxx_document_created_date_time"),
+                                col("document_created_date_time_seconds").alias("document_createdDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("document_sender_id").alias("document_sender_id").cast(StringType()),
                                 col("document_sender_business_proces_role").alias("document_sender_businessProcessRole").cast(IntegerType()),
                                 col("document_recipient_id").alias("document_recipient_id").cast(StringType()),
@@ -57,17 +59,19 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_metering_point_id").alias("series_meteringPointId").cast(StringType()),
                                 col("series_metering_point_type").alias("series_meteringPointType").cast(IntegerType()),
                                 col("series_settlement_method").alias("series_settlementMethod").cast(IntegerType()),
-                                col("series_registration_date_time").alias("series_registrationDateTime").cast(TimestampType()),
+                                col("series_registration_date_time_seconds").alias("series_registrationDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("series_product").alias("series_product").cast(IntegerType()),
                                 col("series_measure_unit").alias("series_unit").cast(IntegerType()),
-                                col("series_time_series_resolution").alias("series_resolution").cast(IntegerType()),
-                                col("series_start_date_time").alias("series_startDateTime").cast(TimestampType()),
-                                col("series_end_date_time").alias("series_endDateTime").cast(TimestampType()),
+                                col("series_resolution").alias("series_resolution").cast(IntegerType()),
+                                col("series_start_date_time_seconds").alias("series_startDateTime").cast(TimestampType()),  # Ignoring the nano part
+                                col("series_end_date_time_seconds").alias("series_endDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("series_point.position").alias("series_point_position").cast(IntegerType()),
-                                col("series_point.observation_date_time").alias("series_point_observationDateTime").cast(TimestampType()),
-                                # TODO: Don't hardcode type here
-                                col("series_point.quantity").alias("series_point_quantity").cast(DecimalType(3)),
+                                col("series_point.observation_date_time.seconds").alias("series_point_observationDateTime").cast(TimestampType()),  # Ignoring the nano part
+                                col("series_point.quantity").alias("series_point_quantity").cast(quantity_type),
                                 col("series_point.quality").alias("series_point_quality").cast(IntegerType()),
                                 col("correlation_id").alias("correlationId").cast(StringType())))
+
+    print("Time Series Point stream schema:")
+    time_series_point_stream.printSchema()
 
     return time_series_point_stream

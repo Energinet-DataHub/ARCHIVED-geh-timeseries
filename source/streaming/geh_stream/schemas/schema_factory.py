@@ -30,9 +30,10 @@ def make_all_nullable(schema):
             make_all_nullable(f)
 
 
-class SchemaFactory:
-    quantity_type = DecimalType(18, 3)
+quantity_type = DecimalType(18, 3)
 
+
+class SchemaFactory:
     message_body_schema: StructType = StructType() \
         .add("Document", StructType()
              .add("Id", StringType(), False)

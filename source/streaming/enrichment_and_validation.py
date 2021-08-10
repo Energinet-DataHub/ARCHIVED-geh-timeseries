@@ -131,7 +131,6 @@ from pyspark.sql.types import StructType
 from geh_stream.monitoring import MonitoredStopwatch
 import geh_stream.batch_operations as batch_operations
 from geh_stream.schemas.schema_factory import SchemaFactory, SchemaNames
-from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.validation import Validator
 from geh_stream.streaming_utils.streamhandlers.enricher import Enricher
 

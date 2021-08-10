@@ -23,7 +23,7 @@ import "google/protobuf/timestamp.proto";
 /**
  * Green Energy Hub type imports.
  */
-import "Types/DecimalValue.proto";
+//import "Types/DecimalValue.proto";
 
 option csharp_namespace = "Energinet.DataHub.TimeSeries.InternalContracts";
 
@@ -44,7 +44,7 @@ message MarketParticipantContract {
 message PointContract {
   int32 position = 1;
   google.protobuf.Timestamp observation_date_time = 2;
-  DecimalValue.DecimalValueContract quantity = 3;
+  /*DecimalValue.*/DecimalValueContract quantity = 3;
   QualityContract quality = 4;
 }
 
@@ -75,6 +75,17 @@ message SeriesContract {
   google.protobuf.Timestamp start_date_time = 9;
   google.protobuf.Timestamp end_date_time = 10;
   repeated PointContract points = 11;
+}
+
+// Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
+message DecimalValueContract {
+
+    // Whole units part of the amount
+    int64 units = 1;
+
+    // Nano units of the amount (10^-9)
+    // Must be same sign as units
+    sfixed32 nanos = 2;
 }
 
 enum BusinessReasonCodeContract {
