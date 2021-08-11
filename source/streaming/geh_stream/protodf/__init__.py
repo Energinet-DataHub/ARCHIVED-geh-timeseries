@@ -36,7 +36,7 @@ possible_types = {
     12: lambda t: BinaryType(),
     13: lambda t: LongType(),
     14: lambda t: StringType(),  # enum type
-    15: lambda t: IntegerType()
+    15: lambda t: IntegerType()  # TODO: PR
 }
 
 
@@ -92,5 +92,9 @@ def __to_row_data(field_descriptor, data):
     if field_descriptor.message_type is not None:
         return message_to_row(field_descriptor.message_type, data)
     if field_descriptor.type == field_descriptor.TYPE_ENUM:
-        return field_descriptor.enum_type.values[data].name
+        # TODO: PR
+        try:
+            return field_descriptor.enum_type.values_by_number[data].name
+        except Exception:
+            raise Exception("Invalid value " + str(data) + " for enum '" + field_descriptor.enum_type.full_name + "'")
     return data

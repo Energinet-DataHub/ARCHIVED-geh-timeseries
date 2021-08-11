@@ -76,8 +76,12 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
     return time_series_point_stream
 
 
+# TODO: Move to lib
+from decimal import Decimal, getcontext
+
+
 def __to_quantity(units, nanos):
-    return units + nanos / 1E-9
+    return units + Decimal(nanos) / 1E-9
 
 
 to_quantity = udf(__to_quantity, quantity_type)

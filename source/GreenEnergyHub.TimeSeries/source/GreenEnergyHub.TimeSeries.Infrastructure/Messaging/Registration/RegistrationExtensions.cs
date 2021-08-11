@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Energinet.DataHub.TimeSeries.InternalContracts;
 using GreenEnergyHub.Json;
 using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.Messaging.Transport;
+using GreenEnergyHub.TimeSeries.Contracts.Internal;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
 

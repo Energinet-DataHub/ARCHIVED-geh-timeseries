@@ -25,7 +25,7 @@ import "google/protobuf/timestamp.proto";
  */
 //import "Types/DecimalValue.proto";
 
-option csharp_namespace = "Energinet.DataHub.TimeSeries.InternalContracts";
+option csharp_namespace = "GreenEnergyHub.TimeSeries.Contracts.Internal";
 
 /**
  * Represents a TimeSeriesCommand
@@ -96,6 +96,7 @@ enum BusinessReasonCodeContract {
   BRC_PeriodicFlexMetering = 4;
 }
 
+// TODO: The same options for sender and receiver?
 enum BusinessProcessRoleContract {
   BPR_Unknown = 0;
   //BPR_EnergySupplier = 1;

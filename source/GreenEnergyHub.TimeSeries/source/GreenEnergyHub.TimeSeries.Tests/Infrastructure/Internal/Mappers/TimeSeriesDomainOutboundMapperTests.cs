@@ -14,12 +14,12 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Energinet.DataHub.TimeSeries.InternalContracts;
 using FluentAssertions;
 using GreenEnergyHub.TestHelpers.FluentAssertionsExtensions;
+using GreenEnergyHub.TimeSeries.Contracts.Internal;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
-using GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers;
+using GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers;
 using GreenEnergyHub.TimeSeries.TestCore;
 using NodaTime;
 using Xunit;

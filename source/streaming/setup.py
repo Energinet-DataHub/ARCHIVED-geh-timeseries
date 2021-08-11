@@ -18,6 +18,8 @@ import pathlib
 import os
 from subprocess import check_call
 
+# protoc TimeSeries.proto Types/DecimalValue.proto --python_out geh_stream/contracts/ --proto_path ../contracts/Internal/
+
 
 def generate_proto_code():
     proto_interface_dir = "./../contracts/Internal/"

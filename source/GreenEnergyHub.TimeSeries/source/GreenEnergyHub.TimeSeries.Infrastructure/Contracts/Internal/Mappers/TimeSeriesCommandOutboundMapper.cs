@@ -14,12 +14,12 @@
 
 using System;
 using System.Linq;
-using Energinet.DataHub.TimeSeries.InternalContracts;
 using GreenEnergyHub.Messaging.Protobuf;
+using GreenEnergyHub.TimeSeries.Contracts.Internal;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
+namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
 {
     public class TimeSeriesCommandOutboundMapper : ProtobufOutboundMapper<TimeSeriesCommand>
     {
@@ -44,6 +44,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Internal.Mappers
                     {
                         Id = document.Sender.Id,
                         BusinessProcesRole = (BusinessProcessRoleContract)document.Sender.BusinessProcessRole,
+                        // BusinessProcesRole = document.Sender.BusinessProcessRole.Cast<BusinessProcessRoleContract>(),
                     },
                     Recipient = new MarketParticipantContract
                     {
