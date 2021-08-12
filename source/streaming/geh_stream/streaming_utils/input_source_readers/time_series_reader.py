@@ -68,7 +68,7 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_point.observation_date_time.seconds").alias("series_point_observationDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 to_quantity(
                                     col("series_point.quantity.units"),
-                                    col("series_point.quantity.nanos").alias("series_point_quantity"),
+                                    col("series_point.quantity.nanos")).alias("series_point_quantity"),
                                 col("series_point.quality").alias("series_point_quality").cast(IntegerType()),
                                 col("correlation_id").alias("correlationId").cast(StringType())))
 
