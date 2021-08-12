@@ -24,8 +24,6 @@ def test_contract_with_enum():
     units = 12345
     nanos = 678900000
 
-    intUnits = 0 if units is None else units
-    divider = Decimal(10**9)
-    returnValue = Decimal(intUnits) + (Decimal(nanos) / divider)
+    returnValue = Decimal(units) + (Decimal(nanos) / 10**9)
 
     assert returnValue == expected
