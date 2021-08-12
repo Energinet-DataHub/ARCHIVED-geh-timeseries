@@ -66,7 +66,9 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_end_date_time_seconds").alias("series_endDateTime").cast(TimestampType()),  # Ignoring the nano part
                                 col("series_point.position").alias("series_point_position").cast(IntegerType()),
                                 col("series_point.observation_date_time.seconds").alias("series_point_observationDateTime").cast(TimestampType()),  # Ignoring the nano part
-                                to_quantity(col("series_point.quantity.units"), col("series_point.quantity.nanos")).alias("series_point_quantity"),
+                                to_quantity(
+                                    col("series_point.quantity.units"),
+                                    col("series_point.quantity.nanos")).alias("series_point_quantity"),
                                 col("series_point.quality").alias("series_point_quality").cast(IntegerType()),
                                 col("correlation_id").alias("correlationId").cast(StringType())))
 
@@ -81,7 +83,13 @@ from decimal import Decimal, getcontext
 
 
 def __to_quantity(units, nanos):
-    return units + Decimal(nanos) / 1E-9
+    getcontext().prec = 18
+
+    return Decimal(to_int(units)) + (Decimal(to_int(nanos)) / 10**9)
+
+
+def to_int(item):
+    return 0 if item is None else item
 
 
 to_quantity = udf(__to_quantity, quantity_type)
