@@ -43,9 +43,6 @@ class SchemaFactory:
              .add("Sender", StructType()
                   .add("Id", StringType(), False)
                   .add("BusinessProcessRole", IntegerType(), False), False)
-             .add("Recipient", StructType()
-                  .add("Id", StringType(), False)
-                  .add("BusinessProcessRole", IntegerType(), True), False)
              .add("BusinessReasonCode", IntegerType(), False), False) \
         .add("Series", StructType()
              .add("Id", StringType(), False)

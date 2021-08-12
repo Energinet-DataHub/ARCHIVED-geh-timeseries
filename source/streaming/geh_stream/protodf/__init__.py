@@ -20,7 +20,7 @@ pushed back with a pull-request when improved to satisfy the needs in geh-timese
 """
 
 from collections import Mapping
-from pyspark.sql.types import Row, StringType, StructType, LongType, DoubleType, FloatType, IntegerType, \
+from pyspark.sql.types import Row, StringType, StructType, StructField, LongType, DoubleType, FloatType, IntegerType, \
     BooleanType, BinaryType, ArrayType
 
 # https://developers.google.com/protocol-buffers/docs/reference/cpp/google.protobuf.descriptor#FieldDescriptor.Type.details
@@ -35,8 +35,12 @@ possible_types = {
     11: lambda t: schema_for(t.message_type),
     12: lambda t: BinaryType(),
     13: lambda t: LongType(),
-    14: lambda t: StringType(),  # enum type
-    15: lambda t: IntegerType()  # TODO: PR
+    14: lambda t: StructType(
+        [
+            StructField("name", StringType(), True),
+            StructField("number", IntegerType(), True)
+        ]),  # enum type
+    15: lambda t: IntegerType()
 }
 
 
@@ -92,9 +96,13 @@ def __to_row_data(field_descriptor, data):
     if field_descriptor.message_type is not None:
         return message_to_row(field_descriptor.message_type, data)
     if field_descriptor.type == field_descriptor.TYPE_ENUM:
-        # TODO: PR
-        try:
-            return field_descriptor.enum_type.values_by_number[data].name
-        except Exception:
-            raise Exception("Invalid value " + str(data) + " for enum '" + field_descriptor.enum_type.full_name + "'")
+        return __enum_to_row_data(field_descriptor, data)
     return data
+
+
+def __enum_to_row_data(field_descriptor, data):
+    try:
+        enum_value = field_descriptor.enum_type.values_by_number[data]
+        return {"name": enum_value.name, "number": enum_value.number}
+    except KeyError:
+        raise Exception("Invalid number " + str(data) + " for enum '" + field_descriptor.enum_type.full_name + "'")
