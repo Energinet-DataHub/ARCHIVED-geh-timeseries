@@ -16,6 +16,7 @@ using System;
 using System.Linq;
 using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.TimeSeries.Contracts.Internal;
+using GreenEnergyHub.TimeSeries.Core;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 
@@ -43,29 +44,21 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
                     Sender = new MarketParticipantContract
                     {
                         Id = document.Sender.Id,
-                        BusinessProcesRole = (BusinessProcessRoleContract)document.Sender.BusinessProcessRole,
-                        // BusinessProcesRole = document.Sender.BusinessProcessRole.Cast<BusinessProcessRoleContract>(),
+                        BusinessProcesRole = document.Sender.BusinessProcessRole.Cast<BusinessProcessRoleContract>(),
                     },
-                    Recipient = new MarketParticipantContract
-                    {
-                        Id = document.Recipient.Id,
-                        BusinessProcesRole = (BusinessProcessRoleContract)document.Recipient.BusinessProcessRole,
-                    },
-                    BusinessReasonCode = (BusinessReasonCodeContract)document.BusinessReasonCode,
+                    BusinessReasonCode = document.BusinessReasonCode.Cast<BusinessReasonCodeContract>(),
                 },
                 Series = new SeriesContract
                 {
                     Id = obj.Series.Id,
                     MeteringPointId = series.MeteringPointId,
-                    MeteringPointType = (MeteringPointTypeContract)series.MeteringPointType,
+                    MeteringPointType = series.MeteringPointType.Cast<MeteringPointTypeContract>(),
 
-                    SettlementMethod = series.SettlementMethod == null ?
-                        SettlementMethodContract.SmcNull :
-                        (SettlementMethodContract)series.SettlementMethod,
+                    SettlementMethod = series.SettlementMethod?.Cast<SettlementMethodContract>() ?? SettlementMethodContract.SmcNull,
                     RegistrationDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
-                    Product = (ProductContract)series.Product,
-                    MeasureUnit = (MeasureUnitContract)series.Unit,
-                    Resolution = (ResolutionContract)series.Resolution,
+                    Product = series.Product.Cast<ProductContract>(),
+                    MeasureUnit = series.Unit.Cast<MeasureUnitContract>(),
+                    Resolution = series.Resolution.Cast<ResolutionContract>(),
                     StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
                     EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
                     Points =
@@ -73,7 +66,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
                         obj.Series.Points.Select(p => new PointContract
                         {
                             Position = p.Position,
-                            Quality = (QualityContract)p.Quality,
+                            Quality = p.Quality.Cast<QualityContract>(),
 
                             Quantity = p.Quantity,
                             ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),

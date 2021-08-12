@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FluentAssertions;
 using GreenEnergyHub.TestHelpers.FluentAssertionsExtensions;
 using GreenEnergyHub.TimeSeries.Contracts.Internal;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers;
 using GreenEnergyHub.TimeSeries.TestCore;
@@ -35,6 +37,9 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
         public void Convert_WhenCalled_ShouldMapToProtobufWithCorrectValues([NotNull] TimeSeriesCommand timeSeriesCommand)
         {
             // Arrange
+            timeSeriesCommand.Document.Recipient.BusinessProcessRole = MarketParticipantRole.GridAccessProvider;
+            timeSeriesCommand.Series.Points.ForEach(p => p.Quality = Quality.Measured);
+
             UpdateInstantsToValidTimes(timeSeriesCommand);
             var mapper = new TimeSeriesCommandOutboundMapper();
 

@@ -41,13 +41,6 @@ message MarketParticipantContract {
     BusinessProcessRoleContract business_proces_role = 2;
 }
 
-message PointContract {
-  int32 position = 1;
-  google.protobuf.Timestamp observation_date_time = 2;
-  /*DecimalValue.*/DecimalValueContract quantity = 3;
-  QualityContract quality = 4;
-}
-
 /**
  * Represents a TimeSeries Document
  */
@@ -56,7 +49,6 @@ message DocumentContract {
   google.protobuf.Timestamp request_date_time = 2;
   google.protobuf.Timestamp created_date_time = 3;
   MarketParticipantContract sender = 4;
-  MarketParticipantContract recipient = 5;
   BusinessReasonCodeContract business_reason_code = 6;
 }
 
@@ -77,6 +69,13 @@ message SeriesContract {
   repeated PointContract points = 11;
 }
 
+message PointContract {
+    int32 position = 1;
+    google.protobuf.Timestamp observation_date_time = 2;
+    DecimalValueContract quantity = 3;
+    QualityContract quality = 4;
+  }
+  
 // Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
 message DecimalValueContract {
 
@@ -100,7 +99,7 @@ enum BusinessReasonCodeContract {
 enum BusinessProcessRoleContract {
   BPR_Unknown = 0;
   //BPR_EnergySupplier = 1;
-  BPR_GridAccessProvider = 2;
+  //BPR_GridAccessProvider = 2;
   //BPR_SystemOperator = 3;
   BPR_MeteredDataResponsible = 4;
   //BPR_EnergyAgency = 5;
