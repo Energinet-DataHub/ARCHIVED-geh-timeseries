@@ -17,6 +17,15 @@ using System.Diagnostics.CodeAnalysis;
 // ReSharper disable once CheckNamespace
 namespace GreenEnergyHub.TimeSeries.Contracts.Internal
 {
+    /// <summary>
+    /// ProtoBuf doesn't support decimal.
+    /// This implementation is inspired by https://docs.microsoft.com/en-us/aspnet/core/grpc/protobuf?view=aspnetcore-5.0#decimals.
+    ///
+    /// <see cref="Units"/>: Whole units part of the amount
+    /// <see cref="Nanos"/>: Nano units of the amount (10^-9). Must be same sign as units
+    ///
+    /// Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
+    /// </summary>
     public partial class DecimalValueContract
     {
         private const decimal NanoFactor = 1_000_000_000;

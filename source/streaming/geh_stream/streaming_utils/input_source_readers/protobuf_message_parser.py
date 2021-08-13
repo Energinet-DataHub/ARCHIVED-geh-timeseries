@@ -23,7 +23,7 @@ from pyspark.sql.functions import udf, col
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
 
-from geh_stream.contracts.TimeSeries_pb2 import TimeSeriesCommandContract
+from geh_stream.contracts.time_series_pb2 import TimeSeriesCommandContract
 
 
 def specific_message_bytes_to_row(pb_bytes):

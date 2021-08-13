@@ -34,14 +34,12 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
     {
         [Theory]
         [InlineAutoMoqData]
-        public void Convert_WhenCalled_ShouldMapToProtobufWithCorrectValues([NotNull] TimeSeriesCommand timeSeriesCommand)
+        public void Convert_WhenCalled_ShouldMapToProtobufWithCorrectValues(
+            [NotNull] TimeSeriesCommand timeSeriesCommand,
+            [NotNull] TimeSeriesCommandOutboundMapper mapper)
         {
             // Arrange
-            timeSeriesCommand.Document.Recipient.BusinessProcessRole = MarketParticipantRole.GridAccessProvider;
-            timeSeriesCommand.Series.Points.ForEach(p => p.Quality = Quality.Measured);
-
-            UpdateInstantsToValidTimes(timeSeriesCommand);
-            var mapper = new TimeSeriesCommandOutboundMapper();
+            FixPossiblyInvalidValues(timeSeriesCommand);
 
             // Act
             var converted = (TimeSeriesCommandContract)mapper.Convert(timeSeriesCommand);
@@ -65,7 +63,13 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
             timeSeriesDocument.Should().NotContainNullsOrEmptyEnumerables();
         }
 
-        private static void UpdateInstantsToValidTimes([NotNull] TimeSeriesCommand timeSeriesCommand)
+        private static void FixPossiblyInvalidValues([NotNull] TimeSeriesCommand timeSeriesCommand)
+        {
+            FixPossiblyInvalidInstants(timeSeriesCommand);
+            FixPossiblyInvalidEnums(timeSeriesCommand);
+        }
+
+        private static void FixPossiblyInvalidInstants([NotNull] TimeSeriesCommand timeSeriesCommand)
         {
             timeSeriesCommand.Document.CreatedDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(11));
             timeSeriesCommand.Document.RequestDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10));
@@ -77,6 +81,12 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
             {
                 point.ObservationDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10));
             }
+        }
+
+        private static void FixPossiblyInvalidEnums(TimeSeriesCommand timeSeriesCommand)
+        {
+            timeSeriesCommand.Document.Recipient.BusinessProcessRole = MarketParticipantRole.GridAccessProvider;
+            timeSeriesCommand.Series.Points.ForEach(p => p.Quality = Quality.Measured);
         }
     }
 }

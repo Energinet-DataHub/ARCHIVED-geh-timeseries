@@ -18,20 +18,13 @@ import pathlib
 import os
 from subprocess import check_call
 
-# protoc TimeSeries.proto Types/DecimalValue.proto --python_out geh_stream/contracts/ --proto_path ../contracts/Internal/
-
 
 def generate_proto_code():
-    proto_interface_dir = "./../contracts/Internal/"
-    generated_src_dir = "contracts/"
-    out_folder = "./geh_stream/"
+    proto_path = "../contracts/internal/"
+    python_out = "geh_stream/contracts/"
 
-    os.makedirs(os.path.join(out_folder, generated_src_dir), exist_ok=True)
-    proto_it = pathlib.Path().glob(proto_interface_dir + "/**/*")
-    proto_path_internal = "contracts=" + proto_interface_dir
-    proto_path_import_root = "./../contracts/"
-    protos = [str(proto) for proto in proto_it if proto.is_file()]
-    check_call(["protoc"] + protos + ["--python_out", out_folder, "--proto_path", proto_path_internal, "--proto_path", proto_path_import_root])
+    os.makedirs(python_out, exist_ok=True)
+    check_call(["protoc"] + ["time_series.proto"] + ["--python_out", python_out, "--proto_path", proto_path])
 
 
 class CustomDevelopCommand(develop):
