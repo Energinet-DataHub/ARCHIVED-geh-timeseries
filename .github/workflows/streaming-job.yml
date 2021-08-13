@@ -19,6 +19,7 @@ on:
       - main
     paths:
       - source/streaming/**
+      - source/contracts/internal/time_series.proto
       - .github/workflows/streaming-job.yml
   workflow_dispatch: {}
 
