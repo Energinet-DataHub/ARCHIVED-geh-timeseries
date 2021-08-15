@@ -17,7 +17,7 @@ import pytest
 from pyspark.sql import DataFrame
 
 from geh_stream.schemas import SchemaNames, SchemaFactory
-import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
+# import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
 
 testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
 

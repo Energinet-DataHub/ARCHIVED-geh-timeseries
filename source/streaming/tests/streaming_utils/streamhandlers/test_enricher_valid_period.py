@@ -17,9 +17,8 @@ from datetime import datetime, timedelta
 import pytest
 
 from geh_stream.codelists import SettlementMethod
-from geh_stream.streaming_utils import parse_enrich_and_validate_time_series_as_points
 from geh_stream.streaming_utils.streamhandlers import Enricher
-from geh_stream.streaming_utils.streamhandlers import denormalize_parsed_data
+from geh_stream.streaming_utils.streamhandlers.denormalization import denormalize_parsed_data
 
 
 def __create_time_stamp(offset_datetime, minutes_offset: int):
