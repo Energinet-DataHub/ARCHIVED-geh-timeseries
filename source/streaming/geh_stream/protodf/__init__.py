@@ -19,7 +19,7 @@ This file is from https://raw.githubusercontent.com/aroch/protobuf-dataframe/ an
 pushed back with a pull-request when improved to satisfy the needs in geh-timeseries.
 """
 
-from collections import Mapping
+from collections.abc import Mapping
 from pyspark.sql.types import Row, StringType, StructType, StructField, LongType, DoubleType, FloatType, IntegerType, \
     BooleanType, BinaryType, ArrayType
 
