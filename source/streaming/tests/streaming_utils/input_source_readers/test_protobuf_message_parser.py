@@ -13,10 +13,16 @@
 # limitations under the License.
 
 import pytest
+from pyspark.sql.types import StructType
+from geh_stream.schemas import SchemaFactory, SchemaNames
+from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 
 
-def test_parse_data(parsed_data):
+def test_parse_data(event_hub_message_df):
     "Test Parse data from protobuf messages"
+
+    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
+    parsed_data = ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
 
     assert "correlation_id" in parsed_data.columns
     assert "document" in parsed_data.columns
