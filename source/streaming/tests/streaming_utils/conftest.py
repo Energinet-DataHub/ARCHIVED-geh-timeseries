@@ -12,40 +12,123 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
-import pandas as pd
 import pytest
-from pyspark.sql import DataFrame
-
-from geh_stream.schemas import SchemaNames, SchemaFactory
+import pandas as pd
+import time
+# from pyspark.sql import DataFrame
+from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
+from geh_stream.protodf import schema_for, message_to_row
+from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
+from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
+from geh_stream.contracts.time_series_pb2 import \
+    TimeSeriesCommandContract, DocumentContract, SeriesContract, PointContract, DecimalValueContract
 # import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
+
+
+# Create timestamp used in DataFrames
+time_now = time.time()
+timestamp_now = pd.Timestamp(time_now, unit='s')
+
+
+@pytest.fixture(scope="session")
+def parsed_data(event_hub_message_df):
+    "Parse data"
+    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
+    return ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
+
+
+@pytest.fixture(scope="session")
+def timeseries_protobuf():
+    "Create timeseries protobuf object"
+    timeseries = TimeSeriesCommandContract()
+    timeseries.correlation_id = "correlationid1"
+
+    document = DocumentContract()
+    document.id = "documentid1"
+
+    timeseries.document.CopyFrom(document)
+
+    series = SeriesContract()
+    series.id = "seriesid1"
+    series.metering_point_id = "meteringpointid1"
+
+    point1 = PointContract()
+    point1.position = 1
+
+    point2 = PointContract()
+    point2.position = 2
+
+    series.points.append(point1)
+    series.points.append(point2)
+
+    timeseries.series.CopyFrom(series)
+
+    return timeseries
+
+
+@pytest.fixture(scope="session")
+def event_hub_message_schema():
+    "Schemas of Event Hub Message, nested json body message, and expected result Dataframe from parse function"
+    return StructType() \
+        .add("body", BinaryType(), False) \
+        .add("partition", StringType(), False) \
+        .add("offset", StringType(), False) \
+        .add("sequenceNumber", LongType(), False) \
+        .add("publisher", StringType(), False) \
+        .add("partitionKey", StringType(), False) \
+        .add("properties", StructType(), True) \
+        .add("systemProperties", StructType(), True) \
+        .add("enqueuedTime", TimestampType(), True)
+
+
+@pytest.fixture(scope="session")
+def event_hub_message_df(event_hub_message_schema, timeseries_protobuf, spark):
+    "Create event hub message"
+    # Create message body using the required fields
+    binary_body_message = timeseries_protobuf.SerializeToString()
+
+    # Create event hub message
+    event_hub_message_pandas_df = pd.DataFrame({
+        "body": [binary_body_message],
+        "partition": ["1"],
+        "offset": ["offset"],
+        "sequenceNumber": [2],
+        "publisher": ["publisher"],
+        "partitionKey": ["partitionKey"],
+        "properties": [None],
+        "systemProperties": [None],
+        "enqueuedTime": [timestamp_now]})
+
+    return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
+
 
 testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
 
 
-def read_testdata_file(file_name):
-    with open(testdata_dir + file_name, "r") as f:
-        return f.read()
+# def read_testdata_file(file_name):
+#     with open(testdata_dir + file_name, "r") as f:
+#         return f.read()
 
 
-json_date_format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
+# json_date_format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
 
 
-@pytest.fixture(scope="session")
-def parsed_data_from_json_file_factory(spark):
-    """
-    Create parsed data from file in ./templates folder.
-    """
-    parsed_data_schema = SchemaFactory.get_instance(SchemaNames.Parsed)
+# @pytest.fixture(scope="session")
+# def parsed_data_from_json_file_factory(spark):
+#     """
+#     Create parsed data from file in ./templates folder.
+#     """
+#     parsed_data_schema = SchemaFactory.get_instance(SchemaNames.Parsed)
 
-    def factory(file_name) -> DataFrame:
-        json_str = read_testdata_file(file_name)
-        json_rdd = spark.sparkContext.parallelize([json_str])
-        parsed_data = spark.read.json(json_rdd,
-                                      schema=parsed_data_schema,
-                                      dateFormat=json_date_format)
-        return parsed_data
+#     def factory(file_name) -> DataFrame:
+#         json_str = read_testdata_file(file_name)
+#         json_rdd = spark.sparkContext.parallelize([json_str])
+#         parsed_data = spark.read.json(json_rdd,
+#                                       schema=parsed_data_schema,
+#                                       dateFormat=json_date_format)
+#         return parsed_data
 
-    return factory
+#     return factory
 
 
 @pytest.fixture(scope="session")

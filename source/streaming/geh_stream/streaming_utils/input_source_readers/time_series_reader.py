@@ -28,6 +28,10 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
         .options(**input_eh_conf) \
         .load()
 
+    return parse_stream(raw_stream)
+
+
+def parse_stream(raw_stream) -> DataFrame:
     print("Input stream schema:")
     raw_stream.printSchema()
 
