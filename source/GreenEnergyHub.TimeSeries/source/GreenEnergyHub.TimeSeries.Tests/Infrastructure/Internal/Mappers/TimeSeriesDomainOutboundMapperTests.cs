@@ -12,20 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using FluentAssertions;
-using GreenEnergyHub.TestHelpers.FluentAssertionsExtensions;
-using GreenEnergyHub.TimeSeries.Contracts.Internal;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
+using GreenEnergyHub.TimeSeries.Core.Enumeration;
 using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
-using GreenEnergyHub.TimeSeries.Domain.Notification;
 using GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers;
 using GreenEnergyHub.TimeSeries.TestCore;
+using GreenEnergyHub.TimeSeries.TestCore.Protobuf;
 using NodaTime;
 using Xunit;
 using Xunit.Categories;
+using domain = GreenEnergyHub.TimeSeries.Domain.Notification;
+using proto = GreenEnergyHub.TimeSeries.Contracts.Internal;
 
 namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
 {
@@ -35,47 +33,46 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
         [Theory]
         [InlineAutoMoqData]
         public void Convert_WhenCalled_ShouldMapToProtobufWithCorrectValues(
-            [NotNull] TimeSeriesCommand timeSeriesCommand,
-            [NotNull] TimeSeriesCommandOutboundMapper mapper)
+            [NotNull] domain.TimeSeriesCommand expectedTimeSeriesCommand,
+            [NotNull] TimeSeriesCommandOutboundMapper sut)
         {
-            // Arrange
-            FixPossiblyInvalidValues(timeSeriesCommand);
+            FixPossiblyInvalidValues(expectedTimeSeriesCommand);
+            var actualProtobufMessage = (proto.TimeSeriesCommand)sut.Convert(expectedTimeSeriesCommand);
 
-            // Act
-            var converted = (TimeSeriesCommandContract)mapper.Convert(timeSeriesCommand);
-
-            // Assert
-            var timeSeriesDocument = timeSeriesCommand.Document;
-            var timeSeriesSeries = timeSeriesCommand.Series;
-            var convertedDocument = converted.Document;
-
-            Assert.Equal(
-                timeSeriesDocument.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
-                converted.Document.CreatedDateTime);
-
-            convertedDocument.Id.Should().BeEquivalentTo(timeSeriesDocument.Id);
-            convertedDocument.Sender.Id.Should().BeEquivalentTo(timeSeriesDocument.Sender.Id);
-            converted.Series.Id.Should().Be(timeSeriesSeries.Id);
-            converted.Series.Points.First().Position.Should().Be(timeSeriesSeries.Points.First().Position);
-
-            convertedDocument.Should().NotContainNullsOrEmptyEnumerables();
-            timeSeriesSeries.Should().NotContainNullsOrEmptyEnumerables();
-            timeSeriesDocument.Should().NotContainNullsOrEmptyEnumerables();
+            // TODO: The assert currently doesn't support the DecimalValue type. All the point type workaround here should be moved in an upcoming pull request
+            ProtobufAssert.OutgoingContractIsSubset(
+                expectedTimeSeriesCommand,
+                actualProtobufMessage,
+                new[] { "Series.Points[0].Quantity", "Series.Points[1].Quantity", "Series.Points[2].Quantity" });
+            for (var i = 0; i < actualProtobufMessage.Series.Points.Count; i++)
+            {
+                var domainPoint = expectedTimeSeriesCommand.Series.Points[i];
+                var protoPoint = actualProtobufMessage.Series.Points[i];
+                Assert.Equal(domainPoint.Position, protoPoint.Position);
+                Assert.Equal(domainPoint.Quality, protoPoint.Quality.Cast<domain.Quality>());
+                Assert.True(domainPoint.Quantity == protoPoint.Quantity);
+                Assert.Equal(domainPoint.ObservationDateTime.TruncateToSeconds(), protoPoint.ObservationDateTime.ToInstant().TruncateToSeconds());
+            }
         }
 
-        private static void FixPossiblyInvalidValues([NotNull] TimeSeriesCommand timeSeriesCommand)
+        private static void FixPossiblyInvalidValues([NotNull] domain.TimeSeriesCommand timeSeriesCommand)
         {
             FixPossiblyInvalidInstants(timeSeriesCommand);
             FixPossiblyInvalidEnums(timeSeriesCommand);
         }
 
-        private static void FixPossiblyInvalidInstants([NotNull] TimeSeriesCommand timeSeriesCommand)
+        private static void FixPossiblyInvalidInstants([NotNull] domain.TimeSeriesCommand timeSeriesCommand)
         {
-            timeSeriesCommand.Document.CreatedDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(11));
-            timeSeriesCommand.Document.RequestDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10));
-            timeSeriesCommand.Series.RegistrationDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12));
-            timeSeriesCommand.Series.StartDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(42));
-            timeSeriesCommand.Series.EndDateTime = SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12));
+            timeSeriesCommand.Document.CreatedDateTime =
+                SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(11)).TruncateToSeconds();
+            timeSeriesCommand.Document.RequestDateTime =
+                SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(10)).TruncateToSeconds();
+            timeSeriesCommand.Series.RegistrationDateTime =
+                SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12)).TruncateToSeconds();
+            timeSeriesCommand.Series.StartDateTime =
+                SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(42)).TruncateToSeconds();
+            timeSeriesCommand.Series.EndDateTime =
+                SystemClock.Instance.GetCurrentInstant().Minus(Duration.FromDays(12)).TruncateToSeconds();
 
             foreach (var point in timeSeriesCommand.Series.Points)
             {
@@ -83,10 +80,10 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal.Mappers
             }
         }
 
-        private static void FixPossiblyInvalidEnums(TimeSeriesCommand timeSeriesCommand)
+        private static void FixPossiblyInvalidEnums(domain.TimeSeriesCommand timeSeriesCommand)
         {
             timeSeriesCommand.Document.Recipient.BusinessProcessRole = MarketParticipantRole.GridAccessProvider;
-            timeSeriesCommand.Series.Points.ForEach(p => p.Quality = Quality.Measured);
+            timeSeriesCommand.Series.Points.ForEach(p => p.Quality = domain.Quality.Measured);
         }
     }
 }

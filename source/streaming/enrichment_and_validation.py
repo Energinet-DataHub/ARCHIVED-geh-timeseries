@@ -103,7 +103,7 @@ from geh_stream.streaming_utils.input_source_readers import get_time_series_poin
 input_eh_starting_position = {
     "offset": None,         # starting from beginning of stream
     "seqNo": -1,            # not in use
-    "enqueuedTime": "2021-08-11T13:32:05.662231Z",
+    "enqueuedTime": "2021-08-17T12:32:05.662231Z",
     "isInclusive": True
 }
 input_eh_connection_string = args.input_eh_connection_string

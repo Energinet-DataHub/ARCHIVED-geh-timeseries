@@ -12,36 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using GreenEnergyHub.TimeSeries.Core;
-using Xunit;
-
-namespace GreenEnergyHub.TimeSeries.Tests.Core
+namespace GreenEnergyHub.TimeSeries.Core.Enumeration
 {
-    public enum A
+    public interface IEnumValueNameComparisonStrategy
     {
-        X = 1,
-        Y = 2,
-    }
-
-    public enum B
-    {
-        X = 1,
-    }
-
-    public class EnumExtensionsTests
-    {
-        [Fact]
-        public void Cast_Casts_WhenTargetEnumHasValue()
-        {
-            var actual = A.X.Cast<B>();
-            Assert.Equal(B.X, actual);
-        }
-
-        [Fact]
-        public void Cast_ThrowsInvalidCastException_WhenTargetEnumDoesNotHaveValue()
-        {
-            Assert.Throws<InvalidCastException>(() => A.Y.Cast<B>());
-        }
+        bool IsEquivalent(System.Enum valueOne, System.Enum valueTwo);
     }
 }
