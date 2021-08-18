@@ -17,6 +17,7 @@ using System.Linq;
 using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
 using GreenEnergyHub.TimeSeries.Core.Enumeration;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
 using domain = GreenEnergyHub.TimeSeries.Domain.Notification;
 using proto = GreenEnergyHub.TimeSeries.Contracts.Internal;
 
@@ -26,54 +27,72 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
     {
         protected override Google.Protobuf.IMessage Convert(domain.TimeSeriesCommand obj)
         {
-            if (obj == null)
-            {
-                throw new ArgumentNullException(nameof(obj));
-            }
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            return ConvertTimeSeriesCommand(obj);
+        }
 
-            var document = obj.Document;
-            var series = obj.Series;
-
+        private static proto.TimeSeriesCommand ConvertTimeSeriesCommand(domain.TimeSeriesCommand obj)
+        {
             return new proto.TimeSeriesCommand
             {
-                Document = new proto.Document
-                {
-                    Id = document.Id,
-                    RequestDateTime = document.RequestDateTime.ToTimestamp().TruncateToSeconds(),
-                    CreatedDateTime = document.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
-                    Sender = new proto.MarketParticipant
-                    {
-                        Id = document.Sender.Id,
-                        BusinessProcessRole = document.Sender.BusinessProcessRole.Cast<proto.BusinessProcessRole>(),
-                    },
-                    BusinessReasonCode = document.BusinessReasonCode.Cast<proto.BusinessReasonCode>(),
-                },
-                Series = new proto.Series
-                {
-                    Id = series.Id,
-                    MeteringPointId = series.MeteringPointId,
-                    MeteringPointType = series.MeteringPointType.Cast<proto.MeteringPointType>(),
-
-                    SettlementMethod = series.SettlementMethod?.Cast<proto.SettlementMethod>() ?? proto.SettlementMethod.SmNull,
-                    RegistrationDateTime = series.RegistrationDateTime.ToTimestamp().TruncateToSeconds(),
-                    Product = series.Product.Cast<proto.Product>(),
-                    Unit = series.Unit.Cast<proto.MeasureUnit>(),
-                    Resolution = series.Resolution.Cast<proto.Resolution>(),
-                    StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
-                    EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
-                    Points =
-                    {
-                        series.Points.Select(p => new proto.Point
-                        {
-                            Position = p.Position,
-                            Quality = p.Quality.Cast<proto.Quality>(),
-
-                            Quantity = p.Quantity,
-                            ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),
-                        }),
-                    },
-                },
+                Document = ConvertDocument(obj.Document),
+                Series = ConvertSeries(obj.Series),
                 CorrelationId = obj.CorrelationId,
+            };
+        }
+
+        private static proto.Document ConvertDocument(Document document)
+        {
+            return new proto.Document
+            {
+                Id = document.Id,
+                RequestDateTime = document.RequestDateTime.ToTimestamp().TruncateToSeconds(),
+                CreatedDateTime = document.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
+                Sender = ConvertSender(document.Sender),
+                BusinessReasonCode = document.BusinessReasonCode.Cast<proto.BusinessReasonCode>(),
+            };
+        }
+
+        private static proto.MarketParticipant ConvertSender(MarketParticipant sender)
+        {
+            return new proto.MarketParticipant
+            {
+                Id = sender.Id,
+                BusinessProcessRole = sender.BusinessProcessRole.Cast<proto.BusinessProcessRole>(),
+            };
+        }
+
+        private static proto.Series ConvertSeries(domain.Series series)
+        {
+            return new proto.Series
+            {
+                Id = series.Id,
+                MeteringPointId = series.MeteringPointId,
+                MeteringPointType = series.MeteringPointType.Cast<proto.MeteringPointType>(),
+
+                SettlementMethod = series.SettlementMethod?.Cast<proto.SettlementMethod>() ?? proto.SettlementMethod.SmNull,
+                RegistrationDateTime = series.RegistrationDateTime.ToTimestamp().TruncateToSeconds(),
+                Product = series.Product.Cast<proto.Product>(),
+                Unit = series.Unit.Cast<proto.MeasureUnit>(),
+                Resolution = series.Resolution.Cast<proto.Resolution>(),
+                StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
+                EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
+                Points =
+                {
+                    series.Points.Select(ConvertPoint),
+                },
+            };
+        }
+
+        private static proto.Point ConvertPoint(domain.Point p)
+        {
+            return new proto.Point
+            {
+                Position = p.Position,
+                Quality = p.Quality.Cast<proto.Quality>(),
+
+                Quantity = p.Quantity,
+                ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),
             };
         }
     }
