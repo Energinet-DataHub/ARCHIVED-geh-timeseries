@@ -20,9 +20,9 @@ from geh_stream.protodf import schema_for
 from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
 
 
-def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
+def test_parse_data(valid_timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test Parse data from protobuf messages"
-    time_series_protobuf = timeseries_protobuf_factory(0, 0)
+    time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
@@ -33,7 +33,7 @@ def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     assert "series" in parsed_data.columns
     assert "points:" in parsed_data.schema.simpleString()
 
-    metering_point_id = "meteringpointid1"
+    metering_point_id = "571313180000000005"
     first_series = parsed_data.first().series
     assert first_series.metering_point_id == metering_point_id
 

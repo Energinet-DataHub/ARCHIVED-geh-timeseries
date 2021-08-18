@@ -30,9 +30,9 @@ timestamp_now = pd.Timestamp(time_now, unit='s')
 
 
 @pytest.fixture(scope="session")
-def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
+def parsed_data(valid_timeseries_protobuf_factory, event_hub_message_df_factory):
     "Parse data"
-    time_series_protobuf = timeseries_protobuf_factory(0, 0)
+    time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
 
@@ -40,21 +40,33 @@ def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
 
 
 @pytest.fixture(scope="session")
-def timeseries_protobuf_factory():
+def valid_timeseries_protobuf_factory():
 
-    def timeseries_protobuf(units, nanos):
+    def valid_timeseries_protobuf(units, nanos):
         "Create timeseries protobuf object"
         timeseries = TimeSeriesCommand()
         timeseries.correlation_id = "correlationid1"
 
         document = Document()
         document.id = "documentid1"
-
+        document.request_date_time.FromJsonString("2020-12-15T13:15:11.8349163Z")
+        document.created_date_time.FromJsonString("2020-12-01T13:16:29.33Z")
+        document.sender.id = "8100000000030"
+        document.sender.business_process_role = 4
+        document.business_reason_code = 4
         timeseries.document.CopyFrom(document)
 
         series = Series()
         series.id = "seriesid1"
-        series.metering_point_id = "meteringpointid1"
+        series.metering_point_id = "571313180000000005"
+        series.metering_point_type = 1
+        series.settlement_method = 3
+        series.registration_date_time.FromJsonString("2021-06-17T11:41:28.8457326Z")
+        series.product = 5
+        series.unit = 1
+        series.resolution = 2
+        series.start_date_time.FromJsonString("2020-11-20T23:00:00Z")
+        series.end_date_time.FromJsonString("2020-11-21T23:00:00Z")
 
         point1 = Point()
         point1.position = 1
@@ -77,7 +89,7 @@ def timeseries_protobuf_factory():
 
         return timeseries
 
-    return timeseries_protobuf
+    return valid_timeseries_protobuf
 
 
 @pytest.fixture(scope="session")
