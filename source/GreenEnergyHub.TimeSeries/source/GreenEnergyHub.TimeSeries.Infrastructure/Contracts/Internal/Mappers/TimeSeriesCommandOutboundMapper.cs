@@ -50,7 +50,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
                 },
                 Series = new proto.Series
                 {
-                    Id = obj.Series.Id,
+                    Id = series.Id,
                     MeteringPointId = series.MeteringPointId,
                     MeteringPointType = series.MeteringPointType.Cast<proto.MeteringPointType>(),
 
