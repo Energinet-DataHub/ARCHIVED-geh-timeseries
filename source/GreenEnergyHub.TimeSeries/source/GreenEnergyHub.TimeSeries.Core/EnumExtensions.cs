@@ -19,12 +19,19 @@ namespace GreenEnergyHub.TimeSeries.Core
 {
     public static class EnumExtensions
     {
+        private static readonly KeyTypeHashSet _enumCache;
+
+        static EnumExtensions()
+        {
+            _enumCache = new KeyTypeHashSet();
+        }
+
         public static TOutputEnum Cast<TOutputEnum>([NotNull]this Enum inputEnum)
           where TOutputEnum : Enum
         {
             if (inputEnum == null) throw new ArgumentNullException(nameof(inputEnum));
 
-            var isDefined = Enum.IsDefined(typeof(TOutputEnum), (int)(object)inputEnum);
+            var isDefined = _enumCache.CheckValueIsDefined<TOutputEnum>((int)(object)inputEnum);
             if (!isDefined)
             {
                 var message = $"Cannot cast enum '{inputEnum.GetType().Name}.{inputEnum}={(int)(object)inputEnum}' to enum type '{typeof(TOutputEnum).Name}' because it has no corresponding value.";
