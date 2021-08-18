@@ -63,7 +63,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
                     EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
                     Points =
                     {
-                        obj.Series.Points.Select(p => new proto.Point
+                        series.Points.Select(p => new proto.Point
                         {
                             Position = p.Position,
                             Quality = p.Quality.Cast<proto.Quality>(),
