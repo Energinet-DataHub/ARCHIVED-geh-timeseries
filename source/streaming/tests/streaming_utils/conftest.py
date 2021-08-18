@@ -11,108 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import os
 import pytest
 import pandas as pd
 import time
 from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
 from pyspark.sql.functions import to_timestamp
+
 from geh_stream.protodf import schema_for, message_to_row
-from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
-from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
-from geh_stream.contracts.time_series_pb2 import \
-    TimeSeriesCommand, Document, Series, Point, DecimalValue
+from geh_stream.schemas import SchemaFactory, SchemaNames
 
 
 # Create timestamp used in DataFrames
 time_now = time.time()
 timestamp_now = pd.Timestamp(time_now, unit='s')
-
-
-@pytest.fixture(scope="session")
-def parsed_data(valid_timeseries_protobuf_factory, event_hub_message_df_factory):
-    "Parse data"
-    time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
-    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
-    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-
-    return ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
-
-
-@pytest.fixture(scope="session")
-def valid_timeseries_protobuf_factory():
-    "Valid timeseries protobuf factory"
-
-    def valid_timeseries_protobuf(units, nanos):
-        "Create valid timeseries protobuf object"
-
-        return __create_valid_timeseries_protobuf(units, nanos)
-
-    return valid_timeseries_protobuf
-
-
-@pytest.fixture(scope="session")
-def invalid_timeseries_protobuf_factory():
-    "Invalid timeseries protobuf factory"
-
-    def invalid_timeseries_protobuf(units, nanos):
-        "Create invalid timeseries protobuf object"
-
-        time_series_protobuf = __create_valid_timeseries_protobuf(units, nanos)
-        time_series_protobuf.series.metering_point_id = "non-existing metering point id 123498hhkjwer8"
-
-        return time_series_protobuf
-
-    return invalid_timeseries_protobuf
-
-
-def __create_valid_timeseries_protobuf(units, nanos):
-    "Create valid timeseries protobuf object"
-
-    timeseries = TimeSeriesCommand()
-    timeseries.correlation_id = "correlationid1"
-
-    document = Document()
-    document.id = "documentid1"
-    document.request_date_time.FromJsonString("2020-12-15T13:15:11.8349163Z")
-    document.created_date_time.FromJsonString("2020-12-01T13:16:29.33Z")
-    document.sender.id = "8100000000030"
-    document.sender.business_process_role = 4
-    document.business_reason_code = 4
-    timeseries.document.CopyFrom(document)
-
-    series = Series()
-    series.id = "seriesid1"
-    series.metering_point_id = "571313180000000005"
-    series.metering_point_type = 1
-    series.settlement_method = 3
-    series.registration_date_time.FromJsonString("2021-06-17T11:41:28.8457326Z")
-    series.product = 5
-    series.unit = 1
-    series.resolution = 2
-    series.start_date_time.FromJsonString("2020-11-20T23:00:00Z")
-    series.end_date_time.FromJsonString("2020-11-21T23:00:00Z")
-
-    point1 = Point()
-    point1.position = 1
-    point1.observation_date_time.FromJsonString("2020-11-12T23:00:00Z")
-    point1.quantity.units = units
-    point1.quantity.nanos = nanos
-    point1.quality = 1
-
-    # point2 = PointContract()
-    # point2.position = 2
-    # point2.observation_date_time.FromJsonString("2020-11-13T00:00:00Z")
-    # point2.quantity.units = 2
-    # point2.quantity.nanos = 000000000
-    # point2.quality = 1
-
-    series.points.append(point1)
-    # series.points.append(point2)
-
-    timeseries.series.CopyFrom(series)
-
-    return timeseries
 
 
 @pytest.fixture(scope="session")
