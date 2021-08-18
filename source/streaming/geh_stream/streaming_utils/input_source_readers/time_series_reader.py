@@ -28,10 +28,10 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
         .options(**input_eh_conf) \
         .load()
 
-    return parse_stream(raw_stream)
+    return __parse_stream(raw_stream)
 
 
-def parse_stream(raw_stream) -> DataFrame:
+def __parse_stream(raw_stream) -> DataFrame:
     print("Input stream schema:")
     raw_stream.printSchema()
 
@@ -39,12 +39,7 @@ def parse_stream(raw_stream) -> DataFrame:
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
     parsed_stream = ProtobufMessageParser.parse(raw_stream, message_schema)  # TODO: Schema is unused
 
-    # Flatten structure because - in general - it's much easier to work with non-nested structures in Spark
-    flattened_stream = flatten_df(parsed_stream)
-
-    # Explode time series into points - again because it's much easier to work with an also has the benefits
-    # that we can adjust names and types of the individual time series point properties
-    temp_time_series_point_stream = flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
+    temp_time_series_point_stream = __get_flattened_time_series_points(parsed_stream)
 
     # Adjust points to match schema SchemaFactory.message_body_schema
     # TODO: Unit test that we end up with the expected schema
@@ -77,6 +72,17 @@ def parse_stream(raw_stream) -> DataFrame:
     time_series_point_stream.printSchema()
 
     return time_series_point_stream
+
+
+def __get_flattened_time_series_points(parsed_stream) -> DataFrame:
+    "Get time series points in flattened structure"
+
+    # Flatten structure because - in general - it's much easier to work with non-nested structures in Spark
+    flattened_stream = flatten_df(parsed_stream)
+
+    # Explode time series into points - again because it's much easier to work with and also has the benefits
+    # that we can adjust names and types of the individual time series point properties
+    return flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
 
 
 # TODO: Move to lib

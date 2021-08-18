@@ -16,10 +16,14 @@ import pytest
 from pyspark.sql.types import StructType
 from geh_stream.schemas import SchemaFactory, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
+from geh_stream.protodf import schema_for
+from geh_stream.contracts.time_series_pb2 import TimeSeriesCommandContract
 
 
-def test_parse_data(event_hub_message_df):
+def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test Parse data from protobuf messages"
+    time_series_protobuf = timeseries_protobuf_factory(0, 0)
+    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
     parsed_data = ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
@@ -35,6 +39,6 @@ def test_parse_data(event_hub_message_df):
 
 
 def test_parse_event_hub_message_returns_correct_schema(parsed_data):
-    "Check that resulting DataFrame has expected schema"  # TODO: does this test make sense at all?
-    # assert str(parsed_data.schema) == str(SchemaFactory.get_instance(SchemaNames.Parsed))
-    assert str(parsed_data.schema) == str(parsed_data.schema)
+    "Check that resulting DataFrame has expected schema"
+    schema = schema_for(TimeSeriesCommandContract().DESCRIPTOR)
+    assert str(parsed_data.schema) == str(schema)

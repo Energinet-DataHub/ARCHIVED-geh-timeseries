@@ -15,14 +15,13 @@ import os
 import pytest
 import pandas as pd
 import time
-# from pyspark.sql import DataFrame
 from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
+from pyspark.sql.functions import to_timestamp
 from geh_stream.protodf import schema_for, message_to_row
 from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.contracts.time_series_pb2 import \
     TimeSeriesCommandContract, DocumentContract, SeriesContract, PointContract, DecimalValueContract
-# import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
 
 
 # Create timestamp used in DataFrames
@@ -31,39 +30,54 @@ timestamp_now = pd.Timestamp(time_now, unit='s')
 
 
 @pytest.fixture(scope="session")
-def parsed_data(event_hub_message_df):
+def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Parse data"
+    time_series_protobuf = timeseries_protobuf_factory(0, 0)
+    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
     message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
+
     return ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
 
 
 @pytest.fixture(scope="session")
-def timeseries_protobuf():
-    "Create timeseries protobuf object"
-    timeseries = TimeSeriesCommandContract()
-    timeseries.correlation_id = "correlationid1"
+def timeseries_protobuf_factory():
 
-    document = DocumentContract()
-    document.id = "documentid1"
+    def timeseries_protobuf(units, nanos):
+        "Create timeseries protobuf object"
+        timeseries = TimeSeriesCommandContract()
+        timeseries.correlation_id = "correlationid1"
 
-    timeseries.document.CopyFrom(document)
+        document = DocumentContract()
+        document.id = "documentid1"
 
-    series = SeriesContract()
-    series.id = "seriesid1"
-    series.metering_point_id = "meteringpointid1"
+        timeseries.document.CopyFrom(document)
 
-    point1 = PointContract()
-    point1.position = 1
+        series = SeriesContract()
+        series.id = "seriesid1"
+        series.metering_point_id = "meteringpointid1"
 
-    point2 = PointContract()
-    point2.position = 2
+        point1 = PointContract()
+        point1.position = 1
+        point1.observation_date_time.FromJsonString("2020-11-12T23:00:00Z")
+        point1.quantity.units = units
+        point1.quantity.nanos = nanos
+        point1.quality = 1
 
-    series.points.append(point1)
-    series.points.append(point2)
+        # point2 = PointContract()
+        # point2.position = 2
+        # point2.observation_date_time.FromJsonString("2020-11-13T00:00:00Z")
+        # point2.quantity.units = 2
+        # point2.quantity.nanos = 000000000
+        # point2.quality = 1
 
-    timeseries.series.CopyFrom(series)
+        series.points.append(point1)
+        # series.points.append(point2)
 
-    return timeseries
+        timeseries.series.CopyFrom(series)
+
+        return timeseries
+
+    return timeseries_protobuf
 
 
 @pytest.fixture(scope="session")
@@ -82,24 +96,29 @@ def event_hub_message_schema():
 
 
 @pytest.fixture(scope="session")
-def event_hub_message_df(event_hub_message_schema, timeseries_protobuf, spark):
-    "Create event hub message"
-    # Create message body using the required fields
-    binary_body_message = timeseries_protobuf.SerializeToString()
+def event_hub_message_df_factory(event_hub_message_schema, spark):
+    "Create event hub message factory"
 
-    # Create event hub message
-    event_hub_message_pandas_df = pd.DataFrame({
-        "body": [binary_body_message],
-        "partition": ["1"],
-        "offset": ["offset"],
-        "sequenceNumber": [2],
-        "publisher": ["publisher"],
-        "partitionKey": ["partitionKey"],
-        "properties": [None],
-        "systemProperties": [None],
-        "enqueuedTime": [timestamp_now]})
+    def event_hub_message_df(timeseries_protobuf):
+        "Create event hub message"
+        # Create message body using the required fields
+        binary_body_message = timeseries_protobuf.SerializeToString()
 
-    return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
+        # Create event hub message
+        event_hub_message_pandas_df = pd.DataFrame({
+            "body": [binary_body_message],
+            "partition": ["1"],
+            "offset": ["offset"],
+            "sequenceNumber": [2],
+            "publisher": ["publisher"],
+            "partitionKey": ["partitionKey"],
+            "properties": [None],
+            "systemProperties": [None],
+            "enqueuedTime": [timestamp_now]})
+
+        return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
+
+    return event_hub_message_df
 
 
 testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
