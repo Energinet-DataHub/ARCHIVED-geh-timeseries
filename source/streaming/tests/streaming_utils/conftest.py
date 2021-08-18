@@ -21,7 +21,7 @@ from geh_stream.protodf import schema_for, message_to_row
 from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.contracts.time_series_pb2 import \
-    TimeSeriesCommandContract, DocumentContract, SeriesContract, PointContract, DecimalValueContract
+    TimeSeriesCommand, Document, Series, Point, DecimalValue
 
 
 # Create timestamp used in DataFrames
@@ -44,19 +44,19 @@ def timeseries_protobuf_factory():
 
     def timeseries_protobuf(units, nanos):
         "Create timeseries protobuf object"
-        timeseries = TimeSeriesCommandContract()
+        timeseries = TimeSeriesCommand()
         timeseries.correlation_id = "correlationid1"
 
-        document = DocumentContract()
+        document = Document()
         document.id = "documentid1"
 
         timeseries.document.CopyFrom(document)
 
-        series = SeriesContract()
+        series = Series()
         series.id = "seriesid1"
         series.metering_point_id = "meteringpointid1"
 
-        point1 = PointContract()
+        point1 = Point()
         point1.position = 1
         point1.observation_date_time.FromJsonString("2020-11-12T23:00:00Z")
         point1.quantity.units = units

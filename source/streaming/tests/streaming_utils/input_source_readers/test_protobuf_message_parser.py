@@ -17,7 +17,7 @@ from pyspark.sql.types import StructType
 from geh_stream.schemas import SchemaFactory, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.protodf import schema_for
-from geh_stream.contracts.time_series_pb2 import TimeSeriesCommandContract
+from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
 
 
 def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
@@ -40,5 +40,5 @@ def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
 
 def test_parse_event_hub_message_returns_correct_schema(parsed_data):
     "Check that resulting DataFrame has expected schema"
-    schema = schema_for(TimeSeriesCommandContract().DESCRIPTOR)
+    schema = schema_for(TimeSeriesCommand().DESCRIPTOR)
     assert str(parsed_data.schema) == str(schema)
