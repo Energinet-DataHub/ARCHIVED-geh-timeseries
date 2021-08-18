@@ -14,7 +14,6 @@
 
 import pytest
 from pyspark.sql.types import StructType
-from geh_stream.schemas import SchemaFactory, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.protodf import schema_for
 from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
@@ -25,8 +24,7 @@ def test_parse_data(valid_timeseries_protobuf_factory, event_hub_message_df_fact
     time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
-    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-    parsed_data = ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
+    parsed_data = ProtobufMessageParser.parse(event_hub_message_df)
 
     assert "correlation_id" in parsed_data.columns
     assert "document" in parsed_data.columns

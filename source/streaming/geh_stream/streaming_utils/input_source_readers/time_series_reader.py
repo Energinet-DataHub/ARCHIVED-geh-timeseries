@@ -11,11 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from decimal import Decimal, getcontext
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, explode, udf
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 
-from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
+from geh_stream.schemas import quantity_type
 from .protobuf_message_parser import ProtobufMessageParser
 from geh_stream.dataframelib import flatten_df
 
@@ -36,13 +37,10 @@ def __parse_stream(raw_stream) -> DataFrame:
     raw_stream.printSchema()
 
     # Parse data from protobuf messages
-    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-    parsed_stream = ProtobufMessageParser.parse(raw_stream, message_schema)  # TODO: Schema is unused
+    parsed_stream = ProtobufMessageParser.parse(raw_stream)
 
     temp_time_series_point_stream = __get_flattened_time_series_points(parsed_stream)
 
-    # Adjust points to match schema SchemaFactory.message_body_schema
-    # TODO: Unit test that we end up with the expected schema
     time_series_point_stream = (temp_time_series_point_stream.select(
                                 col("document_id").alias("document_id").cast(StringType()),
                                 col("document_request_date_time_seconds").alias("document_requestDateTime").cast(TimestampType()),
@@ -85,16 +83,8 @@ def __get_flattened_time_series_points(parsed_stream) -> DataFrame:
     return flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
 
 
-# TODO: Move to lib
-from decimal import Decimal, getcontext
-
-
 def __to_quantity(units, nanos):
-    return Decimal(to_int(units)) + (Decimal(to_int(nanos)) / 10**9)
-
-
-def to_int(item):
-    return 0 if item is None else item
+    return Decimal(units or 0) + (Decimal(nanos or 0) / 10**9)
 
 
 to_quantity = udf(__to_quantity, quantity_type)

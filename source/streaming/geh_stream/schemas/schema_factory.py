@@ -34,34 +34,6 @@ quantity_type = DecimalType(18, 3)
 
 
 class SchemaFactory:
-    message_body_schema: StructType = StructType() \
-        .add("Document", StructType()
-             .add("Id", StringType(), False)
-             .add("RequestDateTime", TimestampType(), False)
-             .add("Type", IntegerType(), False)
-             .add("CreatedDateTime", TimestampType(), False)
-             .add("Sender", StructType()
-                  .add("Id", StringType(), False)
-                  .add("BusinessProcessRole", IntegerType(), False), False)
-             .add("BusinessReasonCode", IntegerType(), False), False) \
-        .add("Series", StructType()
-             .add("Id", StringType(), False)
-             .add("MeteringPointId", StringType(), False)
-             .add("MeteringPointType", IntegerType(), False)
-             .add("SettlementMethod", IntegerType(), True)
-             .add("RegistrationDateTime", TimestampType(), False)
-             .add("Product", IntegerType(), False)
-             .add("Unit", IntegerType(), False)
-             .add("Resolution", IntegerType(), False)
-             .add("StartDateTime", TimestampType(), False)
-             .add("EndDateTime", TimestampType(), False)
-             .add("Points", ArrayType(StructType()
-                  .add("Position", IntegerType(), False)
-                  .add("ObservationDateTime", TimestampType(), False)
-                  .add("Quantity", quantity_type, False)
-                  .add("Quality", IntegerType(), False), True), False), False) \
-        .add("CorrelationId", StringType(), False)
-
     # validFrom and validTo are not to be included in outputs from the time series point streaming process
     master_schema: StructType = StructType() \
         .add("meteringPointId", StringType(), False) \
@@ -69,13 +41,6 @@ class SchemaFactory:
         .add("validTo", TimestampType(), True) \
         .add("meteringPointType", StringType(), False) \
         .add("settlementMethod", IntegerType(), False)
-
-    parsed_schema = copy.deepcopy(message_body_schema) \
-        .add("EventHubEnqueueTime", TimestampType(), True)
-
-    # NOTE: This is a workaround because for some unknown reason pyspark parsing from JSON
-    #       (in event_hub_parser.py) causes all to be nullable regardless of the schema
-    make_all_nullable(parsed_schema)
 
     # TODO: This doesn't seem to be in use as errors in the schema doesn't seem to break anything
     parquet_schema: StructType = StructType() \
@@ -100,12 +65,8 @@ class SchemaFactory:
     # This should be improved
     @staticmethod
     def get_instance(schema_name: SchemaNames):
-        if schema_name is SchemaNames.Parsed:
-            return SchemaFactory.parsed_schema
-        elif schema_name is SchemaNames.Master:
+        if schema_name is SchemaNames.Master:
             return SchemaFactory.master_schema
-        elif schema_name is SchemaNames.MessageBody:
-            return SchemaFactory.message_body_schema
         elif schema_name is SchemaNames.Parquet:
             return SchemaFactory.parquet_schema
         else:

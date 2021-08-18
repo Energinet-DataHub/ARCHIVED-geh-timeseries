@@ -34,9 +34,8 @@ def parsed_data(valid_timeseries_protobuf_factory, event_hub_message_df_factory)
     "Parse data"
     time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
-    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
 
-    return ProtobufMessageParser.parse(event_hub_message_df, message_schema)  # TODO: Schema is unused
+    return ProtobufMessageParser.parse(event_hub_message_df)
 
 
 @pytest.fixture(scope="session")

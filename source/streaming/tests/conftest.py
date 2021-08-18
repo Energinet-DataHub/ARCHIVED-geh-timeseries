@@ -32,7 +32,6 @@ from geh_stream.codelists import MeasureUnit, MeteringPointType, QuantityQuality
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.dataframelib import flatten_df
-from geh_stream.streaming_utils.streamhandlers.denormalization import denormalize_parsed_data
 
 
 # Create Spark Conf/Session
@@ -53,12 +52,6 @@ time_past = time.time() - 1000
 timestamp_now = pd.Timestamp(time_now, unit='s')
 timestamp_future = pd.Timestamp(time_future, unit='s')
 timestamp_past = pd.Timestamp(time_past, unit='s')
-
-
-# Create schema of parsed data (timeseries data) and master data
-@pytest.fixture(scope="session")
-def parsed_schema():
-    return SchemaFactory.get_instance(SchemaNames.Parsed)
 
 
 @pytest.fixture(scope="session")
@@ -158,7 +151,7 @@ def time_series_json(time_series_json_factory):
 
 
 @pytest.fixture(scope="session")
-def parsed_data_factory(spark, parsed_schema, time_series_json_factory):
+def parsed_data_factory(spark, time_series_json_factory):
     def factory(arg):
         """
         Accepts either a dictionary in which case a single row is created,
@@ -188,7 +181,6 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
                 settlement_method=SettlementMethod.flex.value,
                 do_fail_enrichment=False):
         parsed_data = parsed_data_factory(dict(metering_point_id=metering_point_id, quantity=quantity))
-        denormalized_parsed_data = denormalize_parsed_data(parsed_data)
 
         # Should join find a matching master data record or not?
         # If so use a non matching metering point id for the master data record.
@@ -199,7 +191,7 @@ def enriched_data_factory(parsed_data_factory, master_data_factory):
         master_data = master_data_factory(dict(metering_point_id=metering_point_id,
                                                metering_point_type=metering_point_type,
                                                settlement_method=settlement_method))
-        return Enricher.enrich(denormalized_parsed_data, master_data)
+        return Enricher.enrich(parsed_data, master_data)
     return creator
 
 
@@ -212,103 +204,3 @@ def enriched_data(enriched_data_factory):
 def non_enriched_data(enriched_data_factory):
     """Simulate data with no master data for market evaluation point."""
     return enriched_data_factory(do_fail_enrichment=True)
-
-
-date_time_formatting_string = "%Y-%m-%dT%H:%M:%S%z"
-default_obs_time = datetime.strptime("2020-01-01T00:00:00+0000", date_time_formatting_string)
-
-
-# TODO: What is this? Should probably be either removed or refactored (or at least updated).
-@pytest.fixture(scope="module")
-def valid_atomic_value_schema():
-    """
-    Valid atomic data point schema to send
-    """
-    return StructType([
-        StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
-        StructField("Series_MeteringPointId", StringType(), False),
-        StructField("Series_Product", StringType(), False),
-        StructField("Series_Unit", StringType(), False),
-        StructField("Series_MeteringPointType", IntegerType(), False),
-        StructField("Series_SettlementMethod", IntegerType(), False),
-        StructField("Document_BusinessReasonCode", StringType(), False),
-        StructField("Document_Recipient_BusinessProcessRole", StringType(), False),
-        StructField("Series_Point_Quantity", SchemaFactory.quantity_type, False),
-        StructField("Series_Point_Quality", IntegerType(), False),
-        StructField("Series_Point_ObservationDateTime", TimestampType(), False),
-        StructField("Document_CreatedDateTime", TimestampType(), False),
-        StructField("EventHubEnqueueTime", TimestampType(), False)
-    ])
-
-
-# TODO: What is this? Should probably be either removed or refactored.
-@pytest.fixture(scope="module")
-def valid_atomic_values_for_actors_sample_df(spark, valid_atomic_value_schema):
-    structureData = [
-        (True, "10024", "3456", "15min", "product1", "m", "pointtype", "smet", "pr_type", "actor_role", "SC_KIND", ["r1", "r2", "r3"], Decimal(20048), "", default_obs_time, default_obs_time, default_obs_time)
-    ]
-    df2 = spark.createDataFrame(data=structureData, schema=valid_atomic_value_schema)
-    return df2
-
-
-@pytest.fixture(scope="module")
-def invalid_time_series_schema():
-    """
-    Invalid time series schema to send
-    """
-    return StructType([
-        StructField("Series_Id", StringType(), False),
-        StructField("IsTimeSeriesValid", BooleanType(), False),
-        StructField("CorrelationId", StringType(), False),
-        StructField("Document_Sender_Id", StringType(), False),
-        StructField("Document_Sender_BusinessProcessRole", StringType(), False),
-        StructField("Document_Id", StringType(), False),
-        StructField("Document_BusinessReasonCode", StringType(), False),
-        StructField("VR-245-1-Is-Valid", BooleanType(), False),
-        StructField("VR-250-Is-Valid", BooleanType(), False),
-        StructField("VR-251-Is-Valid", BooleanType(), False),
-        StructField("VR-611-Is-Valid", BooleanType(), False),
-        StructField("VR-612-Is-Valid", BooleanType(), False)
-    ])
-
-
-# TODO: What is this? Should probably be either removed or refactored.
-@pytest.fixture(scope="module")
-def invalid_atomic_values_for_actors_sample_df(spark, invalid_time_series_schema):
-    structureData = [
-        ("tseries_id", False, "10024", "420901", "actor_role", "12345", "ptype", True, False, True, True, True)
-    ]
-    df2 = spark.createDataFrame(data=structureData, schema=invalid_time_series_schema)
-    return df2
-
-
-# TODO: Seems brittle
-@pytest.fixture(scope="module")
-def validation_results_schema():
-    """
-    Validation subset of columns
-    """
-    return StructType([
-        StructField("VR-245-1-Is-Valid", BooleanType(), False),
-        StructField("VR-250-Is-Valid", BooleanType(), False),
-        StructField("VR-251-Is-Valid", BooleanType(), False),
-        StructField("VR-611-Is-Valid", BooleanType(), False),
-        StructField("VR-612-Is-Valid", BooleanType(), False)
-    ])
-
-
-# TODO: What is this? Should probably be either removed or refactored.
-@pytest.fixture(scope="module")
-def validation_results_values_for_actors_sample_df(spark, validation_results_schema):
-    structureData = [
-        (True, True, True, True, True),
-        (False, True, True, True, True),
-        (True, False, True, True, True),
-        (True, True, False, True, True),
-        (True, True, True, False, True),
-        (True, True, True, True, False),
-        (False, False, False, False, False)
-    ]
-    df2 = spark.createDataFrame(data=structureData, schema=validation_results_schema)
-    return df2
