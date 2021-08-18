@@ -142,7 +142,7 @@ enum SettlementMethod {
   SM_NON_PROFILED = 2;
   SM_FLEX = 3;
   // Settlment method is not specified
-  SM_NULL = 999;
+  SM_NOT_SET = 999;
 }
 
 enum MeasureUnit {

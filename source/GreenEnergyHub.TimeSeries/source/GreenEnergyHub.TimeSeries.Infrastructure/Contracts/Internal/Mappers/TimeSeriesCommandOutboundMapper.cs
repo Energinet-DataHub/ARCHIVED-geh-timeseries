@@ -70,7 +70,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
                 MeteringPointId = series.MeteringPointId,
                 MeteringPointType = series.MeteringPointType.Cast<proto.MeteringPointType>(),
 
-                SettlementMethod = series.SettlementMethod?.Cast<proto.SettlementMethod>() ?? proto.SettlementMethod.SmNull,
+                SettlementMethod = series.SettlementMethod?.Cast<proto.SettlementMethod>() ?? proto.SettlementMethod.SmNotSet,
                 RegistrationDateTime = series.RegistrationDateTime.ToTimestamp().TruncateToSeconds(),
                 Product = series.Product.Cast<proto.Product>(),
                 Unit = series.Unit.Cast<proto.MeasureUnit>(),
