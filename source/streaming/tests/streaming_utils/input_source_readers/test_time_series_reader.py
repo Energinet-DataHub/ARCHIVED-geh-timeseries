@@ -13,7 +13,9 @@
 # limitations under the License.
 
 import pytest
-from geh_stream.streaming_utils.input_source_readers.time_series_reader import __parse_stream
+from pyspark.sql.types import StructType
+from geh_stream.schemas import SchemaFactory, SchemaNames
+from geh_stream.streaming_utils.input_source_readers.time_series_reader import __parse_stream, __to_quantity, __get_flattened_time_series_points
 from decimal import Decimal
 
 
@@ -75,3 +77,26 @@ def test_parse_series_point_quantity_3_100_from_stream(timeseries_protobuf_facto
     expected_quantity = Decimal('3.100')
     first = parsed_time_series_point_stream.first()
     assert first.series_point_quantity == expected_quantity
+
+
+def test_get_flattened_time_series_points(parsed_data):
+    "Test __get_flattened_time_series_points"
+    flattened_time_series_points = __get_flattened_time_series_points(parsed_data)
+
+    first = flattened_time_series_points.first()
+    assert first.series_id == "seriesid1"
+    assert "correlation_id" in flattened_time_series_points.columns
+    assert "document_id" in flattened_time_series_points.columns
+    assert "series_id" in flattened_time_series_points.columns
+
+
+def test_to_quantity():
+    "Test to_quantity"
+    expected = Decimal('12345.6789')
+
+    units = 12345
+    nanos = 678900000
+
+    returnValue = __to_quantity(units, nanos)
+
+    assert returnValue == expected

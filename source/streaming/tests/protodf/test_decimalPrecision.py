@@ -11,15 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pytest
-from decimal import Decimal, getcontext
+from decimal import Decimal
 
 
-def test_contract_with_enum():
-    getcontext().prec = 10
+def test_decimal_calculation():
     expected = Decimal('12345.6789')
-
-    getcontext().prec = 18
 
     units = 12345
     nanos = 678900000
@@ -27,3 +25,4 @@ def test_contract_with_enum():
     returnValue = Decimal(units) + (Decimal(nanos) / 10**9)
 
     assert returnValue == expected
+

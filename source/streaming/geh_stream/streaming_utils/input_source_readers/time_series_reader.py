@@ -90,8 +90,6 @@ from decimal import Decimal, getcontext
 
 
 def __to_quantity(units, nanos):
-    getcontext().prec = 18
-
     return Decimal(to_int(units)) + (Decimal(to_int(nanos)) / 10**9)
 
 
