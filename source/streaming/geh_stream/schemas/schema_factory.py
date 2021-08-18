@@ -18,18 +18,6 @@ from pyspark.sql.types import IntegerType, StringType, StructType, StructField, 
 from .schema_names import SchemaNames
 
 
-# See NOTE on usage
-def make_all_nullable(schema):
-    schema.nullable = True
-    if isinstance(schema, StructField):
-        make_all_nullable(schema.dataType)
-    if isinstance(schema, ArrayType):
-        make_all_nullable(schema.elementType)
-    if isinstance(schema, StructType):
-        for f in schema.fields:
-            make_all_nullable(f)
-
-
 quantity_type = DecimalType(18, 3)
 
 
