@@ -101,9 +101,9 @@ import json
 from geh_stream.streaming_utils.input_source_readers import get_time_series_point_stream
 
 input_eh_starting_position = {
-    "offset": None,         # starting from beginning of stream
+    "offset": "-1",         # starting from beginning of stream
     "seqNo": -1,            # not in use
-    "enqueuedTime": "2021-08-17T12:32:05.662231Z",
+    "enqueuedTime": None,   # not in use
     "isInclusive": True
 }
 input_eh_connection_string = args.input_eh_connection_string
@@ -137,8 +137,6 @@ from geh_stream.streaming_utils.streamhandlers.enricher import Enricher
 
 def __process_data_frame(time_series_points_df: DataFrame, _: int):
     try:
-        time_series_points_df.show(truncate=False)  # TODO: Remove before squashing
-
         watch = MonitoredStopwatch.start_timer(telemetry_client, __process_data_frame.__name__)
 
         time_series_points_df = Enricher.enrich(time_series_points_df, master_data_df)
