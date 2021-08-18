@@ -30,8 +30,6 @@ env:
 
 jobs:
   validate_build_message_receiver:
-    needs: pre_job
-    if: ${{ needs.pre_job.outputs.has_changes }}
     name: Validate build Message receiver
     runs-on: ubuntu-latest
     steps:

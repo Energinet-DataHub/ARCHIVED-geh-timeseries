@@ -1,14 +1,14 @@
 ﻿/* Copyright 2020 Energinet DataHub A/S
  *
- * Licensed under the Apache License; Version 2.0 (the "License2");
+ * Licensed under the Apache License, Version 2.0 (the "License2");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *     http://www.apache.org/licenses/LICENSE-2.0
  *
- * Unless required by applicable law or agreed to in writing; software
- * distributed under the License is distributed on an "AS IS" BASIS;
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND; either express or implied.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
@@ -19,45 +19,45 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "GreenEnergyHub.TimeSeries.Contracts.Internal";
 
-message TimeSeriesCommandContract {
-  DocumentContract document = 1;
-  SeriesContract series = 2;
+message TimeSeriesCommand {
+  Document document = 1;
+  Series series = 2;
   string correlation_id = 3;
 }
 
-message MarketParticipantContract {
+message MarketParticipant {
   string id = 1;
-  BusinessProcessRoleContract business_proces_role = 2;
+  BusinessProcessRole business_process_role = 2;
 }
 
-message DocumentContract {
+message Document {
   string id = 1;
   google.protobuf.Timestamp request_date_time = 2;
   google.protobuf.Timestamp created_date_time = 3;
-  MarketParticipantContract sender = 4;
-  BusinessReasonCodeContract business_reason_code = 6;
+  MarketParticipant sender = 4;
+  BusinessReasonCode business_reason_code = 5;
 }
 
-message SeriesContract {
+message Series {
   string id = 1;
   string metering_point_id = 2;
-  MeteringPointTypeContract metering_point_type = 3;
-  SettlementMethodContract settlement_method = 4;
+  MeteringPointType metering_point_type = 3;
+  SettlementMethod settlement_method = 4;
   google.protobuf.Timestamp registration_date_time = 5;
-  ProductContract product = 6;
-  MeasureUnitContract measure_unit = 7;
-  ResolutionContract resolution = 8;
+  Product product = 6;
+  MeasureUnit unit = 7;
+  Resolution resolution = 8;
   google.protobuf.Timestamp start_date_time = 9;
   google.protobuf.Timestamp end_date_time = 10;
-  repeated PointContract points = 11;
+  repeated Point points = 11;
 }
 
-message PointContract {
+message Point {
   int32 position = 1;
   google.protobuf.Timestamp observation_date_time = 2;
-  DecimalValueContract quantity = 3;
-  QualityContract quality = 4;
-  }
+  DecimalValue quantity = 3;
+  Quality quality = 4;
+}
   
 /* ProtoBuf doesn't support decimal.
  * This implementation is inspired by https://docs.microsoft.com/en-us/aspnet/core/grpc/protobuf?view=aspnetcore-5.0#decimals.
@@ -66,7 +66,7 @@ message PointContract {
  *
  * Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
 */
-message DecimalValueContract {
+message DecimalValue {
   // Whole units part of the amount
   int64 units = 1;
   // Nano units of the amount (10^-9)
@@ -74,85 +74,85 @@ message DecimalValueContract {
   sfixed32 nanos = 2;
 }
 
-enum BusinessReasonCodeContract {
-  BRC_UNKNOWN = 0;
-  BRC_CONTINUOUS_METER_READING = 1;
-  BRC_PERIODIC_METERING = 2;
-  BRC_HISTORICAL_DATA = 3;
-  BRC_PERIODIC_FLEX_METERING = 4;
+enum BusinessReasonCode {
+  BR_UNKNOWN = 0;
+  BR_CONTINUOUS_METER_READING = 1;
+  BR_PERIODIC_METERING = 2;
+  BR_HISTORICAL_DATA = 3;
+  BR_PERIODIC_FLEX_METERING = 4;
 }
 
 // TODO: The same options for sender and receiver?
-enum BusinessProcessRoleContract {
+enum BusinessProcessRole {
   BPR_UNKNOWN = 0;
   BPR_METERED_DATA_RESPONSIBLE = 4;
 }
 
-enum QualityContract {
-  QC_UNKNOWN = 0;
-  QC_MEASURED = 1;
-  QC_ESTIMATED = 3;
-  QC_QUANTITY_MISSING = 4;
+enum Quality {
+  Q_UNKNOWN = 0;
+  Q_MEASURED = 1;
+  Q_ESTIMATED = 3;
+  Q_QUANTITY_MISSING = 4;
 }
 
-enum ResolutionContract {
-  RC_UNKNOWN = 0;
-  RC_QUARTER_OF_HOUR = 1;
-  RC_HOUR = 2;
+enum Resolution {
+  R_UNKNOWN = 0;
+  R_QUARTER_OF_HOUR = 1;
+  R_HOUR = 2;
 }
 
-enum ProductContract {
-  PC_UNKNOWN = 0;
-  PC_TARIFF = 1;
-  PC_FUEL_QUANTITY = 2;
-  PC_POWER_ACTIVE = 3;
-  PC_POWER_REACTIVE = 4;
-  PC_ENERGY_ACTIVE = 5;
-  PC_ENERGY_REACTIVE = 6;
+enum Product {
+  P_UNKNOWN = 0;
+  P_TARIFF = 1;
+  P_FUEL_QUANTITY = 2;
+  P_POWER_ACTIVE = 3;
+  P_POWER_REACTIVE = 4;
+  P_ENERGY_ACTIVE = 5;
+  P_ENERGY_REACTIVE = 6;
 }
 
-enum MeteringPointTypeContract {
-  MPTC_UNKNOWN = 0;
-  MPTC_CONSUMPTION = 1;
-  MPTC_PRODUCTION = 2;
-  MPTC_EXCHANGE = 3;
-  MPTC_VE_PRODUCTION = 4;
-  MPTC_ANALYSIS = 5;
-  MPTC_SURPLUS_PRODUCTION_GROUP = 6;
-  MPTC_NET_PRODUCTION = 7;
-  MPTC_SUPPLY_TO_GRID = 8;
-  MPTC_CONSUMPTION_FROM_GRID = 9;
-  MPTC_WHOLESALE_SERVICE = 10;
-  MPTC_OWN_PRODUCTION = 11;
-  MPTC_NET_FROM_GRID = 12;
-  MPTC_NET_TO_GRID = 13;
-  MPTC_TOTAL_CONSUMPTION = 14;
-  MPTC_GRID_LOSS_CORRECTION = 15;
-  MPTC_ELECTRICAL_HEATING = 16;
-  MPTC_NET_CONSUMPTION = 17;
-  MPTC_OTHER_CONSUMPTION = 18;
-  MPTC_OTHER_PRODUCTION = 19;
-  MPTC_EXCHANGE_REACTIVE_ENERGY = 20;
-  MPTC_INTERNAL_USE = 21;
+enum MeteringPointType {
+  MPT_UNKNOWN = 0;
+  MPT_CONSUMPTION = 1;
+  MPT_PRODUCTION = 2;
+  MPT_EXCHANGE = 3;
+  MPT_VE_PRODUCTION = 4;
+  MPT_ANALYSIS = 5;
+  MPT_SURPLUS_PRODUCTION_GROUP = 6;
+  MPT_NET_PRODUCTION = 7;
+  MPT_SUPPLY_TO_GRID = 8;
+  MPT_CONSUMPTION_FROM_GRID = 9;
+  MPT_WHOLESALE_SERVICE = 10;
+  MPT_OWN_PRODUCTION = 11;
+  MPT_NET_FROM_GRID = 12;
+  MPT_NET_TO_GRID = 13;
+  MPT_TOTAL_CONSUMPTION = 14;
+  MPT_GRID_LOSS_CORRECTION = 15;
+  MPT_ELECTRICAL_HEATING = 16;
+  MPT_NET_CONSUMPTION = 17;
+  MPT_OTHER_CONSUMPTION = 18;
+  MPT_OTHER_PRODUCTION = 19;
+  MPT_EXCHANGE_REACTIVE_ENERGY = 20;
+  MPT_INTERNAL_USE = 21;
 }
 
-enum SettlementMethodContract {
-  SMC_UNKNOWN = 0;
-  SMC_PROFILED = 1;
-  SMC_NON_PROFILED = 2;
-  SMC_FLEX = 3;
+enum SettlementMethod {
+  SM_UNKNOWN = 0;
+  SM_PROFILED = 1;
+  SM_NON_PROFILED = 2;
+  SM_FLEX = 3;
   // Settlment method is not specified
-  SMC_NULL = 999;
+  SM_NULL = 999;
 }
 
-enum MeasureUnitContract {
-  MUC_UNKNOWN = 0;
-  MUC_KILO_WATT_HOUR = 1;
-  MUC_MEGA_WATT_HOUR = 2;
-  MUC_KILO_WATT = 3;
-  MUC_MEGA_WATT = 4;
-  MUC_KILO_VAR_HOUR = 5;
-  MUC_MEGA_VAR = 6;
-  MUC_TARIFF = 7;
-  MUC_TONNE = 8;
+enum MeasureUnit {
+  MU_UNKNOWN = 0;
+  MU_KILO_WATT_HOUR = 1;
+  MU_MEGA_WATT_HOUR = 2;
+  MU_KILO_WATT = 3;
+  MU_MEGA_WATT = 4;
+  MU_KILO_VAR_HOUR = 5;
+  MU_MEGA_VAR = 6;
+  MU_TARIFF = 7;
+  MU_TONNE = 8;
 }

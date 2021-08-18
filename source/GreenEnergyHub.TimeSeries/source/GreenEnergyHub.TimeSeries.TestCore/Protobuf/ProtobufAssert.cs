@@ -13,15 +13,19 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Google.Protobuf;
 using Google.Protobuf.WellKnownTypes;
+using GreenEnergyHub.TimeSeries.Core.Enumeration;
 using NodaTime;
+using Xunit;
+using Xunit.Sdk;
 
-namespace GreenEnergyHub.TimeSeries.TestCore
+namespace GreenEnergyHub.TimeSeries.TestCore.Protobuf
 {
-    public static class ProtoBufAssert
+    public static class ProtobufAssert
     {
         /// <summary>
         /// Throws <see cref="XunitException"/>.
@@ -50,8 +54,11 @@ namespace GreenEnergyHub.TimeSeries.TestCore
 
                     // Ignore transaction properties from the GreenEnergyHub.Messaging assembly
                     options.Excluding(ctx =>
-                        ctx.SelectedMemberPath.Split(".", StringSplitOptions.RemoveEmptyEntries).Contains("Transaction") &&
-                        ctx.SelectedMemberInfo.MemberType.Assembly!.FullName!.StartsWith("GreenEnergyHub.Messaging", StringComparison.InvariantCulture));
+                        ctx.SelectedMemberPath.Split(".", StringSplitOptions.RemoveEmptyEntries)
+                            .Contains("Transaction") &&
+                        ctx.SelectedMemberInfo.MemberType.Assembly!.FullName!.StartsWith(
+                            "GreenEnergyHub.Messaging",
+                            StringComparison.InvariantCulture));
 
                     // Use runtime type of "expected"
                     options.RespectingRuntimeTypes();
@@ -63,7 +70,10 @@ namespace GreenEnergyHub.TimeSeries.TestCore
         /// <summary>
         /// Throws <see cref="XunitException"/>.
         /// </summary>
-        public static void OutgoingContractIsSubset<TContract>(object expected, IMessage<TContract> actualContract)
+        public static void OutgoingContractIsSubset<TContract>(
+            object expected,
+            IMessage<TContract> actualContract,
+            string[]? excludePaths = null)
             where TContract : IMessage<TContract>
         {
             // FluentAssertions will fail if actualContract has public props that expected doesn't have
@@ -85,11 +95,26 @@ namespace GreenEnergyHub.TimeSeries.TestCore
                     // Ignore the public prop "Descriptor" of the contract object
                     options.Excluding(ctx => ctx.SelectedMemberPath == "Descriptor");
 
+                    foreach (var excludePath in excludePaths ?? Array.Empty<string>())
+                    {
+                        options.Excluding(ctx => ctx.SelectedMemberPath == excludePath);
+                    }
+
                     // Use runtime type of "expected"
                     options.RespectingRuntimeTypes();
 
                     return options;
                 });
+        }
+
+        public static void ContractEnumIsSubSet<TProtobufEnum, TComparisonEnum>()
+        {
+            Assert.True(
+                EnumComparison.IsSubsetOf(
+                    typeof(TProtobufEnum),
+                    typeof(TComparisonEnum),
+                    EnumComparisonStrategy.ProtobufLenient),
+                "Checking " + typeof(TProtobufEnum) + " against " + typeof(TComparisonEnum));
         }
     }
 }
