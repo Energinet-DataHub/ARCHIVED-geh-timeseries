@@ -219,7 +219,7 @@ spark_master_data_version = blob_master_data_version
 is_master_data_blob_newer = True
 
 failure_count = 0
-max_retry_count = 0
+max_retry_count = 5
 
 log("Starting streaming...")
 while True:
