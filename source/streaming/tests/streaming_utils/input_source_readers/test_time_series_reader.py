@@ -19,6 +19,18 @@ from geh_stream.streaming_utils.input_source_readers.time_series_reader import _
 from decimal import Decimal
 
 
+def test_parse_invalid_series_from_stream(invalid_timeseries_protobuf_factory, event_hub_message_df_factory):
+    "Test invalid series is parsed correctly from stream"
+    time_series_protobuf = invalid_timeseries_protobuf_factory(0, 0)
+    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
+
+    parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
+
+    expected_metering_point_id = "non-existing metering point id 123498hhkjwer8"
+    first = parsed_time_series_point_stream.first()
+    assert first.series_meteringPointId == expected_metering_point_id
+
+
 def test_parse_series_from_stream(valid_timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test series is parsed correctly from stream"
     time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
