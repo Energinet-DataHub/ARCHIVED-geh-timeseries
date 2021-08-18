@@ -15,6 +15,7 @@
 using System;
 using GreenEnergyHub.TimeSeries.Core;
 using Xunit;
+using Xunit.Categories;
 
 namespace GreenEnergyHub.TimeSeries.Tests.Core
 {
@@ -29,6 +30,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Core
         X = 1,
     }
 
+    [UnitTest]
     public class EnumExtensionsTests
     {
         [Fact]
