@@ -19,9 +19,9 @@ from geh_stream.protodf import schema_for
 from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
 
 
-def test_parse_data(valid_timeseries_protobuf_factory, event_hub_message_df_factory):
+def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test Parse data from protobuf messages"
-    time_series_protobuf = valid_timeseries_protobuf_factory(0, 0)
+    time_series_protobuf = timeseries_protobuf_factory(0, 0)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
     parsed_data = ProtobufMessageParser.parse(event_hub_message_df)
