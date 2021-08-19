@@ -57,7 +57,7 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Internal
             // ProtobufAssert.ContractEnumIsSubSet<proto.SettlementMethod, SettlementMethod>();
             var settlementMethods = Enum
                 .GetValues<proto.SettlementMethod>()
-                .Where(v => v != proto.SettlementMethod.SmNull);
+                .Where(v => v != proto.SettlementMethod.SmNotSet);
             foreach (var protoSettlementMethod in settlementMethods)
             {
                 Assert.True(Enum.IsDefined(typeof(SettlementMethod), (int)(object)protoSettlementMethod));

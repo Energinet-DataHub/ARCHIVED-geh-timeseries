@@ -18,7 +18,6 @@ import pytest
 
 from geh_stream.codelists import SettlementMethod
 from geh_stream.streaming_utils.streamhandlers import Enricher
-from geh_stream.streaming_utils.streamhandlers.denormalization import denormalize_parsed_data
 
 
 def __create_time_stamp(offset_datetime, minutes_offset: int):
@@ -50,8 +49,7 @@ def master_data(master_data_factory):
 def enriched_data_factory(master_data, parsed_data_factory):
     def __factory(**kwargs):
         parsed_data = parsed_data_factory(kwargs)
-        denormalized_parsed_data = denormalize_parsed_data(parsed_data)
-        return Enricher.enrich(denormalized_parsed_data, master_data)
+        return Enricher.enrich(parsed_data, master_data)
     return __factory
 
 

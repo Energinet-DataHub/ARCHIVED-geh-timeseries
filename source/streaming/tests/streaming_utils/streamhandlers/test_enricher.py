@@ -17,10 +17,8 @@ import time
 from pyspark import SparkConf
 from pyspark.sql import DataFrame, SparkSession
 
-from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.dataframelib import has_column
-from geh_stream.streaming_utils.streamhandlers.denormalization import denormalize_parsed_data
 
 # Create timestamps used in DataFrames
 time_now = time.time()
@@ -43,9 +41,8 @@ def enriched_data(parsed_data_factory, master_data_factory):
         # Not matched because no master data exists for this market evalution point
         dict(metering_point_id="2", quantity=3.0, observation_time=timestamp_now)
     ])
-    denormalized_parsed_data = denormalize_parsed_data(parsed_data)
     master_data = master_data_factory(dict(metering_point_id="1"))
-    return Enricher.enrich(denormalized_parsed_data, master_data)
+    return Enricher.enrich(parsed_data, master_data)
 
 
 # Is the row count maintained

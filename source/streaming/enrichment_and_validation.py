@@ -101,9 +101,9 @@ import json
 from geh_stream.streaming_utils.input_source_readers import get_time_series_point_stream
 
 input_eh_starting_position = {
-    "offset": None,         # starting from beginning of stream
+    "offset": "-1",         # starting from beginning of stream
     "seqNo": -1,            # not in use
-    "enqueuedTime": "2021-08-17T12:32:05.662231Z",
+    "enqueuedTime": None,   # not in use
     "isInclusive": True
 }
 input_eh_connection_string = args.input_eh_connection_string
@@ -130,15 +130,12 @@ from pyspark.sql.types import StructType
 
 from geh_stream.monitoring import MonitoredStopwatch
 import geh_stream.batch_operations as batch_operations
-from geh_stream.schemas.schema_factory import SchemaFactory, SchemaNames
 from geh_stream.validation import Validator
 from geh_stream.streaming_utils.streamhandlers.enricher import Enricher
 
 
 def __process_data_frame(time_series_points_df: DataFrame, _: int):
     try:
-        time_series_points_df.show(truncate=False)  # TODO: Remove before squashing
-
         watch = MonitoredStopwatch.start_timer(telemetry_client, __process_data_frame.__name__)
 
         time_series_points_df = Enricher.enrich(time_series_points_df, master_data_df)
@@ -221,7 +218,7 @@ spark_master_data_version = blob_master_data_version
 is_master_data_blob_newer = True
 
 failure_count = 0
-max_retry_count = 0
+max_retry_count = 5
 
 log("Starting streaming...")
 while True:
