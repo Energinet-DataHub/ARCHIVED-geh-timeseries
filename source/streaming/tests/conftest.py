@@ -64,7 +64,7 @@ def master_schema():
 @pytest.fixture(scope="session")
 def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Parse data"
-    time_series_protobuf = timeseries_protobuf_factory(0, 0)
+    time_series_protobuf = timeseries_protobuf_factory()
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
     return ProtobufMessageParser.parse(event_hub_message_df)
@@ -97,8 +97,16 @@ def timeseries_protobuf_factory():
 #     return invalid_timeseries_protobuf
 
 
-def __create_valid_timeseries_protobuf(metering_point_id, quantity, observation_time):
+def __create_valid_timeseries_protobuf(args):
     "Create valid timeseries protobuf object"
+
+    metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
+    quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
+    observation_date_time = __get_value_if_exits(args, "observation_date_time", timestamp_now)
+
+    # metering_point_id = args["metering_point_id"] or "mepm"
+    # quantity = args["quantity"] or Decimal('1.0')
+    # observation_time = args["observation_time"] or timestamp_now
 
     timeseries = TimeSeriesCommand()
     timeseries.correlation_id = "correlationid1"
@@ -126,7 +134,7 @@ def __create_valid_timeseries_protobuf(metering_point_id, quantity, observation_
 
     point1 = Point()
     point1.position = 1
-    point1.observation_date_time = observation_time
+    point1.observation_date_time.FromDatetime(observation_date_time)
     point1.quantity.units = int(quantity)
     point1.quantity.nanos = int(quantity % 1 * 10**9)
     point1.quality = 1
@@ -145,6 +153,9 @@ def __create_valid_timeseries_protobuf(metering_point_id, quantity, observation_
 
     return timeseries
 
+
+def __get_value_if_exits(args, key, default):
+    return args[key] if args.get(key) is not None else default
 
 # Create parsed data and master data Dataframes
 @pytest.fixture(scope="session")

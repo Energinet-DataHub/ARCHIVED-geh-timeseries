@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import pytest
+import datetime
 from pyspark.sql.types import StructType
 from geh_stream.schemas import SchemaFactory, SchemaNames
 from geh_stream.streaming_utils.input_source_readers.time_series_reader import __parse_stream, __to_quantity, __get_flattened_time_series_points
@@ -45,14 +46,14 @@ def test_parse_series_from_stream(timeseries_protobuf_factory, event_hub_message
 
 def test_parse_series_point_observationDateTime_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test series point observationDateTime is parsed correctly from stream"
-    expected_observation_date_time = "2020-11-12T23:00:00Z"
+    expected_observation_date_time = datetime.datetime.strptime('2020-11-12T23:00:00.000Z', '%Y-%m-%dT%H:%M:%S.%fZ')
     time_series_protobuf = timeseries_protobuf_factory(observation_date_time=expected_observation_date_time)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
     parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
 
     first = parsed_time_series_point_stream.first()
-    assert first.series_point_observationDateTime.isoformat() + "Z" == expected_observation_date_time
+    assert first.series_point_observationDateTime.isoformat() + "Z" == expected_observation_date_time.isoformat() + "Z"
 
 
 def test_parse_series_point_quantity_0_337_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
