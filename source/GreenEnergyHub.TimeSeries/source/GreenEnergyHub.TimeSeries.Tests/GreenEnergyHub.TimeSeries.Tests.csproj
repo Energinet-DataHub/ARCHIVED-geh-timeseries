@@ -41,6 +41,7 @@ limitations under the License.
 
     <ItemGroup>
       <ProjectReference Include="..\..\..\Shared\GreenEnergyHub\source\GreenEnergyHub.TestHelpers\GreenEnergyHub.TestHelpers.csproj" />
+      <ProjectReference Include="..\..\GreenEnergyHub.TimeSeries.Benchmark\GreenEnergyHub.TimeSeries.Benchmark.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Application\GreenEnergyHub.TimeSeries.Application.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Domain\GreenEnergyHub.TimeSeries.Domain.csproj" />
       <ProjectReference Include="..\GreenEnergyHub.TimeSeries.Infrastructure\GreenEnergyHub.TimeSeries.Infrastructure.csproj" />
