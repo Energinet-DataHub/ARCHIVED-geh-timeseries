@@ -20,7 +20,8 @@ import pytest
 from pyspark import SparkConf
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, lit, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, DecimalType, IntegerType, TimestampType, BooleanType
+from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
+    DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
 import pandas as pd
 from decimal import Decimal
 from datetime import datetime
@@ -45,6 +46,47 @@ def spark():
         .builder \
         .config(conf=spark_conf) \
         .getOrCreate()
+
+
+@pytest.fixture(scope="session")
+def event_hub_message_schema():
+    "Schemas of Event Hub Message, nested json body message, and expected result Dataframe from parse function"
+    return StructType() \
+        .add("body", BinaryType(), False) \
+        .add("partition", StringType(), False) \
+        .add("offset", StringType(), False) \
+        .add("sequenceNumber", LongType(), False) \
+        .add("publisher", StringType(), False) \
+        .add("partitionKey", StringType(), False) \
+        .add("properties", StructType(), True) \
+        .add("systemProperties", StructType(), True) \
+        .add("enqueuedTime", TimestampType(), True)
+
+
+@pytest.fixture(scope="session")
+def event_hub_message_df_factory(event_hub_message_schema, spark):
+    "Create event hub message factory"
+
+    def event_hub_message_df(timeseries_protobuf):
+        "Create event hub message"
+        # Create message body using the required fields
+        binary_body_message = timeseries_protobuf.SerializeToString()
+
+        # Create event hub message
+        event_hub_message_pandas_df = pd.DataFrame({
+            "body": [binary_body_message],
+            "partition": ["1"],
+            "offset": ["offset"],
+            "sequenceNumber": [2],
+            "publisher": ["publisher"],
+            "partitionKey": ["partitionKey"],
+            "properties": [None],
+            "systemProperties": [None],
+            "enqueuedTime": [timestamp_now]})
+
+        return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
+
+    return event_hub_message_df
 
 
 # Create timestamps used in DataFrames
@@ -72,14 +114,14 @@ def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
 
 @pytest.fixture(scope="session")
 def timeseries_protobuf_factory():
-    "Valid timeseries protobuf factory"
+    "Timeseries protobuf factory"
 
-    def valid_timeseries_protobuf(**args):
-        "Create valid timeseries protobuf object"
+    def timeseries_protobuf(**args):
+        "Create timeseries protobuf object"
 
-        return __create_valid_timeseries_protobuf(args)
+        return __create_timeseries_protobuf(args)
 
-    return valid_timeseries_protobuf
+    return timeseries_protobuf
 
 
 # @pytest.fixture(scope="session")
@@ -97,8 +139,8 @@ def timeseries_protobuf_factory():
 #     return invalid_timeseries_protobuf
 
 
-def __create_valid_timeseries_protobuf(args):
-    "Create valid timeseries protobuf object"
+def __create_timeseries_protobuf(args):
+    "Create timeseries protobuf object"
 
     metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
     quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
@@ -298,15 +340,17 @@ def parsed_data_factory(spark, timeseries_protobuf_factory, event_hub_message_df
     def factory(
             metering_point_id="mepm",
             quantity=Decimal('1.0'),
-            observation_time=timestamp_now):
+            observation_date_time=timestamp_now):
 
-        time_series_protobuf = timeseries_protobuf_factory(metering_point_id, quantity, observation_time)
+        # args = dict(metering_point_id=metering_point_id, quantity=quantity, observation_date_time=observation_date_time)
+        # args = dict([(i, locals()[i]) for i in ('metering_point_id', 'quantity', 'observation_date_time')])
+
+        time_series_protobuf = timeseries_protobuf_factory(metering_point_id=metering_point_id, quantity=quantity, observation_date_time=observation_date_time)
         event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
         parsed_data = __parse_stream(event_hub_message_df)
 
         return parsed_data
-
     return factory
 
 
@@ -317,7 +361,8 @@ def enriched_data_factory(timeseries_protobuf_factory, event_hub_message_df_fact
                 metering_point_type=MeteringPointType.consumption.value,
                 settlement_method=SettlementMethod.flex.value,
                 do_fail_enrichment=False):
-        time_series_protobuf = timeseries_protobuf_factory(0, 0)
+        time_series_protobuf = timeseries_protobuf_factory(metering_point_id=metering_point_id, quantity=quantity)
+
         event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
         parsed_data = __parse_stream(event_hub_message_df)

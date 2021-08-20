@@ -16,57 +16,10 @@ import os
 import pytest
 import pandas as pd
 import time
-from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
 from pyspark.sql.functions import to_timestamp
 
 from geh_stream.protodf import schema_for, message_to_row
 from geh_stream.schemas import SchemaFactory, SchemaNames
-
-
-# Create timestamp used in DataFrames
-time_now = time.time()
-timestamp_now = pd.Timestamp(time_now, unit='s')
-
-
-@pytest.fixture(scope="session")
-def event_hub_message_schema():
-    "Schemas of Event Hub Message, nested json body message, and expected result Dataframe from parse function"
-    return StructType() \
-        .add("body", BinaryType(), False) \
-        .add("partition", StringType(), False) \
-        .add("offset", StringType(), False) \
-        .add("sequenceNumber", LongType(), False) \
-        .add("publisher", StringType(), False) \
-        .add("partitionKey", StringType(), False) \
-        .add("properties", StructType(), True) \
-        .add("systemProperties", StructType(), True) \
-        .add("enqueuedTime", TimestampType(), True)
-
-
-@pytest.fixture(scope="session")
-def event_hub_message_df_factory(event_hub_message_schema, spark):
-    "Create event hub message factory"
-
-    def event_hub_message_df(timeseries_protobuf):
-        "Create event hub message"
-        # Create message body using the required fields
-        binary_body_message = timeseries_protobuf.SerializeToString()
-
-        # Create event hub message
-        event_hub_message_pandas_df = pd.DataFrame({
-            "body": [binary_body_message],
-            "partition": ["1"],
-            "offset": ["offset"],
-            "sequenceNumber": [2],
-            "publisher": ["publisher"],
-            "partitionKey": ["partitionKey"],
-            "properties": [None],
-            "systemProperties": [None],
-            "enqueuedTime": [timestamp_now]})
-
-        return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
-
-    return event_hub_message_df
 
 
 testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"

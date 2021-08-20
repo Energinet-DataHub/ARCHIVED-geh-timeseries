@@ -11,8 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pandas as pd
 import time
+from decimal import Decimal
 from datetime import datetime, timedelta
 import pytest
 
@@ -47,21 +49,34 @@ def master_data(master_data_factory):
 
 @pytest.fixture(scope="class")
 def enriched_data_factory(master_data, parsed_data_factory):
-    def __factory(**kwargs):
-        parsed_data = parsed_data_factory(kwargs)
+    def __factory(**args):
+
+        # TODO: hvorfor bliver der parset et dictionary af et dictionary her, så __get_value_if_exits() ikke kan hive en enkelt værdi ud?
+
+        metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
+        quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
+        observation_date_time = __get_value_if_exits(args, "observation_date_time", valid_from1)
+
+        parsed_data = parsed_data_factory(metering_point_id=metering_point_id, quantity=quantity, observation_date_time=observation_date_time)
         return Enricher.enrich(parsed_data, master_data)
     return __factory
 
 
+def __get_value_if_exits(args, key, default):
+    return args[key] if args.get(key) is not None else default
+
+
 def test_valid_from_is_inclusive(enriched_data_factory):
-    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
-    print(str(enriched_data.first()))
-    assert enriched_data.first().settlementMethod == SettlementMethod.profiled.value
+    # enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=pd.Timestamp(valid_from1, unit='s'))
+    enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_from1)
+    first = enriched_data.first()
+    print(str(first))
+    assert first.series_settlementMethod == SettlementMethod.flex.value
 
 
 def test_valid_to_is_exclusive(enriched_data_factory):
     # Act
-    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_to1)
+    enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_to1)
 
     # Assert: Only one of the intervals was used in join (previously we had an error where the time series point
     # multiplied because it was matched by both the end of first interval and beginning of second interval).
@@ -69,4 +84,4 @@ def test_valid_to_is_exclusive(enriched_data_factory):
 
     # Assert: The time series point was matched with the second interval (when it matches both the end of first
     # interval and the begining of the second interval).
-    assert enriched_data.first().settlementMethod == SettlementMethod.flex.value
+    assert enriched_data.first().series_settlementMethod == SettlementMethod.flex.value

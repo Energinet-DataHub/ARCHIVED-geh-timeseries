@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pytest
 from geh_stream.dataframelib import has_column
 from geh_stream.validation import Validator
@@ -19,6 +20,11 @@ from geh_stream.validation import Validator
 @pytest.fixture(scope="module")
 def validated_data(spark, enriched_data):
     return Validator.add_validation_status_columns(enriched_data)
+
+
+@pytest.fixture(scope="module")
+def not_valid_validated_data(spark, non_enriched_data):
+    return Validator.add_validation_status_columns(non_enriched_data)
 
 
 def test_validator_drops_cols_only_needed_for_validation(enriched_data, validated_data):
@@ -30,8 +36,16 @@ def test_validator_drops_cols_only_needed_for_validation(enriched_data, validate
     assert not has_column(validated_data, "md.settlementMethod")
 
 
-def test_validator_adds_is_time_series_point_valid_col(validated_data):
+def test_validator_adds_IsTimeSeriesPointValid_col(validated_data):
     assert has_column(validated_data, "IsTimeSeriesPointValid")
+
+
+def test_validator_set_valid_IsTimeSeriesPointValid_col(validated_data):
+    assert validated_data.first().IsTimeSeriesPointValid
+
+
+def test_validator_set_invalid_IsTimeSeriesPointValid_col(not_valid_validated_data):
+    assert not not_valid_validated_data.first().IsTimeSeriesPointValid
 
 
 def test_validator_adds_vr200_col(validated_data):
