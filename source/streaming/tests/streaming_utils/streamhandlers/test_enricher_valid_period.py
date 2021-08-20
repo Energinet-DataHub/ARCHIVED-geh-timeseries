@@ -50,7 +50,7 @@ def master_data(master_data_factory):
 @pytest.fixture(scope="class")
 def enriched_data_factory(master_data, parsed_data_factory):
     def __factory(**args):
-        # TODO can we avoid exploiting dictionary?
+        # TODO can we avoid picking values from dictionary?
         metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
         quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
         observation_date_time = __get_value_if_exits(args, "observation_date_time", valid_from1)
