@@ -11,11 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from decimal import Decimal, getcontext
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, explode, udf
 from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 
-from geh_stream.schemas import SchemaFactory, quantity_type, SchemaNames
+from geh_stream.schemas import quantity_type
 from .protobuf_message_parser import ProtobufMessageParser
 from geh_stream.dataframelib import flatten_df
 
@@ -28,28 +29,24 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
         .options(**input_eh_conf) \
         .load()
 
+    return __parse_stream(raw_stream)
+
+
+def __parse_stream(raw_stream) -> DataFrame:
     print("Input stream schema:")
     raw_stream.printSchema()
 
     # Parse data from protobuf messages
-    message_schema: StructType = SchemaFactory.get_instance(SchemaNames.MessageBody)
-    parsed_stream = ProtobufMessageParser.parse(raw_stream, message_schema)  # TODO: Schema is unused
+    parsed_stream = ProtobufMessageParser.parse(raw_stream)
 
-    # Flatten structure because - in general - it's much easier to work with non-nested structures in Spark
-    flattened_stream = flatten_df(parsed_stream)
+    temp_time_series_point_stream = __get_flattened_time_series_points(parsed_stream)
 
-    # Explode time series into points - again because it's much easier to work with an also has the benefits
-    # that we can adjust names and types of the individual time series point properties
-    temp_time_series_point_stream = flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
-
-    # Adjust points to match schema SchemaFactory.message_body_schema
-    # TODO: Unit test that we end up with the expected schema
     time_series_point_stream = (temp_time_series_point_stream.select(
                                 col("document_id").alias("document_id").cast(StringType()),
                                 col("document_request_date_time_seconds").alias("document_requestDateTime").cast(TimestampType()),
                                 col("document_created_date_time_seconds").alias("document_createdDateTime").cast(TimestampType()),
                                 col("document_sender_id").alias("document_sender_id").cast(StringType()),
-                                col("document_sender_business_proces_role_number").alias("document_sender_businessProcessRole").cast(IntegerType()),
+                                col("document_sender_business_process_role_number").alias("document_sender_businessProcessRole").cast(IntegerType()),
                                 col("document_business_reason_code_number").alias("document_businessReasonCode").cast(IntegerType()),
                                 col("series_id").alias("series_id").cast(StringType()),
                                 col("series_metering_point_id").alias("series_meteringPointId").cast(StringType()),
@@ -57,7 +54,7 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
                                 col("series_settlement_method_number").alias("series_settlementMethod").cast(IntegerType()),
                                 col("series_registration_date_time_seconds").alias("series_registrationDateTime").cast(TimestampType()),
                                 col("series_product_number").alias("series_product").cast(IntegerType()),
-                                col("series_measure_unit_number").alias("series_unit").cast(IntegerType()),
+                                col("series_unit_number").alias("series_unit").cast(IntegerType()),
                                 col("series_resolution_number").alias("series_resolution").cast(IntegerType()),
                                 col("series_start_date_time_seconds").alias("series_startDateTime").cast(TimestampType()),
                                 col("series_end_date_time_seconds").alias("series_endDateTime").cast(TimestampType()),
@@ -75,18 +72,19 @@ def get_time_series_point_stream(spark: SparkSession, input_eh_conf: dict) -> Da
     return time_series_point_stream
 
 
-# TODO: Move to lib
-from decimal import Decimal, getcontext
+def __get_flattened_time_series_points(parsed_stream) -> DataFrame:
+    "Get time series points in flattened structure"
+
+    # Flatten structure because - in general - it's much easier to work with non-nested structures in Spark
+    flattened_stream = flatten_df(parsed_stream)
+
+    # Explode time series into points - again because it's much easier to work with and also has the benefits
+    # that we can adjust names and types of the individual time series point properties
+    return flattened_stream.select(col("*"), explode(col("series_points")).alias("series_point")).drop("series_points")
 
 
 def __to_quantity(units, nanos):
-    getcontext().prec = 18
-
-    return Decimal(to_int(units)) + (Decimal(to_int(nanos)) / 10**9)
-
-
-def to_int(item):
-    return 0 if item is None else item
+    return Decimal(units or 0) + (Decimal(nanos or 0) / 10**9)
 
 
 to_quantity = udf(__to_quantity, quantity_type)

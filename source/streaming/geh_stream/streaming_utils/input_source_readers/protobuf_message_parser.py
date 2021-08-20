@@ -23,25 +23,25 @@ from pyspark.sql.functions import udf, col
 from pyspark.sql import DataFrame
 from pyspark.sql.types import StructType
 
-from geh_stream.contracts.time_series_pb2 import TimeSeriesCommandContract
+from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
 
 
 def specific_message_bytes_to_row(pb_bytes):
-    msg = TimeSeriesCommandContract.FromString(pb_bytes)
-    row = message_to_row(TimeSeriesCommandContract().DESCRIPTOR, msg)
+    msg = TimeSeriesCommand.FromString(pb_bytes)
+    row = message_to_row(TimeSeriesCommand().DESCRIPTOR, msg)
     return row
 
 
-schema = schema_for(TimeSeriesCommandContract().DESCRIPTOR)
+schema = schema_for(TimeSeriesCommand().DESCRIPTOR)
 specific_message_bytes_to_row_udf = udf(specific_message_bytes_to_row, schema)
 
 
 class ProtobufMessageParser:
     @staticmethod
-    def parse(raw_data: DataFrame, message_schema: StructType) -> DataFrame:
+    def parse(raw_data: DataFrame) -> DataFrame:
         parsed_data = raw_data.withColumn("event", specific_message_bytes_to_row_udf(col("body")))
-
         parsed_data = parsed_data.select("event.*")
+
         print("Parsed stream schema:")
         parsed_data.printSchema()
 

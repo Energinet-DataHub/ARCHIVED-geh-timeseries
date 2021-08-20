@@ -11,41 +11,65 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import os
-import pandas as pd
 import pytest
-from pyspark.sql import DataFrame
+import pandas as pd
+import time
+from pyspark.sql.types import BinaryType, LongType, StringType, StructType, TimestampType
+from pyspark.sql.functions import to_timestamp
 
-from geh_stream.schemas import SchemaNames, SchemaFactory
-# import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
-
-testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
-
-
-def read_testdata_file(file_name):
-    with open(testdata_dir + file_name, "r") as f:
-        return f.read()
+from geh_stream.protodf import schema_for, message_to_row
+from geh_stream.schemas import SchemaFactory, SchemaNames
 
 
-json_date_format = "yyyy-MM-dd'T'HH:mm:ss.SSSSSSS'Z'"
+# Create timestamp used in DataFrames
+time_now = time.time()
+timestamp_now = pd.Timestamp(time_now, unit='s')
 
 
 @pytest.fixture(scope="session")
-def parsed_data_from_json_file_factory(spark):
-    """
-    Create parsed data from file in ./templates folder.
-    """
-    parsed_data_schema = SchemaFactory.get_instance(SchemaNames.Parsed)
+def event_hub_message_schema():
+    "Schemas of Event Hub Message, nested json body message, and expected result Dataframe from parse function"
+    return StructType() \
+        .add("body", BinaryType(), False) \
+        .add("partition", StringType(), False) \
+        .add("offset", StringType(), False) \
+        .add("sequenceNumber", LongType(), False) \
+        .add("publisher", StringType(), False) \
+        .add("partitionKey", StringType(), False) \
+        .add("properties", StructType(), True) \
+        .add("systemProperties", StructType(), True) \
+        .add("enqueuedTime", TimestampType(), True)
 
-    def factory(file_name) -> DataFrame:
-        json_str = read_testdata_file(file_name)
-        json_rdd = spark.sparkContext.parallelize([json_str])
-        parsed_data = spark.read.json(json_rdd,
-                                      schema=parsed_data_schema,
-                                      dateFormat=json_date_format)
-        return parsed_data
 
-    return factory
+@pytest.fixture(scope="session")
+def event_hub_message_df_factory(event_hub_message_schema, spark):
+    "Create event hub message factory"
+
+    def event_hub_message_df(timeseries_protobuf):
+        "Create event hub message"
+        # Create message body using the required fields
+        binary_body_message = timeseries_protobuf.SerializeToString()
+
+        # Create event hub message
+        event_hub_message_pandas_df = pd.DataFrame({
+            "body": [binary_body_message],
+            "partition": ["1"],
+            "offset": ["offset"],
+            "sequenceNumber": [2],
+            "publisher": ["publisher"],
+            "partitionKey": ["partitionKey"],
+            "properties": [None],
+            "systemProperties": [None],
+            "enqueuedTime": [timestamp_now]})
+
+        return spark.createDataFrame(event_hub_message_pandas_df, event_hub_message_schema)
+
+    return event_hub_message_df
+
+
+testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
 
 
 @pytest.fixture(scope="session")

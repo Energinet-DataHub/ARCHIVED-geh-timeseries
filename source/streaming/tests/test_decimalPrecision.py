@@ -11,13 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql.functions import explode, col
-from pyspark.sql import DataFrame
-from geh_stream.dataframelib import flatten_df
+
+import pytest
+from decimal import Decimal
 
 
-def denormalize_parsed_data(parsed_data: DataFrame) -> DataFrame:
-    flattened_parsed_data = flatten_df(parsed_data)
-    exploded_data = flattened_parsed_data.select(col("*"), explode(col("Series_Points")).alias("Series_Point")) \
-                                         .drop("Series_Points")
-    return flatten_df(exploded_data)
+def test_decimal_calculation():
+    expected = Decimal('12345.6789')
+
+    units = 12345
+    nanos = 678900000
+
+    returnValue = Decimal(units) + (Decimal(nanos) / 10**9)
+
+    assert returnValue == expected
+

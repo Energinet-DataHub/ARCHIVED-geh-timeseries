@@ -15,7 +15,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 
-namespace GreenEnergyHub.TimeSeries.Core
+namespace GreenEnergyHub.TimeSeries.Core.Enumeration
 {
     public static class EnumExtensions
     {

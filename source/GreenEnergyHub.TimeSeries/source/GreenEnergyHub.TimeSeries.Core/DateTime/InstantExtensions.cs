@@ -31,5 +31,10 @@ namespace GreenEnergyHub.TimeSeries.Core.DateTime
         {
             return Timestamp.FromDateTimeOffset(instant.ToDateTimeOffset());
         }
+
+        public static Instant TruncateToSeconds([NotNull] this Instant instant)
+        {
+            return Instant.FromUnixTimeSeconds(instant.ToUnixTimeSeconds());
+        }
     }
 }

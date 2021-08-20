@@ -15,65 +15,84 @@
 using System;
 using System.Linq;
 using GreenEnergyHub.Messaging.Protobuf;
-using GreenEnergyHub.TimeSeries.Contracts.Internal;
-using GreenEnergyHub.TimeSeries.Core;
 using GreenEnergyHub.TimeSeries.Core.DateTime;
-using GreenEnergyHub.TimeSeries.Domain.Notification;
+using GreenEnergyHub.TimeSeries.Core.Enumeration;
+using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
+using domain = GreenEnergyHub.TimeSeries.Domain.Notification;
+using proto = GreenEnergyHub.TimeSeries.Contracts.Internal;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Contracts.Internal.Mappers
 {
-    public class TimeSeriesCommandOutboundMapper : ProtobufOutboundMapper<TimeSeriesCommand>
+    public class TimeSeriesCommandOutboundMapper : ProtobufOutboundMapper<domain.TimeSeriesCommand>
     {
-        protected override Google.Protobuf.IMessage Convert(TimeSeriesCommand obj)
+        protected override Google.Protobuf.IMessage Convert(domain.TimeSeriesCommand obj)
         {
-            if (obj == null)
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            return ConvertTimeSeriesCommand(obj);
+        }
+
+        private static proto.TimeSeriesCommand ConvertTimeSeriesCommand(domain.TimeSeriesCommand obj)
+        {
+            return new proto.TimeSeriesCommand
             {
-                throw new ArgumentNullException(nameof(obj));
-            }
-
-            var document = obj.Document;
-            var series = obj.Series;
-
-            return new TimeSeriesCommandContract
-            {
-                Document = new DocumentContract
-                {
-                    Id = document.Id,
-                    RequestDateTime = document.RequestDateTime.ToTimestamp().TruncateToSeconds(),
-                    CreatedDateTime = document.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
-                    Sender = new MarketParticipantContract
-                    {
-                        Id = document.Sender.Id,
-                        BusinessProcesRole = document.Sender.BusinessProcessRole.Cast<BusinessProcessRoleContract>(),
-                    },
-                    BusinessReasonCode = document.BusinessReasonCode.Cast<BusinessReasonCodeContract>(),
-                },
-                Series = new SeriesContract
-                {
-                    Id = obj.Series.Id,
-                    MeteringPointId = series.MeteringPointId,
-                    MeteringPointType = series.MeteringPointType.Cast<MeteringPointTypeContract>(),
-
-                    SettlementMethod = series.SettlementMethod?.Cast<SettlementMethodContract>() ?? SettlementMethodContract.SmcNull,
-                    RegistrationDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
-                    Product = series.Product.Cast<ProductContract>(),
-                    MeasureUnit = series.Unit.Cast<MeasureUnitContract>(),
-                    Resolution = series.Resolution.Cast<ResolutionContract>(),
-                    StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
-                    EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
-                    Points =
-                    {
-                        obj.Series.Points.Select(p => new PointContract
-                        {
-                            Position = p.Position,
-                            Quality = p.Quality.Cast<QualityContract>(),
-
-                            Quantity = p.Quantity,
-                            ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),
-                        }),
-                    },
-                },
+                Document = ConvertDocument(obj.Document),
+                Series = ConvertSeries(obj.Series),
                 CorrelationId = obj.CorrelationId,
+            };
+        }
+
+        private static proto.Document ConvertDocument(Document document)
+        {
+            return new proto.Document
+            {
+                Id = document.Id,
+                RequestDateTime = document.RequestDateTime.ToTimestamp().TruncateToSeconds(),
+                CreatedDateTime = document.CreatedDateTime.ToTimestamp().TruncateToSeconds(),
+                Sender = ConvertSender(document.Sender),
+                BusinessReasonCode = document.BusinessReasonCode.Cast<proto.BusinessReasonCode>(),
+            };
+        }
+
+        private static proto.MarketParticipant ConvertSender(MarketParticipant sender)
+        {
+            return new proto.MarketParticipant
+            {
+                Id = sender.Id,
+                BusinessProcessRole = sender.BusinessProcessRole.Cast<proto.BusinessProcessRole>(),
+            };
+        }
+
+        private static proto.Series ConvertSeries(domain.Series series)
+        {
+            return new proto.Series
+            {
+                Id = series.Id,
+                MeteringPointId = series.MeteringPointId,
+                MeteringPointType = series.MeteringPointType.Cast<proto.MeteringPointType>(),
+
+                SettlementMethod = series.SettlementMethod?.Cast<proto.SettlementMethod>() ?? proto.SettlementMethod.SmNotSet,
+                RegistrationDateTime = series.RegistrationDateTime.ToTimestamp().TruncateToSeconds(),
+                Product = series.Product.Cast<proto.Product>(),
+                Unit = series.Unit.Cast<proto.MeasureUnit>(),
+                Resolution = series.Resolution.Cast<proto.Resolution>(),
+                StartDateTime = series.StartDateTime.ToTimestamp().TruncateToSeconds(),
+                EndDateTime = series.EndDateTime.ToTimestamp().TruncateToSeconds(),
+                Points =
+                {
+                    series.Points.Select(ConvertPoint),
+                },
+            };
+        }
+
+        private static proto.Point ConvertPoint(domain.Point p)
+        {
+            return new proto.Point
+            {
+                Position = p.Position,
+                Quality = p.Quality.Cast<proto.Quality>(),
+
+                Quantity = p.Quantity,
+                ObservationDateTime = p.ObservationDateTime.ToTimestamp().TruncateToSeconds(),
             };
         }
     }

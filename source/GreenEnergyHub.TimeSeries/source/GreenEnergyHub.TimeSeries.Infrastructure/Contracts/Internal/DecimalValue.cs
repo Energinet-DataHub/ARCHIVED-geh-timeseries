@@ -26,29 +26,29 @@ namespace GreenEnergyHub.TimeSeries.Contracts.Internal
     ///
     /// Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
     /// </summary>
-    public partial class DecimalValueContract
+    public partial class DecimalValue
     {
         private const decimal NanoFactor = 1_000_000_000;
 
-        private DecimalValueContract(long units, int nanos)
+        private DecimalValue(long units, int nanos)
         {
             Units = units;
             Nanos = nanos;
         }
 
-        public static implicit operator decimal([NotNull] DecimalValueContract grpcDecimal)
+        public static implicit operator decimal([NotNull] DecimalValue grpcDecimal)
         {
             return grpcDecimal.Units + (grpcDecimal.Nanos / NanoFactor);
         }
 
-        public static implicit operator DecimalValueContract(decimal value)
+        public static implicit operator DecimalValue(decimal value)
         {
             var units = decimal.ToInt64(value);
             var nanos = decimal.ToInt32((value - units) * NanoFactor);
-            return new DecimalValueContract(units, nanos);
+            return new DecimalValue(units, nanos);
         }
 
-        public static DecimalValueContract FromDecimal(decimal value)
+        public static DecimalValue FromDecimal(decimal value)
         {
             return value;
         }

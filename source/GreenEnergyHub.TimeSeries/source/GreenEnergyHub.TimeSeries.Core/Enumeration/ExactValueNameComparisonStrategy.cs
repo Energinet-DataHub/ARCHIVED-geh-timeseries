@@ -13,37 +13,15 @@
 // limitations under the License.
 
 using System;
-using GreenEnergyHub.TimeSeries.Core;
-using Xunit;
-using Xunit.Categories;
+using System.Diagnostics.CodeAnalysis;
 
-namespace GreenEnergyHub.TimeSeries.Tests.Core
+namespace GreenEnergyHub.TimeSeries.Core.Enumeration
 {
-    public enum A
+    public class ExactValueNameComparisonStrategy : IEnumValueNameComparisonStrategy
     {
-        X = 1,
-        Y = 2,
-    }
-
-    public enum B
-    {
-        X = 1,
-    }
-
-    [UnitTest]
-    public class EnumExtensionsTests
-    {
-        [Fact]
-        public void Cast_Casts_WhenTargetEnumHasValue()
+        public bool IsEquivalent([NotNull] Enum subjectValue, [NotNull] Enum comparisonValue)
         {
-            var actual = A.X.Cast<B>();
-            Assert.Equal(B.X, actual);
-        }
-
-        [Fact]
-        public void Cast_ThrowsInvalidCastException_WhenTargetEnumDoesNotHaveValue()
-        {
-            Assert.Throws<InvalidCastException>(() => A.Y.Cast<B>());
+            return subjectValue.ToString() == comparisonValue.ToString();
         }
     }
 }
