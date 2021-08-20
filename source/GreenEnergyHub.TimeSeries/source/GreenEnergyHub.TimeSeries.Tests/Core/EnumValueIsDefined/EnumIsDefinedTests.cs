@@ -12,32 +12,32 @@ namespace GreenEnergyHub.TimeSeries.Tests.Core.EnumValueIsDefined
             _logic = logic;
         }
 
-        private enum Kæledyr
+        private enum LocalPets
         {
-            Hund = 1,
-            Kat = 2,
-            Fisk = 3,
-            Surdej = 10,
+            LC_Dog = 1,
+            LC_Cat = 2,
+            LC_Fish = 3,
+            LC_Sourdough = 10,
         }
 
         [Fact]
         public void KnownEnumType()
         {
-            var actual = _logic.CheckValueIsDefined<Pets>((int)Kæledyr.Hund);
+            var actual = _logic.CheckValueIsDefined<Pets>((int)LocalPets.LC_Dog);
             Assert.True(actual);
         }
 
         [Fact]
         public void KnownEnumTypeFromCast()
         {
-            var actual = _logic.CheckValueIsDefined<Pets>((int)(Kæledyr)3);
+            var actual = _logic.CheckValueIsDefined<Pets>((int)(LocalPets)3);
             Assert.True(actual);
         }
 
         [Fact]
         public void UnknownEnumTypeFromCast()
         {
-            var actual = _logic.CheckValueIsDefined<Pets>((int)Kæledyr.Surdej);
+            var actual = _logic.CheckValueIsDefined<Pets>((int)LocalPets.LC_Sourdough);
             Assert.False(actual);
         }
     }
