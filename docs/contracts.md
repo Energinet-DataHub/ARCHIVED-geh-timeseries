@@ -22,7 +22,7 @@ Represents an accepted time series, covering both originals as well as updates.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| TimeSeriesId | string | required | A unique time series identifier |
+| TimeSeriesId | string | required | A time series identifier provided by the Market Participant. Uniqueness cannot be guaranteed |
 | MeteringPointId | string | required | A unique metering point identifier |
 | TimeSeriesStartDateTime | Timestamp | required | In UTC. The start of the time series period. The start equals the ObservationDateTime of the earliest point in the time series list |
 | TimeSeriesEndDateTime | Timestamp | required | In UTC. The end of the time series period. The end is to be considered an up to (excluding) date time which equals the end of the latest point in the time series list |
