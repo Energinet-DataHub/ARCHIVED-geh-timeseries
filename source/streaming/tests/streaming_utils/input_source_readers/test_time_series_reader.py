@@ -103,24 +103,19 @@ def test_get_flattened_time_series_points(parsed_data):
     assert "series_id" in flattened_time_series_points.columns
 
 
-def test_to_quantity():
+@pytest.mark.parametrize(
+    "units,nanos,expected",
+    [
+        pytest.param(12345, 678900000, Decimal('12345.6789'), id="Non zero units and nanos"),
+        pytest.param(0, 678900000, Decimal('0.6789'), id="Zero units and non zero nanos"),
+        pytest.param(12345, 0, Decimal('12345.0'), id="Non zero units and zero nanos"),
+        pytest.param(None, None, Decimal('0'), id="None units and None nanos"),
+        pytest.param(None, 678900000, Decimal('0.6789'), id="None units and non zero nanos"),
+        pytest.param(12345, None, Decimal('12345'), id="Non zero units and None nanos"),
+    ],
+)
+def test_to_quantity(units, nanos, expected):
     "Test to_quantity"
-    expected = Decimal('12345.6789')
-
-    units = 12345
-    nanos = 678900000
-
-    returnValue = __to_quantity(units, nanos)
-
-    assert returnValue == expected
-
-
-def test_to_quantity_with_None():
-    "Test to_quantity with None values"
-    expected = Decimal('0.0')
-
-    units = None
-    nanos = None
 
     returnValue = __to_quantity(units, nanos)
 
