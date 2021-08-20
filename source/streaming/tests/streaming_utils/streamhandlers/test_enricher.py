@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pytest
 import pandas as pd
 import time
@@ -39,19 +40,8 @@ def enriched_data(parsed_data_factory, master_data_factory):
     parsed_data2 = parsed_data_factory(metering_point_id="1", quantity=2.0, observation_date_time=timestamp_far_future)
     parsed_data3 = parsed_data_factory(metering_point_id="2", quantity=3.0, observation_date_time=timestamp_now)
 
-    # parsed_data1 = parsed_data_factory(metering_point_id="1")
-    # parsed_data2 = parsed_data_factory(metering_point_id="1")
-    # parsed_data3 = parsed_data_factory(metering_point_id="2")
-
     parsed_data = parsed_data1.union(parsed_data2).union(parsed_data3)
 
-    # parsed_data = parsed_data_factory([
-    #     dict(metering_point_id="1", quantity=1.0, observation_time=timestamp_now),
-    #     # Not matched because it's outside the master data valid period
-    #     dict(metering_point_id="1", quantity=2.0, observation_time=timestamp_far_future),
-    #     # Not matched because no master data exists for this market evalution point
-    #     dict(metering_point_id="2", quantity=3.0, observation_time=timestamp_now)
-    # ])
     master_data = master_data_factory(dict(metering_point_id="1"))
     return Enricher.enrich(parsed_data, master_data)
 

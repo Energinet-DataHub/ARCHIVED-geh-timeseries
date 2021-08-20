@@ -50,9 +50,7 @@ def master_data(master_data_factory):
 @pytest.fixture(scope="class")
 def enriched_data_factory(master_data, parsed_data_factory):
     def __factory(**args):
-
-        # TODO: hvorfor bliver der parset et dictionary af et dictionary her, så __get_value_if_exits() ikke kan hive en enkelt værdi ud?
-
+        # TODO can we avoid exploiting dictionary?
         metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
         quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
         observation_date_time = __get_value_if_exits(args, "observation_date_time", valid_from1)
@@ -67,7 +65,6 @@ def __get_value_if_exits(args, key, default):
 
 
 def test_valid_from_is_inclusive(enriched_data_factory):
-    # enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=pd.Timestamp(valid_from1, unit='s'))
     enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_from1)
     first = enriched_data.first()
     print(str(first))
