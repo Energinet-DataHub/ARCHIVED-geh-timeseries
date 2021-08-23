@@ -41,6 +41,7 @@ def __parse_stream(raw_stream) -> DataFrame:
 
     temp_time_series_point_stream = __get_flattened_time_series_points(parsed_stream)
 
+    # Explicit mapping of every used property - even though some keep their name and/or type.
     time_series_point_stream = (temp_time_series_point_stream.select(
                                 col("document_id").alias("document_id").cast(StringType()),
                                 col("document_request_date_time_seconds").alias("document_requestDateTime").cast(TimestampType()),
