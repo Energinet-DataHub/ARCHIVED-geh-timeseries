@@ -20,21 +20,15 @@ from geh_stream.streaming_utils.input_source_readers.time_series_reader import _
 from decimal import Decimal
 
 
-def test_parse_invalid_series_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
-    "Test invalid series is parsed correctly from stream"
-    expected_metering_point_id = "non-existing metering point id 123498hhkjwer8"
-    time_series_protobuf = timeseries_protobuf_factory(metering_point_id=expected_metering_point_id)
-    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
-
-    parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
-
-    first = parsed_time_series_point_stream.first()
-    assert first.series_meteringPointId == expected_metering_point_id
-
-
-def test_parse_series_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
+@pytest.mark.parametrize(
+    "expected_metering_point_id",
+    [
+        pytest.param("non-existing metering point id 123498hhkjwer8", id="Non-existing metering_point_id is streamed"),
+        pytest.param("571313180000000005", id="Existing metering_point_id is streamed"),
+    ],
+)
+def test_parse_series_from_stream(expected_metering_point_id, timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test series is parsed correctly from stream"
-    expected_metering_point_id = "571313180000000005"
     time_series_protobuf = timeseries_protobuf_factory(metering_point_id=expected_metering_point_id)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
@@ -56,33 +50,16 @@ def test_parse_series_point_observationDateTime_from_stream(timeseries_protobuf_
     assert first.series_point_observationDateTime.isoformat() + "Z" == expected_observation_date_time.isoformat() + "Z"
 
 
-def test_parse_series_point_quantity_0_337_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
+@pytest.mark.parametrize(
+    "expected_quantity",
+    [
+        pytest.param(Decimal('0.337'), id="Zero units and non zero nanos"),
+        pytest.param(Decimal('2.000'), id="Non-zero units and zero nanos"),
+        pytest.param(Decimal('3.100'), id="Non zero units and non zero nanos"),
+    ],
+)
+def test_parse_series_point_quantity_from_stream(expected_quantity, timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test series point quantity is parsed correctly from stream"
-    expected_quantity = Decimal('0.337')
-    time_series_protobuf = timeseries_protobuf_factory(quantity=expected_quantity)
-    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
-
-    parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
-
-    first = parsed_time_series_point_stream.first()
-    assert first.series_point_quantity == expected_quantity
-
-
-def test_parse_series_point_quantity_2_000_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
-    "Test series point quantity is parsed correctly from stream"
-    expected_quantity = Decimal('2.000')
-    time_series_protobuf = timeseries_protobuf_factory(quantity=expected_quantity)
-    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
-
-    parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
-
-    first = parsed_time_series_point_stream.first()
-    assert first.series_point_quantity == expected_quantity
-
-
-def test_parse_series_point_quantity_3_100_from_stream(timeseries_protobuf_factory, event_hub_message_df_factory):
-    "Test series point quantity is parsed correctly from stream"
-    expected_quantity = Decimal('3.100')
     time_series_protobuf = timeseries_protobuf_factory(quantity=expected_quantity)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
 
