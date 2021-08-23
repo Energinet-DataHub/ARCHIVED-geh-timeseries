@@ -13,10 +13,8 @@
 # limitations under the License.
 
 """
-TODO
-
-This file is from https://raw.githubusercontent.com/aroch/protobuf-dataframe/ and should be
-pushed back with a pull-request when improved to satisfy the needs in geh-timeseries.
+TODO: This file is from https://raw.githubusercontent.com/aroch/protobuf-dataframe/ and should be
+pushed back to its original repo with a pull-request when improved to satisfy the needs in geh-timeseries.
 """
 
 from collections.abc import Mapping

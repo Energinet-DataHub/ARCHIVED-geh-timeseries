@@ -16,7 +16,8 @@ import pytest
 import datetime
 from pyspark.sql.types import StructType
 from geh_stream.schemas import SchemaFactory, SchemaNames
-from geh_stream.streaming_utils.input_source_readers.time_series_reader import __parse_stream, __to_quantity, __get_flattened_time_series_points
+from geh_stream.streaming_utils.input_source_readers.time_series_reader import \
+    __parse_stream, __to_quantity, __get_flattened_time_series_points
 from decimal import Decimal
 
 
@@ -27,7 +28,8 @@ from decimal import Decimal
         pytest.param("571313180000000005", id="Existing metering_point_id is streamed"),
     ],
 )
-def test_parse_series_from_stream(expected_metering_point_id, timeseries_protobuf_factory, event_hub_message_df_factory):
+def test_parse_series_metering_point_id_from_stream(
+        expected_metering_point_id, timeseries_protobuf_factory, event_hub_message_df_factory):
     "Test series is parsed correctly from stream"
     time_series_protobuf = timeseries_protobuf_factory(metering_point_id=expected_metering_point_id)
     event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)

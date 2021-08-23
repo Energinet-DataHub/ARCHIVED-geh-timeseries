@@ -82,7 +82,6 @@ enum BusinessReasonCode {
   BR_PERIODIC_FLEX_METERING = 4;
 }
 
-// TODO: The same options for sender and receiver?
 enum BusinessProcessRole {
   BPR_UNKNOWN = 0;
   BPR_METERED_DATA_RESPONSIBLE = 4;
@@ -141,7 +140,7 @@ enum SettlementMethod {
   SM_PROFILED = 1;
   SM_NON_PROFILED = 2;
   SM_FLEX = 3;
-  // Settlment method is not specified
+  // Settlement method is not specified
   SM_NOT_SET = 999;
 }
 
