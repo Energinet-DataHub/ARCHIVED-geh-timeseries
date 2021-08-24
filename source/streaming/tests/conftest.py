@@ -50,7 +50,7 @@ def spark():
 
 @pytest.fixture(scope="session")
 def event_hub_message_schema():
-    "Schemas of Event Hub Message, nested json body message, and expected result Dataframe from parse function"
+    "Schemas of Event Hub Message, nested protobuf body message, and expected result Dataframe from parse function"
     return StructType() \
         .add("body", BinaryType(), False) \
         .add("partition", StringType(), False) \
@@ -101,7 +101,6 @@ timestamp_past = pd.Timestamp(time_past, unit='s')
 @pytest.fixture(scope="session")
 def master_schema():
     return SchemaFactory.get_instance(SchemaNames.Master)
-
 
 @pytest.fixture(scope="session")
 def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):

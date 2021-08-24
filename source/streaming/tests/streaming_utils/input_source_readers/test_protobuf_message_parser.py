@@ -19,7 +19,7 @@ from geh_stream.protodf import schema_for
 from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
 
 
-def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
+def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory, data_parsed_from_protobuf_schema):
     "Test Parse data from protobuf messages"
     metering_point_id = "571313180000000005"
     time_series_protobuf = timeseries_protobuf_factory(metering_point_id=metering_point_id)
@@ -27,13 +27,13 @@ def test_parse_data(timeseries_protobuf_factory, event_hub_message_df_factory):
 
     parsed_data = ProtobufMessageParser.parse(event_hub_message_df)
 
-    assert "correlation_id" in parsed_data.columns
-    assert "document" in parsed_data.columns
-    assert "series" in parsed_data.columns
-    assert "points:" in parsed_data.schema.simpleString()
-
     first_series = parsed_data.first().series
     assert first_series.metering_point_id == metering_point_id
+
+    parsed_data_schema = str(parsed_data.schema)
+    expected_schema = str(data_parsed_from_protobuf_schema)
+
+    assert parsed_data_schema == expected_schema
 
 
 def test_parse_event_hub_message_returns_correct_schema(parsed_data):

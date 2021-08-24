@@ -42,3 +42,8 @@ def master_data(spark):
 
     master_data = spark.createDataFrame(master_data_pd, schema=master_data_schema)
     return master_data
+
+
+@pytest.fixture(scope="session")
+def data_parsed_from_protobuf_schema():
+    return SchemaFactory.get_instance(SchemaNames.ParsedProtobuf)

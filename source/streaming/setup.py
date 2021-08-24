@@ -24,7 +24,7 @@ def generate_proto_code():
     python_out = "geh_stream/contracts/"
 
     os.makedirs(python_out, exist_ok=True)
-    check_call(["protoc"] + ["time_series.proto"] + ["--python_out", python_out, "--proto_path", proto_path])
+    check_call(["protoc"] + ["time_series_command.proto"] + ["--python_out", python_out, "--proto_path", proto_path])
 
 
 class CustomDevelopCommand(develop):

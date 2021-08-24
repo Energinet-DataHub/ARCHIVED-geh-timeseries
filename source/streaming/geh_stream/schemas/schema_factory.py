@@ -14,7 +14,7 @@
 import copy
 from pyspark.sql import DataFrame, SparkSession
 from pyspark.sql.functions import col, from_json
-from pyspark.sql.types import IntegerType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
+from pyspark.sql.types import IntegerType, LongType, StringType, StructType, StructField, TimestampType, DecimalType, ArrayType
 from .schema_names import SchemaNames
 
 
@@ -49,6 +49,79 @@ class SchemaFactory:
         .add("series_point_quality", StringType(), True) \
         .add("correlationId", StringType(), False)
 
+    parsed_protobuf_schema: StructType = StructType() \
+        .add("correlation_id", StringType(), True) \
+        .add("document", StructType(StructType()
+            .add("business_reason_code", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)
+            .add("created_date_time", StructType(StructType()
+                .add("nanos", IntegerType(), True)
+                .add("seconds", LongType(), True)
+            ), True)
+            .add("id", StringType(), True)
+            .add("request_date_time", StructType(StructType()
+                .add("nanos", IntegerType(), True)
+                .add("seconds", LongType(), True)
+            ), True)
+            .add("sender", StructType(StructType()
+                .add("business_process_role", StructType(StructType()
+                    .add("name", StringType(), True)
+                    .add("number", IntegerType(), True)
+                ), True)
+                .add("id", StringType(), True)
+            ), True)), True) \
+        .add("series", StructType(StructType()
+            .add("end_date_time", StructType(StructType()
+                .add("nanos", IntegerType(), True)
+                .add("seconds", LongType(), True)
+            ), True)
+            .add("id", StringType(), True)
+            .add("metering_point_id", StringType(), True)
+            .add("metering_point_type", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)
+            .add("points", ArrayType(StructType()
+                .add("observation_date_time", StructType(StructType()
+                    .add("nanos", IntegerType(), True)
+                    .add("seconds", LongType(), True)
+                ), True)
+                .add("position", IntegerType(), True)
+                .add("quality", StructType(StructType()
+                    .add("name", StringType(), True)
+                    .add("number", IntegerType(), True)
+                ), True)
+                .add("quantity", StructType(StructType()
+                    .add("nanos", IntegerType(), True)
+                    .add("units", LongType(), True)
+                ), True), True))
+            .add("product", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)
+            .add("registration_date_time", StructType(StructType()
+                .add("nanos", IntegerType(), True)
+                .add("seconds", LongType(), True)
+            ), True)
+            .add("resolution", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)
+            .add("settlement_method", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)
+            .add("start_date_time", StructType(StructType()
+                .add("nanos", IntegerType(), True)
+                .add("seconds", LongType(), True)
+            ), True)
+            .add("unit", StructType(StructType()
+                .add("name", StringType(), True)
+                .add("number", IntegerType(), True)
+            ), True)), True)
+
     # For right now, this is the simplest solution for getting master/parsed data
     # This should be improved
     @staticmethod
@@ -57,5 +130,7 @@ class SchemaFactory:
             return SchemaFactory.master_schema
         elif schema_name is SchemaNames.Parquet:
             return SchemaFactory.parquet_schema
+        elif schema_name is SchemaNames.ParsedProtobuf:
+            return SchemaFactory.parsed_protobuf_schema
         else:
             return None
