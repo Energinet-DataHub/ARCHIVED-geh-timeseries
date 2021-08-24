@@ -1,0 +1,80 @@
+/* Copyright 2020 Energinet DataHub A/S
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License2");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option csharp_namespace = "GreenEnergyHub.TimeSeries.Contracts.Integration";
+
+/* Represents an accepted time series, covering both originals as well as updates. */
+message TimeSeriesAccepted {
+
+    /* A time series identifier provided by the Market Participant. Uniqueness cannot be guaranteed. */
+  string time_series_id = 1;
+
+  /* A unique metering point identifier. */
+  string metering_point_id = 2;
+
+  /* In UTC. The start of the time series period. The start equals the ObservationDateTime of the 
+   * earliest point in the time series list.
+   */
+  google.protobuf.Timestamp time_series_start_date_time = 3;
+  
+  /* In UTC. The end of the time series period. The end is to be considered an up to (excluding)
+   * date time which equals the end of the latest point in the time series list.
+   */
+  google.protobuf.Timestamp time_series_end_date_time = 4;
+
+  /* In UTC. The date and time of a time series point. */
+  google.protobuf.Timestamp observation_date_time = 5;
+
+  /* Quantity of a specific type of energy. Note: 3 decimals for K3 (kVArh) and KWH (kWh) and KWT (kW)
+   * and TNE (Tonne), 6 decimals for MAW (MW) and MWH (MWh) and Z03 (MVAr).
+   */
+  DecimalValue quantity = 6;
+
+  /* Indicates the quality of a specific quantity in a time series, e.g. estimated, measured, etc. */
+  Quality quality = 7;
+}
+
+/* ProtoBuf doesn't support decimal.
+ * This implementation is inspired by https://docs.microsoft.com/en-us/aspnet/core/grpc/protobuf?view=aspnetcore-5.0#decimals.
+ * The type is a candidate for separating out into a reusable package. This is however not (yet) done
+ * due to challenges with multi-file contracts in PySpark.
+ *
+ * Example: 12345.6789 -> { units = 12345, nanos = 678900000 }
+*/
+message DecimalValue {
+
+  /* Whole units part of the amount */
+  int64 units = 1;
+
+  /* Nano units of the amount (10^-9). Must be same sign as units */
+  sfixed32 nanos = 2;
+}
+
+/* The quality of a specific quantity in a time series. */
+enum Quality {
+  Q_MEASURED = 0;
+  Q_ESTIMATED = 1;
+  Q_QUANTITY_MISSING = 2;
+}
+ 
+/* The quality of a specific quantity in a time series. */
+enum Resolution {
+  R_QUARTER_OF_HOUR = 0;
+  R_HOUR = 1;
+}
