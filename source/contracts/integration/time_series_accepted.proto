@@ -19,8 +19,17 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "GreenEnergyHub.TimeSeries.Contracts.Integration";
 
-/* Represents an accepted time series, covering both originals as well as updates. */
+/* Represents an accepted time series, covering both originals as well as updates.
+ * A denormalized model resulting in redundant data in observations has been
+ * agreed with the geh-aggregations domain product team in order to simplify
+ * the processing when receiving the event.
+ */
 message TimeSeriesAccepted {
+  repeated Observation observations = 1;
+}
+
+/* Represents an observation from a time series. A time series can be constituted by as little as a single observation. */
+message Observation {
 
     /* A time series identifier provided by the Market Participant. Uniqueness cannot be guaranteed. */
   string time_series_id = 1;
