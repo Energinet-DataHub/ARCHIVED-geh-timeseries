@@ -50,11 +50,5 @@ namespace GreenEnergyHub.TimeSeries.Tests.Application.Handlers
             Assert.NotNull(result);
             Assert.True(result.IsSucceeded);
         }
-
-        [Fact]
-        public void NoGoodSir()
-        {
-            Assert.True(false);
-        }
     }
 }
