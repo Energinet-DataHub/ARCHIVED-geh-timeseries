@@ -30,25 +30,6 @@ class SchemaFactory:
         .add("meteringPointType", StringType(), False) \
         .add("settlementMethod", IntegerType(), False)
 
-    # TODO: This doesn't seem to be in use as errors in the schema doesn't seem to break anything
-    parquet_schema: StructType = StructType() \
-        .add("document_id", StringType(), False) \
-        .add("document_createdDateTime", TimestampType(), False) \
-        .add("document_sender_id", StringType(), False) \
-        .add("document_businessReasonCode", StringType(), False) \
-        .add("document_sender_businessProcessRole", StringType(), False) \
-        .add("series_id", StringType(), False) \
-        .add("series_meteringPointId", StringType(), False) \
-        .add("series_meteringPointType", StringType(), False) \
-        .add("series_product", StringType(), False) \
-        .add("series_unit", StringType(), False) \
-        .add("series_settlementMethod", StringType(), True) \
-        .add("series_point_position", IntegerType(), True) \
-        .add("series_point_observationDateTime", TimestampType(), False) \
-        .add("series_point_quantity", quantity_type, True) \
-        .add("series_point_quality", StringType(), True) \
-        .add("correlationId", StringType(), False)
-
     parsed_protobuf_schema: StructType = StructType() \
         .add("correlation_id", StringType(), True) \
         .add("document", StructType(StructType()
@@ -122,15 +103,38 @@ class SchemaFactory:
                 .add("number", IntegerType(), True)
             ), True)), True)
 
+    time_series_points_schema: StructType = StructType() \
+        .add("document_id", StringType(), True) \
+        .add("document_requestDateTime", TimestampType(), True) \
+        .add("document_createdDateTime", TimestampType(), True) \
+        .add("document_sender_id", StringType(), True) \
+        .add("document_sender_businessProcessRole", IntegerType(), True) \
+        .add("document_businessReasonCode", IntegerType(), True) \
+        .add("series_id", StringType(), True) \
+        .add("series_meteringPointId", StringType(), True) \
+        .add("series_meteringPointType", IntegerType(), True) \
+        .add("series_settlementMethod", IntegerType(), True) \
+        .add("series_registrationDateTime", TimestampType(), True) \
+        .add("series_product", IntegerType(), True) \
+        .add("series_unit", IntegerType(), True) \
+        .add("series_resolution", IntegerType(), True) \
+        .add("series_startDateTime", TimestampType(), True) \
+        .add("series_endDateTime", TimestampType(), True) \
+        .add("series_point_position", IntegerType(), True) \
+        .add("series_point_observationDateTime", TimestampType(), True) \
+        .add("series_point_quantity", quantity_type, True) \
+        .add("series_point_quality", IntegerType(), True) \
+        .add("correlationId", StringType(), True)
+
     # For right now, this is the simplest solution for getting master/parsed data
     # This should be improved
     @staticmethod
     def get_instance(schema_name: SchemaNames):
         if schema_name is SchemaNames.Master:
             return SchemaFactory.master_schema
-        elif schema_name is SchemaNames.Parquet:
-            return SchemaFactory.parquet_schema
         elif schema_name is SchemaNames.ParsedProtobuf:
             return SchemaFactory.parsed_protobuf_schema
+        elif schema_name is SchemaNames.TimeSeriesPoints:
+            return SchemaFactory.time_series_points_schema
         else:
             return None

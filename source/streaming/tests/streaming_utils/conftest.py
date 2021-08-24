@@ -47,3 +47,8 @@ def master_data(spark):
 @pytest.fixture(scope="session")
 def data_parsed_from_protobuf_schema():
     return SchemaFactory.get_instance(SchemaNames.ParsedProtobuf)
+
+
+@pytest.fixture(scope="session")
+def time_series_points_schema():
+    return SchemaFactory.get_instance(SchemaNames.TimeSeriesPoints)

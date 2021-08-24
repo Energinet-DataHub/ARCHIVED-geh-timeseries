@@ -16,5 +16,5 @@ import enum
 
 class SchemaNames(enum.Enum):
     Master = 1   # the schema of the Master data
-    Parquet = 2  # the schema of the enriched time series data stored in parquet format
-    ParsedProtobuf = 3  # the schema of the data parsed from protobuf
+    ParsedProtobuf = 2  # the schema of the data parsed from protobuf
+    TimeSeriesPoints = 3  # the schema of streamed time series points
