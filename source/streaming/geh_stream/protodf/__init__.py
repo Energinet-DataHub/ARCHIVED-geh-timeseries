@@ -103,4 +103,4 @@ def __enum_to_row_data(field_descriptor, data):
         enum_value = field_descriptor.enum_type.values_by_number[data]
         return {"name": enum_value.name, "number": enum_value.number}
     except KeyError:
-        raise Exception("Invalid number " + str(data) + " for enum '" + field_descriptor.enum_type.full_name + "'")
+        raise ValueError("Invalid number " + str(data) + " for enum '" + field_descriptor.enum_type.full_name + "'")
