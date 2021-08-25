@@ -118,17 +118,13 @@ def timeseries_protobuf_factory():
     def timeseries_protobuf(**args):
         "Create timeseries protobuf object"
 
-        return __create_timeseries_protobuf(args)
+        return __create_timeseries_protobuf(**args)
 
     return timeseries_protobuf
 
 
-def __create_timeseries_protobuf(args):
+def __create_timeseries_protobuf(metering_point_id="mepm", quantity=Decimal('1.0'), observation_date_time=timestamp_now):
     "Create timeseries protobuf object"
-
-    metering_point_id = __get_value_if_exits(args, "metering_point_id", "mepm")
-    quantity = __get_value_if_exits(args, "quantity", Decimal('1.0'))
-    observation_date_time = __get_value_if_exits(args, "observation_date_time", timestamp_now)
 
     timeseries = TimeSeriesCommand()
     timeseries.correlation_id = "correlationid1"
@@ -167,9 +163,6 @@ def __create_timeseries_protobuf(args):
 
     return timeseries
 
-
-def __get_value_if_exits(args, key, default):
-    return args[key] if args.get(key) is not None else default
 
 # Create parsed data and master data Dataframes
 @pytest.fixture(scope="session")
