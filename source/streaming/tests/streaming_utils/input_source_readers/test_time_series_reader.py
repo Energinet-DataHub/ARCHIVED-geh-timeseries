@@ -110,6 +110,6 @@ def test_get_flattened_time_series_points(parsed_data):
 def test_to_quantity(units, nanos, expected):
     "Test to_quantity"
 
-    returnValue = __to_quantity(units, nanos)
+    return_value = __to_quantity(units, nanos)
 
-    assert returnValue == expected
+    assert return_value == expected

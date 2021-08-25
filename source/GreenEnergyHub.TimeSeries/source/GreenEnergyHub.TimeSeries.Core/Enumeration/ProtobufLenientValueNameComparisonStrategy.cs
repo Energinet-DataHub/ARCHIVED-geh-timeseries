@@ -48,6 +48,7 @@ namespace GreenEnergyHub.TimeSeries.Core.Enumeration
 
         private static string GetStringWithoutPrefix(string s)
         {
+            // Separate individual words for each Uppercase in string
             var uppercaseWords = Regex.Matches(s, @"([A-Z][a-z0-9]*)")
                 .Cast<Match>()
                 .Select(m => m.Value).ToList();

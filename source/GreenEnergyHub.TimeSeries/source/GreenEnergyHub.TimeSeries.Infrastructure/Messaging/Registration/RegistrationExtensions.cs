@@ -17,7 +17,7 @@ using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
-using proto=GreenEnergyHub.TimeSeries.Contracts.Internal;
+using proto = GreenEnergyHub.TimeSeries.Contracts.Internal;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 {

@@ -102,6 +102,7 @@ timestamp_past = pd.Timestamp(time_past, unit='s')
 def master_schema():
     return SchemaFactory.get_instance(SchemaNames.Master)
 
+
 @pytest.fixture(scope="session")
 def parsed_data(timeseries_protobuf_factory, event_hub_message_df_factory):
     "Parse data"
