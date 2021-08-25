@@ -24,7 +24,7 @@ from geh_stream.streaming_utils.streamhandlers import Enricher
 
 def __create_time_stamp(offset_datetime, minutes_offset: int):
     new_time = offset_datetime + timedelta(minutes=minutes_offset)
-    return pd.Timestamp(new_time, unit='s')
+    return pd.Timestamp(new_time, unit='s').floor(freq='S')
 
 
 offset_time = datetime.now()
@@ -49,9 +49,10 @@ def master_data(master_data_factory):
 
 @pytest.fixture(scope="class")
 def enriched_data_factory(master_data, parsed_data_factory):
-    def __factory(metering_point_id="mepm", quantity=Decimal('1.0'), observation_date_time=valid_from1):
-        parsed_data = parsed_data_factory(metering_point_id=metering_point_id, quantity=quantity, observation_date_time=observation_date_time)
-        return Enricher.enrich(parsed_data, master_data)
+    def __factory(**args):
+        parsed_data = parsed_data_factory(**args)
+        joined = Enricher.enrich(parsed_data, master_data)
+        return joined
     return __factory
 
 
@@ -59,7 +60,7 @@ def test_valid_from_is_inclusive(enriched_data_factory):
     enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_from1)
     first = enriched_data.first()
     print(str(first))
-    assert first.series_settlementMethod == SettlementMethod.flex.value
+    assert first.settlementMethod == SettlementMethod.profiled.value
 
 
 def test_valid_to_is_exclusive(enriched_data_factory):
@@ -72,4 +73,4 @@ def test_valid_to_is_exclusive(enriched_data_factory):
 
     # Assert: The time series point was matched with the second interval (when it matches both the end of first
     # interval and the begining of the second interval).
-    assert enriched_data.first().series_settlementMethod == SettlementMethod.flex.value
+    assert enriched_data.first().settlementMethod == SettlementMethod.flex.value
