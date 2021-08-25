@@ -38,9 +38,3 @@ def test_parse_data_return_dataframe_with_correct_schema(timeseries_protobuf_fac
     parsed_data = ProtobufMessageParser.parse(event_hub_message_df)
 
     assert str(parsed_data.schema) == str(data_parsed_from_protobuf_schema)
-
-
-def test_parse_event_hub_message_returns_correct_schema(parsed_data):
-    "Check that resulting DataFrame has expected schema"
-    schema = schema_for(TimeSeriesCommand().DESCRIPTOR)
-    assert str(parsed_data.schema) == str(schema)
