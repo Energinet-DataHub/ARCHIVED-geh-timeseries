@@ -11,20 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pandas as pd
 import time
+from decimal import Decimal
 from datetime import datetime, timedelta
 import pytest
 
 from geh_stream.codelists import SettlementMethod
-from geh_stream.streaming_utils import parse_enrich_and_validate_time_series_as_points
 from geh_stream.streaming_utils.streamhandlers import Enricher
-from geh_stream.streaming_utils.streamhandlers import denormalize_parsed_data
 
 
 def __create_time_stamp(offset_datetime, minutes_offset: int):
     new_time = offset_datetime + timedelta(minutes=minutes_offset)
-    return pd.Timestamp(new_time, unit='s')
+    return pd.Timestamp(new_time, unit='s').floor(freq='S')
 
 
 offset_time = datetime.now()
@@ -49,22 +49,23 @@ def master_data(master_data_factory):
 
 @pytest.fixture(scope="class")
 def enriched_data_factory(master_data, parsed_data_factory):
-    def __factory(**kwargs):
-        parsed_data = parsed_data_factory(kwargs)
-        denormalized_parsed_data = denormalize_parsed_data(parsed_data)
-        return Enricher.enrich(denormalized_parsed_data, master_data)
+    def __factory(**args):
+        parsed_data = parsed_data_factory(**args)
+        joined = Enricher.enrich(parsed_data, master_data)
+        return joined
     return __factory
 
 
 def test_valid_from_is_inclusive(enriched_data_factory):
-    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_from1)
-    print(str(enriched_data.first()))
-    assert enriched_data.first().settlementMethod == SettlementMethod.profiled.value
+    enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_from1)
+    first = enriched_data.first()
+    print(str(first))
+    assert first.settlementMethod == SettlementMethod.profiled.value
 
 
 def test_valid_to_is_exclusive(enriched_data_factory):
     # Act
-    enriched_data = enriched_data_factory(metering_point_id="1", observation_time=valid_to1)
+    enriched_data = enriched_data_factory(metering_point_id='1', observation_date_time=valid_to1)
 
     # Assert: Only one of the intervals was used in join (previously we had an error where the time series point
     # multiplied because it was matched by both the end of first interval and beginning of second interval).

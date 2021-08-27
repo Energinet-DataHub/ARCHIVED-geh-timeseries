@@ -13,10 +13,11 @@
 // limitations under the License.
 
 using GreenEnergyHub.Json;
+using GreenEnergyHub.Messaging.Protobuf;
 using GreenEnergyHub.Messaging.Transport;
-using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization;
 using GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Commands;
 using Microsoft.Extensions.DependencyInjection;
+using proto = GreenEnergyHub.TimeSeries.Contracts.Internal;
 
 namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
 {
@@ -26,10 +27,9 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
         {
             services.AddScoped<ICorrelationContext, CorrelationContext>();
             services.AddScoped<MessageExtractor>();
-            services.AddScoped<MessageSerializer, JsonMessageSerializer>();
-            services.AddScoped<IJsonOutboundMapperFactory, DefaultJsonMapperFactory>();
             services.AddScoped<MessageDeserializer, TimeSeriesCommandDeserializer>();
-            services.AddSingleton<IJsonSerializer, GreenEnergyHub.TimeSeries.Core.Json.JsonSerializer>();
+            services.SendProtobuf<proto.TimeSeriesCommand>();
+            services.AddSingleton<IJsonSerializer, Core.Json.JsonSerializer>();
 
             return new MessagingRegistrator(services);
         }

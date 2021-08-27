@@ -15,7 +15,7 @@ Follow this guide to set up your Time Series streaming development environment:
     * Remote - Containers
     * GitLens
     * indent-rainbow
-    * Python (with Jupyter and Pylance)
+    * Python (with Jupyter and Pylance) by Microsoft
     * vscode-icons or Material Icon Theme
     * Test Explorer UI
 * Setup your environment:

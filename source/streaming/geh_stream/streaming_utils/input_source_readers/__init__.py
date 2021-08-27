@@ -14,4 +14,4 @@
 
 # The available input source reader methods
 from .masterdata_reader import read_master_data_from_csv
-from .time_series_reader import read_time_series_streaming_data
+from .time_series_reader import get_time_series_point_stream

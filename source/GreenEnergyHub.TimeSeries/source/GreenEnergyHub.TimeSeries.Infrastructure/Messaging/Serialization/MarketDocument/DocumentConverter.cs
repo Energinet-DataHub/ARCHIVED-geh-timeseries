@@ -83,8 +83,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.Marke
                 }
                 else if (reader.Is(CimDocumentConverterConstants.Type, ns))
                 {
-                    var content = await reader.ReadElementContentAsStringAsync().ConfigureAwait(false);
-                    document.Type = DocumentTypeMapper.Map(content);
+                    // We do not actually use this field, but we need to handle it non-the-less
+                    continue;
                 }
                 else if (reader.Is(CimDocumentConverterConstants.BusinessReasonCode, ns))
                 {

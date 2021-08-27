@@ -30,9 +30,9 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
     {
         [Theory]
         [InlineAutoMoqData]
-        public async Task WriteAsync_WhenCalled_CallsKafkaDispatcher(
-            [Frozen] [NotNull] Mock<IKafkaDispatcher> dispatcher,
-            [Frozen] [NotNull] Mock<IKafkaDispatcher<IOutboundMessage>> dispatcherContainer,
+        public async Task WriteAsync_WhenCalled_CallsKafkaBinaryDispatcher(
+            [Frozen] [NotNull] Mock<IKafkaBinaryDispatcher> dispatcher,
+            [Frozen] [NotNull] Mock<IKafkaBinaryDispatcher<IOutboundMessage>> dispatcherContainer,
             [NotNull] string topic,
             [NotNull] byte[] data)
         {
@@ -51,10 +51,10 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
             dispatcher
                 .Setup(
                     d => d.DispatchAsync(
-                        It.IsAny<string>(),
+                        It.IsAny<byte[]>(),
                         It.IsAny<string>()))
                 .Returns(Task.CompletedTask)
-                .Callback<string, string>(
+                .Callback<byte[], string>(
                     (_, t) => calledTopic = t);
 
             var sut = new TestableEventHubChannel<IOutboundMessage>(dispatcherContainer.Object);

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System;
-using System.Diagnostics;
 using GreenEnergyHub.Iso8601;
 using GreenEnergyHub.Messaging.Transport;
 using GreenEnergyHub.TimeSeries.Application.Handlers;

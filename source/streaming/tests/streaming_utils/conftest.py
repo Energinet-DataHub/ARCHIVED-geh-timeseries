@@ -11,38 +11,18 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-import os
-import pandas as pd
-import pytest
-from pyspark.sql import DataFrame
 
-from geh_stream.schemas import SchemaNames, SchemaFactory
-import geh_stream.streaming_utils.input_source_readers.event_hub_parser as eventhub
+import os
+import pytest
+import pandas as pd
+import time
+from pyspark.sql.functions import to_timestamp
+
+from geh_stream.protodf import schema_for, message_to_row
+from geh_stream.schemas import SchemaFactory, SchemaNames
+
 
 testdata_dir = os.path.dirname(os.path.realpath(__file__)) + "/testdata/"
-
-
-def read_testdata_file(file_name):
-    with open(testdata_dir + file_name, "r") as f:
-        return f.read()
-
-
-@pytest.fixture(scope="session")
-def parsed_data_from_json_file_factory(spark):
-    """
-    Create parsed data from file in ./templates folder.
-    """
-    parsed_data_schema = SchemaFactory.get_instance(SchemaNames.Parsed)
-
-    def factory(file_name) -> DataFrame:
-        json_str = read_testdata_file(file_name)
-        json_rdd = spark.sparkContext.parallelize([json_str])
-        parsed_data = spark.read.json(json_rdd,
-                                      schema=parsed_data_schema,
-                                      dateFormat=eventhub.json_date_format)
-        return parsed_data
-
-    return factory
 
 
 @pytest.fixture(scope="session")
@@ -62,3 +42,13 @@ def master_data(spark):
 
     master_data = spark.createDataFrame(master_data_pd, schema=master_data_schema)
     return master_data
+
+
+@pytest.fixture(scope="session")
+def data_parsed_from_protobuf_schema():
+    return SchemaFactory.get_instance(SchemaNames.ParsedProtobuf)
+
+
+@pytest.fixture(scope="session")
+def time_series_points_schema():
+    return SchemaFactory.get_instance(SchemaNames.TimeSeriesPoints)

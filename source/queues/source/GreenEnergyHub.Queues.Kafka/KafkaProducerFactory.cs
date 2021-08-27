@@ -42,5 +42,22 @@ namespace GreenEnergyHub.Queues.Kafka
 
             return new ProducerBuilder<Null, string>(producerConfig).Build();
         }
+
+        public IProducer<Null, byte[]> BuildBinary()
+        {
+            var producerConfig = new ProducerConfig()
+            {
+                BootstrapServers = _kafkaConfiguration.BoostrapServers,
+                SecurityProtocol = Enum.Parse<SecurityProtocol>(_kafkaConfiguration.SecurityProtocol, true),
+                SaslMechanism = Enum.Parse<SaslMechanism>(_kafkaConfiguration.SaslMechanism, true),
+                SaslUsername = _kafkaConfiguration.SaslUsername,
+                SaslPassword = _kafkaConfiguration.SaslPassword,
+                MessageSendMaxRetries = _kafkaConfiguration.MessageSendMaxRetries,
+                MessageTimeoutMs = _kafkaConfiguration.MessageTimeoutMs,
+                SslCaLocation = _kafkaConfiguration.SslCaLocation,
+            };
+
+            return new ProducerBuilder<Null, byte[]>(producerConfig).Build();
+        }
     }
 }

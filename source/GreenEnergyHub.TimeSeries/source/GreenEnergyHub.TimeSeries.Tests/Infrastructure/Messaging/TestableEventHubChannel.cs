@@ -24,8 +24,8 @@ namespace GreenEnergyHub.TimeSeries.Tests.Infrastructure.Messaging
         where TOutboundMessage : IOutboundMessage
     {
         public TestableEventHubChannel(
-            [NotNull] IKafkaDispatcher<TOutboundMessage> dispatcher)
-            : base(dispatcher)
+            [NotNull] IKafkaBinaryDispatcher<TOutboundMessage> binaryDispatcher)
+            : base(binaryDispatcher)
         {
         }
 

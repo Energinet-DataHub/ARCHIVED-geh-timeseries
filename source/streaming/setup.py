@@ -12,6 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from setuptools import setup, find_packages
+from setuptools.command.develop import develop
+
+import pathlib
+import os
+from subprocess import check_call
+
+
+def generate_proto_code():
+    proto_path = "../contracts/internal/"
+    python_out = "geh_stream/contracts/"
+
+    os.makedirs(python_out, exist_ok=True)
+    check_call(["protoc"] + ["time_series_command.proto"] + ["--python_out", python_out, "--proto_path", proto_path])
+
+
+class CustomDevelopCommand(develop):
+    """Wrapper for custom commands to run before package installation."""
+    uninstall = False
+
+    def run(self):
+        develop.run(self)
+
+    def install_for_development(self):
+        develop.install_for_development(self)
+        generate_proto_code()
+
 
 # File 'VERSION' is created by pipeline. If executed manual it must be created manually.
 __version__ = ""
@@ -24,5 +50,8 @@ setup(name='geh_stream',
       long_description="",
       long_description_content_type='text/markdown',
       license='MIT',
-      packages=find_packages()
+      packages=find_packages(),
+      cmdclass={
+           'develop': CustomDevelopCommand,  # used for pip install -e ./
+      },
       )

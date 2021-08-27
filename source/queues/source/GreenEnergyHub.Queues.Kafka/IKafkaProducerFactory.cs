@@ -24,7 +24,13 @@ namespace GreenEnergyHub.Queues.Kafka
         /// <summary>
         /// Build a new kafka producer instance.
         /// </summary>
-        /// <returns>The producert instance.</returns>
+        /// <returns>The producer instance.</returns>
         IProducer<Null, string> Build();
+
+        /// <summary>
+        /// Build a new kafka producer instance for binary data.
+        /// </summary>
+        /// <returns>The producer instance.</returns>
+        IProducer<Null, byte[]> BuildBinary();
     }
 }

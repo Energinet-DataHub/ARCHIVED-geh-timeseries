@@ -24,13 +24,13 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
     /// Interface for sending messages using the Kafka protocol
     /// </summary>
     /// <typeparam name="TOutboundMessage">type of message to be sent using the Kafka protocol</typeparam>
-    public interface IKafkaDispatcher<TOutboundMessage>
+    public interface IKafkaBinaryDispatcher<TOutboundMessage>
         where TOutboundMessage : IOutboundMessage
     {
         /// <summary>
         /// An instance of a the kafka dispatcher
         /// </summary>
-        IKafkaDispatcher Instance { get; }
+        IKafkaBinaryDispatcher Instance { get; }
 
         /// <summary>
         /// The topic to use in Kafka

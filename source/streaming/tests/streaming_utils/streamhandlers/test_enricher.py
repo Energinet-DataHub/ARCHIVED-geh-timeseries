@@ -11,17 +11,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import pytest
 import pandas as pd
 import time
 from pyspark import SparkConf
 from pyspark.sql import DataFrame, SparkSession
-from pyspark.sql.functions import col
 
-from geh_stream.schemas import SchemaNames, SchemaFactory
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.dataframelib import has_column
-from geh_stream.streaming_utils.streamhandlers import denormalize_parsed_data
 
 # Create timestamps used in DataFrames
 time_now = time.time()
@@ -37,16 +35,15 @@ timestamp_far_future = pd.Timestamp(time_far_future, unit='s')
 # Run the enrich function
 @pytest.fixture(scope="class")
 def enriched_data(parsed_data_factory, master_data_factory):
-    parsed_data = parsed_data_factory([
-        dict(metering_point_id="1", quantity=1.0, observation_time=timestamp_now),
-        # Not matched because it's outside the master data valid period
-        dict(metering_point_id="1", quantity=2.0, observation_time=timestamp_far_future),
-        # Not matched because no master data exists for this market evalution point
-        dict(metering_point_id="2", quantity=3.0, observation_time=timestamp_now)
-    ])
-    denormalized_parsed_data = denormalize_parsed_data(parsed_data)
+
+    parsed_data1 = parsed_data_factory(metering_point_id="1", quantity=1.0, observation_date_time=timestamp_now)
+    parsed_data2 = parsed_data_factory(metering_point_id="1", quantity=2.0, observation_date_time=timestamp_far_future)
+    parsed_data3 = parsed_data_factory(metering_point_id="2", quantity=3.0, observation_date_time=timestamp_now)
+
+    parsed_data = parsed_data1.union(parsed_data2).union(parsed_data3)
+
     master_data = master_data_factory(dict(metering_point_id="1"))
-    return Enricher.enrich(denormalized_parsed_data, master_data)
+    return Enricher.enrich(parsed_data, master_data)
 
 
 # Is the row count maintained

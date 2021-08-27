@@ -12,19 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using GreenEnergyHub.TimeSeries.Domain.MarketDocument;
-
-namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Serialization.MarketDocument
+namespace GreenEnergyHub.TimeSeries.Core.Enumeration
 {
-    public static class DocumentTypeMapper
+    public interface IEnumValueNameComparisonStrategy
     {
-        public static DocumentType Map(string value)
-        {
-            return value switch
-            {
-                "E66" => DocumentType.NotifyValidatedMeasureData,
-                _ => DocumentType.Unknown
-            };
-        }
+        bool IsEquivalent(System.Enum valueOne, System.Enum valueTwo);
     }
 }

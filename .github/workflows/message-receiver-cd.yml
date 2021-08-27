@@ -19,8 +19,9 @@ on:
       - main
     paths:
       - source/GreenEnergyHub.TimeSeries/**
+      - source/contracts/internal/time_series.proto
+      - .github/workflows/message-receiver-ci.yml
       - .github/workflows/message-receiver-cd.yml
-      - .github/actions/dotnet-build-and-test/**
   workflow_dispatch: {}
 
 env:

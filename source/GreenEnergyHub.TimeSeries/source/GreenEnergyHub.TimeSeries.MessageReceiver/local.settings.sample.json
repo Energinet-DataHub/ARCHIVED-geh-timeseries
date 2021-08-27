@@ -1,13 +1,13 @@
 {
-   "IsEncrypted": false,
+  "IsEncrypted": false,
   "Values": {
     "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "CACERT_PATH": "c:\\cacert\\cacert.pem",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
     "LOCAL_TIMEZONENAME": "Europe/Copenhagen",
-    "TIMESERIES_QUEUE_CONNECTION_STRING": "<Insert connection string for event hub queue for time series commands>",
-    "TIMESERIES_QUEUE_TOPIC": "<Insert name of topic for time series commands>",
-    "TIMESERIES_QUEUE_URL": "<Insert URL for event hub queue for time series commands>",
+    "TIMESERIES_QUEUE_CONNECTION_STRING": "<Insert connection string for event hub queue for time series commands but without EntityPath>",
+    "TIMESERIES_QUEUE_TOPIC": "<Insert name of event hub instance for time series commands>",
+    "TIMESERIES_QUEUE_URL": "<Insert URL for event hub namespace for time series commands>"
   }
 }

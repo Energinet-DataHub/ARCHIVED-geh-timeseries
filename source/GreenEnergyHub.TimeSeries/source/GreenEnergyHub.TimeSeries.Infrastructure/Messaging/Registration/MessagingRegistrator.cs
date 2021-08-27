@@ -75,7 +75,7 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
             _services.AddScoped<IMessageDispatcher<TOutboundMessage>, MessageDispatcher<TOutboundMessage>>();
             _services.AddScoped<Channel<TOutboundMessage>, EventHubChannel<TOutboundMessage>>();
 
-            _services.AddSingleton<IKafkaDispatcher<TOutboundMessage>>(
+            _services.AddSingleton<IKafkaBinaryDispatcher<TOutboundMessage>>(
                 _ =>
                 {
                     var kafkaConfiguration = new KafkaConfiguration
@@ -90,8 +90,8 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging.Registration
                         MessageSendMaxRetries = KafkaConstants.MessageSendMaxRetries,
                     };
                     var producer = new KafkaProducerFactory(kafkaConfiguration);
-                    var instance = new KafkaDispatcher(producer);
-                    return new KafkaDispatcher<TOutboundMessage>(instance, eventHubTopic);
+                    var instance = new KafkaBinaryDispatcher(producer);
+                    return new KafkaBinaryDispatcher<TOutboundMessage>(instance, eventHubTopic);
                 });
 
             return this;

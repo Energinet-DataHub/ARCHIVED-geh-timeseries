@@ -24,8 +24,7 @@ namespace GreenEnergyHub.Queues.Kafka
         private readonly IProducer<Null, string> _producer;
         private bool _disposed;
 
-        public KafkaDispatcher(
-            IKafkaProducerFactory producerFactory)
+        public KafkaDispatcher(IKafkaProducerFactory producerFactory)
         {
             if (producerFactory is null)
             {

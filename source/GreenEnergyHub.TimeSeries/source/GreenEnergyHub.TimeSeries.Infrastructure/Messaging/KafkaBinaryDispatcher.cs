@@ -23,16 +23,16 @@ namespace GreenEnergyHub.TimeSeries.Infrastructure.Messaging
     /// being dispatched/send.
     /// </summary>
     // ReSharper disable once UnusedTypeParameter - Generic type parameter is needed
-    public class KafkaDispatcher<TOutboundMessage> : IKafkaDispatcher<TOutboundMessage>
+    public class KafkaBinaryDispatcher<TOutboundMessage> : IKafkaBinaryDispatcher<TOutboundMessage>
         where TOutboundMessage : IOutboundMessage
     {
-        public KafkaDispatcher(IKafkaDispatcher instance, string topic)
+        public KafkaBinaryDispatcher(IKafkaBinaryDispatcher instance, string topic)
         {
             Instance = instance;
             Topic = topic;
         }
 
-        public IKafkaDispatcher Instance { get; }
+        public IKafkaBinaryDispatcher Instance { get; }
 
         public string Topic { get; }
     }
