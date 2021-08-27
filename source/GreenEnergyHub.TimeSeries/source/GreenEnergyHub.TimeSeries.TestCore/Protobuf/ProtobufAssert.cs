@@ -50,13 +50,13 @@ namespace GreenEnergyHub.TimeSeries.TestCore.Protobuf
                     options.ComparingByMembers<IMessage>();
 
                     // Ignore the public prop "Descriptor" of the contract object
-                    options.Excluding(ctx => ctx.SelectedMemberPath == "Descriptor");
+                    options.Excluding(ctx => ctx.Path == "Descriptor");
 
                     // Ignore transaction properties from the GreenEnergyHub.Messaging assembly
                     options.Excluding(ctx =>
-                        ctx.SelectedMemberPath.Split(".", StringSplitOptions.RemoveEmptyEntries)
+                        ctx.Path.Split(".", StringSplitOptions.RemoveEmptyEntries)
                             .Contains("Transaction") &&
-                        ctx.SelectedMemberInfo.MemberType.Assembly!.FullName!.StartsWith(
+                        ctx.Type.Assembly!.FullName!.StartsWith(
                             "GreenEnergyHub.Messaging",
                             StringComparison.InvariantCulture));
 
@@ -93,11 +93,11 @@ namespace GreenEnergyHub.TimeSeries.TestCore.Protobuf
                     options.ComparingByMembers<IMessage>();
 
                     // Ignore the public prop "Descriptor" of the contract object
-                    options.Excluding(ctx => ctx.SelectedMemberPath == "Descriptor");
+                    options.Excluding(ctx => ctx.Path == "Descriptor");
 
                     foreach (var excludePath in excludePaths ?? Array.Empty<string>())
                     {
-                        options.Excluding(ctx => ctx.SelectedMemberPath == excludePath);
+                        options.Excluding(ctx => ctx.Path == excludePath);
                     }
 
                     // Use runtime type of "expected"
