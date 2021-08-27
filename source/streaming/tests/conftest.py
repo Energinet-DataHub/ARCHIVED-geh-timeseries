@@ -28,7 +28,8 @@ from datetime import datetime
 import time
 import uuid
 
-from geh_stream.codelists import MeasureUnit, MeteringPointType, QuantityQuality, Product, SettlementMethod
+from geh_stream.codelists import BusinessProcessRole, BusinessReasonCode, ResolutionDuration, \
+    MeasureUnit, MeteringPointType, QuantityQuality, Product, SettlementMethod
 from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory, quantity_type
 from geh_stream.dataframelib import flatten_df
@@ -132,11 +133,11 @@ def __create_timeseries_protobuf(metering_point_id="mepm", quantity=Decimal('1.0
 
     document = Document()
     document.id = "documentid1"
-    document.request_date_time.FromJsonString("2020-12-15T13:15:11.8349163Z")
-    document.created_date_time.FromJsonString("2020-12-01T13:16:29.33Z")
+    document.request_date_time.FromJsonString("2020-12-15T13:15:11.000Z")
+    document.created_date_time.FromJsonString("2020-12-01T13:16:29.000Z")
     document.sender.id = "8100000000030"
-    document.sender.business_process_role = 4
-    document.business_reason_code = 4
+    document.sender.business_process_role = BusinessProcessRole.metered_data_responsible.value
+    document.business_reason_code = BusinessReasonCode.periodic_flex_metering.value
     timeseries.document.CopyFrom(document)
 
     series = Series()
@@ -144,19 +145,19 @@ def __create_timeseries_protobuf(metering_point_id="mepm", quantity=Decimal('1.0
     series.metering_point_id = metering_point_id
     series.metering_point_type = MeteringPointType.consumption.value
     series.settlement_method = SettlementMethod.flex.value
-    series.registration_date_time.FromJsonString("2021-06-17T11:41:28.8457326Z")
-    series.product = 5
-    series.unit = 1
-    series.resolution = 2
-    series.start_date_time.FromJsonString("2020-11-20T23:00:00Z")
-    series.end_date_time.FromJsonString("2020-11-21T23:00:00Z")
+    series.registration_date_time.FromJsonString("2021-06-17T11:41:28.000Z")
+    series.product = Product.energy_active.value
+    series.unit = MeasureUnit.kilo_watt_hour.value
+    series.resolution = ResolutionDuration.hour.value
+    series.start_date_time.FromJsonString("2020-11-20T23:00:00.000Z")
+    series.end_date_time.FromJsonString("2020-11-21T23:00:00.000Z")
 
     point1 = Point()
     point1.position = 1
     point1.observation_date_time.FromDatetime(observation_date_time)
     point1.quantity.units = int(quantity)
     point1.quantity.nanos = int(quantity % 1 * 10**9)
-    point1.quality = 1
+    point1.quality = QuantityQuality.measured.value
 
     series.points.append(point1)
 

@@ -16,6 +16,8 @@ import pytest
 import datetime
 from pyspark.sql.types import StructType
 from geh_stream.schemas import SchemaFactory, SchemaNames
+from geh_stream.codelists import BusinessProcessRole, BusinessReasonCode, ResolutionDuration, \
+    MeasureUnit, MeteringPointType, QuantityQuality, Product, SettlementMethod
 from geh_stream.streaming_utils.input_source_readers.time_series_reader import \
     __parse_stream, __to_quantity, __get_flattened_time_series_points
 from decimal import Decimal
@@ -83,6 +85,56 @@ def test_parse_series_point_quantity_from_stream(expected_quantity, timeseries_p
 
     first = parsed_time_series_point_stream.first()
     assert first.series_point_quantity == expected_quantity
+
+
+def test_parse_series_point_all_hardcoded_test_values(timeseries_protobuf_factory, event_hub_message_df_factory):
+    "Test series hardcoded test values are parsed correctly from stream"
+    # Arrange
+    document_id = "documentid1"
+    document_requestDateTime = datetime.datetime.strptime("2020-12-15T13:15:11.000Z", '%Y-%m-%dT%H:%M:%S.%fZ')
+    document_createdDateTime = datetime.datetime.strptime("2020-12-01T13:16:29.000Z", '%Y-%m-%dT%H:%M:%S.%fZ')
+    document_sender_id = "8100000000030"
+    document_sender_businessProcessRole = BusinessProcessRole.metered_data_responsible.value
+    document_businessReasonCode = BusinessReasonCode.periodic_flex_metering.value
+    series_id = "seriesid1"
+    series_meteringPointType = MeteringPointType.consumption.value
+    series_settlementMethod = SettlementMethod.flex.value
+    series_registrationDateTime = datetime.datetime.strptime('2021-06-17T11:41:28.000Z', '%Y-%m-%dT%H:%M:%S.%fZ')
+    series_product = Product.energy_active.value
+    series_unit = MeasureUnit.kilo_watt_hour.value
+    series_resolution = ResolutionDuration.hour.value
+    series_startDateTime = datetime.datetime.strptime('2020-11-20T23:00:00.000Z', '%Y-%m-%dT%H:%M:%S.%fZ')
+    series_endDateTime = datetime.datetime.strptime('2020-11-21T23:00:00.000Z', '%Y-%m-%dT%H:%M:%S.%fZ')
+    series_point_position = 1
+    series_point_quality = QuantityQuality.measured.value
+    correlationId = "correlationid1"
+
+    time_series_protobuf = timeseries_protobuf_factory()
+    event_hub_message_df = event_hub_message_df_factory(time_series_protobuf)
+
+    # Act
+    parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
+
+    # Assert
+    first = parsed_time_series_point_stream.first()
+    assert first.document_id == document_id
+    assert first.document_requestDateTime.isoformat() + "Z" == document_requestDateTime.isoformat() + "Z"
+    assert first.document_createdDateTime.isoformat() + "Z" == document_createdDateTime.isoformat() + "Z"
+    assert first.document_sender_id == document_sender_id
+    assert first.document_sender_businessProcessRole == document_sender_businessProcessRole
+    assert first.document_businessReasonCode == document_businessReasonCode
+    assert first.series_id == series_id
+    assert first.series_meteringPointType == series_meteringPointType
+    assert first.series_settlementMethod == series_settlementMethod
+    assert first.series_registrationDateTime.isoformat() + "Z" == series_registrationDateTime.isoformat() + "Z"
+    assert first.series_product == series_product
+    assert first.series_unit == series_unit
+    assert first.series_resolution == series_resolution
+    assert first.series_startDateTime.isoformat() + "Z" == series_startDateTime.isoformat() + "Z"
+    assert first.series_endDateTime.isoformat() + "Z" == series_endDateTime.isoformat() + "Z"
+    assert first.series_point_position == series_point_position
+    assert first.series_point_quality == series_point_quality
+    assert first.correlationId == correlationId
 
 
 def test_get_flattened_time_series_points(parsed_data):
