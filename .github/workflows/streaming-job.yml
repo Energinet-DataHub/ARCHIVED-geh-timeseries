@@ -17,6 +17,7 @@ on:
   push:
     branches:
       - main
+      - install_protobuf_and_protodf_in_pipeline_container
     paths:
       - source/streaming/**
       - source/contracts/internal/time_series.proto
