@@ -34,7 +34,7 @@ from geh_stream.streaming_utils.streamhandlers import Enricher
 from geh_stream.schemas import SchemaNames, SchemaFactory, quantity_type
 from geh_stream.dataframelib import flatten_df
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
-from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand, Document, Series, Point, DecimalValue
+from geh_stream.contracts.time_series_command_pb2 import TimeSeriesCommand, Document, Series, Point, DecimalValue
 from geh_stream.streaming_utils.input_source_readers.time_series_reader import __parse_stream
 
 
