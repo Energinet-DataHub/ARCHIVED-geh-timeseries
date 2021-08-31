@@ -14,4 +14,5 @@
 
 # The available input source reader methods
 from .masterdata_reader import read_master_data_from_csv
+from .protobuf_message_parser import ProtobufMessageParser
 from .time_series_reader import get_time_series_point_stream
