@@ -12,6 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-By having a __init__.py in this root directory, we can access 
+By having a __init__.py in this root directory, we can access
 "streaming_utils" within streaming job.
 """
