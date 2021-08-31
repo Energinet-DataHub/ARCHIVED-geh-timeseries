@@ -35,8 +35,8 @@ class CustomDevelopCommand(develop):
         develop.run(self)
 
     def install_for_development(self):
-        develop.install_for_development(self)
         generate_proto_code()
+        develop.install_for_development(self)
 
 
 # File 'VERSION' is created by pipeline. If executed manual it must be created manually.

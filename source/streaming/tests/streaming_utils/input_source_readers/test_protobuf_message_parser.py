@@ -16,7 +16,7 @@ import pytest
 from pyspark.sql.types import StructType
 from geh_stream.streaming_utils.input_source_readers.protobuf_message_parser import ProtobufMessageParser
 from geh_stream.protodf import schema_for
-from geh_stream.contracts.time_series_pb2 import TimeSeriesCommand
+from geh_stream.contracts.time_series_command_pb2 import TimeSeriesCommand
 
 
 def test_parse_data_returns_expected_metering_point_id(timeseries_protobuf_factory, event_hub_message_df_factory, data_parsed_from_protobuf_schema):
