@@ -17,6 +17,7 @@ on:
   push:
     branches:
       - main
+      - install_protoc_in_streaming_job_workflow
     paths:
       - source/streaming/**
       - source/contracts/internal/time_series.proto
