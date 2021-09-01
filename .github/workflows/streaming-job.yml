@@ -141,6 +141,8 @@ jobs:
         working-directory: ./source/streaming
         run: |
           echo "${{ steps.next-wheel-file-version.outputs.next_version }}" > VERSION
+          # Generate Python classes from Protobuf contracts
+          python -m pip install -e ./
           pip install wheel
           python setup.py sdist bdist_wheel
 
