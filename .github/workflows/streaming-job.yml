@@ -16,7 +16,7 @@ name: Streaming Job
 on:
   push:
     branches:
-      - main      
+      - main
     paths:
       - source/streaming/**
       - source/contracts/internal/time_series.proto
