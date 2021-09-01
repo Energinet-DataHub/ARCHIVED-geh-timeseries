@@ -16,8 +16,7 @@ name: Streaming Job
 on:
   push:
     branches:
-      - main
-      - install_protoc_in_streaming_job_workflow
+      - main      
     paths:
       - source/streaming/**
       - source/contracts/internal/time_series.proto
