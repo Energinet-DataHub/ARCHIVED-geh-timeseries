@@ -36,6 +36,12 @@ resource "databricks_job" "streaming_job" {
 
   library {
     pypi {
+      package = "protobuf=3.*"
+    }
+  }
+
+  library {
+    pypi {
       package = "applicationinsights==0.11.9"
     }
   }
