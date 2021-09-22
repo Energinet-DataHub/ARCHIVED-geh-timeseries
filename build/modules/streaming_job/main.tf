@@ -36,7 +36,7 @@ resource "databricks_job" "streaming_job" {
 
   library {
     pypi {
-      package = "protobuf=3.*"
+      package = "protobuf==3.*"
     }
   }
 
