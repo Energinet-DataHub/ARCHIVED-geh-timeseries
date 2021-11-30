@@ -10,8 +10,6 @@
     "CONSUMPTION_METERING_POINT_CREATED_SUBSCRIPTION_NAME": "consumption-metering-point-created-to-timeseries",
     "METERING_POINT_CONNECTED_TOPIC_NAME": "metering-point-connected",
     "METERING_POINT_CONNECTED_SUBSCRIPTION_NAME": "metering-point-connected-to-timeseries",
-    "ENERGY_SUPPLIER_CHANGED_TOPIC_NAME": "energy-supplier-changed",
-    "ENERGY_SUPPLIER_CHANGED_SUBSCRIPTION_NAME": "energy-supplier-change-to-timeseries",
     "EVENT_HUB_NAME": "evh-received-queue"
   }
 }
