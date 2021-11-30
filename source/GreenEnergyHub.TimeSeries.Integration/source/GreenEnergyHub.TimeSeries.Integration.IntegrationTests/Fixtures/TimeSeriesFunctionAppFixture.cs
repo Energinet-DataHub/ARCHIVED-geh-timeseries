@@ -91,11 +91,6 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures
                 .AddSubscription("subscription").SetEnvironmentVariableToSubscriptionName("METERING_POINT_CONNECTED_SUBSCRIPTION_NAME")
                 .CreateAsync().ConfigureAwait(false);
 
-            await ServiceBusResourceProvider
-                .BuildTopic("sbt-supplier-changed").SetEnvironmentVariableToTopicName("ENERGY_SUPPLIER_CHANGED_TOPIC_NAME")
-                .AddSubscription("subscription").SetEnvironmentVariableToSubscriptionName("ENERGY_SUPPLIER_CHANGED_SUBSCRIPTION_NAME")
-                .CreateAsync().ConfigureAwait(false);
-
             // => Event Hub
             // Overwrite event hub related settings, so the function app uses the names we have control of in the test
             Environment.SetEnvironmentVariable("EVENT_HUB_CONNECTION", EventHubResourceProvider.ConnectionString);

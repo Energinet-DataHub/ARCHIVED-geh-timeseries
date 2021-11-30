@@ -62,7 +62,6 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener
                 services.ConfigureProtobufReception();
                 ConsumptionMeteringPointCreatedHandlerConfiguration.ConfigureServices(services);
                 MeteringPointConnectedHandlerConfiguration.ConfigureServices(services);
-                EnergySupplierChangedHandlerConfiguration.ConfigureServices(services);
             }).Build();
 
             buildHost.Run();
