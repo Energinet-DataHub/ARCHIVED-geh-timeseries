@@ -1,0 +1,17 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "<App insights instrumentation key>",
+    "INTEGRATION_EVENT_LISTENER_CONNECTION_STRING": "<sb listener connection string for integration events>",
+    "EVENT_HUB_CONNECTION": "<eh connection string for internal domain events>",
+    "CONSUMPTION_METERING_POINT_CREATED_TOPIC_NAME": "consumption-metering-point-created",
+    "CONSUMPTION_METERING_POINT_CREATED_SUBSCRIPTION_NAME": "consumption-metering-point-created-to-aggregations",
+    "METERING_POINT_CONNECTED_TOPIC_NAME": "metering-point-connected",
+    "METERING_POINT_CONNECTED_SUBSCRIPTION_NAME": "metering-point-connected-to-aggregations",
+    "ENERGY_SUPPLIER_CHANGED_TOPIC_NAME": "energy-supplier-changed",
+    "ENERGY_SUPPLIER_CHANGED_SUBSCRIPTION_NAME": "energy-supplier-change-to-aggregations",
+    "EVENT_HUB_NAME": "evh-aggregation"
+  }
+}
