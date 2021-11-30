@@ -57,7 +57,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.MarketR
 
             var request = await _messageExtractor.ExtractAsync(data).ConfigureAwait(false);
 
-            await _eventDispatcher.DispatchAsync(request, _eventDataHelper.GetEventhubMetaData(eventMetaData, "MarketRole")).ConfigureAwait(false);
+            await _eventDispatcher.DispatchAsync(request, EventDataHelper.GetEventhubMetaData(eventMetaData, "MarketRole")).ConfigureAwait(false);
         }
     }
 }

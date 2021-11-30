@@ -149,7 +149,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.IntegrationEventListener.C
         public void GetEventHubMetaData_ThrowsArgumentNullException_WhenMetadata_IsNull()
         {
             Assert.Throws<ArgumentNullException>(() =>
-                new EventDataHelper(new JsonSerializer()).GetEventhubMetaData(null, null));
+                EventDataHelper.GetEventhubMetaData(null, null));
         }
 
         [Fact]
@@ -170,12 +170,12 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.IntegrationEventListener.C
                 { "domain", _expectedDomain },
             };
 
-            var result = new EventDataHelper(new JsonSerializer()).GetEventhubMetaData(metadata, _expectedDomain);
+            var result = EventDataHelper.GetEventhubMetaData(metadata, _expectedDomain);
 
             result.Should().BeEquivalentTo(expected);
         }
 
-        private Mock<FunctionContext> GetContext(string metadata = null)
+        private static Mock<FunctionContext> GetContext(string metadata = null)
         {
             var context = new Mock<FunctionContext>();
             var bindingContext = new Mock<BindingContext>();
@@ -192,7 +192,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.IntegrationEventListener.C
             return context;
         }
 
-        private EventMetadata SetEventMetadata(
+        private static EventMetadata SetEventMetadata(
             Instant? operationTimestamp = null,
             int messageVersion = 0,
             string messageType = "",
@@ -202,7 +202,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.IntegrationEventListener.C
             return new EventMetadata(messageVersion, messageType, eventIdentification, operationTimestamp ?? Instant.MinValue, operationCorrelationId);
         }
 
-        private string EventMetadataToJson(EventMetadata metadata)
+        private static string EventMetadataToJson(EventMetadata metadata)
         {
             return new JsonSerializer().Serialize(metadata);
         }

@@ -57,7 +57,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Meterin
 
             var request = await _messageExtractor.ExtractAsync(data).ConfigureAwait(false);
 
-            await _eventDispatcher.DispatchAsync(request, _eventDataHelper.GetEventhubMetaData(eventMetaData, "MeteringPoint")).ConfigureAwait(false);
+            await _eventDispatcher.DispatchAsync(request, EventDataHelper.GetEventhubMetaData(eventMetaData, "MeteringPoint")).ConfigureAwait(false);
         }
     }
 }

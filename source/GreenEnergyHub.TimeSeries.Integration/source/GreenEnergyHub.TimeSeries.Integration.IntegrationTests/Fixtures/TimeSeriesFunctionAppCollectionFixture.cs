@@ -15,7 +15,7 @@
 using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures;
 using Xunit;
 
-namespace GreenEnergyHub.TimeSeries.IntegrationEventListener.IntegrationTests.Fixtures
+namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures
 {
     /// <summary>
     /// A xUnit collection fixture for ensuring tests don't run in parallel.
@@ -23,8 +23,8 @@ namespace GreenEnergyHub.TimeSeries.IntegrationEventListener.IntegrationTests.Fi
     /// xUnit documentation of collection fixtures:
     ///  * https://xunit.net/docs/shared-context#collection-fixture
     /// </summary>
-    [CollectionDefinition(nameof(AggregationsFunctionAppCollectionFixture))]
-    public class AggregationsFunctionAppCollectionFixture : ICollectionFixture<AggregationsFunctionAppFixture>
+    [CollectionDefinition(nameof(TimeSeriesFunctionAppCollectionFixture))]
+    public class TimeSeriesFunctionAppCollectionFixture : ICollectionFixture<TimeSeriesFunctionAppFixture>
     {
     }
 }

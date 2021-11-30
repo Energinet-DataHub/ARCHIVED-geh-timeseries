@@ -28,9 +28,9 @@ using Microsoft.Extensions.Configuration;
 
 namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures
 {
-    public class AggregationsFunctionAppFixture : FunctionAppFixture
+    public class TimeSeriesFunctionAppFixture : FunctionAppFixture
     {
-        public AggregationsFunctionAppFixture()
+        public TimeSeriesFunctionAppFixture()
         {
             AzuriteManager = new AzuriteManager();
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
@@ -61,7 +61,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures
             }
 
             var buildConfiguration = GetBuildConfiguration();
-            hostSettings.FunctionApplicationPath = $"..\\..\\..\\..\\GreenEnergyHub.TimeSeries.IntegrationEventListener\\bin\\{buildConfiguration}\\net5.0";
+            hostSettings.FunctionApplicationPath = $"..\\..\\..\\..\\GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener\\bin\\{buildConfiguration}\\net5.0";
         }
 
         /// <inheritdoc/>
@@ -101,7 +101,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("EVENT_HUB_CONNECTION", EventHubResourceProvider.ConnectionString);
 
             var eventHub = await EventHubResourceProvider
-                .BuildEventHub("evh-aggregation").SetEnvironmentVariableToEventHubName("EVENT_HUB_NAME")
+                .BuildEventHub("evh-received-queue").SetEnvironmentVariableToEventHubName("EVENT_HUB_NAME")
                 .CreateAsync().ConfigureAwait(false);
 
             EventHubListener = new EventHubListenerMock(EventHubResourceProvider.ConnectionString, eventHub.Name, "UseDevelopmentStorage=true", "container", TestLogger);

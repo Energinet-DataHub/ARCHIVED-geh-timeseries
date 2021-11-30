@@ -20,16 +20,15 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using FluentAssertions;
 using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Assets;
 using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures;
-using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Functions
 {
-    [Collection(nameof(AggregationsFunctionAppCollectionFixture))]
-    public class ConsumptionMeteringPointCreatedListenerTests_RunAsync : FunctionAppTestBase<AggregationsFunctionAppFixture>
+    [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
+    public class ConsumptionMeteringPointCreatedListenerTests_RunAsync : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {
-        public ConsumptionMeteringPointCreatedListenerTests_RunAsync(AggregationsFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
+        public ConsumptionMeteringPointCreatedListenerTests_RunAsync(TimeSeriesFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture, testOutputHelper)
         {
             Fixture.EventHubListener.Reset();
