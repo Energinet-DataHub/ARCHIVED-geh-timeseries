@@ -20,7 +20,7 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using FluentAssertions;
 using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Assets;
 using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures;
-using GreenEnergyHub.TimeSeries.IntegrationEventListener.IntegrationTests.Fixtures;
+using GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Fixtures;
 using Xunit;
 using Xunit.Abstractions;
 
