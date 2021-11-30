@@ -24,6 +24,8 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Assets
     {
         public static ServiceBusMessage CreateMpCreatedMessage()
         {
+            var date = new DateTime(2021, 1, 2, 3, 4, 5, DateTimeKind.Utc);
+            var timestamp = Timestamp.FromDateTime(DateTime.SpecifyKind(date, DateTimeKind.Utc));
             var message = new ConsumptionMeteringPointCreated
             {
                 Product = ConsumptionMeteringPointCreated.Types.ProductType.PtEnergyactive,
@@ -36,11 +38,15 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Assets
                 MeteringPointId = "1",
                 MeterReadingPeriodicity = ConsumptionMeteringPointCreated.Types.MeterReadingPeriodicity.MrpHourly,
                 NetSettlementGroup = ConsumptionMeteringPointCreated.Types.NetSettlementGroup.NsgOne,
-                EffectiveDate = Timestamp.FromDateTime(DateTime.SpecifyKind(DateTime.Now, DateTimeKind.Utc)),
+                EffectiveDate = timestamp,
             };
 
             var serviceBusMessage = new ServiceBusMessage(message.ToByteArray());
+            serviceBusMessage.ApplicationProperties.Add("OperationTimestamp", date.ToUniversalTime());
+            serviceBusMessage.ApplicationProperties.Add("OperationCorrelationId", "1bf1b76337f14b78badc248a3289d021");
+            serviceBusMessage.ApplicationProperties.Add("MessageVersion", 1);
             serviceBusMessage.ApplicationProperties.Add("MessageType", "ConsumptionMeteringPointCreated");
+            serviceBusMessage.ApplicationProperties.Add("EventIdentification", "2542ed0d242e46b68b8b803e93ffbf7b");
             return serviceBusMessage;
         }
     }

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.FunctionApp.TestCommon;
@@ -41,11 +42,10 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Functions
         {
             // Arrange
             var message = TestMessages.CreateMpCreatedMessage();
+            var expectedEventData = "domain:MeteringPoint; event_id:2542ed0d242e46b68b8b803e93ffbf7b; event_name:ConsumptionMeteringPointCreated; processed_date:2021-01-02T03:04:05Z";
 
             using var isReceivedEvent = await Fixture.EventHubListener
-                .When(e =>
-                    e.Properties.Any(p =>
-                        p.Key == "SchemaType" && (string)p.Value == "ConsumptionMeteringPointCreated"))
+                .When(e => ConvertDictionaryToString(e.Properties) == expectedEventData)
                 .VerifyOnceAsync()
                 .ConfigureAwait(false);
 
@@ -56,6 +56,13 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Functions
             // Assert
             var isReceived = isReceivedEvent.Wait(DefaultTimeout);
             isReceived.Should().BeTrue();
+        }
+
+        private static string ConvertDictionaryToString(IDictionary<string, object> dictionary)
+        {
+            var pairs = dictionary.OrderBy(pair =>
+                pair.Key).Select(pair => pair.Key + ":" + string.Join(", ", pair.Value));
+            return string.Join("; ", pairs);
         }
     }
 }
