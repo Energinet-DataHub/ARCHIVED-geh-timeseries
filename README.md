@@ -1,7 +1,7 @@
 # Time Series
 
 <!--
-[![codecov](https://codecov.io/gh/Energinet-DataHub/geh-timeseries/branch/main/graph/badge.svg?token=GDF7UM3531)](https://codecov.io/gh/Energinet-DataHub/geh-timeseries)
+`[![codecov](https://codecov.io/gh/Energinet-DataHub/geh-timeseries/branch/main/graph/badge.svg?token=GDF7UM3531)](https://codecov.io/gh/Energinet-DataHub/geh-timeseries)`
 -->
 
 ## Intro
