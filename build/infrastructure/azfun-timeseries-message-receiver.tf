@@ -30,7 +30,7 @@ module "azfun_message_receiver" {
     CACERT_PATH                                  = var.cacert_path
     LOCAL_TIMEZONENAME                           = local.LOCAL_TIMEZONENAME
     TIMESERIES_QUEUE_TOPIC                       = module.evh_receivedqueue.name
-    TIMESERIES_QUEUE_URL                         = "${module.evhnm_received_queue.name}.servicebus.windows.net:9093"
+    TIMESERIES_QUEUE_URL                         = "${module.evhnm_timeseries.name}.servicebus.windows.net:9093"
     TIMESERIES_QUEUE_CONNECTION_STRING           = module.evhar_receivedqueue_sender.primary_connection_string
   }
   dependencies                              = [
