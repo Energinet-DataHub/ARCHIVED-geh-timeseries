@@ -1,9 +1,8 @@
+@echo off
 rem Simple helper script for developers to ease deployment of Terraform
 rem -----------------------------------------------------------------------------------
 rem Set up prerequisites as outlined in README.md and then
 rem simply issue the command "deploy-from-localhost" in a command prompt in this folder
-
-@echo off
 
 if exist "backend.tf" (
     if exist "backend.tf.tmp" del backend.tf.tmp

@@ -374,9 +374,6 @@ appsettings.*.json
 # Patch files
 *.orig
 
-# Spark / Databricks
-run_args*.conf
-
 # MD Spell Check
 /utilities/md-spellcheck/dictionary.dic
 
