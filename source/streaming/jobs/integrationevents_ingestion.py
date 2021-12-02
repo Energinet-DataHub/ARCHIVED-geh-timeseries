@@ -23,7 +23,7 @@ from geh_stream.integrationevents_ingestion.eventhub_ingestor import ingest
 
 p = configargparse.ArgParser(
     description='Green Energy Hub events stream ingestor',
-    default_config_files=['run_args_integrationevents_ingestion.conf'],
+    default_config_files=['integrationevents_ingestion.conf'],
     formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
 p.add('--data-storage-account-key', type=str, required=True)
