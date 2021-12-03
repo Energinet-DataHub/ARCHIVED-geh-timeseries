@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
+#EventHub namespace for EventHubs in the TimeSeries domain
 module "evhnm_timeseries" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-namespace?ref=1.3.0"
   name                      = "evhnm-timeseries-${var.project}-${var.organisation}-${var.environment}"
