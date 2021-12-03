@@ -20,6 +20,7 @@ module "azfun_integration_event_listener" {
   app_service_plan_id                       = module.azfun_ingestion_event_listener_plan.id
   storage_account_name                      = module.azfun_ingestion_event_listener_stor.name
   application_insights_instrumentation_key  = module.appi.instrumentation_key
+  always_on                                 = true
   tags                                      = data.azurerm_resource_group.main.tags
   app_settings                              = {
     # Region: Default Values
@@ -51,8 +52,8 @@ module "azfun_ingestion_event_listener_plan" {
   location            = data.azurerm_resource_group.main.location
   kind                = "FunctionApp"
   sku                 = {
-    tier  = "Free"
-    size  = "F1"
+    tier  = "Basic"
+    size  = "B1"
   }
   tags                = data.azurerm_resource_group.main.tags
 }
@@ -74,14 +75,3 @@ resource "random_string" "ingestion_event_listener" {
   special = false
   upper   = false
 }
-
-# module "ping_webtest_ingestion_event_listener" {
-#  source                          = "./modules/ping-webtest" # Repo geh-terraform-modules doesn't have a webtest module at the time of this writing
-#  name                            = "ping-webtest-ingestion-event-listener-${var.project}-${var.organisation}-${var.environment}"
-#  resource_group_name             = data.azurerm_resource_group.main.name
-#  location                        = data.azurerm_resource_group.main.location
-#  tags                            = data.azurerm_resource_group.main.tags
-#  application_insights_id         = module.appi.id
-#  url                             = "https://${module.azfun_ingestion_event_listener.default_hostname}/api/HealthStatus"
-#  dependencies                    = [module.azfun_ingestion_event_listener.dependent_on]
-#}
