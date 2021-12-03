@@ -90,10 +90,10 @@ BASE_STORAGE_PATH = "abfss://{0}@{1}.dfs.core.windows.net/".format(
 print("Base storage url:", BASE_STORAGE_PATH)
 
 # %% Read master data from input source
-from geh_stream.streaming_utils.input_source_readers import read_master_data_from_csv
+from geh_stream.streaming_utils.input_source_readers import read_master_data
 
 master_data_storage_path = BASE_STORAGE_PATH + args.master_data_path
-master_data_df = read_master_data_from_csv(spark, master_data_storage_path)
+master_data_df = read_master_data(spark, master_data_storage_path)
 
 # %% Read raw time series streaming data from input source
 import json
@@ -197,76 +197,4 @@ out_stream = time_series_point_stream \
 from datetime import datetime
 import sys
 
-from geh_stream.azure import BlobService
-
-
-def log(message):
-    print("%s %s..." % (datetime.utcnow(), message))
-    telemetry_client.track_trace("Streaming", {"message": message})
-    telemetry_client.flush()
-
-
-# Purpose of this construction is to ensure that the master data used to enrich the streaming data
-# is no older than 5 minutes.
-# The alternative of restarting the job every 5ish minutes was considered too expensive.
-# The assumption here is that reading of master data and restart of the streaming
-# can be done in less than 30 seconds.
-
-blob_service = BlobService(args.storage_account_name, args.storage_account_key, args.storage_container_name)
-blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
-spark_master_data_version = blob_master_data_version
-is_master_data_blob_newer = True
-
-failure_count = 0
-max_retry_count = 5
-
-log("Starting streaming...")
-while True:
-    try:
-        if is_master_data_blob_newer:
-            # Persist master data to avoid rereading them in each batch
-            master_data_df.persist()
-
-            execution = out_stream.start()
-            spark_master_data_version = blob_master_data_version
-
-        # Use .awaitTermination() instead of time.sleep() because sleep() makes the stream restart
-        # wait despite that the streaming has already stopped.
-        execution.awaitTermination(4.5 * 60)
-
-        blob_master_data_version = blob_service.get_blob_properties(args.master_data_path).last_modified
-        is_master_data_blob_newer = blob_master_data_version > spark_master_data_version
-
-        if is_master_data_blob_newer:
-            # .awaitTermination() doesn't stop the execution on timeout
-            execution.stop()
-            log("Continuing with new master data that was updated in ODS at %s..." % blob_master_data_version)
-        else:
-            log("Continuing with current master data because they have not been updated in ODS...")
-
-        failure_count = 0
-
-    except Exception as error:
-        failure_count += 1
-
-        # Make sure the exception is not accidently tracked on the last used parent
-        telemetry_client.context.operation.parent_id = None
-        # We need to track and flush the exception so it is not lost in case the exception will stop execution
-        telemetry_client.track_exception()
-        telemetry_client.flush()
-
-        log(str(error))
-
-        # Only retry a certain number of times when consecutive executions fail
-        if failure_count > max_retry_count:
-            message = "Tried to recover %s times. Giving up now. RIP dear streaming job." % (max_retry_count)
-            log(message)
-            sys.exit(message)
-
-        log("Trying to recover. Attempt no %s..." % (failure_count))
-
-    finally:
-        if is_master_data_blob_newer:
-            master_data_df.unpersist()
-
-# %%
+out_stream.start().awaitTermination()

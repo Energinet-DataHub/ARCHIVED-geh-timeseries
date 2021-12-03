@@ -25,19 +25,14 @@ csv_read_config = {
 master_data_schema = SchemaFactory.get_instance(SchemaNames.Master)
 
 
-def read_master_data_from_csv(spark: SparkSession, master_data_storage_path: str) -> DataFrame:
-    master_data = spark \
-        .read \
-        .format("csv") \
-        .schema(master_data_schema) \
-        .options(**csv_read_config) \
-        .load(master_data_storage_path)
+def read_master_data(spark: SparkSession, master_data_storage_path: str) -> DataFrame:
+    master_data = spark.read.format("delta").load(master_data_storage_path)
 
     master_data = master_data \
         .withColumn("validTo",
                     coalesce(col("validTo"), lit("9999-12-31").cast("timestamp")))
 
-    master_data.printSchema()
-    master_data.show(truncate=False)
+    # master_data.printSchema()
+    # master_data.show(truncate=False)
 
     return master_data
