@@ -28,8 +28,6 @@ module "azfun_integration_event_listener" {
     WEBSITE_RUN_FROM_PACKAGE                              = 1
     WEBSITES_ENABLE_APP_SERVICE_STORAGE                   = true
     FUNCTIONS_WORKER_RUNTIME                              = "dotnet-isolated"
-    CACERT_PATH                                           = var.cacert_path
-    LOCAL_TIMEZONENAME                                    = local.LOCAL_TIMEZONENAME
     INTEGRATION_EVENT_LISTENER_CONNECTION_STRING          = "to be set manually - for now"
     CONSUMPTION_METERING_POINT_CREATED_TOPIC_NAME         = "consumption-metering-point-created"
     CONSUMPTION_METERING_POINT_CREATED_SUBSCRIPTION_NAME  = "consumption-metering-point-created-to-timeseries"
