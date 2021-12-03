@@ -10,8 +10,8 @@ ARG openjdk_version="8"
 ARG hadoop_version="3.3.0"
 ARG hadoop_checksum="9ac5a5a8d29de4d2edfb5e554c178b04863375c5644d6fea1f6464ab4a7e22a50a6c43253ea348edbd114fc534dcde5bdd2826007e24b2a6b0ce0d704c5b4f5b"
 
-ARG spark_version="3.0.3"
-ARG spark_checksum="22f80d2d50b964fa6f87358330ccdaa4748fa1fc546272a1efb21868dc59a815ce9bdcee3b520b797e3740221212baacf1a4ba5e7166d552a0990efb9478de32"
+ARG spark_version="3.1.2"
+ARG spark_checksum="e7b580bc67356f1b36756b18a95e452307eb3825265616e399b1766124764d6e65ab4c666ad23c93e006d88b6c83a78a7d786be981b4f20696697860a459879d"
 
 ARG py4j_version="0.10.9"
 
