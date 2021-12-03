@@ -18,8 +18,7 @@ on:
     branches:
       - main
     paths:
-      - source/GreenEnergyHub.TimeSeries/**
-      - source/contracts/internal/time_series.proto
+      - source/GreenEnergyHub.TimeSeries.Integration/**
       - .github/workflows/integration-event-listener-ci.yml
   workflow_dispatch: {}
 
