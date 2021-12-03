@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 module "evh_receivedqueue" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=2.0.0"
   name                      = "evh-received-queue"
   namespace_name            = module.evhnm_timeseries.name
   resource_group_name       = data.azurerm_resource_group.main.name
@@ -22,7 +22,7 @@ module "evh_receivedqueue" {
 }
 
 module "evhar_receivedqueue_sender" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-receivedqueue-sender"
   namespace_name            = module.evhnm_timeseries.name
   eventhub_name             = module.evh_receivedqueue.name
@@ -32,7 +32,7 @@ module "evhar_receivedqueue_sender" {
 }
 
 module "evhar_receivedqueue_receiver" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-receivedqueue-receiver"
   namespace_name            = module.evhnm_timeseries.name
   eventhub_name             = module.evh_receivedqueue.name
@@ -42,7 +42,7 @@ module "evhar_receivedqueue_receiver" {
 }
 
 module "kvs_receivedqueue_sender_connection_string" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
   name                      = "evhar-receivedqueue-sender-connection-string"
   value                     = module.evhar_receivedqueue_sender.primary_connection_string
   key_vault_id              = module.kv_timeseries.id
@@ -53,7 +53,7 @@ module "kvs_receivedqueue_sender_connection_string" {
 }
 
 module "evhar_receivedqueue_receiver_connection_string" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
   name                      = "evhar-receivedqueue-receiver-connection-string"
   value                     = module.evhar_receivedqueue_receiver.primary_connection_string
   key_vault_id              = module.kv_timeseries.id

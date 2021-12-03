@@ -13,7 +13,7 @@
 # limitations under the License.
 
 module "evh_ingestion_queue" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=2.0.0"
   name                      = "evh-ingestion-queue"
   namespace_name            = module.evhnm_timeseries.name
   resource_group_name       = data.azurerm_resource_group.main.name
@@ -23,7 +23,7 @@ module "evh_ingestion_queue" {
 }
 
 module "evhar_ingestion_queue_sender" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-ingestion-queue-sender"
   namespace_name            = module.evhnm_timeseries.name
   eventhub_name             = module.evh_ingestion_queue.name
@@ -33,7 +33,7 @@ module "evhar_ingestion_queue_sender" {
 }
 
 module "evhar_ingestion_queue_receiver" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-ingestion-queue-receiver"
   namespace_name            = module.evhnm_timeseries.name
   eventhub_name             = module.evh_ingestion_queue.name
@@ -43,7 +43,7 @@ module "evhar_ingestion_queue_receiver" {
 }
 
 module "kvs_ingestion_queue_sender_connection_string" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
   name                      = "evhar-ingestion-queue-sender-connection-string"
   value                     = module.evhar_ingestion_queue_sender.primary_connection_string
   key_vault_id              = module.kv_timeseries.id
@@ -54,7 +54,7 @@ module "kvs_ingestion_queue_sender_connection_string" {
 }
 
 module "evhar_ingestion_queue_receiver_connection_string" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
   name                      = "evhar-ingestion-queue-receiver-connection-string"
   value                     = module.evhar_ingestion_queue_receiver.primary_connection_string
   key_vault_id              = module.kv_timeseries.id

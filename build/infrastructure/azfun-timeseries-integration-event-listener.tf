@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 module "azfun_integration_event_listener" {
-  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//function-app?ref=1.2.0"
+  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//function-app?ref=2.0.0"
   name                                      = "azfun-integration-event-listener-${var.project}-${var.organisation}-${var.environment}"
   resource_group_name                       = data.azurerm_resource_group.main.name
   location                                  = data.azurerm_resource_group.main.location
@@ -44,7 +44,7 @@ module "azfun_integration_event_listener" {
 }
 
 module "azfun_ingestion_event_listener_plan" {
-  source              = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//app-service-plan?ref=1.2.0"
+  source              = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//app-service-plan?ref=2.0.0"
   name                = "asp-ingestion-event-listener-${var.project}-${var.organisation}-${var.environment}"
   resource_group_name = data.azurerm_resource_group.main.name
   location            = data.azurerm_resource_group.main.location
@@ -57,7 +57,7 @@ module "azfun_ingestion_event_listener_plan" {
 }
 
 module "azfun_ingestion_event_listener_stor" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=1.7.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=2.0.0"
   name                      = "stormsgrcvr${random_string.ingestion_event_listener.result}"
   resource_group_name       = data.azurerm_resource_group.main.name
   location                  = data.azurerm_resource_group.main.location

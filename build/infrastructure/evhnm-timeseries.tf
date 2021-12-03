@@ -14,7 +14,7 @@
 
 #EventHub namespace for EventHubs in the TimeSeries domain
 module "evhnm_timeseries" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-namespace?ref=1.3.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-namespace?ref=2.0.0"
   name                      = "evhnm-timeseries-${var.project}-${var.organisation}-${var.environment}"
   resource_group_name       = data.azurerm_resource_group.main.name
   location                  = data.azurerm_resource_group.main.location
