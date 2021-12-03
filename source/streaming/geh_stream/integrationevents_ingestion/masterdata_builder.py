@@ -52,7 +52,7 @@ def __incomming_event_handler(df: DataFrame, epoch_id, spark, master_data_path):
                 col("deserialized.settlement_method").alias("settlementMethod"),
                 col("deserialized.connection_state").alias("connectionState"),
                 col("deserialized.effective_date").alias("validFrom")) \
-        .withColumn("validTo", lit("9999-12-31").cast("timestamp"))
+        .withColumn("validTo", lit(None).cast("timestamp"))
 
     df.printSchema()
     df.show()
