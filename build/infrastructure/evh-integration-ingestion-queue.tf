@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-module "evh_receivedqueue" {
+
+module "evh_integration_event_queue" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=2.0.0"
-  name                      = "evh-received-queue"
+  name                      = "evh-ingestion-queue"
   namespace_name            = module.evhnm_timeseries.name
   resource_group_name       = data.azurerm_resource_group.main.name
   partition_count           = 32
@@ -21,44 +22,44 @@ module "evh_receivedqueue" {
   dependencies              = [module.evhnm_timeseries.dependent_on]
 }
 
-module "evhar_receivedqueue_sender" {
+module "evhar_ingestion_queue_sender" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
-  name                      = "evhar-receivedqueue-sender"
+  name                      = "evhar-ingestion-queue-sender"
   namespace_name            = module.evhnm_timeseries.name
-  eventhub_name             = module.evh_receivedqueue.name
+  eventhub_name             = module.evh_integration_event_queue.name
   resource_group_name       = data.azurerm_resource_group.main.name
   send                      = true
-  dependencies              = [module.evh_receivedqueue.dependent_on]
+  dependencies              = [module.evh_integration_event_queue.dependent_on]
 }
 
-module "evhar_receivedqueue_receiver" {
+module "evhar_ingestion_queue_receiver" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
-  name                      = "evhar-receivedqueue-receiver"
+  name                      = "evhar-ingestion-queue-receiver"
   namespace_name            = module.evhnm_timeseries.name
-  eventhub_name             = module.evh_receivedqueue.name
+  eventhub_name             = module.evh_integration_event_queue.name
   resource_group_name       = data.azurerm_resource_group.main.name
   listen                    = true
-  dependencies              = [module.evh_receivedqueue.dependent_on]
+  dependencies              = [module.evh_integration_event_queue.dependent_on]
 }
 
-module "kvs_receivedqueue_sender_connection_string" {
+module "kvs_ingestion_queue_sender_connection_string" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
-  name                      = "evhar-receivedqueue-sender-connection-string"
-  value                     = module.evhar_receivedqueue_sender.primary_connection_string
+  name                      = "evhar-ingestion-queue-sender-connection-string"
+  value                     = module.evhar_ingestion_queue_sender.primary_connection_string
   key_vault_id              = module.kv_timeseries.id
   dependencies = [
       module.kv_timeseries.dependent_on, 
-      module.evhar_receivedqueue_sender.dependent_on
+      module.evhar_ingestion_queue_sender.dependent_on
   ]
 }
 
-module "evhar_receivedqueue_receiver_connection_string" {
+module "evhar_ingestion_queue_receiver_connection_string" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
-  name                      = "evhar-receivedqueue-receiver-connection-string"
-  value                     = module.evhar_receivedqueue_receiver.primary_connection_string
+  name                      = "evhar-ingestion-queue-receiver-connection-string"
+  value                     = module.evhar_ingestion_queue_receiver.primary_connection_string
   key_vault_id              = module.kv_timeseries.id
   dependencies = [
       module.kv_timeseries.dependent_on, 
-      module.evhar_receivedqueue_receiver.dependent_on
+      module.evhar_ingestion_queue_receiver.dependent_on
   ]
 }

@@ -42,7 +42,7 @@ variable "spn_object_id" {
 
 variable "streaming_container_name" {
   type = string
-  default = "messagedata"
+  default = "delta-lake"
 }
 
 variable "cacert_path" {

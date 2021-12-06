@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 module "stor_timeseries_data" {
-  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=1.7.0"
+  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=2.0.0"
   name                            = "data${lower(var.project)}${lower(var.organisation)}${lower(var.environment)}"
   resource_group_name             = data.azurerm_resource_group.main.name
   location                        = data.azurerm_resource_group.main.location
@@ -24,7 +24,7 @@ module "stor_timeseries_data" {
 }
 
 module "kvs_timeseries_storage_account_key" {
-  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=1.3.0"
+  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//key-vault-secret?ref=2.0.0"
   name                            = "timeseries-storage-account-key"
   value                           = module.stor_timeseries_data.primary_access_key
   key_vault_id                    = module.kv_timeseries.id
@@ -35,7 +35,7 @@ module "kvs_timeseries_storage_account_key" {
 }
 
 module "stor_streaming_container" {
-  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-container?ref=1.3.0"
+  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-container?ref=2.0.0"
   container_name                  = var.streaming_container_name
   storage_account_name            = module.stor_timeseries_data.name
   container_access_type           = "private"
