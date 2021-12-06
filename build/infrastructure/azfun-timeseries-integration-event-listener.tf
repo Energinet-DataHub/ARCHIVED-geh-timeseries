@@ -34,7 +34,7 @@ module "azfun_integration_event_listener" {
     METERING_POINT_CONNECTED_TOPIC_NAME                   = "metering-point-connected"
     METERING_POINT_CONNECTED_SUBSCRIPTION_NAME            = "metering-point-connected-to-timeseries"
     EVENT_HUB_CONNECTION                                  = module.evhar_ingestion_queue_sender.primary_connection_string
-    EVENT_HUB_NAME                                        = module.evh_ingestion_queue.name
+    EVENT_HUB_NAME                                        = module.evh_integration_event_queue.name
   }
   dependencies                              = [
     module.appi.dependent_on,

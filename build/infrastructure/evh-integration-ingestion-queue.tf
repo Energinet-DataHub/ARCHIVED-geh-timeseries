@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "evh_ingestion_queue" {
+module "evh_integration_event_queue" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=2.0.0"
   name                      = "evh-ingestion-queue"
   namespace_name            = module.evhnm_timeseries.name
@@ -26,20 +26,20 @@ module "evhar_ingestion_queue_sender" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-ingestion-queue-sender"
   namespace_name            = module.evhnm_timeseries.name
-  eventhub_name             = module.evh_ingestion_queue.name
+  eventhub_name             = module.evh_integration_event_queue.name
   resource_group_name       = data.azurerm_resource_group.main.name
   send                      = true
-  dependencies              = [module.evh_ingestion_queue.dependent_on]
+  dependencies              = [module.evh_integration_event_queue.dependent_on]
 }
 
 module "evhar_ingestion_queue_receiver" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub-auth-rule?ref=2.0.0"
   name                      = "evhar-ingestion-queue-receiver"
   namespace_name            = module.evhnm_timeseries.name
-  eventhub_name             = module.evh_ingestion_queue.name
+  eventhub_name             = module.evh_integration_event_queue.name
   resource_group_name       = data.azurerm_resource_group.main.name
   listen                    = true
-  dependencies              = [module.evh_ingestion_queue.dependent_on]
+  dependencies              = [module.evh_integration_event_queue.dependent_on]
 }
 
 module "kvs_ingestion_queue_sender_connection_string" {
