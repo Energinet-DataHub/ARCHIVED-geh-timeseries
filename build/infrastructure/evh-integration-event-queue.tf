@@ -14,7 +14,7 @@
 
 module "evh_integration_event_queue" {
   source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//event-hub?ref=2.0.0"
-  name                      = "evh-ingestion-queue"
+  name                      = "evh-integration-event-queue"
   namespace_name            = module.evhnm_timeseries.name
   resource_group_name       = data.azurerm_resource_group.main.name
   partition_count           = 32
