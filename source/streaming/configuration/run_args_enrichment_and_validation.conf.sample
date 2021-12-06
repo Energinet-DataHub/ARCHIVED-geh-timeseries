@@ -1,6 +1,6 @@
 storage-account-name=mystorageacoount
 storage-account-key=<account-key>
-storage-container-name=messagedata
+storage-container-name=delta_lake
 
 master-data-path=master-data/master-data.csv
 

@@ -33,7 +33,7 @@ variable "storage_account_name" {
 
 variable "streaming_container_name" {
   type = string
-  default = "messagedata"
+  default = "delta-lake"
 }
 
 variable "python_main_file" {
