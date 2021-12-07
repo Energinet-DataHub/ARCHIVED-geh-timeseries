@@ -64,31 +64,30 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
 
             if (eventMetadata != null)
             {
-                if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentification))
-                {
-                    throw new ArgumentException("EventIdentification is not set");
-                }
-
-                if (string.IsNullOrWhiteSpace(eventMetadata.MessageType))
-                {
-                    throw new ArgumentException("MessageType is not set");
-                }
-
-                if (string.IsNullOrWhiteSpace(eventMetadata.OperationCorrelationId))
-                {
-                    throw new ArgumentException("OperationCorrelationId is not set");
-                }
-
-                if (eventMetadata.MessageVersion < 1)
-                {
-                    throw new ArgumentException("MessageVersion is not set");
-                }
-
-                if (eventMetadata.OperationTimestamp == Instant.MinValue)
-                {
-                    throw new ArgumentException("OperationTimestamp is not set");
-                }
-
+                // if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentification))
+                // {
+                //     throw new ArgumentException("EventIdentification is not set");
+                // }
+                //
+                // if (string.IsNullOrWhiteSpace(eventMetadata.MessageType))
+                // {
+                //     throw new ArgumentException("MessageType is not set");
+                // }
+                //
+                // if (string.IsNullOrWhiteSpace(eventMetadata.OperationCorrelationId))
+                // {
+                //     throw new ArgumentException("OperationCorrelationId is not set");
+                // }
+                //
+                // if (eventMetadata.MessageVersion < 1)
+                // {
+                //     throw new ArgumentException("MessageVersion is not set");
+                // }
+                //
+                // if (eventMetadata.OperationTimestamp == Instant.MinValue)
+                // {
+                //     throw new ArgumentException("OperationTimestamp is not set");
+                // }
                 return eventMetadata;
             }
 

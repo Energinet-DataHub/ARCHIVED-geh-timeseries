@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 module "azfun_message_receiver" {
-  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//function-app?ref=1.2.0"
+  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//function-app?ref=2.0.0"
   name                                      = "azfun-message-receiver-${var.project}-${var.organisation}-${var.environment}"
   resource_group_name                       = data.azurerm_resource_group.main.name
   location                                  = data.azurerm_resource_group.main.location
@@ -30,7 +30,7 @@ module "azfun_message_receiver" {
     CACERT_PATH                                  = var.cacert_path
     LOCAL_TIMEZONENAME                           = local.LOCAL_TIMEZONENAME
     TIMESERIES_QUEUE_TOPIC                       = module.evh_receivedqueue.name
-    TIMESERIES_QUEUE_URL                         = "${module.evhnm_received_queue.name}.servicebus.windows.net:9093"
+    TIMESERIES_QUEUE_URL                         = "${module.evhnm_timeseries.name}.servicebus.windows.net:9093"
     TIMESERIES_QUEUE_CONNECTION_STRING           = module.evhar_receivedqueue_sender.primary_connection_string
   }
   dependencies                              = [
@@ -41,7 +41,7 @@ module "azfun_message_receiver" {
 }
 
 module "azfun_message_receiver_plan" {
-  source              = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//app-service-plan?ref=1.2.0"
+  source              = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//app-service-plan?ref=2.0.0"
   name                = "asp-message-receiver-${var.project}-${var.organisation}-${var.environment}"
   resource_group_name = data.azurerm_resource_group.main.name
   location            = data.azurerm_resource_group.main.location
@@ -54,7 +54,7 @@ module "azfun_message_receiver_plan" {
 }
 
 module "azfun_message_receiver_stor" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=1.7.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-account?ref=2.0.0"
   name                      = "stormsgrcvr${random_string.message_receiver.result}"
   resource_group_name       = data.azurerm_resource_group.main.name
   location                  = data.azurerm_resource_group.main.location
