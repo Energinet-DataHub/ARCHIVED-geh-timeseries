@@ -35,12 +35,12 @@ p.add('--storage-container-name', type=str, required=False, default='data',
       help='Azure Storage container name')
 
 # Master data (in storage account)
-p.add('--master-data-path', type=str, required=False, default="master-data/master-data.csv",
-      help='Path to master data storage location (csv) relative to container''s root')
+p.add('--master-data-path', type=str, required=False, default="master-data",
+      help='Path to master data storage location (Delta Table) relative to container''s (Delta Lake) root')
 
 # Stored valid time series points (in storage account)
 p.add('--output-path', type=str, required=False, default="delta/meter-data/",
-      help='Path to stream output storage location (deltalake) relative to container''s root')
+      help='Path to stream output storage location (Delta Table) relative to container''s (Delta Lake) root')
 
 # Streamed data input source
 p.add('--input-eh-connection-string', type=str, required=True,
@@ -139,6 +139,10 @@ def __process_data_frame(time_series_points_df: DataFrame, _: int):
         watch = MonitoredStopwatch.start_timer(telemetry_client, __process_data_frame.__name__)
 
         time_series_points_df = Enricher.enrich(time_series_points_df, master_data_df)
+
+        print("Enriched timeseries points:")
+        time_series_points_df.show(truncate=False)
+
         time_series_points_df = Validator.add_validation_status_columns(time_series_points_df)
 
         # This validation cannot be done in the Validator due to the implementation.
@@ -187,14 +191,11 @@ def __process_data_frame(time_series_points_df: DataFrame, _: int):
 # The trigger determines how often a batch is created and processed.
 output_delta_lake_path = BASE_STORAGE_PATH + args.output_path
 checkpoint_path = BASE_STORAGE_PATH + args.streaming_checkpoint_path
+
 out_stream = time_series_point_stream \
     .writeStream \
     .option("checkpointLocation", checkpoint_path) \
     .trigger(processingTime=args.trigger_interval) \
-    .foreachBatch(__process_data_frame)
-
-# %% Start streaming
-from datetime import datetime
-import sys
-
-out_stream.start().awaitTermination()
+    .foreachBatch(__process_data_frame) \
+    .start() \
+    .awaitTermination()

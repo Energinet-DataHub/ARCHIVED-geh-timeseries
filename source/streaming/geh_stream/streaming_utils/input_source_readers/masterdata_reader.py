@@ -32,7 +32,7 @@ def read_master_data(spark: SparkSession, master_data_storage_path: str) -> Data
         .withColumn("validTo",
                     coalesce(col("validTo"), lit("9999-12-31").cast("timestamp")))
 
-    # master_data.printSchema()
-    # master_data.show(truncate=False)
+    master_data.printSchema()
+    master_data.show(truncate=False)
 
     return master_data
