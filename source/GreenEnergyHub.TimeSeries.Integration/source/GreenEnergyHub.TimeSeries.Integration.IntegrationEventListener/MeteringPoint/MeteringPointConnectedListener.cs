@@ -53,7 +53,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Meterin
 
             var eventMetaData = _eventDataHelper.GetEventMetaData(context);
 
-            _logger.LogTrace("MeteringPointConnected event received with {OperationCorrelationId}", eventMetaData.OperationCorrelationId);
+            _logger.LogTrace("MeteringPointConnected event received with {OperationCorrelationId}", eventMetaData.CorrelationId);
 
             var request = await _messageExtractor.ExtractAsync(data).ConfigureAwait(false);
 

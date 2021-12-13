@@ -39,8 +39,8 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
 
             return new Dictionary<string, string>
             {
-                { "event_id", eventMetaData.EventIdentification },
-                { "processed_date", eventMetaData.OperationTimestamp.ToIso8601GeneralString() },
+                { "event_id", eventMetaData.EventIdentifier },
+                { "processed_date", eventMetaData.Timestamp.ToIso8601GeneralString() },
                 { "event_name", eventMetaData.MessageType },
                 { "domain", domain },
             };
@@ -62,36 +62,39 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
 
             var eventMetadata = _jsonSerializer.Deserialize<EventMetadata>(metadata.ToString() ?? throw new InvalidOperationException());
 
-            if (eventMetadata != null)
+            ValidateEventMetadata(eventMetadata);
+
+            return eventMetadata;
+        }
+
+        private static void ValidateEventMetadata(EventMetadata? eventMetadata)
+        {
+            if (eventMetadata == null) throw new InvalidOperationException("Service bus metadata is null");
+
+            if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentifier))
             {
-                // if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentification))
-                // {
-                //     throw new ArgumentException("EventIdentification is not set");
-                // }
-                //
-                // if (string.IsNullOrWhiteSpace(eventMetadata.MessageType))
-                // {
-                //     throw new ArgumentException("MessageType is not set");
-                // }
-                //
-                // if (string.IsNullOrWhiteSpace(eventMetadata.OperationCorrelationId))
-                // {
-                //     throw new ArgumentException("OperationCorrelationId is not set");
-                // }
-                //
-                // if (eventMetadata.MessageVersion < 1)
-                // {
-                //     throw new ArgumentException("MessageVersion is not set");
-                // }
-                //
-                // if (eventMetadata.OperationTimestamp == Instant.MinValue)
-                // {
-                //     throw new ArgumentException("OperationTimestamp is not set");
-                // }
-                return eventMetadata;
+                throw new ArgumentException("EventIdentification is not set");
             }
 
-            throw new InvalidOperationException("Service bus metadata is null");
+            if (string.IsNullOrWhiteSpace(eventMetadata.MessageType))
+            {
+                throw new ArgumentException("MessageType is not set");
+            }
+
+            if (string.IsNullOrWhiteSpace(eventMetadata.CorrelationId))
+            {
+                throw new ArgumentException("OperationCorrelationId is not set");
+            }
+
+            if (eventMetadata.MessageVersion < 1)
+            {
+                throw new ArgumentException("MessageVersion is not set");
+            }
+
+            if (eventMetadata.Timestamp == Instant.MinValue)
+            {
+                throw new ArgumentException("OperationTimestamp is not set");
+            }
         }
     }
 }
