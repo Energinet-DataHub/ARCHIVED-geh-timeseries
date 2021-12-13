@@ -33,19 +33,6 @@ def __incomming_event_handler(df: DataFrame, epoch_id, spark, master_data_path):
     df.printSchema()
     df.show()
 
-    #     .withColumn("metering_point_id")
-    # if len(df.head(1)) > 0:
-    #     for row in df.rdd.collect():
-    #         event_class = message_registry.get(row[EventMetaData.event_name])
-
-    #         if event_class is not None:
-    #             # deserialize from json with dataclasses_json
-    #             try:
-    #                 event = event_class.from_json(row["body"])
-    #                 dispatcher(event)
-    #             except Exception as e:
-    #                 print("An exception occurred when trying to dispatch" + str(e))
-
     df = df \
         .select(col("deserialized.metering_point_id").alias("meteringPointId"),
                 col("deserialized.metering_point_type").alias("meteringPointType"),
