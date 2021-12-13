@@ -36,9 +36,9 @@ namespace GreenEnergyHub.TimeSeries.Integration.Infrastructure.Serialization.Nam
                 "MessageVersion" => "MessageVersion",
                 "MessageType" => "MessageType",
                 "Transaction" => "Transaction",
-                "Timestamp" => "Timestamp",
-                "EventIdentifier" => "EventIdentifier",
-                "CorrelationId" => "CorrelationId",
+                "OperationTimestamp" => "OperationTimestamp",
+                "EventIdentification" => "EventIdentification",
+                "OperationCorrelationId" => "OperationCorrelationId",
                 _ => throw new ArgumentOutOfRangeException(nameof(name), name, "Could not convert property name.")
             };
         }

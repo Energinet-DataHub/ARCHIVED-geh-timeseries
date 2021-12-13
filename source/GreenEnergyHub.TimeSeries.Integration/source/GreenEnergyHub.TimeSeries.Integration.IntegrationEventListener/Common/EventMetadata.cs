@@ -20,8 +20,8 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
     public record EventMetadata(
         int MessageVersion,
         string MessageType,
-        string EventIdentifier, // TODO: Rename to EventIdentification following merge of https://github.com/Energinet-DataHub/geh-metering-point/pull/517/files
-        Instant Timestamp, // TODO: Rename to OperationTimestamp following merge of https://github.com/Energinet-DataHub/geh-metering-point/pull/517/files
-        string CorrelationId); // TODO: Rename to OperationCorrelationId following merge of https://github.com/Energinet-DataHub/geh-metering-point/pull/517/files
+        string EventIdentification,
+        Instant OperationTimestamp,
+        string OperationCorrelationId);
 #pragma warning restore SA1313
 }

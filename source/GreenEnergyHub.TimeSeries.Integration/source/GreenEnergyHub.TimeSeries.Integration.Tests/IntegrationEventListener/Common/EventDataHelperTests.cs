@@ -29,9 +29,9 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.IntegrationEventListener.C
     [UnitTest]
     public class EventDataHelperTests
     {
-        private readonly string _expectedEventIdentification = "eventIdentifier";
+        private readonly string _expectedEventIdentification = "EventIdentification";
         private readonly string _expectedMessageType = "messageType";
-        private readonly string _expectedOperationCorrelationId = "CorrelationId";
+        private readonly string _expectedOperationCorrelationId = "OperationCorrelationId";
         private readonly int _expectedMessageVersion = 1;
         private readonly Instant _expectedOperationTimestamp = Instant.FromUtc(2020, 1, 1, 0, 0);
         private readonly string _expectedDomain = "domain";

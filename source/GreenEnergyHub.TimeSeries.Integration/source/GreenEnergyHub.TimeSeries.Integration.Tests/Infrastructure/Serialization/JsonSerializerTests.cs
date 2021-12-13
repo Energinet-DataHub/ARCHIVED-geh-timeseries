@@ -76,7 +76,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.Infrastructure.Serializati
         public void DeserializeString_ValidJson_ReturnsCorrectValues()
         {
             // Arrange
-            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentifier\": \"1234\", \"Timestamp\": \"2021-10-01T10:00:00Z\", \"CorrelationId\": \"5678\"}";
+            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentification\": \"1234\", \"OperationTimestamp\": \"2021-10-01T10:00:00Z\", \"OperationCorrelationId\": \"5678\"}";
             var expected = new EventMetadata(1, "ConsumptionMeteringPointCreated", "1234", Instant.FromDateTimeUtc(new DateTime(2021, 10, 01, 10, 0, 0).ToUniversalTime()), "5678");
             var sut = new JsonSerializer();
 
@@ -100,7 +100,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.Infrastructure.Serializati
         public void Deserialize_CustomType_ReturnsCorrectTypeAndValues()
         {
             // Arrange
-            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentifier\": \"1234\", \"Timestamp\": \"2021-10-01T10:00:00Z\", \"CorrelationId\": \"5678\"}";
+            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentification\": \"1234\", \"OperationTimestamp\": \"2021-10-01T10:00:00Z\", \"OperationCorrelationId\": \"5678\"}";
             var expected = new EventMetadata(1, "ConsumptionMeteringPointCreated", "1234", Instant.FromDateTimeUtc(new DateTime(2021, 10, 01, 10, 0, 0).ToUniversalTime()), "5678");
             var sut = new JsonSerializer();
 
@@ -126,7 +126,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.Tests.Infrastructure.Serializati
         [Fact]
         public async Task DeserializeAsync_ValidStream_ReturnsCorrectValues()
         {
-            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentifier\": \"1234\", \"Timestamp\": \"2021-10-01T10:00:00Z\", \"CorrelationId\": \"5678\"}";
+            const string jsonString = "{\"MessageVersion\": 1, \"MessageType\": \"ConsumptionMeteringPointCreated\", \"EventIdentification\": \"1234\", \"OperationTimestamp\": \"2021-10-01T10:00:00Z\", \"OperationCorrelationId\": \"5678\"}";
             var expected = new EventMetadata(1, "ConsumptionMeteringPointCreated", "1234", Instant.FromDateTimeUtc(new DateTime(2021, 10, 01, 10, 0, 0).ToUniversalTime()), "5678");
             await using var jsonStream = new MemoryStream(Encoding.UTF8.GetBytes(s: jsonString));
             var sut = new JsonSerializer();

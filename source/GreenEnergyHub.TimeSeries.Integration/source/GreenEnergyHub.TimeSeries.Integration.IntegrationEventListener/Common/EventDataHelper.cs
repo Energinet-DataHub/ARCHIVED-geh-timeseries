@@ -39,8 +39,8 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
 
             return new Dictionary<string, string>
             {
-                { "event_id", eventMetaData.EventIdentifier },
-                { "processed_date", eventMetaData.Timestamp.ToIso8601GeneralString() },
+                { "event_id", eventMetaData.EventIdentification },
+                { "processed_date", eventMetaData.OperationTimestamp.ToIso8601GeneralString() },
                 { "event_name", eventMetaData.MessageType },
                 { "domain", domain },
             };
@@ -71,7 +71,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
         {
             if (eventMetadata == null) throw new InvalidOperationException("Service bus metadata is null");
 
-            if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentifier))
+            if (string.IsNullOrWhiteSpace(eventMetadata.EventIdentification))
             {
                 throw new ArgumentException("EventIdentification is not set");
             }
@@ -81,7 +81,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
                 throw new ArgumentException("MessageType is not set");
             }
 
-            if (string.IsNullOrWhiteSpace(eventMetadata.CorrelationId))
+            if (string.IsNullOrWhiteSpace(eventMetadata.OperationCorrelationId))
             {
                 throw new ArgumentException("OperationCorrelationId is not set");
             }
@@ -91,7 +91,7 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.Common
                 throw new ArgumentException("MessageVersion is not set");
             }
 
-            if (eventMetadata.Timestamp == Instant.MinValue)
+            if (eventMetadata.OperationTimestamp == Instant.MinValue)
             {
                 throw new ArgumentException("OperationTimestamp is not set");
             }

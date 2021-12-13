@@ -42,11 +42,11 @@ namespace GreenEnergyHub.TimeSeries.Integration.IntegrationTests.Assets
             };
 
             var serviceBusMessage = new ServiceBusMessage(message.ToByteArray());
-            serviceBusMessage.ApplicationProperties.Add("Timestamp", date.ToUniversalTime());
-            serviceBusMessage.ApplicationProperties.Add("CorrelationId", "1bf1b76337f14b78badc248a3289d021");
+            serviceBusMessage.ApplicationProperties.Add("OperationTimestamp", date.ToUniversalTime());
+            serviceBusMessage.ApplicationProperties.Add("OperationCorrelationId", "1bf1b76337f14b78badc248a3289d021");
             serviceBusMessage.ApplicationProperties.Add("MessageVersion", 1);
             serviceBusMessage.ApplicationProperties.Add("MessageType", "ConsumptionMeteringPointCreated");
-            serviceBusMessage.ApplicationProperties.Add("EventIdentifier", "2542ed0d242e46b68b8b803e93ffbf7b");
+            serviceBusMessage.ApplicationProperties.Add("EventIdentification", "2542ed0d242e46b68b8b803e93ffbf7b");
             return serviceBusMessage;
         }
     }
