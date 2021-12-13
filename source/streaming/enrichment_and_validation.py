@@ -39,8 +39,8 @@ p.add('--master-data-path', type=str, required=False, default="master-data",
       help='Path to master data storage location (Delta Table) relative to container''s (Delta Lake) root')
 
 # Stored valid time series points (in storage account)
-p.add('--output-path', type=str, required=False, default="delta/meter-data/",
-      help='Path to stream output storage location (Delta Table) relative to container''s (Delta Lake) root')
+p.add('--meter-data-path', type=str, required=False, default="meter-data",
+      help='Path to meter data stream output storage location (Delta Table) relative to container''s (Delta Lake) root')
 
 # Streamed data input source
 p.add('--input-eh-connection-string', type=str, required=True,
