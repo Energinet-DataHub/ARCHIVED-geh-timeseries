@@ -38,7 +38,7 @@ def __process_eventhub_item(df: DataFrame, epoch_id, events_delta_path):
             .save(events_delta_path)
 
 
-def ingest(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, events_delta_path):
+def ingest_events(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, events_delta_path):
 
     spark = SparkSession.builder.getOrCreate()
 
@@ -46,6 +46,6 @@ def ingest(event_hub_connection_key: str, delta_lake_container_name: str, storag
     input_configuration["eventhubs.connectionString"] = spark.sparkContext._gateway.jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(event_hub_connection_key)
     streamingDF = (spark.readStream.format("eventhubs").options(**input_configuration).load())
 
-    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/streaming_checkpoint"
+    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/events_checkpoint"
     stream = (streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: __process_eventhub_item(df, epochId, events_delta_path)).start())
-    stream.awaitTermination()
+    # stream.awaitTermination()

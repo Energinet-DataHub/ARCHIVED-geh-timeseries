@@ -14,13 +14,14 @@
 name: PR Environment - Tear Down
 
 on:
-  pull_request:
-    branches:
-      - main
-    paths:
-      - build/infrastructure/**
-      - .github/workflows/pr-env-teardown.yml
-    types: [closed]
+  # pull_request:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - build/infrastructure/**
+  #     - .github/workflows/pr-env-teardown.yml
+  #   types: [closed]
+  workflow_dispatch: {}
 env:
   ORGANISATION_NAME: endk
   PROJECT_NAME: 'time${{ github.event.number }}'

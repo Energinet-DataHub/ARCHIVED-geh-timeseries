@@ -10,6 +10,6 @@
     "CONSUMPTION_METERING_POINT_CREATED_SUBSCRIPTION_NAME": "consumption-metering-point-created-to-timeseries",
     "METERING_POINT_CONNECTED_TOPIC_NAME": "metering-point-connected",
     "METERING_POINT_CONNECTED_SUBSCRIPTION_NAME": "metering-point-connected-to-timeseries",
-    "EVENT_HUB_NAME": "evh-received-queue"
+    "EVENT_HUB_NAME": "evh-integration-event-queue"
   }
 }

@@ -34,18 +34,11 @@ module "kvs_timeseries_storage_account_key" {
   ]
 }
 
+# The Delta Lake of the timeseries domain
 module "stor_streaming_container" {
   source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//storage-container?ref=2.0.0"
   container_name                  = var.streaming_container_name
   storage_account_name            = module.stor_timeseries_data.name
   container_access_type           = "private"
   dependencies                    = [ module.stor_timeseries_data.dependent_on ]
-}
-
-resource "azurerm_storage_blob" "master_data" {
-  name                            = "master-data/master-data.csv"
-  storage_account_name            = module.stor_timeseries_data.name
-  storage_container_name          = module.stor_streaming_container.name
-  type                            = "Block"
-  source                          = "../../source/streaming/tests/streaming_utils/testdata/master-data.csv"
 }

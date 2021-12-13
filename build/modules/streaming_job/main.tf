@@ -17,7 +17,7 @@ resource "databricks_job" "streaming_job" {
   max_concurrent_runs = 1
 
   new_cluster { 
-    spark_version  = "7.2.x-scala2.12"
+    spark_version  = "9.1.x-scala2.12"
     node_type_id   = "Standard_DS3_v2"
     num_workers    = 1
   }
@@ -62,8 +62,8 @@ resource "databricks_job" "streaming_job" {
       "--storage-account-name=${var.storage_account_name}",
       "--storage-account-key=${var.storage_account_key}",
       "--storage-container-name=${var.streaming_container_name}",
-      "--master-data-path=master-data/master-data.csv",
-      "--output-path=delta/meter-data/",
+      "--master-data-path=master-data",
+      "--meter-data-path=meter-data/",
       "--input-eh-connection-string=${var.input_eventhub_listen_connection_string}",
       "--max-events-per-trigger=100",
       "--trigger-interval=1 second",

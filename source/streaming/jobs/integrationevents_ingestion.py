@@ -19,7 +19,8 @@ import configargparse
 from pyspark import SparkConf
 from pyspark.sql.session import SparkSession
 
-from geh_stream.integrationevents_ingestion.eventhub_ingestor import ingest
+from geh_stream.integrationevents_ingestion.event_ingestor import ingest_events
+from geh_stream.integrationevents_ingestion.masterdata_builder import build_masterdata
 
 p = configargparse.ArgParser(
     description='Green Energy Hub events stream ingestor',
@@ -54,5 +55,8 @@ spark = initialize_spark(args)
 events_delta_path = f"abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.events_data_blob_name}"
 master_data_path = f"abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.master_data_blob_name}"
 
-# start the eventhub ingestor
-ingest(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)
+# start the integration events ingestor
+ingest_events(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)
+
+# start the master data builder
+build_masterdata(args.delta_lake_container_name, args.data_storage_account_name, events_delta_path, master_data_path)
