@@ -21,7 +21,7 @@ limitations under the License.
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+      <PackageReference Include="Google.Protobuf" Version="3.19.2" />
       <PackageReference Include="NodaTime" Version="3.0.9" />
       <PackageReference Include="NodaTime.Serialization.JsonNet" Version="3.0.0" />
     </ItemGroup>
