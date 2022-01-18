@@ -24,7 +24,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         public static HttpResponseData Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
         {
-            var response = request.CreateResponse(HttpStatusCode.OK);
+            var response = request.CreateResponse(HttpStatusCode.Accepted);
             return response;
         }
     }

@@ -41,7 +41,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         {
             using var request = CreateValidTimeSeriesHttpRequest();
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
 
         private HttpRequestMessage CreateValidTimeSeriesHttpRequest()
