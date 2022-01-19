@@ -14,44 +14,39 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 <Project Sdk="Microsoft.NET.Sdk">
-
-    <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
-        <Nullable>enable</Nullable>
-        <IsPackable>false</IsPackable>
-      <AssemblyName>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</AssemblyName>
-      <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</RootNamespace>
-    </PropertyGroup>
-
-    <ItemGroup>
-        <PackageReference Include="Energinet.DataHub.Core.FunctionApp.TestCommon" Version="1.3.0" />
-        <PackageReference Include="Energinet.DataHub.Core.TestCommon" Version="1.3.0" />
-        <PackageReference Include="FluentAssertions" Version="6.3.0" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-        <PackageReference Include="xunit" Version="2.4.1" />
-        <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <PackageReference Include="coverlet.collector" Version="3.1.0">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
-      <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
-      <None Update="functionapphost.settings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-      <None Update="integrationtest.local.settings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\MessageReceiver\MessageReceiver.csproj" />
-    </ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <IsPackable>false</IsPackable>
+    <AssemblyName>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</AssemblyName>
+    <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Energinet.DataHub.Core.FunctionApp.TestCommon" Version="1.3.0" />
+    <PackageReference Include="Energinet.DataHub.Core.TestCommon" Version="1.3.0" />
+    <PackageReference Include="FluentAssertions" Version="6.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="xunit" Version="2.4.1" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="coverlet.collector" Version="3.1.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
+    <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
+    <None Update="functionapphost.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="integrationtest.local.settings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MessageReceiver\MessageReceiver.csproj" />
+  </ItemGroup>
 </Project>
