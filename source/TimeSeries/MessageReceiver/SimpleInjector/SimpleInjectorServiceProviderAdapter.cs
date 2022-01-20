@@ -12,21 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Net;
-using System.Threading.Tasks;
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Azure.Functions.Worker.Http;
+using System;
+using SimpleInjector;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector
 {
-    public class TimeSeriesIngestion
+    public class SimpleInjectorServiceProviderAdapter : IServiceProvider
     {
-        [Function(TimeSeriesFunctionNames.TimeSeriesIngestion)]
-        public async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
+        private readonly Container _container;
+
+        public SimpleInjectorServiceProviderAdapter(Container container)
         {
-            var response = request.CreateResponse(HttpStatusCode.Accepted);
-            return await Task.FromResult(response).ConfigureAwait(false);
+            _container = container;
+        }
+
+        public object? GetService(Type serviceType)
+        {
+            if (serviceType == null)
+            {
+                throw new ArgumentNullException(nameof(serviceType));
+            }
+
+            return _container.GetInstance(serviceType);
         }
     }
 }

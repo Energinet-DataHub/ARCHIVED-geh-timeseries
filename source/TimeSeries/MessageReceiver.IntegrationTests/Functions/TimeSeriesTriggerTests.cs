@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -37,11 +36,11 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         }
 
         [Fact]
-        public async Task When_TimeSeriesTriggerFired_Then_OkResponseReturned()
+        public async Task When_RequestReceivedWithNoJwtToken_Then_UnauthorizedResponseReturned()
         {
             using var request = CreateValidTimeSeriesHttpRequest();
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
-            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
         private HttpRequestMessage CreateValidTimeSeriesHttpRequest()

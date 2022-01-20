@@ -12,39 +12,65 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.IO;
-using Microsoft.ApplicationInsights.Extensibility;
-using Microsoft.Extensions.Configuration;
+using System;
+using System.Threading.Tasks;
+using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
+using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
+using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
+using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
+using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Serilog;
+using Microsoft.Extensions.Logging;
+using SimpleInjector;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public static class Program
+    public class Program : Startup
     {
-        public static void Main()
+        public static async Task Main()
         {
-            var host = new HostBuilder().ConfigureAppConfiguration(configurationBuilder =>
-                {
-                    configurationBuilder.SetBasePath(Directory.GetCurrentDirectory());
-                    configurationBuilder.AddJsonFile("local.settings.json", true, true);
-                    configurationBuilder.AddEnvironmentVariables();
-                })
-                .ConfigureFunctionsWorkerDefaults();
+            var program = new Program();
 
-            var buildHost = host.ConfigureServices((context, services) =>
+            var host = program.ConfigureApplication();
+            program.VerifyContainer();
+            await program.ExecuteApplicationAsync(host).ConfigureAwait(false);
+        }
+
+        protected override void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
+        {
+            base.ConfigureFunctionsWorkerDefaults(options);
+
+            options.UseMiddleware<JwtTokenMiddleware>();
+            options.UseMiddleware<RequestResponseLoggingMiddleware>();
+        }
+
+        protected override void ConfigureContainer(Container container)
+        {
+            if (container == null)
             {
-                using var telemetryConfiguration = TelemetryConfiguration.CreateDefault();
-                telemetryConfiguration.InstrumentationKey = context.Configuration["APPINSIGHTS_INSTRUMENTATIONKEY"];
-                var logger = new LoggerConfiguration()
-                    .WriteTo.Console()
-                    .WriteTo.ApplicationInsights(telemetryConfiguration, TelemetryConverter.Traces)
-                    .CreateLogger();
-                services.AddLogging(loggingBuilder => loggingBuilder.AddSerilog(logger));
-            }).Build();
+                throw new ArgumentNullException(nameof(container));
+            }
 
-            buildHost.Run();
+            base.ConfigureContainer(container);
+
+            container.Register<TimeSeriesIngestion>(Lifestyle.Scoped);
+
+            container.AddJwtTokenSecurity(
+                "https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration",
+                "audience");
+
+            container.RegisterSingleton<IRequestResponseLogging>(
+                () =>
+                {
+                    var logger = container.GetService<ILogger<RequestResponseLoggingBlobStorage>>();
+                    var storage = new RequestResponseLoggingBlobStorage(
+                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING") ?? throw new InvalidOperationException(),
+                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME") ?? throw new InvalidOperationException(),
+                        logger ?? throw new InvalidOperationException());
+                    return storage;
+                });
+            container.Register<RequestResponseLoggingMiddleware>(Lifestyle.Scoped);
         }
     }
 }
