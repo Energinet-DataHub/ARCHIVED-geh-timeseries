@@ -80,6 +80,10 @@ artifacts/
 # StyleCop
 StyleCopReport.xml
 
+# Azurite
+__blobstorage*
+__azurite_db*
+
 # Files built by Visual Studio
 *_i.c
 *_p.c
