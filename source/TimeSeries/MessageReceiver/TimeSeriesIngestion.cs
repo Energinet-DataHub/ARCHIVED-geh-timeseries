@@ -19,10 +19,10 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class TimeSeriesIngestion
+    public static class TimeSeriesIngestion
     {
         [Function(TimeSeriesFunctionNames.TimeSeriesIngestion)]
-        public async Task<HttpResponseData> RunAsync(
+        public static async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
         {
             var response = request.CreateResponse(HttpStatusCode.Accepted);

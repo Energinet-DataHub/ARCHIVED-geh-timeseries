@@ -54,8 +54,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
             base.ConfigureContainer(container);
 
-            container.Register<TimeSeriesIngestion>(Lifestyle.Scoped);
-
             container.AddJwtTokenSecurity(
                 "https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration",
                 "audience");

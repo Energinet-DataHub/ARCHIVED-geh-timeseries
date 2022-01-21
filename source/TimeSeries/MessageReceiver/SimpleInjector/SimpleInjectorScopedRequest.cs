@@ -31,13 +31,18 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector
             _container = container;
         }
 
-        public async Task Invoke(FunctionContext context, [NotNull] FunctionExecutionDelegate next)
+        public Task Invoke(FunctionContext context, [NotNull] FunctionExecutionDelegate next)
         {
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
             }
 
+            return InvokeInternalAsync(context, next);
+        }
+
+        private async Task InvokeInternalAsync(FunctionContext context, FunctionExecutionDelegate next)
+        {
             await using var scope = AsyncScopedLifestyle.BeginScope(_container);
             if (scope.Container is null)
             {
