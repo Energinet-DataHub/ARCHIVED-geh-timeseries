@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageReceiver", "MessageReceiver\MessageReceiver.csproj", "{03C494AD-C4D9-42A1-976B-BF906CF6DB41}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MessageReceiver.IntegrationTests", "MessageReceiver.IntegrationTests\MessageReceiver.IntegrationTests.csproj", "{E4424831-9F73-4A4A-8D43-92EA6BE0E675}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{03C494AD-C4D9-42A1-976B-BF906CF6DB41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03C494AD-C4D9-42A1-976B-BF906CF6DB41}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03C494AD-C4D9-42A1-976B-BF906CF6DB41}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03C494AD-C4D9-42A1-976B-BF906CF6DB41}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E4424831-9F73-4A4A-8D43-92EA6BE0E675}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E4424831-9F73-4A4A-8D43-92EA6BE0E675}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E4424831-9F73-4A4A-8D43-92EA6BE0E675}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E4424831-9F73-4A4A-8D43-92EA6BE0E675}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
