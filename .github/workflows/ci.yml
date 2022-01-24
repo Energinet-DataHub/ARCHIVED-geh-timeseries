@@ -43,7 +43,7 @@ jobs:
       ARTIFACT_NAME: message_receiver
 
   create_prerelease:
-    needs: [message_rceiver_ci]
+    needs: [message_receiver_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@2.6.1
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
