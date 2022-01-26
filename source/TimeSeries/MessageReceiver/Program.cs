@@ -61,11 +61,11 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             container.RegisterSingleton<IRequestResponseLogging>(
                 () =>
                 {
-                    var logger = container.GetService<ILogger<RequestResponseLoggingBlobStorage>>();
+                    var logger = container.GetRequiredService<ILogger<RequestResponseLoggingBlobStorage>>();
                     var storage = new RequestResponseLoggingBlobStorage(
-                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING") ?? throw new InvalidOperationException(),
-                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME") ?? throw new InvalidOperationException(),
-                        logger ?? throw new InvalidOperationException());
+                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING") ?? throw new InvalidOperationException("Environment variable REQUEST_RESPONSE_LOGGING_CONNECTION_STRING was not found"),
+                        Environment.GetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME") ?? throw new InvalidOperationException("Environment variable REQUEST_RESPONSE_LOGGING_CONTAINER_NAME was not found"),
+                        logger);
                     return storage;
                 });
             container.Register<RequestResponseLoggingMiddleware>(Lifestyle.Scoped);
