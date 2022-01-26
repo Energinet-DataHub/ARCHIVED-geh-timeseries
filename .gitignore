@@ -378,9 +378,6 @@ appsettings.*.json
 # Patch files
 *.orig
 
-# MD Spell Check
-/utilities/md-spellcheck/dictionary.dic
-
 # Mac DS Store
 .DS_Store
 
