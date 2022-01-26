@@ -39,7 +39,7 @@ jobs:
   terraform_validate:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.7.0
     with:
-      TERRAFORM_WORKING_DIR_PATH: "./build/infrastructure/primary/main"
+      TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.0.10"
 
   message_receiver_ci:
