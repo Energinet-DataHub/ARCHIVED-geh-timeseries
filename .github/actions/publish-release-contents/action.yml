@@ -21,8 +21,14 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Publish Time Series Ingestion to release folder
+    - name: Publish Infrastructure to release folder
+      shell: bash
+      run: |
+        mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
+        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/primary 2>/dev/null || :
+
+    - name: Publish MessageReceiver to release folder
       uses: actions/download-artifact@v2
       with:
         name: message_receiver
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/MessageReceiver
+        path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/message-receiver
