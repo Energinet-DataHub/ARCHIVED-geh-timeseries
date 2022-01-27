@@ -27,7 +27,7 @@ runs:
         mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
         cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/primary 2>/dev/null || :
 
-    - name: Publish MessageReceiver to release folder
+    - name: Publish Message Receiver to release folder
       uses: actions/download-artifact@v2
       with:
         name: message_receiver
