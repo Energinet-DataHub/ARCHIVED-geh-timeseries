@@ -27,7 +27,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         public TimeSeriesFunctionAppFixture()
         {
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
+            AuthorizationConfiguration = new AuthorizationConfiguration();
         }
+
+        public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -53,6 +56,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY", IntegrationTestConfiguration.ApplicationInsightsInstrumentationKey);
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "timeserieslogs");
+            Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
+            Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
         }
 
         /// <inheritdoc/>
