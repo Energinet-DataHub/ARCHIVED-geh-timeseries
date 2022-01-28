@@ -41,8 +41,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         {
             base.ConfigureFunctionsWorkerDefaults(options);
 
-            options.UseMiddleware<JwtTokenMiddleware>();
             options.UseMiddleware<RequestResponseLoggingMiddleware>();
+            options.UseMiddleware<JwtTokenMiddleware>();
         }
 
         protected override void ConfigureContainer(Container container)
@@ -54,9 +54,12 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
             base.ConfigureContainer(container);
 
-            container.AddJwtTokenSecurity(
-                "https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration",
-                "audience");
+            var tenantId = Environment.GetEnvironmentVariable("B2C_TENANT_ID") ?? throw new InvalidOperationException(
+                "B2C tenant id not found.");
+            var audience = Environment.GetEnvironmentVariable("BACKEND_SERVICE_APP_ID") ?? throw new InvalidOperationException(
+                "Backend service app id not found.");
+
+            container.AddJwtTokenSecurity($"https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration", audience);
 
             container.RegisterSingleton<IRequestResponseLogging>(
                 () =>
