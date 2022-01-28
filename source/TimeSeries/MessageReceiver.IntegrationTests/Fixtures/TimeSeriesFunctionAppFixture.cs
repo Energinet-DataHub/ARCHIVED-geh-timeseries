@@ -16,9 +16,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Azure.Storage.Blobs;
 using Energinet.DataHub.Core.FunctionApp.TestCommon;
+using Energinet.DataHub.Core.FunctionApp.TestCommon.Azurite;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.Configuration;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.FunctionAppHost;
+using Microsoft.Extensions.Configuration;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 {
@@ -26,6 +29,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
     {
         public TimeSeriesFunctionAppFixture()
         {
+            AzuriteManager = new AzuriteManager();
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
             AuthorizationConfiguration = new AuthorizationConfiguration();
         }
@@ -33,6 +37,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
+
+        private AzuriteManager AzuriteManager { get; }
 
         /// <inheritdoc/>
         protected override void OnConfigureHostSettings(FunctionAppHostSettings hostSettings)
@@ -50,12 +56,22 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         }
 
         /// <inheritdoc/>
+        protected override async Task OnInitializeFunctionAppDependenciesAsync(IConfiguration localSettingsSnapshot)
+        {
+            AzuriteManager.StartAzurite();
+
+            // Shared logging blob storage container
+            var storage = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
+            await storage.CreateIfNotExistsAsync().ConfigureAwait(false);
+        }
+
+        /// <inheritdoc/>
         protected override void OnConfigureEnvironment()
         {
             Environment.SetEnvironmentVariable("AzureWebJobsStorage", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY", IntegrationTestConfiguration.ApplicationInsightsInstrumentationKey);
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
-            Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "timeserieslogs");
+            Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
             Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
         }
@@ -69,6 +85,12 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             }
 
             return base.OnFunctionAppHostFailedAsync(hostLogSnapshot, exception);
+        }
+
+        /// <inheritdoc/>
+        protected override async Task OnDisposeFunctionAppDependenciesAsync()
+        {
+            AzuriteManager.Dispose();
         }
 
         private static string GetBuildConfiguration()

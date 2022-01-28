@@ -40,20 +40,34 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithNoJwtToken_Then_UnauthorizedResponseReturned()
         {
-            using var request = await CreateValidTimeSeriesHttpRequest().ConfigureAwait(false);
+            using var request = await CreateValidTimeSeriesHttpRequest(false).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
-        private async Task<HttpRequestMessage> CreateValidTimeSeriesHttpRequest()
+        [Fact]
+        public async Task When_RequestReceivedWithJwtToken_Then_AcceptedResponseReturned()
+        {
+            using var request = await CreateValidTimeSeriesHttpRequest(true).ConfigureAwait(false);
+            var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        private async Task<HttpRequestMessage> CreateValidTimeSeriesHttpRequest(bool includeJwtToken)
         {
             var xmlString = _testDocuments.ValidTimeSeries;
             const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesIngestion;
-            var confidentialClientApp = CreateConfidentialClientApp();
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
-            var result = await confidentialClientApp.AcquireTokenForClient(Fixture.AuthorizationConfiguration.BackendAppScope).ExecuteAsync().ConfigureAwait(false);
-            request.Headers.Add("Authorization", $"Bearer {result.AccessToken}");
+            if (includeJwtToken)
+            {
+                var confidentialClientApp = CreateConfidentialClientApp();
+                var result = await confidentialClientApp
+                    .AcquireTokenForClient(Fixture.AuthorizationConfiguration.BackendAppScope).ExecuteAsync()
+                    .ConfigureAwait(false);
+                request.Headers.Add("Authorization", $"Bearer {result.AccessToken}");
+            }
+
             request.Content = new StringContent(xmlString);
             return request;
         }
