@@ -19,5 +19,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
     /// </summary>
     /// <param name="ClientId"></param>
     /// <param name="ClientSecret"></param>
+#pragma warning disable SA1313 // Parameter names should begin with lower-case letter
     public record ClientCredentialsSettings(string ClientId, string ClientSecret);
+#pragma warning restore SA1313 // Parameter names should begin with lower-case letter
 }
