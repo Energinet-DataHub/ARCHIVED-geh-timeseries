@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon;
 using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Assets;
 using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures;
 using FluentAssertions;
+using Microsoft.Identity.Client;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -38,18 +40,49 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithNoJwtToken_Then_UnauthorizedResponseReturned()
         {
-            using var request = CreateValidTimeSeriesHttpRequest();
+            using var request = await CreateValidTimeSeriesHttpRequest(false).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
 
-        private HttpRequestMessage CreateValidTimeSeriesHttpRequest()
+        [Fact]
+        public async Task When_RequestReceivedWithJwtToken_Then_AcceptedResponseReturned()
+        {
+            using var request = await CreateValidTimeSeriesHttpRequest(true).ConfigureAwait(false);
+            var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        private async Task<HttpRequestMessage> CreateValidTimeSeriesHttpRequest(bool includeJwtToken)
         {
             var xmlString = _testDocuments.ValidTimeSeries;
             const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesIngestion;
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
+
+            if (includeJwtToken)
+            {
+                var confidentialClientApp = CreateConfidentialClientApp();
+                var result = await confidentialClientApp
+                    .AcquireTokenForClient(Fixture.AuthorizationConfiguration.BackendAppScope).ExecuteAsync()
+                    .ConfigureAwait(false);
+                request.Headers.Add("Authorization", $"Bearer {result.AccessToken}");
+            }
+
             request.Content = new StringContent(xmlString);
             return request;
+        }
+
+        private IConfidentialClientApplication CreateConfidentialClientApp()
+        {
+            var (teamClientId, teamClientSecret) = Fixture.AuthorizationConfiguration.ClientCredentialsSettings;
+
+            var confidentialClientApp = ConfidentialClientApplicationBuilder
+                .Create(teamClientId)
+                .WithClientSecret(teamClientSecret)
+                .WithAuthority(new Uri($"https://login.microsoftonline.com/{Fixture.AuthorizationConfiguration.B2cTenantId}"))
+                .Build();
+
+            return confidentialClientApp;
         }
     }
 }
