@@ -45,7 +45,7 @@ jobs:
 
   message_receiver_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@3.0.2
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/MessageReceiver/MessageReceiver.csproj"
       DOTNET_VERSION: "5.0.202"
