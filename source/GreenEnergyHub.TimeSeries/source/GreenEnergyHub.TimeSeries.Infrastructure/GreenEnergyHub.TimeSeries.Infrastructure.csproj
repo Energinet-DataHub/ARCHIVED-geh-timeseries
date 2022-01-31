@@ -34,7 +34,7 @@ limitations under the License.
     </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Google.Protobuf" Version="3.19.1" />
+    <PackageReference Include="Google.Protobuf" Version="3.19.4" />
     <PackageReference Include="Grpc.Tools" Version="2.42.0" PrivateAssets="All" />
   </ItemGroup>
 
