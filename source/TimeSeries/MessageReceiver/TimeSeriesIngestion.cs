@@ -14,6 +14,10 @@
 
 using System.Net;
 using System.Threading.Tasks;
+using System.Xml.Linq;
+using Energinet.DataHub.Core.Schemas;
+using Energinet.DataHub.Core.SchemaValidation;
+using Energinet.DataHub.Core.SchemaValidation.Extensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 
@@ -25,8 +29,40 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         public static async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
         {
+            var (succeeded, errorResponse, element) = await ValidateAndReadXmlAsync(request).ConfigureAwait(false);
+
+            if (!succeeded)
+            {
+                return errorResponse ?? request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+
             var response = request.CreateResponse(HttpStatusCode.Accepted);
             return await Task.FromResult(response).ConfigureAwait(false);
+        }
+
+        private static async Task<(bool Succeeded, HttpResponseData? ErrorResponse, XElement? Element)> ValidateAndReadXmlAsync(HttpRequestData request)
+        {
+            var reader = new SchemaValidatingReader(request.Body, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
+
+            HttpResponseData? response = null;
+            var isSucceeded = true;
+
+            var xmlElement = await reader.AsXElementAsync().ConfigureAwait(false);
+
+            if (!reader.HasErrors)
+            {
+                return (isSucceeded, response, xmlElement);
+            }
+
+            isSucceeded = false;
+            response = request.CreateResponse(HttpStatusCode.BadRequest);
+
+            await reader
+                .CreateErrorResponse()
+                .WriteAsXmlAsync(response.Body)
+                .ConfigureAwait(false);
+
+            return (isSucceeded, response, xmlElement);
         }
     }
 }
