@@ -42,7 +42,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         private static async Task<(bool Succeeded, HttpResponseData? ErrorResponse, XElement? Element)> ValidateAndReadXmlAsync(HttpRequestData request)
         {
-            var reader = new SchemaValidatingReader(request.Body, Schemas.CimXml.StructureRequestChangeAccountingPointCharacteristics);
+            var reader = new SchemaValidatingReader(request.Body, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
 
             HttpResponseData? response = null;
             var isSucceeded = true;
