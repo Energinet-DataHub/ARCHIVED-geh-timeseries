@@ -64,6 +64,5 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
             return (isSucceeded, response, xmlElement);
         }
-
     }
 }
