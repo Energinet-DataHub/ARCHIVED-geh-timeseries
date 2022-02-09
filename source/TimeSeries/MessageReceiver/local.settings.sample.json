@@ -7,6 +7,8 @@
     "REQUEST_RESPONSE_LOGGING_CONNECTION_STRING": "<Blob container connection string for request/response logging>",
     "REQUEST_RESPONSE_LOGGING_CONTAINER_NAME": "<Blob container name for request/response logging>",
     "B2C_TENANT_ID": "<Environment specific Tenant Id for token>",
-    "BACKEND_SERVICE_APP_ID":  "<Environment specific Backend Service App Id for token>" 
+    "BACKEND_SERVICE_APP_ID": "<Environment specific Backend Service App Id for token>",
+    "EVENT_HUB_CONNECTION_STRING": "<Environment specific event hub connection string with send rights>",
+    "EVENT_HUB_NAME": "<Name of event hub>"
   }
 }
