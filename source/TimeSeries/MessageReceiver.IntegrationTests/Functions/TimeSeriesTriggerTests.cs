@@ -59,7 +59,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithJwtTokenAndSchemaInvalid_Then_BadRequestResponseReturned()
         {
-            var content = _testDocuments.InvalidTimeSeries;
+            var content = _testDocuments.InvalidTimeSeriesMissingId;
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
