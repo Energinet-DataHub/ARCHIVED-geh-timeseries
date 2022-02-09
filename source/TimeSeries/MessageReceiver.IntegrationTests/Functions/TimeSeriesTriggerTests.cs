@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -40,7 +41,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithNoJwtToken_Then_UnauthorizedResponseReturned()
         {
-            using var request = await CreateValidTimeSeriesHttpRequest(false).ConfigureAwait(false);
+            var content = _testDocuments.ValidTimeSeries;
+            using var request = await CreateTimeSeriesHttpRequest(false, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
@@ -48,14 +50,42 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithJwtToken_Then_AcceptedResponseReturned()
         {
-            using var request = await CreateValidTimeSeriesHttpRequest(true).ConfigureAwait(false);
+            var content = _testDocuments.ValidTimeSeries;
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
 
-        private async Task<HttpRequestMessage> CreateValidTimeSeriesHttpRequest(bool includeJwtToken)
+        [Fact]
+        public async Task When_RequestReceivedWithJwtTokenAndSchemaInvalid_Then_BadRequestResponseReturned()
         {
-            var xmlString = _testDocuments.ValidTimeSeries;
+            var content = _testDocuments.InvalidTimeSeriesMissingId;
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+            var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task When_RequestIsReceived_Then_RequestAndResponseAreLogged()
+        {
+            // Arrange
+            const string expectedHttpDataResponseType = "response";
+            const string expectedHttpDataRequestType = "request";
+            var content = _testDocuments.ValidTimeSeries;
+
+            // Act
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+
+            // Assert
+            var blobItems = Fixture.LogContainerClient.GetBlobs().TakeLast(2).ToArray();
+            var actualHttpDataRequestType = blobItems[0].Metadata["httpdatatype"];
+            var actualHttpDataResponse = blobItems[1].Metadata["httpdatatype"];
+            actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
+            actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
+        }
+
+        private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
+        {
             const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesIngestion;
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
@@ -68,7 +98,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
                 request.Headers.Add("Authorization", $"Bearer {result.AccessToken}");
             }
 
-            request.Content = new StringContent(xmlString);
+            request.Content = new StringContent(content);
             return request;
         }
 
