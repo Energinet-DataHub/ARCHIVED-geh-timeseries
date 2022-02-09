@@ -14,7 +14,8 @@
 
 using System.Net;
 using System.Threading.Tasks;
-using System.Xml.Linq;
+using Energinet.DataHub.Core.Messaging.Transport;
+using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
@@ -29,7 +30,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         public static async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
         {
-            var (succeeded, errorResponse, element) = await ValidateAndReadXmlAsync(request).ConfigureAwait(false);
+            var timeSeriesResult = await _timeSeriesForwarder.ForwardAsync().configureAwait(false);
+            var (succeeded, errorResponse, element) = await ValidateMessageAsync(request).ConfigureAwait(false);
 
             if (!succeeded)
             {
@@ -40,7 +42,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             return await Task.FromResult(response).ConfigureAwait(false);
         }
 
-        private static async Task<(bool Succeeded, HttpResponseData? ErrorResponse, XElement? Element)> ValidateAndReadXmlAsync(HttpRequestData request)
+        private static async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
         {
             var reader = new SchemaValidatingReader(request.Body, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
 

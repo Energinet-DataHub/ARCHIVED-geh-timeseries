@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Energinet.DataHub.TimeSeries.Application</AssemblyName>
+    <RootNamespace>Energinet.DataHub.TimeSeries.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Energinet.DataHub.Core.Messaging" Version="1.1.3" />
+  </ItemGroup>
+
+</Project>
