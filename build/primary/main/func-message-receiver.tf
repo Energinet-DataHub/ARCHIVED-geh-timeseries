@@ -33,6 +33,8 @@ module "func_message_recevier" {
     REQUEST_RESPONSE_LOGGING_CONTAINER_NAME             = data.azurerm_key_vault_secret.st_market_operator_logs_container_name.value
     B2C_TENANT_ID                                       = data.azurerm_key_vault_secret.b2c_tenant_id.value
     BACKEND_SERVICE_APP_ID                              = data.azurerm_key_vault_secret.backend_service_app_id.value
+    EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"]
+    EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
   }
   
   tags                                      = azurerm_resource_group.this.tags
