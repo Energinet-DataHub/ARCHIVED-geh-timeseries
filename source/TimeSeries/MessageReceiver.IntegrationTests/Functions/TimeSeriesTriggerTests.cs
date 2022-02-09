@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -62,6 +63,25 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        [Fact]
+        public async Task When_RequestIsReceived_Then_RequestAndResponseAreLogged()
+        {
+            // Arrange
+            const string expectedHttpDataResponseType = "response";
+            const string expectedHttpDataRequestType = "request";
+            var content = _testDocuments.ValidTimeSeries;
+
+            // Act
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+
+            // Assert
+            var blobItems = Fixture.ContainerClient.GetBlobs().TakeLast(2).ToArray();
+            var actualHttpDataRequestType = blobItems[0].Metadata["httpdatatype"];
+            var actualHttpDataResponse = blobItems[1].Metadata["httpdatatype"];
+            actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
+            actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
         }
 
         private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
