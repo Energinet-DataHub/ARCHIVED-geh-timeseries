@@ -40,7 +40,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithNoJwtToken_Then_UnauthorizedResponseReturned()
         {
-            using var request = await CreateValidTimeSeriesHttpRequest(false).ConfigureAwait(false);
+            var content = _testDocuments.ValidTimeSeries;
+            using var request = await CreateTimeSeriesHttpRequest(false, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
         }
@@ -48,14 +49,23 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
         [Fact]
         public async Task When_RequestReceivedWithJwtToken_Then_AcceptedResponseReturned()
         {
-            using var request = await CreateValidTimeSeriesHttpRequest(true).ConfigureAwait(false);
+            var content = _testDocuments.ValidTimeSeries;
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Accepted);
         }
 
-        private async Task<HttpRequestMessage> CreateValidTimeSeriesHttpRequest(bool includeJwtToken)
+        [Fact]
+        public async Task When_RequestReceivedWithJwtTokenAndSchemaInvalid_Then_BadRequestResponseReturned()
         {
-            var xmlString = _testDocuments.ValidTimeSeries;
+            var content = _testDocuments.InvalidTimeSeries;
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+            var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+        private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
+        {
             const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesIngestion;
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
@@ -68,7 +78,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
                 request.Headers.Add("Authorization", $"Bearer {result.AccessToken}");
             }
 
-            request.Content = new StringContent(xmlString);
+            request.Content = new StringContent(content);
             return request;
         }
 

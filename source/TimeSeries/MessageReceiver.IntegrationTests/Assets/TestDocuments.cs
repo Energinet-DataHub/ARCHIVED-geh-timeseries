@@ -20,6 +20,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Assets
     {
         public string ValidTimeSeries => GetDocumentAsString("Valid_Hourly_CIM_TimeSeries.xml");
 
+        public string InvalidTimeSeries => GetDocumentAsString("Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
+
         private string GetDocumentAsString(string documentName)
         {
             var stream = GetDocumentStream(documentName);
