@@ -36,7 +36,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
-        public BlobContainerClient ContainerClient { get; private set; }
+        public BlobContainerClient LogContainerClient { get; private set; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -63,8 +63,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             AzuriteManager.StartAzurite();
 
             // Shared logging blob storage container
-            ContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
-            await ContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
+            await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
         }
 
         /// <inheritdoc/>

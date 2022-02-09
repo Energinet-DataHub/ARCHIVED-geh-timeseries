@@ -77,7 +77,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
 
             // Assert
-            var blobItems = Fixture.ContainerClient.GetBlobs().TakeLast(2).ToArray();
+            var blobItems = Fixture.LogContainerClient.GetBlobs().TakeLast(2).ToArray();
             var actualHttpDataRequestType = blobItems[0].Metadata["httpdatatype"];
             var actualHttpDataResponse = blobItems[1].Metadata["httpdatatype"];
             actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
