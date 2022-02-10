@@ -20,15 +20,14 @@ on:
 
 jobs:
   ci_base:
-    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
   dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
-      DOTNET_VERSION: "5.0.202"
-      USE_AZURITE: true
-      USE_AZURE_FUNCTIONS_CORE_TOOLS: true
+      DOTNET_VERSION: "5.0.404"      
+      USE_AZURE_FUNCTIONS_TOOLS: true
     secrets:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
@@ -38,22 +37,22 @@ jobs:
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
   terraform_validate:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.0.10"
 
   message_receiver_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@3.0.2
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/MessageReceiver/MessageReceiver.csproj"
-      DOTNET_VERSION: "5.0.202"
+      DOTNET_VERSION: "5.0.404"
       ARTIFACT_NAME: message_receiver
 
   create_prerelease:
     needs: [message_receiver_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
     secrets:
