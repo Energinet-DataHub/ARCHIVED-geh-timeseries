@@ -20,7 +20,7 @@ on:
 
 jobs:
   ci_base:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
+    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
   dotnet_solution_time_series_ci:
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
