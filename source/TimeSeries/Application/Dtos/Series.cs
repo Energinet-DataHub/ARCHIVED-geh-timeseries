@@ -20,6 +20,6 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 
         public MeasureUnit MeasureUnit { get; set; }
 
-        public IEnumerable<Point> Points { get; set; }
+        public Period Period { get; set; }
     }
 }
