@@ -26,8 +26,7 @@ jobs:
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
-      DOTNET_VERSION: "5.0.404"
-      USE_AZURITE: true
+      DOTNET_VERSION: "5.0.404"      
       USE_AZURE_FUNCTIONS_TOOLS: true
     secrets:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
