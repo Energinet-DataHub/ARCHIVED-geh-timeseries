@@ -1,23 +1,13 @@
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.Messaging.Transport;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
 {
     public class TimeSeriesBundleConverter
     {
-        public async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private readonly IClock _clock;
-
-        protected DocumentConverter(IClock clock)
-        {
-            _clock = clock;
-        }
-
         public async Task<IInboundMessage> ConvertAsync(SchemaValidatingReader reader)
         {
             var document = await ParseDocumentAsync(reader).ConfigureAwait(false);
@@ -25,6 +15,13 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
             var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
 
             return message;
+        }
+
+        private readonly IClock _clock;
+
+        protected DocumentConverter(IClock clock)
+        {
+            _clock = clock;
         }
 
         protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(SchemaValidatingReader reader, DocumentDto document);

@@ -30,7 +30,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
             _timeSeriesBundleConverter = timeSeriesBundleConverter;
         }
 
-        protected override async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
+        protected override async Task<IInboundMessage> ConvertAsync(SchemaValidatingReader reader)
         {
             return await _timeSeriesBundleConverter.ConvertAsync(reader).ConfigureAwait(false);
         }
