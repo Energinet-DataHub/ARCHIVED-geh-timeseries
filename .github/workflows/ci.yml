@@ -28,7 +28,6 @@ jobs:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
       DOTNET_VERSION: "5.0.404"
       USE_AZURITE: true
-      USE_AZURE_FUNCTIONS_CORE_TOOLS: true
       USE_AZURE_FUNCTIONS_TOOLS: true
     secrets:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
