@@ -19,6 +19,7 @@ using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
+using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 
@@ -26,45 +27,51 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
     public static class TimeSeriesIngestion
     {
+        private readonly ITimeSeriesBundleHandler _timeSeriesBundleHandler;
+        private readonly IHttpResponseBuilder _httpResponseBuilder;
+
+        /// <summary>
+        /// The name of the function.
+        /// Function name affects the URL and thus possibly dependent infrastructure.
+        /// </summary>
+        private readonly ValidatingMessageExtractor<TimeSeriesBundleDto> _messageExtractor;
+
+        public TimeSeriesIngestion(
+            ITimeSeriesBundleHandler timeSeriesBundleHandler,
+                IHttpResponseBuilder httpResponseBuilder,
+            ValidatingMessageExtractor<TimeSeriesBundleDto> messageExtractor)
+        {
+            _timeSeriesBundleHandler = timeSeriesBundleHandler;
+            _httpResponseBuilder = httpResponseBuilder;
+            _messageExtractor = messageExtractor;
+        }
+
         [Function(TimeSeriesFunctionNames.TimeSeriesIngestion)]
         public static async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData request)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
         {
-            var timeSeriesResult = await _timeSeriesForwarder.ForwardAsync().configureAwait(false);
-            var (succeeded, errorResponse, element) = await ValidateMessageAsync(request).ConfigureAwait(false);
-
-            if (!succeeded)
+            var inboundMessage = await ValidateMessageAsync(req).ConfigureAwait(false);
+            if (inboundMessage.HasErrors)
             {
-                return errorResponse ?? request.CreateResponse(HttpStatusCode.BadRequest);
+                return await _httpResponseBuilder
+                    .CreateBadRequestResponseAsync(req, inboundMessage.SchemaValidationError)
+                    .ConfigureAwait(false);
             }
 
-            var response = request.CreateResponse(HttpStatusCode.Accepted);
-            return await Task.FromResult(response).ConfigureAwait(false);
+            var timeSeriesMessageResult = await _timeSeriesBundleHandler
+                .HandleAsync(inboundMessage.ValidatedMessage)
+                .ConfigureAwait(false);
+
+            return await _httpResponseBuilder
+                .CreateAcceptedResponseAsync(req, timeSeriesMessageResult)
+                .ConfigureAwait(false);
         }
 
         private static async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
         {
-            var reader = new SchemaValidatingReader(request.Body, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
-
-            HttpResponseData? response = null;
-            var isSucceeded = true;
-
-            var xmlElement = await reader.AsXElementAsync().ConfigureAwait(false);
-
-            if (!reader.HasErrors)
-            {
-                return (isSucceeded, response, xmlElement);
-            }
-
-            isSucceeded = false;
-            response = request.CreateResponse(HttpStatusCode.BadRequest);
-
-            await reader
-                .CreateErrorResponse()
-                .WriteAsXmlAsync(response.Body)
+            return (SchemaValidatedInboundMessage<TimeSeriesBundleDto>)await _messageExtractor
+                .ExtractAsync(req.Body)
                 .ConfigureAwait(false);
-
-            return (isSucceeded, response, xmlElement);
         }
     }
 }
