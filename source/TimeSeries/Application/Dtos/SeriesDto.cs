@@ -4,7 +4,7 @@ using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
-    public class Series
+    public class SeriesDto
     {
         public string Id { get; set; }
 
@@ -20,6 +20,6 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 
         public MeasureUnit MeasureUnit { get; set; }
 
-        public Period Period { get; set; }
+        public PeriodDto PeriodDto { get; set; }
     }
 }

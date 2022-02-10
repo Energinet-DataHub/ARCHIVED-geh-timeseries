@@ -4,7 +4,7 @@ using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
-    public class Period
+    public class PeriodDto
     {
         public Resolution Resolution { get; set; }
 
@@ -12,6 +12,6 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 
         public Instant EndDateTime { get; set; }
 
-        public IEnumerable<Point> Points { get; set; }
+        public IEnumerable<PointDto> Points { get; set; }
     }
 }

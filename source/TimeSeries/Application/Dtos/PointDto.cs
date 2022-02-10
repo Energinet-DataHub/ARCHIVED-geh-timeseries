@@ -3,7 +3,7 @@ using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
-    public class Point
+    public class PointDto
     {
         public decimal Quantity { get; set; }
 

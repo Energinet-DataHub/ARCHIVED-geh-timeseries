@@ -2,7 +2,7 @@
 
 namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
-    public class MarketParticipant
+    public class MarketParticipantDto
     {
         public string Id { get; set; }
 

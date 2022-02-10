@@ -20,9 +20,9 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
     public class TimeSeriesBundleDto : IInboundMessage
     {
-        public Document Document { get; set; }
+        public DocumentDto DocumentDto { get; set; }
 
-        public IEnumerable<Series> Series { get; set; }
+        public IEnumerable<SeriesDto> Series { get; set; }
 
         public Transaction Transaction { get; set; }
     }
