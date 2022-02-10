@@ -12,10 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+using System.Threading.Tasks;
+using Energinet.DataHub.Core.SchemaValidation.Errors;
+using Microsoft.Azure.Functions.Worker.Http;
+
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
 {
-    public static class TimeSeriesFunctionNames
+    public interface IHttpResponseBuilder
     {
-        public const string TimeSeriesBundleIngestor = "TimeSeriesIngestion";
+        Task<HttpResponseData> CreateAcceptedResponseAsync<T>(
+            HttpRequestData request,
+            T response);
+
+        Task<HttpResponseData> CreateBadRequestResponseAsync(
+            HttpRequestData request,
+            ErrorResponse response);
     }
 }

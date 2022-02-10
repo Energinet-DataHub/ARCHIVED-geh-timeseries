@@ -20,6 +20,8 @@ using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Energinet.DataHub.TimeSeries.Infrastructure.Function;
+using Energinet.DataHub.TimeSeries.Infrastructure.MessagingExtensions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 
@@ -46,8 +48,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             _messageExtractor = messageExtractor;
         }
 
-        [Function(TimeSeriesFunctionNames.TimeSeriesIngestion)]
-        public static async Task<HttpResponseData> RunAsync(
+        [Function(TimeSeriesFunctionNames.TimeSeriesBundleIngestor)]
+        public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
         {
             var inboundMessage = await ValidateMessageAsync(req).ConfigureAwait(false);
@@ -67,10 +69,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 .ConfigureAwait(false);
         }
 
-        private static async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
+        private async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
         {
             return (SchemaValidatedInboundMessage<TimeSeriesBundleDto>)await _messageExtractor
-                .ExtractAsync(req.Body)
+                .ExtractAsync(request.Body)
                 .ConfigureAwait(false);
         }
     }

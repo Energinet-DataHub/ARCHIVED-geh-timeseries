@@ -86,7 +86,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
 
         private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
         {
-            const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesIngestion;
+            const string requestUri = "api/" + TimeSeriesFunctionNames.TimeSeriesBundleIngestor;
             var request = new HttpRequestMessage(HttpMethod.Post, requestUri);
 
             if (includeJwtToken)

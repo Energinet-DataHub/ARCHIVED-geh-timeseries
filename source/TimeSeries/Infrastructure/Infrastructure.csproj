@@ -6,4 +6,10 @@
     <RootNamespace>Energinet.DataHub.TimeSeries.Infrastructure</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Energinet.DataHub.Core.Messaging" Version="1.1.3" />
+    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="1.0.7" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.4.0" />
+  </ItemGroup>
+
 </Project>
