@@ -26,7 +26,10 @@ runs:
       run: |
         mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
         cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/primary 2>/dev/null || :
-
+    - name: Publish Streaming cluster Infrastructure to release folder
+      shell: bash
+      run: |
+        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/databricks_streaming_cluster ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/databricks_streaming_cluster 2>/dev/null || :
     - name: Publish Message Receiver to release folder
       uses: actions/download-artifact@v2
       with:
