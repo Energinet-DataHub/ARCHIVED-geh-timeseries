@@ -12,10 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Application.Dtos;
+
+namespace Energinet.DataHub.TimeSeries.Application
 {
-    public static class TimeSeriesFunctionNames
+    public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        public const string TimeSeriesBundleIngestor = "TimeSeriesBundleIngestion";
+        public Task HandleAsync(TimeSeriesBundleDto inboundMessageValidatedMessage)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

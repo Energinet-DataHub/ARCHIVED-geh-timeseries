@@ -17,11 +17,8 @@ using Energinet.DataHub.TimeSeries.Application.Dtos;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
-    public class TimeSeriesBundleHandler : ITimeSeriesBundleHandler
+    public interface ITimeSeriesForwarder
     {
-        public Task HandleAsync(TimeSeriesBundleDto inboundMessageValidatedMessage)
-        {
-            throw new System.NotImplementedException();
-        }
+        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle);
     }
 }

@@ -23,23 +23,18 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class TimeSeriesIngestion
+    public class TimeSeriesBundleIngestion
     {
-        private readonly ITimeSeriesBundleHandler _timeSeriesBundleHandler;
+        private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
-
-        /// <summary>
-        /// The name of the function.
-        /// Function name affects the URL and thus possibly dependent infrastructure.
-        /// </summary>
         private readonly ValidatingMessageExtractor<TimeSeriesBundleDto> _messageExtractor;
 
-        public TimeSeriesIngestion(
-            ITimeSeriesBundleHandler timeSeriesBundleHandler,
+        public TimeSeriesBundleIngestion(
+            ITimeSeriesForwarder timeSeriesForwarder,
             IHttpResponseBuilder httpResponseBuilder,
             ValidatingMessageExtractor<TimeSeriesBundleDto> messageExtractor)
         {
-            _timeSeriesBundleHandler = timeSeriesBundleHandler;
+            _timeSeriesForwarder = timeSeriesForwarder;
             _httpResponseBuilder = httpResponseBuilder;
             _messageExtractor = messageExtractor;
         }
@@ -56,7 +51,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                     .ConfigureAwait(false);
             }
 
-            await _timeSeriesBundleHandler
+            await _timeSeriesForwarder
                 .HandleAsync(inboundMessage.ValidatedMessage)
                 .ConfigureAwait(false);
 
