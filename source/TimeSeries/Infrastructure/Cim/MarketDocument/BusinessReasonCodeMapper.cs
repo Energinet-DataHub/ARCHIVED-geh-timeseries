@@ -12,16 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Threading.Tasks;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
+using System.ComponentModel;
+using Energinet.DataHub.TimeSeries.Application.Enums;
 
-namespace Energinet.DataHub.TimeSeries.Application
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
 {
-    public class TimeSeriesBundleHandler : ITimeSeriesBundleHandler
+    public static class BusinessReasonCodeMapper
     {
-        public Task HandleAsync(TimeSeriesBundleDto inboundMessageValidatedMessage)
+        private const string CimPeriodicMetering = "E23";
+        private const string CimHistoricalData = "E30";
+
+        public static BusinessReasonCode Map(string value)
         {
-            throw new System.NotImplementedException();
+            return value switch
+            {
+                CimPeriodicMetering => BusinessReasonCode.PeriodicMetering,
+                CimHistoricalData => BusinessReasonCode.HistoricalData,
+                _ => BusinessReasonCode.Unknown,
+            };
         }
     }
 }

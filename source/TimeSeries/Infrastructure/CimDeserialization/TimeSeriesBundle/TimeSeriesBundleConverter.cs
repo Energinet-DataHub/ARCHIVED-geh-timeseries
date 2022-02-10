@@ -1,32 +1,50 @@
+﻿// Copyright 2020 Energinet DataHub A/S
+//
+// Licensed under the Apache License, Version 2.0 (the "License2");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.Messaging.Transport;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using NodaTime;
+using Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
 {
     public class TimeSeriesBundleConverter
     {
-        public async Task<IInboundMessage> ConvertAsync(SchemaValidatingReader reader)
+        public async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
         {
-            var document = await ParseDocumentAsync(reader).ConfigureAwait(false);
+            var timeSeriesBundle = new TimeSeriesBundleDto();
+            timeSeriesBundle.Document = await ParseDocumentAsync(reader).ConfigureAwait(false);
 
-            var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
-
-            return message;
+            // var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
+            return timeSeriesBundle;
         }
 
-        private readonly IClock _clock;
-
-        protected DocumentConverter(IClock clock)
+        // protected override Task<IInboundMessage> ConvertSpecializedContentAsync(SchemaValidatingReader reader, DocumentDto documentDto);
+        private static async Task<DocumentDto> ParseDocumentAsync(SchemaValidatingReader reader)
         {
-            _clock = clock;
+            var document = new DocumentDto()
+            {
+                Sender = new MarketParticipantDto(),
+                Receiver = new MarketParticipantDto(),
+            };
+
+            await ParseFieldsAsync(reader, document).ConfigureAwait(false);
+
+            return document;
         }
 
-        protected abstract Task<IInboundMessage> ConvertSpecializedContentAsync(SchemaValidatingReader reader, DocumentDto document);
-
-        private static async Task ParseFieldsAsync(SchemaValidatingReader reader, DocumentDto document)
+        private static async Task ParseFieldsAsync(SchemaValidatingReader reader, DocumentDto documentDto)
         {
             var hasReadRoot = false;
 
@@ -39,69 +57,45 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                 else if (reader.Is(CimMarketDocumentConstants.Id))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Id = content;
-                }
-                else if (reader.Is(CimMarketDocumentConstants.Type))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Type = DocumentTypeMapper.Map(content);
+                    documentDto.Id = content;
                 }
                 else if (reader.Is(CimMarketDocumentConstants.BusinessReasonCode))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
-                }
-                else if (reader.Is(CimMarketDocumentConstants.IndustryClassification))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.IndustryClassification = IndustryClassificationMapper.Map(content);
+                    documentDto.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
                 }
                 else if (reader.Is(CimMarketDocumentConstants.SenderId))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Sender.Id = content;
+                    documentDto.Sender.Id = content;
                 }
                 else if (reader.Is(CimMarketDocumentConstants.SenderBusinessProcessRole))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                    documentDto.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
                 }
                 else if (reader.Is(CimMarketDocumentConstants.RecipientId))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Recipient.Id = content;
+                    documentDto.Receiver.Id = content;
                 }
                 else if (reader.Is(CimMarketDocumentConstants.RecipientBusinessProcessRole))
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    document.Recipient.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                    documentDto.Receiver.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
                 }
                 else if (reader.Is(CimMarketDocumentConstants.CreatedDateTime))
                 {
-                    document.CreatedDateTime = await reader.ReadValueAsNodaTimeAsync().ConfigureAwait(false);
+                    documentDto.CreatedDateTime = await reader.ReadValueAsNodaTimeAsync().ConfigureAwait(false);
                 }
                 else if (reader.IsElement())
                 {
                     // CIM does not have the payload in a separate element,
                     // so we have to assume that the first unknown element
-                    // is the start of the specialized document
+                    // is the start of the specialized documentDto
                     break;
                 }
             }
-        }
-
-        private async Task<DocumentDto> ParseDocumentAsync(SchemaValidatingReader reader)
-        {
-            var document = new DocumentDto()
-            {
-                Sender = new MarketParticipantDto(),
-                Recipient = new MarketParticipantDto(),
-                RequestDate = _clock.GetCurrentInstant(),
-            };
-
-            await ParseFieldsAsync(reader, document).ConfigureAwait(false);
-
-            return document;
         }
     }
 }

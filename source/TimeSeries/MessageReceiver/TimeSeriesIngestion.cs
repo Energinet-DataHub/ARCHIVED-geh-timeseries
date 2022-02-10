@@ -65,7 +65,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         private async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
         {
-            return (SchemaValidatedInboundMessage<TimeSeriesBundleDto>)await _messageExtractor
+            return await _messageExtractor
                 .ExtractAsync(request.Body)
                 .ConfigureAwait(false);
         }

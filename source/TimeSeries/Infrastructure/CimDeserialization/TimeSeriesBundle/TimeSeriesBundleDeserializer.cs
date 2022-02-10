@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.Messaging.Transport;
 using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
@@ -30,7 +31,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
             _timeSeriesBundleConverter = timeSeriesBundleConverter;
         }
 
-        protected override async Task<IInboundMessage> ConvertAsync(SchemaValidatingReader reader)
+        protected override async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
         {
             return await _timeSeriesBundleConverter.ConvertAsync(reader).ConfigureAwait(false);
         }

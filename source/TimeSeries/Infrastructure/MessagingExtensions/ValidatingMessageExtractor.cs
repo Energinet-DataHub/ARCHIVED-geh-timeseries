@@ -29,14 +29,14 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.MessagingExtensions
         {
         }
 
-        public async Task<IInboundMessage> ExtractAsync(Stream data, CancellationToken cancellationToken = default)
+        public async Task<SchemaValidatedInboundMessage<TInboundMessage>> ExtractAsync(Stream data, CancellationToken cancellationToken = default)
         {
             if (data == null)
                 throw new ArgumentNullException(nameof(data));
 
             var bytes = await GetBytesFromStreamAsync(data, cancellationToken).ConfigureAwait(false);
 
-            return await ExtractAsync(bytes, cancellationToken).ConfigureAwait(false);
+            return (SchemaValidatedInboundMessage<TInboundMessage>)await ExtractAsync(bytes, cancellationToken).ConfigureAwait(false);
         }
 
         private static async Task<byte[]> GetBytesFromStreamAsync(Stream data, CancellationToken cancellationToken)

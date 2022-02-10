@@ -12,20 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using Energinet.DataHub.TimeSeries.Application.Enums;
-using NodaTime;
 
-namespace Energinet.DataHub.TimeSeries.Application.Dtos
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
 {
-    public class PeriodDto
+    public static class MarketParticipantRoleMapper
     {
-        public Resolution Resolution { get; set; }
+        private const string CimMeteredDataAdministrator = "DGL";
+        private const string CimMeteredDataResponsible = "MDR";
 
-        public Instant StartDateTime { get; set; }
-
-        public Instant EndDateTime { get; set; }
-
-        public IEnumerable<PointDto> Points { get; set; }
+        public static MarketParticipantRole Map(string value)
+        {
+            return value switch
+            {
+                CimMeteredDataResponsible => MarketParticipantRole.MeteredDataResponsible,
+                CimMeteredDataAdministrator => MarketParticipantRole.MeteredDataAdministrator,
+                _ => MarketParticipantRole.Unknown,
+            };
+        }
     }
 }
