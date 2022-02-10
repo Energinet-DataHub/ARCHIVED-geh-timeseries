@@ -5,6 +5,6 @@ namespace Energinet.DataHub.TimeSeries.Application
 {
     public interface ITimeSeriesBundleHandler
     {
-        Task HandleAsync(TimeSeriesBundleDto inboundMessageValidatedMessage);
+        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle);
     }
 }
