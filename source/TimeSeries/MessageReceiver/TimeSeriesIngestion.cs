@@ -12,13 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Net;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.Messaging.Transport;
 using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
-using Energinet.DataHub.Core.Schemas;
-using Energinet.DataHub.Core.SchemaValidation;
-using Energinet.DataHub.Core.SchemaValidation.Extensions;
+using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.Function;
 using Energinet.DataHub.TimeSeries.Infrastructure.MessagingExtensions;
@@ -27,7 +23,7 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public static class TimeSeriesIngestion
+    public class TimeSeriesIngestion
     {
         private readonly ITimeSeriesBundleHandler _timeSeriesBundleHandler;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
@@ -40,7 +36,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         public TimeSeriesIngestion(
             ITimeSeriesBundleHandler timeSeriesBundleHandler,
-                IHttpResponseBuilder httpResponseBuilder,
+            IHttpResponseBuilder httpResponseBuilder,
             ValidatingMessageExtractor<TimeSeriesBundleDto> messageExtractor)
         {
             _timeSeriesBundleHandler = timeSeriesBundleHandler;
@@ -60,13 +56,11 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                     .ConfigureAwait(false);
             }
 
-            var timeSeriesMessageResult = await _timeSeriesBundleHandler
+            await _timeSeriesBundleHandler
                 .HandleAsync(inboundMessage.ValidatedMessage)
                 .ConfigureAwait(false);
 
-            return await _httpResponseBuilder
-                .CreateAcceptedResponseAsync(req, timeSeriesMessageResult)
-                .ConfigureAwait(false);
+            return _httpResponseBuilder.CreateAcceptedResponse(req);
         }
 
         private async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)

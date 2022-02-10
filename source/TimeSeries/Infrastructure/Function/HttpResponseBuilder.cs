@@ -16,18 +16,15 @@ using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
-using Energinet.DataHub.TimeSeries.Infrastructure.Function;
 using Microsoft.Azure.Functions.Worker.Http;
 
-namespace GreenEnergyHub.Charges.Infrastructure.Core.Function
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
 {
     public sealed class HttpResponseBuilder : IHttpResponseBuilder
     {
-        public async Task<HttpResponseData> CreateAcceptedResponseAsync<T>(HttpRequestData request, T response)
+        public HttpResponseData CreateAcceptedResponse(HttpRequestData request)
         {
-            var httpResponse = request.CreateResponse(HttpStatusCode.Accepted);
-            await httpResponse.WriteAsJsonAsync(response).ConfigureAwait(false);
-            return httpResponse;
+            return request.CreateResponse(HttpStatusCode.Accepted);
         }
 
         public async Task<HttpResponseData> CreateBadRequestResponseAsync(HttpRequestData request, ErrorResponse response)

@@ -14,6 +14,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Infrastructure.Function;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -60,8 +61,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         protected virtual void ConfigureContainer(Container container) { }
 
-        protected virtual void ConfigureServiceCollection(IServiceCollection services) { }
-
         protected virtual void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
         {
             options.UseMiddleware<SimpleInjectorScopedRequest>();
@@ -80,8 +79,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         {
             ReplaceServiceDescriptor(serviceCollection);
 
-            ConfigureServiceCollection(serviceCollection);
-
             serviceCollection.AddApplicationInsightsTelemetryWorkerService(
                 Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"));
 
@@ -90,6 +87,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             {
                 options.AddLogging();
             });
+
+            serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
         }
     }
 }

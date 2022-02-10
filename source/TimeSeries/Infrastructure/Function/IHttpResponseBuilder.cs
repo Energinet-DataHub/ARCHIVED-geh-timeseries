@@ -20,9 +20,8 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
 {
     public interface IHttpResponseBuilder
     {
-        Task<HttpResponseData> CreateAcceptedResponseAsync<T>(
-            HttpRequestData request,
-            T response);
+        HttpResponseData CreateAcceptedResponse(
+            HttpRequestData request);
 
         Task<HttpResponseData> CreateBadRequestResponseAsync(
             HttpRequestData request,

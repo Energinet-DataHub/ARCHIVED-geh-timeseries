@@ -15,7 +15,7 @@
       "allowedHungarianPrefixes": ["db"]
     },
     "documentationRules": {
-      "documentInterfaces": true,
+      "documentInterfaces": false,
       "documentExposedElements": false,
       "documentInternalElements": false,
       "documentPrivateElements": false,
