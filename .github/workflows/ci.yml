@@ -78,7 +78,7 @@ jobs:
       ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [message_receiver_ci,wheel_ci]
+    needs: [message_receiver_ci, wheel_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@3.0.3
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
