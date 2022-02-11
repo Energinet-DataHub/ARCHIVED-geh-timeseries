@@ -37,13 +37,14 @@ jobs:
       AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
-  databricks_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
-    with:
-      PATH_STATIC_CHECKS: './source'
-      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-      ARTIFACT_NAME: 'build-databricks_artifacts'
-      TEST_REPORT_PATH: ./source/databricks/htmlcov/
+# TODO reintroduce once pipelines are sorted (This step is slow due to docker container)
+  # databricks_ci:
+  #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
+  #   with:
+  #     PATH_STATIC_CHECKS: './source'
+  #     IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
+  #     ARTIFACT_NAME: 'build-databricks_artifacts'
+  #     TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
   terraform_validate:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@3.0.3
