@@ -12,16 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
 {
-    public class TimeSeriesBundleConverter
+    public class TimeSeriesBundleDtoValidatingDeserializer : ITimeSeriesBundleDtoValidatingDeserializer
     {
-        public async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
+        public async Task<TimeSeriesBundleDtoResult> ValidateAndDeserializeAsync(Stream reqBody)
+        {
+            var reader = new SchemaValidatingReader(reqBody, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
+            var timeSeriesBundle = await ConvertAsync(reader).ConfigureAwait(false);
+            return new TimeSeriesBundleDtoResult
+            {
+                HasErrors = reader.HasErrors,
+                Errors = reader.Errors.ToList(),
+                TimeSeriesBundleDto = timeSeriesBundle,
+            };
+        }
+
+        private static async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)
         {
             var timeSeriesBundle = new TimeSeriesBundleDto();
             timeSeriesBundle.Document = await ParseDocumentAsync(reader).ConfigureAwait(false);

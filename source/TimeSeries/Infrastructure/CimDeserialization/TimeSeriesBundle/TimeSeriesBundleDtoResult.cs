@@ -12,32 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Energinet.DataHub.TimeSeries.Application.Enums;
-using NodaTime;
+using System.Collections.Generic;
+using Energinet.DataHub.Core.SchemaValidation;
+using Energinet.DataHub.TimeSeries.Application.Dtos;
 
-namespace Energinet.DataHub.TimeSeries.Application.Dtos
+namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
 {
-    public class SeriesDto
+    public class TimeSeriesBundleDtoResult
     {
-        public SeriesDto()
+        public TimeSeriesBundleDtoResult()
         {
-            Period = new PeriodDto();
+            Errors = new List<SchemaValidationError>();
         }
 
-        public string? Id { get; set; }
+        public bool HasErrors { get; set; }
 
-        public string? TransactionId { get; set; }
+        public TimeSeriesBundleDto? TimeSeriesBundleDto { get; set; }
 
-        public string? MeteringPointId { get; set; }
-
-        public MeteringPointType MeteringPointType { get; set; }
-
-        public Instant RegistrationDateTime { get; set; }
-
-        public string? Product { get; set; }
-
-        public MeasureUnit MeasureUnit { get; set; }
-
-        public PeriodDto Period { get; set; }
+        public List<SchemaValidationError> Errors { get; set; }
     }
 }

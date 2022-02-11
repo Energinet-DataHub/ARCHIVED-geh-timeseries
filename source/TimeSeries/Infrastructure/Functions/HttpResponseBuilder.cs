@@ -12,13 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
 using Microsoft.Azure.Functions.Worker.Http;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
 {
     public sealed class HttpResponseBuilder : IHttpResponseBuilder
     {
@@ -27,10 +29,13 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
             return request.CreateResponse(HttpStatusCode.Accepted);
         }
 
-        public async Task<HttpResponseData> CreateBadRequestResponseAsync(HttpRequestData request, ErrorResponse response)
+        public async Task<HttpResponseData> CreateBadRequestResponseAsync(
+            HttpRequestData request,
+            IEnumerable<SchemaValidationError> schemaValidationErrors)
         {
+            var errorResponse = new ErrorResponse(schemaValidationErrors);
             var httpResponse = request.CreateResponse(HttpStatusCode.BadRequest);
-            await response.WriteAsXmlAsync(httpResponse.Body).ConfigureAwait(false);
+            await errorResponse.WriteAsXmlAsync(httpResponse.Body).ConfigureAwait(false);
             return httpResponse;
         }
     }

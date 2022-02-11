@@ -5,7 +5,13 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
     public class DocumentDto
     {
-        public string Id { get; set; }
+        public DocumentDto()
+        {
+            Sender = new MarketParticipantDto();
+            Receiver = new MarketParticipantDto();
+        }
+
+        public string? Id { get; set; }
 
         public Instant CreatedDateTime { get; set; }
 

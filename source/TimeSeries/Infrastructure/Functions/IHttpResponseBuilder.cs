@@ -13,24 +13,19 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Energinet.DataHub.TimeSeries.Application.Enums;
-using NodaTime;
+using System.Threading.Tasks;
+using Energinet.DataHub.Core.SchemaValidation;
+using Microsoft.Azure.Functions.Worker.Http;
 
-namespace Energinet.DataHub.TimeSeries.Application.Dtos
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
 {
-    public class PeriodDto
+    public interface IHttpResponseBuilder
     {
-        public PeriodDto()
-        {
-            Points = new List<PointDto>();
-        }
+        HttpResponseData CreateAcceptedResponse(
+            HttpRequestData request);
 
-        public Resolution Resolution { get; set; }
-
-        public Instant StartDateTime { get; set; }
-
-        public Instant EndDateTime { get; set; }
-
-        public IEnumerable<PointDto> Points { get; set; }
+        Task<HttpResponseData> CreateBadRequestResponseAsync(
+            HttpRequestData request,
+            IEnumerable<SchemaValidationError> response);
     }
 }

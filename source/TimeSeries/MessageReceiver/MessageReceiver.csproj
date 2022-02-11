@@ -17,7 +17,6 @@ limitations under the License.
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <AzureFunctionsVersion>V3</AzureFunctionsVersion>
-    <Nullable>enable</Nullable>
     <OutputType>Exe</OutputType>
     <AssemblyName>Energinet.DataHub.TimeSeries.MessageReceiver</AssemblyName>
     <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver</RootNamespace>
@@ -27,7 +26,6 @@ limitations under the License.
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common.Abstractions" Version="1.0.3" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector" Version="1.0.3" />
     <PackageReference Include="Energinet.DataHub.Core.Logging" Version="1.0.5" />
-    <PackageReference Include="Energinet.DataHub.Core.Messaging" Version="1.1.3" />
     <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="1.0.8" />
     <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="1.0.7" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.20.0" />

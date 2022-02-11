@@ -13,11 +13,10 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
+using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.TimeSeries.Application;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.Infrastructure.Function;
-using Energinet.DataHub.TimeSeries.Infrastructure.MessagingExtensions;
+using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 
@@ -27,42 +26,38 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
     {
         private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
-        private readonly ValidatingMessageExtractor<TimeSeriesBundleDto> _messageExtractor;
+        private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
 
         public TimeSeriesBundleIngestion(
             ITimeSeriesForwarder timeSeriesForwarder,
             IHttpResponseBuilder httpResponseBuilder,
-            ValidatingMessageExtractor<TimeSeriesBundleDto> messageExtractor)
+            ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer)
         {
             _timeSeriesForwarder = timeSeriesForwarder;
             _httpResponseBuilder = httpResponseBuilder;
-            _messageExtractor = messageExtractor;
+            _timeSeriesBundleDtoValidatingDeserializer = timeSeriesBundleDtoValidatingDeserializer;
         }
 
         [Function(TimeSeriesFunctionNames.TimeSeriesBundleIngestor)]
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
         {
-            var inboundMessage = await ValidateMessageAsync(req).ConfigureAwait(false);
-            if (inboundMessage.HasErrors)
+            var deserializationResult = await _timeSeriesBundleDtoValidatingDeserializer
+                .ValidateAndDeserializeAsync(req.Body)
+                .ConfigureAwait(false);
+
+            if (deserializationResult.HasErrors)
             {
                 return await _httpResponseBuilder
-                    .CreateBadRequestResponseAsync(req, inboundMessage.SchemaValidationError)
+                    .CreateBadRequestResponseAsync(req, deserializationResult.Errors)
                     .ConfigureAwait(false);
             }
 
             await _timeSeriesForwarder
-                .HandleAsync(inboundMessage.ValidatedMessage)
+                .HandleAsync(deserializationResult.TimeSeriesBundleDto!)
                 .ConfigureAwait(false);
 
             return _httpResponseBuilder.CreateAcceptedResponse(req);
-        }
-
-        private async Task<SchemaValidatedInboundMessage<TimeSeriesBundleDto>> ValidateMessageAsync(HttpRequestData request)
-        {
-            return await _messageExtractor
-                .ExtractAsync(request.Body)
-                .ConfigureAwait(false);
         }
     }
 }

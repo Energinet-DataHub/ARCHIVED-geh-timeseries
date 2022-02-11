@@ -13,17 +13,19 @@
 // limitations under the License.
 
 using System.Collections.Generic;
-using Energinet.DataHub.Core.Messaging.MessageTypes.Common;
-using Energinet.DataHub.Core.Messaging.Transport;
 
 namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
-    public class TimeSeriesBundleDto : IInboundMessage
+    public class TimeSeriesBundleDto
     {
+        public TimeSeriesBundleDto()
+        {
+            Document = new DocumentDto();
+            Series = new List<SeriesDto>();
+        }
+
         public DocumentDto Document { get; set; }
 
         public IEnumerable<SeriesDto> Series { get; set; }
-
-        public Transaction Transaction { get; set; }
     }
 }

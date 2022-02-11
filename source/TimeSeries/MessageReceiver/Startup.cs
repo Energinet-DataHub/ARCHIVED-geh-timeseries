@@ -14,12 +14,9 @@
 
 using System;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.Messaging.Transport.SchemaValidation;
 using Energinet.DataHub.TimeSeries.Application;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
-using Energinet.DataHub.TimeSeries.Infrastructure.Function;
-using Energinet.DataHub.TimeSeries.Infrastructure.MessagingExtensions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -94,11 +91,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             });
 
             serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
-            serviceCollection
-                .AddScoped<SchemaValidatingMessageDeserializer<TimeSeriesBundleDto>, TimeSeriesBundleDeserializer>();
-            serviceCollection.AddScoped<TimeSeriesBundleConverter>();
-            serviceCollection.AddScoped<ValidatingMessageExtractor<TimeSeriesBundleDto>>();
+            serviceCollection.AddScoped<TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection
+                .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
         }
     }
 }

@@ -12,19 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.SchemaValidation.Errors;
-using Microsoft.Azure.Functions.Worker.Http;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Function
+namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
 {
-    public interface IHttpResponseBuilder
+    public interface ITimeSeriesBundleDtoValidatingDeserializer
     {
-        HttpResponseData CreateAcceptedResponse(
-            HttpRequestData request);
-
-        Task<HttpResponseData> CreateBadRequestResponseAsync(
-            HttpRequestData request,
-            ErrorResponse response);
+        Task<TimeSeriesBundleDtoResult> ValidateAndDeserializeAsync(Stream reqBody);
     }
 }
