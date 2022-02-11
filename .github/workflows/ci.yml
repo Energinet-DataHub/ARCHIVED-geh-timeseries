@@ -37,6 +37,7 @@ jobs:
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
 # TODO reintroduce once pipelines are sorted (This step is slow due to docker container)
+
   # databricks_ci:
   #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
   #   with:
