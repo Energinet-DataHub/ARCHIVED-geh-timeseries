@@ -52,5 +52,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
         public const string CodingScheme = "codingScheme";
 
         public const string MarketActivityRecord = "MktActivityRecord";
+
+        public const string Series = "Series";
     }
 }
