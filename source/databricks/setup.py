@@ -13,13 +13,8 @@
 # limitations under the License.
 from setuptools import setup, find_packages
 
-# File 'VERSION' is created by pipeline. If executed manual it must be created manually.
-__version__ = ""
-with open('VERSION') as version_file:
-    __version__ = version_file.read().strip()
-
 setup(name='package',
-      version=__version__,
+      version=1.0,
       description='Tools for timeseries streaming',
       long_description="",
       long_description_content_type='text/markdown',
