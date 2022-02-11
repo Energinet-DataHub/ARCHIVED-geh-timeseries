@@ -52,6 +52,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 throw new ArgumentNullException(nameof(container));
             }
 
+            container.Register<TimeSeriesBundleIngestion>(Lifestyle.Scoped);
             base.ConfigureContainer(container);
 
             var tenantId = Environment.GetEnvironmentVariable("B2C_TENANT_ID") ?? throw new InvalidOperationException(

@@ -41,11 +41,9 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
             var timeSeriesBundle = new TimeSeriesBundleDto();
             timeSeriesBundle.Document = await ParseDocumentAsync(reader).ConfigureAwait(false);
 
-            // var message = await ConvertSpecializedContentAsync(reader, document).ConfigureAwait(false);
             return timeSeriesBundle;
         }
 
-        // protected override Task<IInboundMessage> ConvertSpecializedContentAsync(SchemaValidatingReader reader, DocumentDto documentDto);
         private static async Task<DocumentDto> ParseDocumentAsync(SchemaValidatingReader reader)
         {
             var document = new DocumentDto()
@@ -69,40 +67,41 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                 {
                     hasReadRoot = true;
                 }
-                else if (reader.Is(CimMarketDocumentConstants.Id))
+                else if (reader.CurrentNodeName == CimMarketDocumentConstants.Id && reader.CanReadValue)
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
                     documentDto.Id = content;
                 }
-                else if (reader.Is(CimMarketDocumentConstants.BusinessReasonCode))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    documentDto.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
-                }
-                else if (reader.Is(CimMarketDocumentConstants.SenderId))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    documentDto.Sender.Id = content;
-                }
-                else if (reader.Is(CimMarketDocumentConstants.SenderBusinessProcessRole))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    documentDto.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
-                }
-                else if (reader.Is(CimMarketDocumentConstants.RecipientId))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    documentDto.Receiver.Id = content;
-                }
-                else if (reader.Is(CimMarketDocumentConstants.RecipientBusinessProcessRole))
-                {
-                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    documentDto.Receiver.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
-                }
-                else if (reader.Is(CimMarketDocumentConstants.CreatedDateTime))
-                {
-                    documentDto.CreatedDateTime = await reader.ReadValueAsNodaTimeAsync().ConfigureAwait(false);
-                }
+
+                //else if (reader.Is(CimMarketDocumentConstants.BusinessReasonCode))
+                //{
+                //    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
+                //    documentDto.BusinessReasonCode = BusinessReasonCodeMapper.Map(content);
+                //}
+                //else if (reader.Is(CimMarketDocumentConstants.SenderId))
+                //{
+                //    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
+                //    documentDto.Sender.Id = content;
+                //}
+                //else if (reader.Is(CimMarketDocumentConstants.SenderBusinessProcessRole))
+                //{
+                //    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
+                //    documentDto.Sender.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                //}
+                //else if (reader.Is(CimMarketDocumentConstants.RecipientId))
+                //{
+                //    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
+                //    documentDto.Receiver.Id = content;
+                //}
+                //else if (reader.Is(CimMarketDocumentConstants.RecipientBusinessProcessRole))
+                //{
+                //    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
+                //    documentDto.Receiver.BusinessProcessRole = MarketParticipantRoleMapper.Map(content);
+                //}
+                //else if (reader.Is(CimMarketDocumentConstants.CreatedDateTime))
+                //{
+                //    documentDto.CreatedDateTime = await reader.ReadValueAsNodaTimeAsync().ConfigureAwait(false);
+                //}
                 else if (reader.IsElement())
                 {
                     // CIM does not have the payload in a separate element,
