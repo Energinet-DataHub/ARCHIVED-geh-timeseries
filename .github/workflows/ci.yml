@@ -67,7 +67,8 @@ jobs:
       ARTIFACT_NAME: message_receiver
 
   wheel_ci:
-    needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
+    #needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
+    needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
     uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@2.4.0
     with:
       PYHTON_VERSION: '3.8.6'
