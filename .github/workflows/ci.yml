@@ -79,7 +79,7 @@ jobs:
 
   create_prerelease:
     needs: [message_receiver_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
+    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@feature/databricks_streaming_infrastructure_deployment
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
     secrets:
