@@ -19,7 +19,6 @@ resource "databricks_job" "streaming_job" {
   always_running = true
 
   new_cluster {
-    cluster_name            = "Timeseries-cluster"
     spark_version           = "8.4.x-scala2.12"
     node_type_id            = "Standard_DS3_v2"
     num_workers    = 1
