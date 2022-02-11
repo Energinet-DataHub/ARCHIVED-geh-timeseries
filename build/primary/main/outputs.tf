@@ -14,5 +14,5 @@
 output databricks_workspace_url {
   description = "URL of the created Databricks workspace"
   value       = data.azurerm_key_vault_secret.dbw_shared_workspace_url.value
-  sensitive   = false
+  sensitive   = true
 }
