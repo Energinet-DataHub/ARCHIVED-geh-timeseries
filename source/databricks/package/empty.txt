@@ -11,18 +11,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from setuptools import setup, find_packages
 
-# File 'VERSION' is created by pipeline. If executed manual it must be created manually.
-__version__ = ""
-with open('VERSION') as version_file:
-    __version__ = version_file.read().strip()
-
-setup(name='package',
-      version=__version__,
-      description='Tools for timeseries streaming',
-      long_description="",
-      long_description_content_type='text/markdown',
-      license='MIT',
-      packages=find_packages()
-      )
+#This is a filesytem placeholder
