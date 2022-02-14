@@ -116,7 +116,9 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                         else if (reader.CurrentNodeName == CimMarketDocumentConstants.Period &&
                                  reader.CurrentNodeType == NodeType.StartElement)
                         {
-                            series = await ParsePeriodAsync(reader, seriesEntry, series).ConfigureAwait(false);
+                            seriesEntry.Period = await ParsePeriodAsync(reader).ConfigureAwait(false);
+                            series.Add(seriesEntry);
+                            seriesEntry = new SeriesDto();
                         }
                     }
                 }
@@ -125,16 +127,17 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
             return series;
         }
 
-        private static async Task<List<SeriesDto>> ParsePeriodAsync(SchemaValidatingReader reader, SeriesDto seriesEntry, List<SeriesDto> series)
+        private static async Task<PeriodDto> ParsePeriodAsync(SchemaValidatingReader reader)
         {
-            seriesEntry.Period = new PeriodDto();
+            var period = new PeriodDto();
+            var points = new List<PointDto>();
 
             while (await reader.AdvanceAsync().ConfigureAwait(false))
             {
                 if (reader.CurrentNodeName == CimMarketDocumentConstants.Resolution && reader.CanReadValue)
                 {
                     var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                    seriesEntry.Period.Resolution = ResolutionMapper.Map(content);
+                    period.Resolution = ResolutionMapper.Map(content);
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.TimeIntervalStart && reader.CanReadValue)
                 {
@@ -142,7 +145,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                         .ReadValueAsStringAsync()
                         .ConfigureAwait(false);
 
-                    seriesEntry.Period.StartDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
+                    period.StartDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.TimeIntervalEnd && reader.CanReadValue)
                 {
@@ -150,25 +153,24 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                         .ReadValueAsStringAsync()
                         .ConfigureAwait(false);
 
-                    seriesEntry.Period.EndDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
+                    period.EndDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Point && reader.CurrentNodeType == NodeType.StartElement)
                 {
-                    var points = await ParsePointsAsync(reader).ConfigureAwait(false);
-                    seriesEntry.Period.Points = points;
+                    points = await ParsePointsAsync(reader).ConfigureAwait(false);
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Series &&
                          reader.CurrentNodeType == NodeType.EndElement)
                 {
-                    series.Add(seriesEntry);
+                    period.Points = points;
                     break;
                 }
             }
 
-            return series;
+            return period;
         }
 
-        private static async Task<IEnumerable<PointDto>> ParsePointsAsync(SchemaValidatingReader reader)
+        private static async Task<List<PointDto>> ParsePointsAsync(SchemaValidatingReader reader)
         {
             var points = new List<PointDto>();
             var point = new PointDto();
