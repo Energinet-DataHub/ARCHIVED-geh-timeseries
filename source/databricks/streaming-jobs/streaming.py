@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 import sys
 sys.path.append(r'/workspaces/geh-timeseries/source/databricks')
 sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
@@ -30,7 +31,7 @@ args, unknown_args = p.parse_known_args()
 
 spark = initialize_spark(args)
 
-events_delta_path = f"abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.events_data_blob_name}"
+events_delta_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.events_data_blob_name}'
 
 # start the eventhub ingestor
 events_ingestion_stream(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)
