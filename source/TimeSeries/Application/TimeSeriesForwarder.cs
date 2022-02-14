@@ -19,7 +19,7 @@ namespace Energinet.DataHub.TimeSeries.Application
 {
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        public Task HandleAsync(TimeSeriesBundleDto inboundMessageValidatedMessage)
+        public Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             throw new System.NotImplementedException();
         }
