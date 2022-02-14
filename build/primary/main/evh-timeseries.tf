@@ -52,7 +52,7 @@ module "kvs_evh_timeseries_listen_key" {
 
   name          = "evh-timeseries-listen-connection-string"
   value         = module.evh_received_timeseries.primary_connection_strings["listen"]
-  key_vault_id  = data.azurerm_key_vault.kv_shared.id
+  key_vault_id  = data.azurerm_key_vault.kv_shared_resources.id
 
   tags          = azurerm_resource_group.this.tags
 }
