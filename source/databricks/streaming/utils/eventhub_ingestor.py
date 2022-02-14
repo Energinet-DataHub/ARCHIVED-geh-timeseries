@@ -13,14 +13,11 @@
 # limitations under the License.
 from pyspark.sql import SparkSession
 
-from .event_meta_data import EventMetaData
-
 
 def process_eventhub_item(df, epoch_id, events_delta_path):
     if len(df.head(1)) > 0:
         # Append event
         df.write \
-            .partitionBy(EventMetaData.event_name) \
             .format("delta") \
             .mode("append") \
             .save(events_delta_path)
