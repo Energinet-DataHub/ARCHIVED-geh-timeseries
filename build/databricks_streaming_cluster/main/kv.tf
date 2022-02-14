@@ -21,7 +21,6 @@ data "azurerm_key_vault_secret" "dbw_databricks_workspace_id" {
   key_vault_id = data.azurerm_key_vault.kv_shared.id
 }
 
-
 data "azurerm_key_vault_secret" "st_data_lake_name" {
   name         = "st-data-lake-name"
   key_vault_id = data.azurerm_key_vault.kv_shared.id
