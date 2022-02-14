@@ -3,10 +3,11 @@
     public enum Quality
     {
         Unknown = 0,
-        Measured = 1, // E01
-        Revised = 2, // 36
+        Adjusted = 1, // A01
+        NotAvailable = 2, // A02
         Estimated = 3, // 56
-        QuantityMissing = 4, // A02
-        Calculated = 5, // D01
+        AsProvided = 4, // A03
+        Incomplete = 5, // A05
+        Calculated = 6, // Z01
     }
 }
