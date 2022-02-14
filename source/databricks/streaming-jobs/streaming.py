@@ -17,7 +17,7 @@ sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
 
 import configargparse
 
-from package import events_ingenstion_stream, initialize_spark
+from package import events_ingestion_stream, initialize_spark
 
 p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
@@ -33,4 +33,4 @@ spark = initialize_spark(args)
 events_delta_path = f"abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.events_data_blob_name}"
 
 # start the eventhub ingestor
-events_ingenstion_stream(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)
+events_ingestion_stream(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)

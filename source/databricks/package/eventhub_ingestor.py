@@ -16,10 +16,12 @@ from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
 
 
-def process_eventhub_item(df, epoch_id, events_delta_path):
+def process_eventhub_item(df, events_delta_path):
     if len(df.head(1)) > 0:
         # Append event
-        df = df.withColumn("year", year(df.enqueuedTime)).withColumn("month", month(df.enqueuedTime)).withColumn("day", dayofmonth(df.enqueuedTime))
+        df = df.withColumn("year", year(df.enqueuedTime)) \
+            .withColumn("month", month(df.enqueuedTime)) \
+            .withColumn("day", dayofmonth(df.enqueuedTime))
 
         df.write \
             .partitionBy("year", "month", "day") \
@@ -28,7 +30,7 @@ def process_eventhub_item(df, epoch_id, events_delta_path):
             .save(events_delta_path)
 
 
-def events_ingenstion_stream(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, events_delta_path):
+def events_ingestion_stream(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, events_delta_path):
 
     spark = SparkSession.builder.getOrCreate()
 
@@ -38,5 +40,5 @@ def events_ingenstion_stream(event_hub_connection_key: str, delta_lake_container
 
     checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
 
-    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, events_delta_path)).start()
+    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df: process_eventhub_item(df, events_delta_path)).start()
     # streamingDF.awaitTermination()
