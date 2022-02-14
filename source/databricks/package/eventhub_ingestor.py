@@ -18,9 +18,7 @@ from pyspark.sql.types import StringType
 def process_eventhub_item(df, epoch_id, events_delta_path):
     if len(df.head(1)) > 0:
         # Append event
-        body = df.select(df.body.cast(StringType()).alias("body"))
-
-        body.write \
+        df.write \
             .format("delta") \
             .mode("append") \
             .save(events_delta_path)
