@@ -5,6 +5,11 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
     public class PointDto
     {
+        public PointDto()
+        {
+            Quality = Quality.AsProvided;
+        }
+
         public decimal Quantity { get; set; }
 
         public Quality Quality { get; set; }
