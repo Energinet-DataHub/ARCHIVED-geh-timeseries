@@ -54,5 +54,33 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
         public const string MarketActivityRecord = "MktActivityRecord";
 
         public const string Series = "Series";
+
+        public const string OriginalTransactionIdReferenceSeriesId = "originalTransactionIDReference_Series.mRID";
+
+        public const string MeteringPointId = "marketEvaluationPoint.mRID";
+
+        public const string MeteringPointType = "marketEvaluationPoint.type";
+
+        public const string RegistrationDateTime = "registration_DateAndOrTime.dateTime";
+
+        public const string Product = "product";
+
+        public const string MeasureUnit = "quantity_Measure_Unit.name";
+
+        public const string Period = "Period";
+
+        public const string Resolution = "resolution";
+
+        public const string TimeIntervalStart = "start";
+
+        public const string TimeIntervalEnd = "end";
+
+        public const string Point = "Point";
+
+        public const string Position = "position";
+
+        public const string Quantity = "quantity";
+
+        public const string Quality = "quality";
     }
 }

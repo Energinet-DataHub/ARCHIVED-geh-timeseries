@@ -11,5 +11,7 @@
         MegaVar = 6,
         Tariff = 7,
         Tonne = 8,
+        Ampere = 9,
+        Stk = 10,
     }
 }
