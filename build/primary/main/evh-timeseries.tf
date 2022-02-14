@@ -40,5 +40,19 @@ module "evh_received_timeseries" {
       name    = "send",
       send    = true
     },
+    {
+      name    = "listen",
+      listen  = true
+    },
   ]
+}
+
+module "kvs_evh_timeseries_listen_key" {
+  source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=5.1.0"
+
+  name          = "evh-timeseries-listen-connection-string"
+  value         = module.evh_aggregations.primary_connection_strings["listen"]
+  key_vault_id  = module.kv_aggregations.id
+
+  tags          = azurerm_resource_group.this.tags
 }

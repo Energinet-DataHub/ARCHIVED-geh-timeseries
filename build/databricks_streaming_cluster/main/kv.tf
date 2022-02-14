@@ -20,3 +20,23 @@ data "azurerm_key_vault_secret" "dbw_databricks_workspace_id" {
   name         = "dbw-shared-workspace-id"
   key_vault_id = data.azurerm_key_vault.kv_shared.id
 }
+
+
+data "azurerm_key_vault_secret" "st_data_lake_name" {
+  name         = "st-data-lake-name"
+  key_vault_id = data.azurerm_key_vault.kv_aggregations.id
+}
+
+data "azurerm_key_vault_secret" "st_data_lake_primary_access_key" {
+  name         = "st-data-lake-primary-access-key"
+  key_vault_id = data.azurerm_key_vault.kv_aggregations.id
+}
+
+data "azurerm_key_vault_secret" "st_data_lake_data_container_name" {
+  name         = "st-data-lake-data-container-name"
+  key_vault_id = data.azurerm_key_vault.kv_aggregations.id
+}
+data "azurerm_key_vault_secret" "evh_timeseries_listen_connection_string" {
+  name         = "evh-timeseries-listen-connection-string"
+  key_vault_id = data.azurerm_key_vault.kv_aggregations.id
+}
