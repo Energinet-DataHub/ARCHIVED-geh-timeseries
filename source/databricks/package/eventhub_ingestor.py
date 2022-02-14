@@ -13,12 +13,16 @@
 # limitations under the License.
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
+from pyspark.sql.functions import year, month, dayofmonth
 
 
 def process_eventhub_item(df, epoch_id, events_delta_path):
     if len(df.head(1)) > 0:
         # Append event
+        df = df.withColumn("year", year(df.enqueuedTime)).withColumn("month", month(df.enqueuedTime)).withColumn("day", dayofmonth(df.enqueuedTime))
+
         df.write \
+            .partitionBy("year", "month", "day") \
             .format("delta") \
             .mode("append") \
             .save(events_delta_path)
