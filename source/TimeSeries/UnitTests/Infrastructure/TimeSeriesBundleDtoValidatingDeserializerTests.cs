@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
@@ -45,5 +46,27 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             // Assert
             result.TimeSeriesBundleDto.Series.Should().HaveCountGreaterThan(1);
         }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task
+            ValidateAndDeserialize_WhenCalledWithValidCimXmlMessageWithMultipleSeries_ReturnsParsedObjectWithMultipleSeriesWithCorrectNumberOfPoints(
+                TimeSeriesBundleDtoValidatingDeserializer sut)
+        {
+            // Arrange
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+
+            // Act
+            var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
+            var firstSeriesPointsCount = result.TimeSeriesBundleDto.Series.First().Period.Points.Count();
+            var secondSeriesPointsCount = result.TimeSeriesBundleDto.Series.Last().Period.Points.Count();
+            // Assert
+            result.TimeSeriesBundleDto.Series.First().Period.Points.Should().HaveCount(6);
+            result.TimeSeriesBundleDto.Series.Last().Period.Points.Should().HaveCount(3);
+        }
+
+        // Test that if quality is not present -> quality is set to Quality.AsProvided
+        // Test that if quantity is not present -> quantity is null
+        // Test that if schema validation fails -> HasErrors == true and Errors count is greater than 0
     }
 }
