@@ -14,7 +14,7 @@
 
 using System.IO;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Assets
+namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 {
     public class TestDocuments
     {

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>Energinet.DataHub.TimeSeries.TestCore</AssemblyName>
+    <RootNamespace>Energinet.DataHub.TimeSeries.TestCore</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
+    <None Remove="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
+    <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
+  </ItemGroup>
+
+</Project>
