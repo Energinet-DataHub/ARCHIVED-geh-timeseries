@@ -78,10 +78,12 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
 
             // Assert
-            result.TimeSeriesBundleDto.Series
+            var actualQuality = result.TimeSeriesBundleDto.Series
                 .Select(x => x.Period)
-                .Select(y => y.Points)
-                .Should().AllBeEquivalentTo(Quality.AsProvided);
+                .Select(y => y.Points
+                    .Select(t => t.Quality));
+
+            actualQuality.Should().AllBeEquivalentTo(Quality.AsProvided);
         }
 
         [Theory]
@@ -91,7 +93,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeries;
+            var document = _testDocuments.InValidMultipleTimeSeriesMissingQuantity;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);

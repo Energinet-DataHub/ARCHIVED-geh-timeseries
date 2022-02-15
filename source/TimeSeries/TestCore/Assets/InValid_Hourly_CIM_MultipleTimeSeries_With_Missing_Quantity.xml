@@ -1,4 +1,5 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 Copyright 2020 Energinet DataHub A/S
 
@@ -40,26 +41,24 @@ limitations under the License.
             </cim:timeInterval>
             <cim:Point>
                 <cim:position>1</cim:position>
-                <cim:quantity>242</cim:quantity>
+                <cim:quality>A03</cim:quality>
             </cim:Point>
             <cim:Point>
                 <cim:position>2</cim:position>
-                <cim:quantity>242</cim:quantity>
             </cim:Point>
             <cim:Point>
                 <cim:position>3</cim:position>
-                <cim:quantity>222</cim:quantity>
             </cim:Point>
             <cim:Point>
                 <cim:position>4</cim:position>
-                <cim:quantity>202</cim:quantity>
             </cim:Point>
             <cim:Point>
                 <cim:position>5</cim:position>
-                <cim:quantity>191</cim:quantity>
+                <cim:quality>A05</cim:quality>
             </cim:Point>
             <cim:Point>
                 <cim:position>6</cim:position>
+                <cim:quality>A02</cim:quality>
             </cim:Point>
         </cim:Period>
     </cim:Series>
@@ -83,11 +82,9 @@ limitations under the License.
             </cim:Point>
             <cim:Point>
                 <cim:position>2</cim:position>
-                <cim:quantity>12</cim:quantity>
             </cim:Point>
             <cim:Point>
                 <cim:position>3</cim:position>
-                <cim:quantity>756</cim:quantity>
             </cim:Point>
         </cim:Period>
     </cim:Series>
