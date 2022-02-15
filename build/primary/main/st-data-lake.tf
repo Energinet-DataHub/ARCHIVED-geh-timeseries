@@ -33,7 +33,7 @@ module "kvs_st_data_lake_timeseries_unprocessed_blob_name" {
   source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=5.1.0"
 
   name          = "st-data-lake-timeseries-unprocessed-blob-name"
-  value         = local.DATA_LAKE_MASTER_DATA_BLOB_NAME
+  value         = local.DATA_LAKE_TIMESERIES_UNPROCESSED_BLOB_NAME
   key_vault_id  = data.azurerm_key_vault.kv_shared_resources.id
 
   tags          = azurerm_resource_group.this.tags
