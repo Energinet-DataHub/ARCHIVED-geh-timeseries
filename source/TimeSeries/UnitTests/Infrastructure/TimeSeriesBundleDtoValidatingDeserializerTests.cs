@@ -72,7 +72,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.InValidMultipleTimeSeriesMissingQuality;
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingQuality;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
@@ -97,7 +97,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.InValidMultipleTimeSeriesMissingQuantity;
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingQuantity;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
@@ -105,12 +105,17 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             // Assert
             result.HasErrors.Should().BeFalse();
 
-            var actualQuantity = result.TimeSeriesBundleDto.Series
-                .Select(x => x.Period)
-                .Select(y => y.Points
-                    .Select(t => t.Quantity));
+            // Assert
+            var allPoints = result.TimeSeriesBundleDto.Series
+                .Select(x => x.Period).Select(y => y.Points);
 
-            actualQuantity.Should().NotBeNull();
+            foreach (var points in allPoints)
+            {
+                foreach (var point in points)
+                {
+                    point.Quantity.Should().BeNull();
+                }
+            }
         }
 
         [Theory]
