@@ -99,7 +99,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
         [Theory]
         [InlineAutoMoqData]
         public async Task
-            ValidateAndDeserialize_WhenCalledWithTimeSeriesInvalidScema_ReturnsParsedObjectErrorsSet(
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesInvalidSchema_ReturnsParsedObjectErrorsSet(
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
