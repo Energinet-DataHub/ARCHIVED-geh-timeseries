@@ -12,11 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.TestCore.Assets;
+using Energinet.DataHub.TimeSeries.TestCore.Attributes;
+using FluentAssertions;
 using Xunit;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
 {
     public class TimeSeriesBundleDtoValidatingDeserializerTests
     {
+        private readonly TestDocuments _testDocuments;
+
+        public TimeSeriesBundleDtoValidatingDeserializerTests()
+        {
+            _testDocuments = new TestDocuments();
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task
+            ValidateAndDeserialize_WhenCalledWithValidCimXmlMessageWithMultipleSeries_ReturnsParsedObjectWithMultipleSeries(
+                TimeSeriesBundleDtoValidatingDeserializer sut)
+        {
+            // Arrange
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+
+            // Act
+            var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
+
+            // Assert
+            result.TimeSeriesBundleDto.Series.Should().HaveCountGreaterThan(1);
+        }
     }
 }

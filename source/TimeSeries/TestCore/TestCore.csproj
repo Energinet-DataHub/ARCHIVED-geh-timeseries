@@ -8,12 +8,20 @@
 
   <ItemGroup>
     <None Remove="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
+    <None Remove="Assets\Valid_Hourly_CIM_MultipleTimeSeries.xml" />
     <None Remove="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
+    <EmbeddedResource Include="Assets\Valid_Hourly_CIM_MultipleTimeSeries.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoFixture.AutoMoq" Version="4.17.0" />
+    <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
+    <PackageReference Include="MicroElements.AutoFixture.NodaTime" Version="1.0.0" />
   </ItemGroup>
 
 </Project>
