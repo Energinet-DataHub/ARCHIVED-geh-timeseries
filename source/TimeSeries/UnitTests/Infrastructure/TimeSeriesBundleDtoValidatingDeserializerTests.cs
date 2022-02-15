@@ -120,13 +120,14 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeries;
+            var document = _testDocuments.InvalidTimeSeriesMissingIdAsStream;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
 
             // Assert
-            result.Should().BeNull();
+            result.Errors.Should().HaveCountGreaterThan(0);
+            result.HasErrors.Should().BeTrue();
         }
     }
 }
