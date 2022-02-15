@@ -14,13 +14,17 @@
 
 using System.IO;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Assets
+namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 {
     public class TestDocuments
     {
         public string ValidTimeSeries => GetDocumentAsString("Valid_Hourly_CIM_TimeSeries.xml");
 
         public string InvalidTimeSeriesMissingId => GetDocumentAsString("Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
+
+        public string ValidMultipleTimeSeriesMissingId => GetDocumentAsString("Valid_Hourly_CIM_MultipleTimeSeries.xml");
+
+        public Stream ValidMultipleTimeSeriesMissingIdAsStream => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries.xml");
 
         private string GetDocumentAsString(string documentName)
         {

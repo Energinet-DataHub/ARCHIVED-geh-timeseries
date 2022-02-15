@@ -38,9 +38,6 @@ limitations under the License.
     <PackageReference Remove="Microsoft.CodeAnalysis.FxCopAnalyzers" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
-    <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
-    <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
     <None Update="functionapphost.settings.json">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -50,5 +47,6 @@ limitations under the License.
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MessageReceiver\MessageReceiver.csproj" />
+    <ProjectReference Include="..\TestCore\TestCore.csproj" />
   </ItemGroup>
 </Project>

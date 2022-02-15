@@ -12,23 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
-using Energinet.DataHub.Core.SchemaValidation;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
+using AutoFixture.Xunit2;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
+namespace Energinet.DataHub.TimeSeries.TestCore.Attributes
 {
-    public class TimeSeriesBundleDtoResult
+    public class InlineAutoMoqDataAttribute : InlineAutoDataAttribute
     {
-        public TimeSeriesBundleDtoResult()
-        {
-            Errors = new List<SchemaValidationError>();
-        }
-
-        public bool HasErrors { get; set; }
-
-        public TimeSeriesBundleDto TimeSeriesBundleDto { get; set; }
-
-        public List<SchemaValidationError> Errors { get; set; }
+        public InlineAutoMoqDataAttribute(params object[] objects)
+            : base(new AutoMoqDataAttribute(), objects) { }
     }
 }
