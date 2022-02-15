@@ -50,7 +50,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
         [Theory]
         [InlineAutoMoqData]
         public async Task
-            ValidateAndDeserialize_WhenCalledWithValidCimXmlMessageWithMultipleSeries_ReturnsParsedObjectWithMultipleSeriesWithCorrectNumberOfPoints(
+            ValidateAndDeserialize_WhenCalledWithValidCimXmlMessageWithMultipleSeries_ReturnsParsedObjectWithPointsNotOverwrittenByLastSeriesPoints(
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
@@ -58,11 +58,10 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
-            var firstSeriesPointsCount = result.TimeSeriesBundleDto.Series.First().Period.Points.Count();
-            var secondSeriesPointsCount = result.TimeSeriesBundleDto.Series.Last().Period.Points.Count();
+
             // Assert
-            result.TimeSeriesBundleDto.Series.First().Period.Points.Should().HaveCount(6);
-            result.TimeSeriesBundleDto.Series.Last().Period.Points.Should().HaveCount(3);
+            result.TimeSeriesBundleDto.Series.First().Should()
+                .NotBeEquivalentTo(result.TimeSeriesBundleDto.Series.Last());
         }
 
         // Test that if quality is not present -> quality is set to Quality.AsProvided
