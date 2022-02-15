@@ -18,6 +18,8 @@ using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
 using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
+using Energinet.DataHub.TimeSeries.Application;
+using Energinet.DataHub.TimeSeries.Infrastructure;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -53,6 +55,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             }
 
             container.Register<TimeSeriesBundleIngestion>(Lifestyle.Scoped);
+            container.Register<IEventHubConnectionHandler, EventHubConnectionHandler>(Lifestyle.Singleton);
+            container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
             base.ConfigureContainer(container);
 
             var tenantId = Environment.GetEnvironmentVariable("B2C_TENANT_ID") ?? throw new InvalidOperationException(
