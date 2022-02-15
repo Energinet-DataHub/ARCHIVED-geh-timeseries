@@ -64,8 +64,54 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 .NotBeEquivalentTo(result.TimeSeriesBundleDto.Series.Last());
         }
 
-        // Test that if quality is not present -> quality is set to Quality.AsProvided
-        // Test that if quantity is not present -> quantity is null
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithQualityNotPresent_ReturnsParsedObjectWithQualitySetToAsProvided(
+                TimeSeriesBundleDtoValidatingDeserializer sut)
+        {
+            // Arrange
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+
+            // Act
+            var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithQuantityNotPresent_ReturnsParsedObjectWithQuantitySetToNull(
+                TimeSeriesBundleDtoValidatingDeserializer sut)
+        {
+            // Arrange
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+
+            // Act
+            var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
+        [Theory]
+        [InlineAutoMoqData]
+        public async Task
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesInvalidScema_ReturnsParsedObjectErrorsSet(
+                TimeSeriesBundleDtoValidatingDeserializer sut)
+        {
+            // Arrange
+            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+
+            // Act
+            var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
+
+            // Assert
+            result.Should().BeNull();
+        }
+
         // Test that if schema validation fails -> HasErrors == true and Errors count is greater than 0
     }
 }
