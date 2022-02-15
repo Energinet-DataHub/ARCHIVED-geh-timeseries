@@ -21,6 +21,11 @@ data "azurerm_key_vault_secret" "appi_instrumentation_key" {
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
 }
 
+data "azurerm_key_vault_secret" "st_shared_data_lake_name" {
+  name         = "st-data-lake-name"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
+
 data "azurerm_key_vault_secret" "st_market_operator_logs_primary_connection_string" {
   name         = "st-marketoplogs-primary-connection-string"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
