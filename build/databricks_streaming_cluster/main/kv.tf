@@ -31,8 +31,8 @@ data "azurerm_key_vault_secret" "st_data_lake_primary_access_key" {
   key_vault_id = data.azurerm_key_vault.kv_shared.id
 }
 
-data "azurerm_key_vault_secret" "st_data_lake_data_container_name" {
-  name         = "st-data-lake-data-container-name"
+data "azurerm_key_vault_secret" "st_data_lake_timeseries_container_name" {
+  name         = "st-data-lake-timeseries-container-name"
   key_vault_id = data.azurerm_key_vault.kv_shared.id
 }
 data "azurerm_key_vault_secret" "evh_timeseries_listen_connection_string" {

@@ -52,8 +52,8 @@ resource "databricks_job" "streaming_job" {
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_data_lake_name.value}",
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
          "--event-hub-connection-key=${data.azurerm_key_vault_secret.evh_timeseries_listen_connection_string.value}",
-         "--delta-lake-container-name=${data.azurerm_key_vault_secret.st_data_lake_data_container_name.value}",
-         "--events-data-blob-name=timeseries"
+         "--delta-lake-container-name=${data.azurerm_key_vault_secret.st_data_lake_timeseries_container_name.value}",
+         "--events-data-blob-name=timeseries-unprocessed"
     ]
   }
 
