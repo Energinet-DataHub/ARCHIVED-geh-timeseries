@@ -111,7 +111,5 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             // Assert
             result.Should().BeNull();
         }
-
-        // Test that if schema validation fails -> HasErrors == true and Errors count is greater than 0
     }
 }
