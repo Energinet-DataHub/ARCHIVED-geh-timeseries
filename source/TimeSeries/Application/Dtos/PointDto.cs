@@ -10,7 +10,7 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
             Quality = Quality.AsProvided;
         }
 
-        public decimal Quantity { get; set; }
+        public decimal? Quantity { get; set; }
 
         public Quality Quality { get; set; }
 

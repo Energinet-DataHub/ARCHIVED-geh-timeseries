@@ -99,7 +99,14 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
 
             // Assert
-            result.Should().BeNull();
+            result.HasErrors.Should().BeFalse();
+
+            var actualQuantity = result.TimeSeriesBundleDto.Series
+                .Select(x => x.Period)
+                .Select(y => y.Points
+                    .Select(t => t.Quantity));
+
+            actualQuantity.Should().NotBeNull();
         }
 
         [Theory]
