@@ -41,4 +41,3 @@ def events_ingestion_stream(event_hub_connection_key: str, delta_lake_container_
     checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
 
     streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df: process_eventhub_item(df, events_delta_path)).start()
-    # streamingDF.awaitTermination()
