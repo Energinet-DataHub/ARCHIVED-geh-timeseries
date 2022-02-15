@@ -78,12 +78,16 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
 
             // Assert
-            var actualQuality = result.TimeSeriesBundleDto.Series
-                .Select(x => x.Period)
-                .Select(y => y.Points
-                    .Select(t => t.Quality));
+            var allPoints = result.TimeSeriesBundleDto.Series
+                .Select(x => x.Period).Select(y => y.Points);
 
-            actualQuality.Should().AllBeEquivalentTo(Quality.AsProvided);
+            foreach (var points in allPoints)
+            {
+                foreach (var point in points)
+                {
+                    point.Quality.Should().Be(Quality.AsProvided);
+                }
+            }
         }
 
         [Theory]
