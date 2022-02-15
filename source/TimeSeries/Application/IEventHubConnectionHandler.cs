@@ -17,18 +17,8 @@ using Energinet.DataHub.TimeSeries.Application.Dtos;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
-    public class TimeSeriesForwarder : ITimeSeriesForwarder
+    public interface IEventHubConnectionHandler
     {
-        private readonly IEventHubConnectionHandler _eventHubConnectionHandler;
-
-        public TimeSeriesForwarder(IEventHubConnectionHandler eventHubConnectionHandler)
-        {
-            _eventHubConnectionHandler = eventHubConnectionHandler;
-        }
-
-        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
-        {
-            await _eventHubConnectionHandler.EventSenderAsync(timeSeriesBundle).ConfigureAwait(false);
-        }
+        Task EventSenderAsync(TimeSeriesBundleDto timeSeriesBundle);
     }
 }
