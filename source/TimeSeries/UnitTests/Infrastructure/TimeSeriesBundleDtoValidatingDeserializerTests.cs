@@ -14,6 +14,7 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Application.Enums;
 using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using Energinet.DataHub.TimeSeries.TestCore.Attributes;
@@ -38,7 +39,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+            var document = _testDocuments.ValidMultipleTimeSeries;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
@@ -54,7 +55,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+            var document = _testDocuments.ValidMultipleTimeSeries;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
@@ -71,13 +72,16 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+            var document = _testDocuments.InValidMultipleTimeSeriesMissingQuality;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
 
             // Assert
-            result.Should().BeNull();
+            result.TimeSeriesBundleDto.Series
+                .Select(x => x.Period)
+                .Select(y => y.Points)
+                .Should().AllBeEquivalentTo(Quality.AsProvided);
         }
 
         [Theory]
@@ -87,7 +91,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+            var document = _testDocuments.ValidMultipleTimeSeries;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);
@@ -103,7 +107,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
-            var document = _testDocuments.ValidMultipleTimeSeriesMissingIdAsStream;
+            var document = _testDocuments.ValidMultipleTimeSeries;
 
             // Act
             var result = await sut.ValidateAndDeserializeAsync(document).ConfigureAwait(false);

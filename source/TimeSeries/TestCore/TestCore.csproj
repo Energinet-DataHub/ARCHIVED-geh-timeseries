@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Assets\InValid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quality.xml" />
     <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_MultipleTimeSeries.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />

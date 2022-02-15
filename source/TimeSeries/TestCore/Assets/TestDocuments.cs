@@ -24,7 +24,9 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 
         public string ValidMultipleTimeSeriesMissingId => GetDocumentAsString("Valid_Hourly_CIM_MultipleTimeSeries.xml");
 
-        public Stream ValidMultipleTimeSeriesMissingIdAsStream => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries.xml");
+        public Stream ValidMultipleTimeSeries => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries.xml");
+
+        public Stream InValidMultipleTimeSeriesMissingQuality => GetDocumentStream("Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
 
         private string GetDocumentAsString(string documentName)
         {
