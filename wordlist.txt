@@ -69,7 +69,6 @@ eventhub
 protobuf
 py
 pyarrow
-pylint
 pypi
 pyspelling
 servicebus
