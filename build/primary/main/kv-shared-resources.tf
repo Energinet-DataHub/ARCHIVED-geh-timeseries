@@ -16,11 +16,6 @@ data "azurerm_key_vault" "kv_shared_resources" {
   resource_group_name = var.shared_resources_resource_group_name
 }
 
-data "azurerm_key_vault_secret" "sb_domain_relay_listener_connection_string" {
-  name         = "sb-domain-relay-listen-connection-string"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
 data "azurerm_key_vault_secret" "appi_instrumentation_key" {
   name         = "appi-shared-instrumentation-key"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
@@ -28,41 +23,6 @@ data "azurerm_key_vault_secret" "appi_instrumentation_key" {
 
 data "azurerm_key_vault_secret" "st_shared_data_lake_name" {
   name         = "st-data-lake-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "st_shared_data_lake_data_container_name" {
-  name         = "st-data-lake-data-container-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "st_shared_data_lake_timeseries_blob_name" {
-  name         = "st-data-lake-timeseries-blob-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "st_shared_data_lake_primary_access_key" {
-  name         = "st-data-lake-primary-access-key"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "sbt_metering_point_created_name" {
-  name         = "sbt-metering-point-created-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "sbs-metering-point-created-to-timeseries-name" {
-  name         = "sbs-metering-point-created-to-timeseries-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "sbt_metering_point_connected_name" {
-  name         = "sbt-metering-point-connected-name"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
-data "azurerm_key_vault_secret" "sbs-metering-point-connected-to-timeseries-name" {
-  name         = "sbs-metering-point-connected-to-timeseries-name"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
 }
 

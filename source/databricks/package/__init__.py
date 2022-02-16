@@ -11,13 +11,5 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from setuptools import setup, find_packages
-
-setup(name='package',
-      version=1.0,
-      description='Tools for timeseries streaming',
-      long_description='',
-      long_description_content_type='text/markdown',
-      license='MIT',
-      packages=find_packages()
-      )
+from .data_loader import initialize_spark
+from .timeseries_persister import timeseries_persister

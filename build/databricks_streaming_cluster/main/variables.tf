@@ -25,3 +25,8 @@ variable resource_group_name {
   type        = string
   description = "Resource Group that the infrastructure code is deployed into."
 }
+
+variable evh_timeseries_listen_connection_string {
+  type        = string
+  description = "Connectionstring for the timeseries eventhub"
+}
