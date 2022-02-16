@@ -10,4 +10,8 @@
     <PackageReference Include="NodaTime" Version="3.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
