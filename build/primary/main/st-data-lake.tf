@@ -19,6 +19,11 @@ resource "azurerm_storage_blob" "azurerm_storage_blob" {
   type                    = "Block"
 }
 
+resource "azurerm_storage_container" "container" {
+  name                  = local.DATA_LAKE_DATA_CONTAINER_NAME
+  storage_account_name  = data.azurerm_key_vault_secret.st_shared_data_lake_name.value
+}
+
 module "kvs_st_data_lake_container_name" {
   source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=5.1.0"
 
