@@ -14,16 +14,17 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
+using Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument;
 using NodaTime;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
+namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle
 {
     public class TimeSeriesBundleDtoValidatingDeserializer : ITimeSeriesBundleDtoValidatingDeserializer
     {
@@ -145,7 +146,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                         .ReadValueAsStringAsync()
                         .ConfigureAwait(false);
 
-                    period.StartDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
+                    period.StartDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content, CultureInfo.InvariantCulture));
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.TimeIntervalEnd && reader.CanReadValue)
                 {
@@ -153,7 +154,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSer
                         .ReadValueAsStringAsync()
                         .ConfigureAwait(false);
 
-                    period.EndDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content));
+                    period.EndDateTime = Instant.FromDateTimeOffset(DateTimeOffset.Parse(content, CultureInfo.InvariantCulture));
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Point && reader.CurrentNodeType == NodeType.StartElement)
                 {

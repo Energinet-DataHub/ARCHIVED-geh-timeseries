@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
+namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
 {
     /// <summary>
     /// Strings used in CIM/XML for elements, namespaces or attributes that we need to

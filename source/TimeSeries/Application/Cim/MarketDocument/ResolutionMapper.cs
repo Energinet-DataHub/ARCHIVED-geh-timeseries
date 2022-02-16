@@ -14,7 +14,7 @@
 
 using Energinet.DataHub.TimeSeries.Application.Enums;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
+namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
 {
     public static class ResolutionMapper
     {

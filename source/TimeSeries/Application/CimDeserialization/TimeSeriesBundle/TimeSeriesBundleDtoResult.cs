@@ -16,7 +16,7 @@ using System.Collections.Generic;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
+namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle
 {
     public class TimeSeriesBundleDtoResult
     {

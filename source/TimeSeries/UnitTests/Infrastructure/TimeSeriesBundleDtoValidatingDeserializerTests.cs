@@ -14,8 +14,8 @@
 
 using System.Linq;
 using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Application.Enums;
-using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using Energinet.DataHub.TimeSeries.TestCore.Attributes;
 using FluentAssertions;

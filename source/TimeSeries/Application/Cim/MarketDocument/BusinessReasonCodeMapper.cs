@@ -12,10 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.ComponentModel;
 using Energinet.DataHub.TimeSeries.Application.Enums;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Cim.MarketDocument
+namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
 {
     public static class BusinessReasonCodeMapper
     {

@@ -15,7 +15,7 @@
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle
+namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle
 {
     public interface ITimeSeriesBundleDtoValidatingDeserializer
     {
