@@ -21,13 +21,11 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
     public class EventHubSender : IEventHubSender, IAsyncDisposable
     {
-        private static readonly string? _connectionString = Environment.GetEnvironmentVariable("EVENT_HUB_CONNECTION_STRING");
-        private static readonly string? _eventHubName = Environment.GetEnvironmentVariable("EVENT_HUB_NAME");
         private readonly EventHubProducerClient _eventHubProducerClient;
 
-        public EventHubSender()
+        public EventHubSender(string connectionString, string eventHubName)
         {
-            _eventHubProducerClient = new EventHubProducerClient(_connectionString, _eventHubName);
+            _eventHubProducerClient = new EventHubProducerClient(connectionString, eventHubName);
         }
 
         public async ValueTask DisposeAsync()
