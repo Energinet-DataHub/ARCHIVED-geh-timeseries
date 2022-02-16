@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageReceiver", "MessageReceiver\MessageReceiver.csproj", "{03C494AD-C4D9-42A1-976B-BF906CF6DB41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeSeriesBundleIngestor", "TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj", "{03C494AD-C4D9-42A1-976B-BF906CF6DB41}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MessageReceiver.IntegrationTests", "MessageReceiver.IntegrationTests\MessageReceiver.IntegrationTests.csproj", "{E4424831-9F73-4A4A-8D43-92EA6BE0E675}"
 EndProject

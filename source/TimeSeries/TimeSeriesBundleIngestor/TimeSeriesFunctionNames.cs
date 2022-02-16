@@ -16,6 +16,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
     public static class TimeSeriesFunctionNames
     {
-        public const string TimeSeriesBundleIngestor = "TimeSeriesBundleIngestion";
+        public const string TimeSeriesBundleIngestor = "TimeSeriesBundleIngestor";
     }
 }

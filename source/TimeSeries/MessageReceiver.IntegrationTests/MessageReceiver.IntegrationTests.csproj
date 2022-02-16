@@ -46,7 +46,7 @@ limitations under the License.
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\MessageReceiver\MessageReceiver.csproj" />
+    <ProjectReference Include="..\TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj" />
     <ProjectReference Include="..\TestCore\TestCore.csproj" />
   </ItemGroup>
 </Project>

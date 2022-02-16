@@ -42,16 +42,16 @@ jobs:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.0.10"
 
-  message_receiver_ci:
+  time_series_bundle_ingestor_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
-      CSPROJ_FILE_PATH: "source/TimeSeries/MessageReceiver/MessageReceiver.csproj"
+      CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
       DOTNET_VERSION: "5.0.404"
-      ARTIFACT_NAME: message_receiver
+      ARTIFACT_NAME: time_series_bundle_ingestor
 
   create_prerelease:
-    needs: [message_receiver_ci]
+    needs: [time_series_bundle_ingestor_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries

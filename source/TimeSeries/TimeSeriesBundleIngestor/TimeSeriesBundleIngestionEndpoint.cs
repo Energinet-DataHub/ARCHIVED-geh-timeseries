@@ -22,13 +22,13 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class TimeSeriesBundleIngestion
+    public class TimeSeriesBundleIngestionEndpoint
     {
         private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
 
-        public TimeSeriesBundleIngestion(
+        public TimeSeriesBundleIngestionEndpoint(
             ITimeSeriesForwarder timeSeriesForwarder,
             IHttpResponseBuilder httpResponseBuilder,
             ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer)

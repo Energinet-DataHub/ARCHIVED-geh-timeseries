@@ -27,8 +27,8 @@ runs:
         mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
         cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/primary 2>/dev/null || :
 
-    - name: Publish Message Receiver to release folder
+    - name: Publish TimeSeriesBundleIngestor to release folder
       uses: actions/download-artifact@v2
       with:
-        name: message_receiver
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/message-receiver
+        name: time_series_bundle_ingestor
+        path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/time-series-bundle-ingestor
