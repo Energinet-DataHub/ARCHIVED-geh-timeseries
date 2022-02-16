@@ -18,6 +18,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.FunctionApp.TestCommon;
+using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using FluentAssertions;
@@ -82,6 +83,19 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Function
             var actualHttpDataResponse = blobItems[1].Metadata["httpdatatype"];
             actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
             actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
+        }
+
+        [Fact]
+        public async Task When_FunctionExecuted_Then_MessageSentToEventHub()
+        {
+            var content = _testDocuments.ValidTimeSeries;
+            using var whenAllEvent = await Fixture.EventHubListener
+                .WhenAny()
+                .VerifyCountAsync(1).ConfigureAwait(false);
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            var allReceived = whenAllEvent.Wait(TimeSpan.FromSeconds(5));
+            allReceived.Should().BeTrue();
         }
 
         private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
