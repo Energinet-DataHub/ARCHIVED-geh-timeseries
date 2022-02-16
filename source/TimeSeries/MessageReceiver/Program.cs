@@ -20,6 +20,7 @@ using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Infrastructure;
+using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -55,7 +56,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             }
 
             container.Register<TimeSeriesBundleIngestion>(Lifestyle.Scoped);
-            container.Register<IEventHubConnectionHandler, EventHubConnectionHandler>(Lifestyle.Singleton);
+            container.Register<IEventHubSender, EventHubSender>(Lifestyle.Singleton);
             container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
             base.ConfigureContainer(container);
 

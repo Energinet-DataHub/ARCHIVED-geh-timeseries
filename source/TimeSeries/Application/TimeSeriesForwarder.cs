@@ -12,23 +12,27 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        private readonly IEventHubConnectionHandler _eventHubConnectionHandler;
+        private readonly IEventHubSender _eventHubSender;
 
-        public TimeSeriesForwarder(IEventHubConnectionHandler eventHubConnectionHandler)
+        public TimeSeriesForwarder(IEventHubSender eventHubSender)
         {
-            _eventHubConnectionHandler = eventHubConnectionHandler;
+            _eventHubSender = eventHubSender;
         }
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
-            await _eventHubConnectionHandler.EventSenderAsync(timeSeriesBundle).ConfigureAwait(false);
+            var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(timeSeriesBundle));
+            await _eventHubSender.SendAsync(body).ConfigureAwait(false);
         }
     }
 }

@@ -13,12 +13,11 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
 
-namespace Energinet.DataHub.TimeSeries.Application
+namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
-    public interface IEventHubConnectionHandler
+    public interface IEventHubSender
     {
-        Task EventSenderAsync(TimeSeriesBundleDto timeSeriesBundle);
+        Task SendAsync(byte[] body);
     }
 }

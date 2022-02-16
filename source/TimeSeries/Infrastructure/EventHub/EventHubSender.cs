@@ -13,39 +13,34 @@
 // limitations under the License.
 
 using System;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
-using Energinet.DataHub.TimeSeries.Application;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure
+namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
-    public class EventHubConnectionHandler : IEventHubConnectionHandler, IAsyncDisposable
+    public class EventHubSender : IEventHubSender, IAsyncDisposable
     {
         private static readonly string? _connectionString = Environment.GetEnvironmentVariable("EVENT_HUB_CONNECTION_STRING");
         private static readonly string? _eventHubName = Environment.GetEnvironmentVariable("EVENT_HUB_NAME");
         private readonly EventHubProducerClient _eventHubProducerClient;
 
-        public EventHubConnectionHandler()
+        public EventHubSender()
         {
             _eventHubProducerClient = new EventHubProducerClient(_connectionString, _eventHubName);
-        }
-
-        public async Task EventSenderAsync(TimeSeriesBundleDto timeSeriesBundle)
-        {
-            var timeSeriesBundleJson = JsonSerializer.Serialize(timeSeriesBundle);
-            using EventDataBatch eventDataBatch =
-                await _eventHubProducerClient.CreateBatchAsync().ConfigureAwait(false);
-            eventDataBatch.TryAdd(new EventData(Encoding.UTF8.GetBytes(timeSeriesBundleJson)));
-            await _eventHubProducerClient.SendAsync(eventDataBatch).ConfigureAwait(false);
         }
 
         public async ValueTask DisposeAsync()
         {
             await _eventHubProducerClient.DisposeAsync().ConfigureAwait(false);
+        }
+
+        public async Task SendAsync(byte[] body)
+        {
+            using var eventDataBatch =
+                await _eventHubProducerClient.CreateBatchAsync().ConfigureAwait(false);
+            eventDataBatch.TryAdd(new EventData(body));
+            await _eventHubProducerClient.SendAsync(eventDataBatch).ConfigureAwait(false);
         }
     }
 }
