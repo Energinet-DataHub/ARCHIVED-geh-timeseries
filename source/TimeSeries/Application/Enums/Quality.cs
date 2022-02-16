@@ -17,11 +17,11 @@ namespace Energinet.DataHub.TimeSeries.Application.Enums
     public enum Quality
     {
         Unknown = 0,
-        Adjusted = 1, // A01
-        NotAvailable = 2, // A02
-        Estimated = 3, // 56
-        AsProvided = 4, // A03
-        Incomplete = 5, // A05
-        Calculated = 6, // Z01
+        Adjusted = 1,
+        NotAvailable = 2,
+        Estimated = 3,
+        AsProvided = 4,
+        Incomplete = 5,
+        Calculated = 6,
     }
 }
