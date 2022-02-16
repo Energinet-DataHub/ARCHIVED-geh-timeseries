@@ -26,6 +26,8 @@ data "azurerm_key_vault_secret" "st_data_lake_name" {
   key_vault_id = data.azurerm_key_vault.kv_shared.id
 }
 
+data.azurerm_key_vault_secret..value
+
 data "azurerm_key_vault_secret" "st_data_lake_primary_access_key" {
   name         = "st-data-lake-primary-access-key"
   key_vault_id = data.azurerm_key_vault.kv_shared.id
