@@ -55,7 +55,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 throw new ArgumentNullException(nameof(container));
             }
 
-            container.Register<TimeSeriesBundleIngestionEndpoint>(Lifestyle.Scoped);
+            container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
             container.Register<IEventHubSender, EventHubSender>(Lifestyle.Singleton);
             container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
             base.ConfigureContainer(container);

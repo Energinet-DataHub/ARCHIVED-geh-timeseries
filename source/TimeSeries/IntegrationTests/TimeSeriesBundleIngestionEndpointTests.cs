@@ -26,14 +26,14 @@ using Microsoft.Identity.Client;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Functions
+namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
 {
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
-    public class TimeSeriesTriggerTests : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
+    public class TimeSeriesBundleIngestionEndpoint : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {
         private readonly TestDocuments _testDocuments;
 
-        public TimeSeriesTriggerTests(TimeSeriesFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
+        public TimeSeriesBundleIngestionEndpoint(TimeSeriesFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture, testOutputHelper)
         {
             _testDocuments = new TestDocuments();

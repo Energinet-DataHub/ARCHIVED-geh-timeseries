@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Infrastructure.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
@@ -22,13 +21,13 @@ using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class TimeSeriesBundleIngestionEndpoint
+    public class TimeSeriesBundleIngestorEndpoint
     {
         private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
 
-        public TimeSeriesBundleIngestionEndpoint(
+        public TimeSeriesBundleIngestorEndpoint(
             ITimeSeriesForwarder timeSeriesForwarder,
             IHttpResponseBuilder httpResponseBuilder,
             ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer)
