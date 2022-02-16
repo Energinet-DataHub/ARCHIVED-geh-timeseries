@@ -197,7 +197,7 @@ csharp_style_throw_expression = true:suggestion
 csharp_style_conditional_delegate_call = true:suggestion
 
 # Code block preferences
-csharp_prefer_braces = true:error
+csharp_prefer_braces = when_multiline:error
 csharp_braces_for_ifelse = required_for_multiline_statement
 
 # Unused value preferences
@@ -404,7 +404,7 @@ dotnet_diagnostic.SA1200.severity = none
 dotnet_diagnostic.SA1201.severity = error
 dotnet_diagnostic.SA1202.severity = error
 dotnet_diagnostic.SA1203.severity = error
-dotnet_diagnostic.SA1204.severity = error
+dotnet_diagnostic.SA1204.severity = none
 dotnet_diagnostic.SA1205.severity = error
 dotnet_diagnostic.SA1206.severity = error
 dotnet_diagnostic.SA1207.severity = error
@@ -464,7 +464,7 @@ dotnet_diagnostic.SA1517.severity = error
 dotnet_diagnostic.SA1518.severity = error
 dotnet_diagnostic.SA1519.severity = error
 dotnet_diagnostic.SA1520.severity = error
-dotnet_diagnostic.SA1600.severity = error
+dotnet_diagnostic.SA1600.severity = none
 dotnet_diagnostic.SA1601.severity = error
 dotnet_diagnostic.SA1602.severity = error
 dotnet_diagnostic.SA1604.severity = error
