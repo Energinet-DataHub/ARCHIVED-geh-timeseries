@@ -24,11 +24,11 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
             Period = new PeriodDto();
         }
 
-        public string? Id { get; set; }
+        public string Id { get; set; }
 
         public string? TransactionId { get; set; }
 
-        public string? MeteringPointId { get; set; }
+        public string MeteringPointId { get; set; }
 
         public MeteringPointType MeteringPointType { get; set; }
 
