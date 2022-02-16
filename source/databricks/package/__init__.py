@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .data_loader import initialize_spark
-from .eventhub_ingestor import timeseries_persister
+from .timeseries_persister import timeseries_persister
