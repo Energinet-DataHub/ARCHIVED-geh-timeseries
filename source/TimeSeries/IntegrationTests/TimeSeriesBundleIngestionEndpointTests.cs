@@ -88,12 +88,17 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
         [Fact]
         public async Task When_FunctionExecuted_Then_MessageSentToEventHub()
         {
+            // Arrange
             var content = _testDocuments.ValidTimeSeries;
             using var whenAllEvent = await Fixture.EventHubListener
                 .WhenAny()
                 .VerifyCountAsync(1).ConfigureAwait(false);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+
+            // Act
             await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+
+            // Assert
             var allReceived = whenAllEvent.Wait(TimeSpan.FromSeconds(5));
             allReceived.Should().BeTrue();
         }
