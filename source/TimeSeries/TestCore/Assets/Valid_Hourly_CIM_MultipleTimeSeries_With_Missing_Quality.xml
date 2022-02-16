@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2020 Energinet DataHub A/S
+
+Licensed under the Apache License, Version 2.0 (the "License2");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<cim:NotifyValidatedMeasureData_MarketDocument xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cim="urn:ediel.org:measure:notifyvalidatedmeasuredata:0:1" xsi:schemaLocation="urn:ediel.org:measure:notifyvalidatedmeasuredata:0:1 urn-ediel-org-measure-notifyvalidatedmeasuredata-0-1.xsd">
+    <cim:mRID>C1876453</cim:mRID>
+    <cim:type>E66</cim:type>
+    <cim:process.processType>E23</cim:process.processType>
+    <cim:businessSector.type>23</cim:businessSector.type>
+    <cim:sender_MarketParticipant.mRID codingScheme="A10">5799999933317</cim:sender_MarketParticipant.mRID>
+    <cim:sender_MarketParticipant.marketRole.type>MDR</cim:sender_MarketParticipant.marketRole.type>
+    <cim:receiver_MarketParticipant.mRID codingScheme="A10">5790001330552</cim:receiver_MarketParticipant.mRID>
+    <cim:receiver_MarketParticipant.marketRole.type>DGL</cim:receiver_MarketParticipant.marketRole.type>
+    <cim:createdDateTime>2022-12-17T09:30:47Z</cim:createdDateTime>
+    <cim:Series>
+        <cim:mRID>C123456</cim:mRID>
+        <cim:originalTransactionIDReference_Series.mRID>C1875000</cim:originalTransactionIDReference_Series.mRID>
+        <cim:marketEvaluationPoint.mRID codingScheme="A10">579999993331812345</cim:marketEvaluationPoint.mRID>
+        <cim:marketEvaluationPoint.type>E17</cim:marketEvaluationPoint.type>
+        <cim:registration_DateAndOrTime.dateTime>2022-12-17T07:30:00Z</cim:registration_DateAndOrTime.dateTime>
+        <cim:product>8716867000030</cim:product>
+        <cim:quantity_Measure_Unit.name>KWH</cim:quantity_Measure_Unit.name>
+        <cim:Period>
+            <cim:resolution>PT1H</cim:resolution>
+            <cim:timeInterval>
+                <cim:start>2022-08-15T22:00Z</cim:start>
+                <cim:end>2022-08-16T04:00Z</cim:end>
+            </cim:timeInterval>
+            <cim:Point>
+                <cim:position>1</cim:position>
+                <cim:quantity>242</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>2</cim:position>
+                <cim:quantity>242</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>3</cim:position>
+                <cim:quantity>222</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>4</cim:position>
+                <cim:quantity>202</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>5</cim:position>
+                <cim:quantity>191</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>6</cim:position>
+            </cim:Point>
+        </cim:Period>
+    </cim:Series>
+    <cim:Series>
+        <cim:mRID>C789123</cim:mRID>
+        <cim:originalTransactionIDReference_Series.mRID>C7445231</cim:originalTransactionIDReference_Series.mRID>
+        <cim:marketEvaluationPoint.mRID codingScheme="A10">579999997778885555</cim:marketEvaluationPoint.mRID>
+        <cim:marketEvaluationPoint.type>E18</cim:marketEvaluationPoint.type>
+        <cim:registration_DateAndOrTime.dateTime>2022-12-18T07:30:00Z</cim:registration_DateAndOrTime.dateTime>
+        <cim:product>8716867000030</cim:product>
+        <cim:quantity_Measure_Unit.name>KWH</cim:quantity_Measure_Unit.name>
+        <cim:Period>
+            <cim:resolution>PT1H</cim:resolution>
+            <cim:timeInterval>
+                <cim:start>2022-08-16T22:00Z</cim:start>
+                <cim:end>2022-08-17T01:00Z</cim:end>
+            </cim:timeInterval>
+            <cim:Point>
+                <cim:position>1</cim:position>
+                <cim:quantity>10.123</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>2</cim:position>
+                <cim:quantity>12</cim:quantity>
+            </cim:Point>
+            <cim:Point>
+                <cim:position>3</cim:position>
+                <cim:quantity>756</cim:quantity>
+            </cim:Point>
+        </cim:Period>
+    </cim:Series>
+</cim:NotifyValidatedMeasureData_MarketDocument>
