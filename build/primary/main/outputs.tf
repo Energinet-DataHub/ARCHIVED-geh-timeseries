@@ -16,3 +16,9 @@ output evh_timeseries_listen_connection_string {
   value       = module.evh_received_timeseries.primary_connection_strings["listen"]
   sensitive   = true
 }
+
+output databricks_workspace_url {
+  description = "URL of the created Databricks workspace"
+  value       = data.azurerm_key_vault_secret.dbw_shared_workspace_url.value
+  sensitive   = true
+}
