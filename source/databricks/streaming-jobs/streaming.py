@@ -25,13 +25,13 @@ p.add('--data-storage-account-name', type=str, required=True)
 p.add('--data-storage-account-key', type=str, required=True)
 p.add('--event-hub-connection-key', type=str, required=True)
 p.add('--delta-lake-container-name', type=str, required=True)
-p.add('--events-data-blob-name', type=str, required=True)
+p.add('--timeseries-unprocessed-blob-name', type=str, required=True)
 
 args, unknown_args = p.parse_known_args()
 
 spark = initialize_spark(args)
 
-events_delta_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.events_data_blob_name}'
+timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
 
 # start the eventhub ingestor
-timeseries_persister(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, events_delta_path)
+timeseries_persister(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path)

@@ -16,7 +16,7 @@ from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
 
 # epoch_id is required in function signature, but not used
-def process_eventhub_item(df, epoch_id, events_delta_path):
+def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
     if len(df.head(1)) > 0:
         # Append event
         df = df.withColumn("year", year(df.enqueuedTime)) \
@@ -27,10 +27,10 @@ def process_eventhub_item(df, epoch_id, events_delta_path):
             .partitionBy("year", "month", "day") \
             .format("delta") \
             .mode("append") \
-            .save(events_delta_path)
+            .save(timeseries_unprocessed_path)
 
 
-def timeseries_persister(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, events_delta_path):
+def timeseries_persister(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, timeseries_unprocessed_path):
 
     spark = SparkSession.builder.getOrCreate()
 
@@ -40,4 +40,4 @@ def timeseries_persister(event_hub_connection_key: str, delta_lake_container_nam
 
     checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
 
-    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, events_delta_path)).start()
+    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)).start()
