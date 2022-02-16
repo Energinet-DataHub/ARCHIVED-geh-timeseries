@@ -25,7 +25,7 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
             Receiver = new MarketParticipantDto();
         }
 
-        public string? Id { get; set; }
+        public string Id { get; set; }
 
         public Instant CreatedDateTime { get; set; }
 
