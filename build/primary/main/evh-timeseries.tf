@@ -40,5 +40,9 @@ module "evh_received_timeseries" {
       name    = "send",
       send    = true
     },
+    {
+      name    = "listen",
+      listen  = true
+    },
   ]
 }
