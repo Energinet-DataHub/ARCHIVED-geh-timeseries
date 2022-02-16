@@ -131,7 +131,6 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
         private static async Task<PeriodDto> ParsePeriodAsync(SchemaValidatingReader reader)
         {
             var period = new PeriodDto();
-            var points = new List<PointDto>();
 
             while (await reader.AdvanceAsync().ConfigureAwait(false))
             {
@@ -158,12 +157,11 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Point && reader.CurrentNodeType == NodeType.StartElement)
                 {
-                    points = await ParsePointsAsync(reader).ConfigureAwait(false);
+                    period.Points = await ParsePointsAsync(reader).ConfigureAwait(false);
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Series &&
                          reader.CurrentNodeType == NodeType.EndElement)
                 {
-                    period.Points = points;
                     break;
                 }
             }
