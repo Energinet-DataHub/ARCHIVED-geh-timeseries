@@ -32,11 +32,10 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
         {
             var reader = new SchemaValidatingReader(reqBody, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
             var timeSeriesBundle = await ConvertAsync(reader).ConfigureAwait(false);
-            return new TimeSeriesBundleDtoResult
+            return new TimeSeriesBundleDtoResult(timeSeriesBundle)
             {
                 HasErrors = reader.HasErrors,
                 Errors = reader.Errors.ToList(),
-                TimeSeriesBundleDto = timeSeriesBundle,
             };
         }
 
@@ -209,7 +208,7 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
 
         private static async Task<DocumentDto> ParseDocumentAsync(SchemaValidatingReader reader)
         {
-            var document = new DocumentDto()
+            var document = new DocumentDto
             {
                 Sender = new MarketParticipantDto(),
                 Receiver = new MarketParticipantDto(),
