@@ -36,6 +36,7 @@ limitations under the License.
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Remove="Microsoft.CodeAnalysis.FxCopAnalyzers" />
+    <PackageReference Include="System.ComponentModel.TypeConverter" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <None Update="functionapphost.settings.json">
