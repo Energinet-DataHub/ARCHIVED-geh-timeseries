@@ -22,6 +22,10 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
         public SeriesDto()
         {
             Period = new PeriodDto();
+
+            // Cim deserialization will ensure a value is set.
+            Id = null!;
+            MeteringPointId = null!;
         }
 
         public string Id { get; set; }

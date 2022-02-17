@@ -23,6 +23,9 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
         {
             Sender = new MarketParticipantDto();
             Receiver = new MarketParticipantDto();
+
+            // Cim deserialization will ensure a value is set.
+            Id = null!;
         }
 
         public string Id { get; set; }

@@ -14,12 +14,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
+using Energinet.DataHub.Core.SchemaValidation.Extensions;
 using Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using NodaTime;
@@ -32,11 +34,7 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
         {
             var reader = new SchemaValidatingReader(reqBody, Schemas.CimXml.MeasureNotifyValidatedMeasureData);
             var timeSeriesBundle = await ConvertAsync(reader).ConfigureAwait(false);
-            return new TimeSeriesBundleDtoResult(timeSeriesBundle)
-            {
-                HasErrors = reader.HasErrors,
-                Errors = reader.Errors.ToList(),
-            };
+            return new TimeSeriesBundleDtoResult(timeSeriesBundle, reader.HasErrors, reader.Errors.ToList());
         }
 
         private static async Task<TimeSeriesBundleDto> ConvertAsync(SchemaValidatingReader reader)

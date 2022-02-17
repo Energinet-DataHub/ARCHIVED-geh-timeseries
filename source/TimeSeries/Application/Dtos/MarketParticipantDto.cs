@@ -18,6 +18,11 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 {
     public class MarketParticipantDto
     {
+        public MarketParticipantDto()
+        {
+            Id = null!;
+        }
+
         public string Id { get; set; }
 
         public MarketParticipantRole BusinessProcessRole { get; set; }

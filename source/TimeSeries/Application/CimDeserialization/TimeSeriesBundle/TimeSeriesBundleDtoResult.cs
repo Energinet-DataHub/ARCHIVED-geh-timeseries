@@ -20,16 +20,20 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
 {
     public class TimeSeriesBundleDtoResult
     {
-        public TimeSeriesBundleDtoResult(TimeSeriesBundleDto timeSeriesBundleDto)
+        public TimeSeriesBundleDtoResult(
+            TimeSeriesBundleDto timeSeriesBundleDto,
+            bool hasErrors,
+            List<SchemaValidationError> errors)
         {
             TimeSeriesBundleDto = timeSeriesBundleDto;
-            Errors = new List<SchemaValidationError>();
+            HasErrors = hasErrors;
+            Errors = errors;
         }
 
-        public bool HasErrors { get; set; }
+        public bool HasErrors { get; }
 
         public TimeSeriesBundleDto TimeSeriesBundleDto { get; }
 
-        public List<SchemaValidationError> Errors { get; set; }
+        public List<SchemaValidationError> Errors { get; }
     }
 }
