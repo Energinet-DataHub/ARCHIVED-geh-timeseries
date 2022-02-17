@@ -20,6 +20,7 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
     {
         public MarketParticipantDto()
         {
+            // Cim deserialization will ensure a value is set.
             Id = null!;
         }
 
