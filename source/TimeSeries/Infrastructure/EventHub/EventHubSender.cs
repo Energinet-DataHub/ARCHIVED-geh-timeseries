@@ -31,6 +31,7 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
         public async ValueTask DisposeAsync()
         {
             await _eventHubProducerClient.DisposeAsync().ConfigureAwait(false);
+            GC.SuppressFinalize(this);
         }
 
         public async Task SendAsync(byte[] body)
