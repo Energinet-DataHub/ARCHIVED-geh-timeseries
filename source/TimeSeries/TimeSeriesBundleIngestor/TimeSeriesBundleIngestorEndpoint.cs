@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
@@ -41,6 +42,9 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         public async Task<HttpResponseData> RunAsync(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
         {
+            if (req == null)
+                throw new ArgumentNullException(nameof(req));
+
             var deserializationResult = await _timeSeriesBundleDtoValidatingDeserializer
                 .ValidateAndDeserializeAsync(req.Body)
                 .ConfigureAwait(false);

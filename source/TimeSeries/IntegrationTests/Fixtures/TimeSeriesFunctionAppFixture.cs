@@ -36,6 +36,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
+            LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
         }
 
         [NotNull]
@@ -43,7 +44,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
-        public BlobContainerClient LogContainerClient { get; private set; }
+        public BlobContainerClient LogContainerClient { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -72,7 +73,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             AzuriteManager.StartAzurite();
 
             // Shared logging blob storage container
-            LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // => Event Hub

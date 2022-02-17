@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
@@ -23,6 +24,7 @@ using Xunit;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
 {
+    [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Arguments are not null")]
     public class TimeSeriesBundleDtoValidatingDeserializerTests
     {
         private readonly TestDocuments _testDocuments;
