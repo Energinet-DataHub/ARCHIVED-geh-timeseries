@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Serialization;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -95,6 +96,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
             serviceCollection
                 .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
+            serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
         }
     }
 }
