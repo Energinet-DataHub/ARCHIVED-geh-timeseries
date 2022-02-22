@@ -11,6 +11,4 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .data_loader import initialize_spark
-from .timeseries_persister import timeseries_persister
-from .timeseries_transformer import timeseries_transformer
+from .eventhub_timeseries_schema import eventhub_timeseries_schema

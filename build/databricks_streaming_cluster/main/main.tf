@@ -53,7 +53,8 @@ resource "databricks_job" "streaming_job" {
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
          "--event-hub-connection-key=${var.evh_timeseries_listen_connection_string}",
          "--delta-lake-container-name=timeseries-data",
-         "--timeseries-unprocessed-blob-name=timeseries-unprocessed"
+         "--timeseries-unprocessed-blob-name=timeseries-unprocessed",
+         "--timeseries-processed-blob-name=timeseries-processed"
     ]
   }
 

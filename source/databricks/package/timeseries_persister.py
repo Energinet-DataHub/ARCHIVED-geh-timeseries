@@ -38,6 +38,10 @@ def timeseries_persister(event_hub_connection_key: str, delta_lake_container_nam
     input_configuration["eventhubs.connectionString"] = spark.sparkContext._gateway.jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(event_hub_connection_key)
     streamingDF = (spark.readStream.format("eventhubs").options(**input_configuration).load())
 
-    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
+    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-persister"
 
-    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)).start()
+    streamingDF. \
+        writeStream. \
+        option("checkpointLocation", checkpoint_path). \
+        foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)). \
+        start()
