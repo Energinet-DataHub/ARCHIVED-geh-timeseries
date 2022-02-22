@@ -53,5 +53,3 @@ def timeseries_transformer(delta_lake_container_name: str, storage_account_name:
         option("checkpointLocation", checkpoint_path). \
         foreachBatch(lambda df, epochId: transform(df, epochId, timeseries_processed_path)). \
         start()
-    
-    read_df.awaitTermination()
