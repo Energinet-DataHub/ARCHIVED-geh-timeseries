@@ -11,5 +11,13 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .resolution import Resolution
-from .colname import Colname
+from package.codelists import Colname
+from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType
+
+time_series_schema = StructType([
+    StructField(Colname.metering_point_id, StringType(), True),
+    StructField(Colname.transaction_id, StringType(), True),
+    StructField(Colname.quantity, DecimalType(18, 3), True),
+    StructField(Colname.quality, StringType(), True),
+    StructField(Colname.time, TimestampType(), True),
+])

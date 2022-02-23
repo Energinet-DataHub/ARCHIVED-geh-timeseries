@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql.types import StringType,StructType,StructField,ArrayType
+from pyspark.sql.types import StringType, StructType, StructField, ArrayType
 
 eventhub_timeseries_schema = StructType([
     # StructField('Document', StructType([
@@ -21,21 +21,21 @@ eventhub_timeseries_schema = StructType([
     #        StructField('BusinessProcessRole', StringType(), True)
     #        ]), True)]),True),
     StructField('Series', ArrayType(StructType([
-                #StructField('Id', StringType(), True),
-                StructField('TransactionId', StringType(), True),
-                StructField('MeteringPointId', StringType(), True),
-                #StructField('MeteringPointType', StringType(), True),
-                #StructField('RegistrationDateTime', StringType(), True),
-                #StructField('Product', StringType(), True),
+                # StructField('Id', StringType(), True),
+                StructField('TransactionId', StringType(), False),
+                StructField('MeteringPointId', StringType(), False),
+                # StructField('MeteringPointType', StringType(), True),
+                # StructField('RegistrationDateTime', StringType(), True),
+                # StructField('Product', StringType(), True),
                 StructField('Period', StructType([
-                    StructField('Resolution', StringType(), True),
-                    StructField('StartDateTime', StringType(), True),
-                    #StructField('EndDateTime', StringType(), True),
+                    StructField('Resolution', StringType(), False),
+                    StructField('StartDateTime', StringType(), False),
+                    # StructField('EndDateTime', StringType(), True),
                     StructField('Points', ArrayType(StructType([
-                        StructField('Quantity', StringType(), True),
-                        StructField('Quality', StringType(), True),
-                        StructField('Position', StringType(), True),
-                ])), True),
-                ]), True)
-                ]),True))
+                        StructField('Quantity', StringType(), False),
+                        StructField('Quality', StringType(), False),
+                        StructField('Position', StringType(), False),
+                    ])), False),
+                ]), False)
+                ]), False))
 ])
