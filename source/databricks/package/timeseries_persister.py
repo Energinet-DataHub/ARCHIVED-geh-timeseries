@@ -15,6 +15,7 @@ from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
 
+
 # epoch_id is required in function signature, but not used
 def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
     if len(df.head(1)) > 0:
