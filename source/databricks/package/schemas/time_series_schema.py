@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from package.codelists import Colname
-from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType
+from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType
 
 time_series_schema = StructType([
     StructField(Colname.metering_point_id, StringType(), True),
     StructField(Colname.transaction_id, StringType(), True),
     StructField(Colname.quantity, DecimalType(18, 3), True),
-    StructField(Colname.quality, StringType(), True),
+    StructField(Colname.quality, IntegerType(), True),
     StructField(Colname.time, TimestampType(), True),
 ])

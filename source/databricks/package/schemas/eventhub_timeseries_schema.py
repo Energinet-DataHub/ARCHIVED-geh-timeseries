@@ -11,7 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql.types import StringType, StructType, StructField, ArrayType
+from pyspark.sql.types import StringType, StructType, StructField, ArrayType, IntegerType
 
 eventhub_timeseries_schema = StructType([
     # StructField('Document', StructType([
@@ -28,12 +28,12 @@ eventhub_timeseries_schema = StructType([
                 # StructField('RegistrationDateTime', StringType(), True),
                 # StructField('Product', StringType(), True),
                 StructField('Period', StructType([
-                    StructField('Resolution', StringType(), False),
+                    StructField('Resolution', IntegerType(), False),
                     StructField('StartDateTime', StringType(), False),
                     # StructField('EndDateTime', StringType(), True),
                     StructField('Points', ArrayType(StructType([
                         StructField('Quantity', StringType(), False),
-                        StructField('Quality', StringType(), False),
+                        StructField('Quality', IntegerType(), False),
                         StructField('Position', StringType(), False),
                     ])), False),
                 ]), False)
