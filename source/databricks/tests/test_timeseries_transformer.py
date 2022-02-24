@@ -56,6 +56,7 @@ def test__createDataframe_from_json_input_schema(eventhub_timeseries_body_datafr
     # Assert
     assert result.schema == time_series_schema
 
+
 def test__createDataframe_from_json_input_correctvalues_0(eventhub_timeseries_body_dataframe_factory):
     # Arrange
     transformer = JsonTransformer()
@@ -63,10 +64,11 @@ def test__createDataframe_from_json_input_correctvalues_0(eventhub_timeseries_bo
     # Act
     result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory())
     # Assert
-    assert  result.collect()[0][Colname.metering_point_id] == "579999993331812346"
-    assert  result.collect()[0][Colname.quantity] == 242
-    assert  result.collect()[0][Colname.quality] == 3
-    assert  result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+    assert result.collect()[0][Colname.metering_point_id] == "579999993331812346"
+    assert result.collect()[0][Colname.quantity] == 242
+    assert result.collect()[0][Colname.quality] == 3
+    assert result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+
 
 def test__createDataframe_from_json_input_correctvalues_1(eventhub_timeseries_body_dataframe_factory):
     # Arrange
@@ -75,10 +77,11 @@ def test__createDataframe_from_json_input_correctvalues_1(eventhub_timeseries_bo
     # Act
     result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory())
     # Assert
-    assert  result.collect()[1][Colname.metering_point_id] == "579999993331812346"
-    assert  result.collect()[1][Colname.quantity] == 242
-    assert  result.collect()[1][Colname.quality] == 4
-    assert  result.collect()[1][Colname.time] == datetime(2022, 8, 15, 23, 0)
+    assert result.collect()[1][Colname.metering_point_id] == "579999993331812346"
+    assert result.collect()[1][Colname.quantity] == 242
+    assert result.collect()[1][Colname.quality] == 4
+    assert result.collect()[1][Colname.time] == datetime(2022, 8, 15, 23, 0)
+
 
 def test__createDataframe_from_json_input_correctvalues_nextday(eventhub_timeseries_body_dataframe_factory):
     # Arrange
@@ -87,8 +90,7 @@ def test__createDataframe_from_json_input_correctvalues_nextday(eventhub_timeser
     # Act
     result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory())
     # Assert
-    assert  result.collect()[2][Colname.metering_point_id] == "579999993331812346"
-    assert  result.collect()[2][Colname.quantity] == 222
-    assert  result.collect()[2][Colname.quality] == 4
-    assert  result.collect()[2][Colname.time] == datetime(2022, 8, 16, 0, 0)
-
+    assert result.collect()[2][Colname.metering_point_id] == "579999993331812346"
+    assert result.collect()[2][Colname.quantity] == 222
+    assert result.collect()[2][Colname.quality] == 4
+    assert result.collect()[2][Colname.time] == datetime(2022, 8, 16, 0, 0)
