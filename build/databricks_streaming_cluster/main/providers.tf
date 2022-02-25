@@ -24,7 +24,7 @@ terraform {
 }
 
 provider "databricks" {
-  azure_workspace_resource_id = data.azurerm_key_vault_secret.dbw_databricks_workspace_id.value
+  # azure_workspace_resource_id = data.azurerm_key_vault_secret.dbw_databricks_workspace_id.value
   host = data.azurerm_key_vault_secret.dbw_databricks_workspace_url.value
 }
 
