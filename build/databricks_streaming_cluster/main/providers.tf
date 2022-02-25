@@ -19,7 +19,7 @@ terraform {
       source = "databrickslabs/databricks"
       version = "0.5.0"
     }
-    azurerm = "=2.78.0"
+    azurerm = "=2.97.0"
   }
 }
 
