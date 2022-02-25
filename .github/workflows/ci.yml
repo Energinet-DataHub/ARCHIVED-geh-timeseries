@@ -48,13 +48,13 @@ jobs:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
-      TERRAFORM_VERSION: "1.0.10"
+      TERRAFORM_VERSION: "1.1.6"
       
   terraform_validate_streaming_cluster:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
     with:
       TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
-      TERRAFORM_VERSION: '1.0.10'
+      TERRAFORM_VERSION: '1.1.6'
 
   time_series_bundle_ingestor_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
