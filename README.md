@@ -23,7 +23,7 @@ These are the business processes maintained by this domain.
 
 Upon receipt of a time series message, the data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data are published to the [Aggregation domain](https://github.com/Energinet-DataHub/geh-aggregations) for use in their work.
 
-![design](ARCHITECTURE.png)
+![design](./docs/images/ARCHITECTURE.drawio.png)
 
 ## Context Streams
 
