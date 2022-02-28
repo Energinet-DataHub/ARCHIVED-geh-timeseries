@@ -14,10 +14,10 @@
 
 using System;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
-using Energinet.DataHub.TimeSeries.Infrastructure.Serialization;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
