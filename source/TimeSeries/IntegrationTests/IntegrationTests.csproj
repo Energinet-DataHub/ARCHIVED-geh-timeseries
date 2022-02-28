@@ -49,5 +49,6 @@ limitations under the License.
   <ItemGroup>
     <ProjectReference Include="..\TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj" />
     <ProjectReference Include="..\TestCore\TestCore.csproj" />
+    <ProjectReference Include="..\TimeSeriesPersister\TimeSeriesPersister.csproj" />
   </ItemGroup>
 </Project>

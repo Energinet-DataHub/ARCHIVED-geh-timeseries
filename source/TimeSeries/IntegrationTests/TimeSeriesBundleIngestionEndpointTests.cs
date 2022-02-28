@@ -32,11 +32,11 @@ using Xunit.Abstractions;
 namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
 {
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
-    public class TimeSeriesBundleIngestionEndpoint : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
+    public class TimeSeriesBundleIngestionEndpointTests : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {
         private readonly TestDocuments _testDocuments;
 
-        public TimeSeriesBundleIngestionEndpoint(TimeSeriesFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
+        public TimeSeriesBundleIngestionEndpointTests(TimeSeriesFunctionAppFixture fixture, ITestOutputHelper testOutputHelper)
             : base(fixture, testOutputHelper)
         {
             _testDocuments = new TestDocuments();

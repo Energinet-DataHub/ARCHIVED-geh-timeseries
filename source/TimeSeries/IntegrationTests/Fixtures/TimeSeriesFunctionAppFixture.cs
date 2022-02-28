@@ -52,6 +52,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
         private EventHubResourceProvider EventHubResourceProvider { get; }
 
+        private Process? TimeSeriesPersisterProcess { get; set; }
+
         /// <inheritdoc/>
         protected override void OnConfigureHostSettings(FunctionAppHostSettings hostSettings)
         {
@@ -85,6 +87,21 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             EventHubListener = new EventHubListenerMock(EventHubResourceProvider.ConnectionString, eventHub.Name, "UseDevelopmentStorage=true", "container", TestLogger);
             await EventHubListener.InitializeAsync().ConfigureAwait(false);
+
+            var foo = nameof(TimeSeriesPersister.Program); // Hack to make the dll available in order to use it when running Apache Spark
+            Console.WriteLine(foo);
+            Environment.SetEnvironmentVariable("TIME_SERIES_POINTS_TABLE_PATH", "time_series_points");
+            var sparkHomePath = Environment.GetEnvironmentVariable("SPARK_HOME");
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = $"{sparkHomePath}\\bin\\spark-submit",
+                Arguments =
+                    "--class org.apache.spark.deploy.dotnet.DotnetRunner --master local microsoft-spark-3-1_2.12-2.1.0.jar dotnet TimeSeriesPersister.dll",
+                ErrorDialog = true,
+                //WindowStyle = ProcessWindowStyle.Normal,
+                UseShellExecute = true,
+            };
+            TimeSeriesPersisterProcess = Process.Start(startInfo);
         }
 
         /// <inheritdoc/>
@@ -118,6 +135,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             // => Storage
             AzuriteManager.Dispose();
+
+            TimeSeriesPersisterProcess!.Kill();
         }
 
         private static string GetBuildConfiguration()
