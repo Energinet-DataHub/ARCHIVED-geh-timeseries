@@ -15,10 +15,10 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.TestCommon.AutoFixture.Attributes;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Application.Enums;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
-using Energinet.DataHub.TimeSeries.TestCore.Attributes;
 using FluentAssertions;
 using Xunit;
 
