@@ -14,9 +14,9 @@
 
 using System.Text;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
-using Energinet.DataHub.TimeSeries.Infrastructure.Serialization;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
