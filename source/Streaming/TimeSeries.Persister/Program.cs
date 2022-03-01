@@ -34,16 +34,16 @@ namespace TimeSeries.Persister
                 .Option("kafka.request.timeout.ms", "60000")
                 .Option("kafka.session.timeout.ms", "60000")
                 .Option("failOnDataLoss", "false")
+                .Option("checkpointLocation", "/tmp/kafka_cp.txt")
                 .Load();
 
-            // var checkpointPath = "received_time_series_checkpoint";
-            //var checkpointPath = $"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
+            var checkpointPath = "/tmp/received_time_series_checkpoint";
+            //var checkpointPath = $"abfss://{delta_lake_container_name}@{stdatalakesharedresu001}.dfs.core.windows.net/checkpoint"
             streamingDf
                 .WriteStream()
-                //     //.Option("checkpointLocation", checkpointPath)
-                //     // TODO: Trigger setup
+                 .Option("checkpointLocation", checkpointPath)
                 .ForeachBatch((df, epochId) => ProcessEventhubItem(df, epochId, timeseries_unprocessed_path))
-                .Start();
+                .Start().AwaitTermination();
         }
 
         public static void ProcessEventhubItem(DataFrame df, long epochId, string timeseriesUnprocessedPath)
