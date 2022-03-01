@@ -18,12 +18,12 @@
 		"GRANT_SUDO": "yes"
 	},
 
-	// Use 'forwardPorts' to make a list of ports inside the container available locally.
-	"forwardPorts": [
-		"localhost:5050"
-	],
+    "forwardPorts": [5567],
+	
+    "appPort": [ "5567:5050" ],
 
 	"overrideCommand": false,
 
-	"containerUser": "root",
+	"containerUser": "root"
+
 }
