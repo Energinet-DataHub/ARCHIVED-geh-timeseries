@@ -7,7 +7,7 @@
 	},
     "extensions": [
         "ms-dotnettools.dotnet-interactive-vscode"    
-    ]
+    ],
 
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
@@ -20,11 +20,10 @@
 
 	// Use 'forwardPorts' to make a list of ports inside the container available locally.
 	"forwardPorts": [
-		5576,8888
+		"localhost:5050"
 	],
 
 	"overrideCommand": false,
 
 	"containerUser": "root",
-	"postCreateCommand": "apt-get update;   apt-get install -y apt-transport-https &&   apt-get update &&   apt-get install -y dotnet-sdk-6.0",
 }
