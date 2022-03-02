@@ -23,7 +23,7 @@ module "evhnm_timeseries" {
   location                        = azurerm_resource_group.this.location
   sku                             = "Standard"
   capacity                        = 1
-  private_endpoint_subnet_id      = data.azurerm_key_vault_secret.snet_private_endoints_id.value
+  private_endpoint_subnet_id      = data.azurerm_key_vault_secret.snet_private_endpoints_id.value
   private_dns_resource_group_name = data.azurerm_key_vault_secret.pdns_resource_group_name.value
 
   tags                            = azurerm_resource_group.this.tags
