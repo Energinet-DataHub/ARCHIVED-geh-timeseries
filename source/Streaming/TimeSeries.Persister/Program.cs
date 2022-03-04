@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Spark.Sql;
-using Microsoft.Spark.Sql.Types;
 
 namespace TimeSeries.Persister
 {
@@ -33,17 +31,17 @@ namespace TimeSeries.Persister
                 .Option("kafka.sasl.jaas.config", eh_sasl)
                 .Option("kafka.request.timeout.ms", "60000")
                 .Option("kafka.session.timeout.ms", "60000")
-                .Option("failOnDataLoss", "false")
-                .Option("checkpointLocation", "/tmp/kafka_cp.txt")
+                //.Option("failOnDataLoss", "false")
+                //.Option("checkpointLocation", "/tmp/kafka_cp.txt")
                 .Load();
 
-            var checkpointPath = "/tmp/received_time_series_checkpoint";
+            //var checkpointPath = "/tmp/received_time_series_checkpoint";
             //var checkpointPath = $"abfss://{delta_lake_container_name}@{stdatalakesharedresu001}.dfs.core.windows.net/checkpoint"
             streamingDf
                 .WriteStream()
-                 .Option("checkpointLocation", checkpointPath)
+                 //.Option("checkpointLocation", checkpointPath)
                 .ForeachBatch((df, epochId) => ProcessEventhubItem(df, epochId, timeseries_unprocessed_path))
-                .Start().AwaitTermination();
+                .Start().AwaitTermination(60000);
         }
 
         public static void ProcessEventhubItem(DataFrame df, long epochId, string timeseriesUnprocessedPath)
