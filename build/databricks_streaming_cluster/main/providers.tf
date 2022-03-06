@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 terraform {
-  required_version = "1.1.5"
+  required_version = "1.1.6"
 
   required_providers {
     databricks = {
