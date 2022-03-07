@@ -20,7 +20,7 @@ import configargparse
 
 from package import timeseries_persister, timeseries_transformer, initialize_spark
 
-p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
+p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
 p.add('--data-storage-account-key', type=str, required=True)
 p.add('--event-hub-connection-key', type=str, required=True)
@@ -34,9 +34,6 @@ spark = initialize_spark(args)
 
 timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
 timeseries_processed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_processed_blob_name}'
-
-# start the eventhub ingestor
-timeseries_persister(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path)
 
 # start the unprocessed timeseries transformer
 timeseries_transformer(args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path, timeseries_processed_path)
