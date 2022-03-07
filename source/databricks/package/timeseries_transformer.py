@@ -14,6 +14,7 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType, StructType, StructField, ArrayType
 from package.transforms import JsonTransformer
+from package.codelists import Colname
 
 
 def transform(df, epoch_id, timeseries_processed_path):
@@ -21,7 +22,10 @@ def transform(df, epoch_id, timeseries_processed_path):
     withTime = JsonTransformer.TransformFromJsonToDataframe(jsonStringDataframe)
 
     withTime.write \
-            .partitionBy("MeteringPointId") \
+            .partitionBy(
+                Colname.year, 
+                Colname.month, 
+                Colname.day) \
             .format("delta") \
             .mode("append") \
             .save(timeseries_processed_path)
