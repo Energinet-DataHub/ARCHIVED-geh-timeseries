@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from package.schemas.eventhub_timeseries_schema import eventhub_timeseries_schema
-from pyspark.sql.functions import from_json, explode, when, col, to_timestamp, expr
+from pyspark.sql.functions import from_json, explode, when, col, to_timestamp, expr, year, month, dayofmonth
 from pyspark.sql.dataframe import DataFrame
 from package.codelists import Resolution
 from package.codelists import Colname
@@ -47,5 +47,9 @@ class JsonTransformer():
         # TODO how do we handle month resolution ?
         timeToAdd = withResolutionInMinutes.withColumn("TimeToAdd", (col("Position") - 1) * col("ClockResolution")).drop("ClockResolution", "Position")
         withTime = timeToAdd.withColumn(Colname.time, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")).drop("StartDateTime").drop("TimeToAdd")
+        withTime = withTime \
+            .withColumn(Colname.year, year(col(Colname.time))) \
+            .withColumn(Colname.month, month(col(Colname.time))) \
+            .withColumn(Colname.day, dayofmonth(col(Colname.time)))
 
         return withTime

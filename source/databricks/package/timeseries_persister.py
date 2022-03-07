@@ -14,18 +14,22 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
+from package.codelists import Colname
 
 
 # epoch_id is required in function signature, but not used
 def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
     if len(df.head(1)) > 0:
         # Append event
-        df = df.withColumn("year", year(df.enqueuedTime)) \
-            .withColumn("month", month(df.enqueuedTime)) \
-            .withColumn("day", dayofmonth(df.enqueuedTime))
+        df = df.withColumn(Colname.year, year(df.enqueuedTime)) \
+            .withColumn(Colname.month, month(df.enqueuedTime)) \
+            .withColumn(Colname.day, dayofmonth(df.enqueuedTime))
 
         df.write \
-            .partitionBy("year", "month", "day") \
+            .partitionBy(
+                Colname.year,
+                Colname.month,
+                Colname.day) \
             .format("delta") \
             .mode("append") \
             .save(timeseries_unprocessed_path)
