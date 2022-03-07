@@ -22,21 +22,6 @@ jobs:
   ci_base:
     uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
-  check_change:
-    runs-on: ubuntu-latest 
-    name: Test changed-files
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v17.2
-      - name: List all changed files
-        run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
   dotnet_solution_time_series_ci:
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
