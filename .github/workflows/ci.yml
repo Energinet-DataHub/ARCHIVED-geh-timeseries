@@ -23,6 +23,8 @@ jobs:
     uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
   check_change:
+    runs-on: ubuntu-latest 
+    name: Test changed-files
     steps:
       - uses: actions/checkout@v2
         with:
