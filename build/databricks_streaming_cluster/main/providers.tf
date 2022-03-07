@@ -17,15 +17,14 @@ terraform {
   required_providers {
     databricks = {
       source = "databrickslabs/databricks"
-      version = "0.5.0"
+      version = "0.5.1"
     }
-    azurerm = "=2.78.0"
+    azurerm = "=2.91.0"
   }
 }
 
 provider "databricks" {
   azure_workspace_resource_id = data.azurerm_key_vault_secret.dbw_databricks_workspace_id.value
-  host = data.azurerm_key_vault_secret.dbw_databricks_workspace_url.value
 }
 
 provider "azurerm" {
