@@ -18,7 +18,7 @@ sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
 
 import configargparse
 
-from package import timeseries_persister, timeseries_transformer, initialize_spark
+from package import timeseries_transformer, initialize_spark
 
 p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)

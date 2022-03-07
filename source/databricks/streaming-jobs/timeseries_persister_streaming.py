@@ -35,4 +35,3 @@ timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.d
 
 # start the eventhub ingestor
 timeseries_persister(args.event_hub_connection_key, args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path)
-
