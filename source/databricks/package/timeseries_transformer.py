@@ -18,17 +18,18 @@ from package.codelists import Colname
 
 
 def transform(df, epoch_id, timeseries_processed_path):
-    jsonStringDataframe = df.select(df.body.cast(StringType()).alias("body"))
-    withTime = JsonTransformer.TransformFromJsonToDataframe(jsonStringDataframe)
-
-    withTime.write \
-            .partitionBy(
-                Colname.year,
-                Colname.month,
-                Colname.day) \
-            .format("delta") \
-            .mode("append") \
-            .save(timeseries_processed_path)
+    if len(df.head(1)) > 0:
+        jsonStringDataframe = df.select(df.body.cast(StringType()).alias("body"))
+        withTime = JsonTransformer.TransformFromJsonToDataframe(jsonStringDataframe)
+    
+        withTime.write \
+                .partitionBy(
+                    Colname.year,
+                    Colname.month,
+                    Colname.day) \
+                .format("delta") \
+                .mode("append") \
+                .save(timeseries_processed_path)
 
 
 def timeseries_transformer(delta_lake_container_name: str, storage_account_name: str, timeseries_unprocessed_path: str, timeseries_processed_path: str):
