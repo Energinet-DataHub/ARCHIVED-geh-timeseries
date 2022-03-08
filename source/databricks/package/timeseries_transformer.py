@@ -21,7 +21,7 @@ def transform(df, epoch_id, timeseries_processed_path):
     if len(df.head(1)) > 0:
         jsonStringDataframe = df.select(df.body.cast(StringType()).alias("body"))
         withTime = JsonTransformer.TransformFromJsonToDataframe(jsonStringDataframe)
-    
+
         withTime.write \
                 .partitionBy(
                     Colname.year,
