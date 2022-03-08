@@ -23,30 +23,38 @@ class JsonTransformer():
 
     def TransformFromJsonToDataframe(self, source: DataFrame) -> DataFrame:
         structured = source.select(from_json(source.body, eventhub_timeseries_schema).alias('json'))
-        flat = structured. \
-            select(explode("json.Series")). \
-            select("col.MeteringPointId", "col.TransactionId", "col.Period"). \
-            select(
+        flat = structured \
+            .select(explode("json.Series")) \
+            .select("col.MeteringPointId", "col.TransactionId", "col.Period") \
+            .select(
                 col("MeteringPointId").alias(Colname.metering_point_id),
                 col("TransactionId").alias(Colname.transaction_id),
                 to_timestamp(col("Period.StartDateTime")).alias("StartDateTime"),
                 col("Period.Resolution").alias("Resolution"),
-                explode("Period.Points").alias("Period_Point")). \
-            select("*",
+                explode("Period.Points").alias("Period_Point")) \
+            .select("*",
                    col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
                    col("Period_Point.Quality").alias(Colname.quality),
-                   "Period_Point.Position"). \
-            drop("Period_Point")
+                   "Period_Point.Position") \
+            .drop("Period_Point")
 
-        withResolutionInMinutes = flat.withColumn("ClockResolution",
-                                                  when(col("Resolution") == Resolution.quarter, 15).
-                                                  when(col("Resolution") == Resolution.hour, 60).
-                                                  when(col("Resolution") == Resolution.day, 1440).
-                                                  when(col("Resolution") == Resolution.month, 43800)).drop("Resolution")
+        flat = flat \
+            .withColumn("ResolutionString",
+                                        when(col("Resolution") == Resolution.quarter, 'MINUTES') \
+                                        .when(col("Resolution") == Resolution.hour, 'HOURS') \
+                                        .when(col("Resolution") == Resolution.day, 'DAYS') \
+                                        .when(col("Resolution") == Resolution.month, 'MONTHS')) \
+            .withColumn("ToAdd", 
+                                when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15) \
+                                .otherwise(col("Position") -1)) \
+            .drop("Resolution")
 
-        # TODO how do we handle month resolution ?
-        timeToAdd = withResolutionInMinutes.withColumn("TimeToAdd", (col("Position") - 1) * col("ClockResolution")).drop("ClockResolution", "Position")
-        withTime = timeToAdd.withColumn(Colname.time, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")).drop("StartDateTime").drop("TimeToAdd")
+        set_time_func = (col("StartDateTime") + expr(f"INTERVAL {col('ToAdd')} {col('ResolutionString')}"))
+
+        withTime = flat \
+            .withColumn(Colname.time, set_time_func) \
+            .drop("StartDateTime", "ResolutionString", "ToAdd")
+        
         withTime = withTime \
             .withColumn(Colname.year, year(col(Colname.time))) \
             .withColumn(Colname.month, month(col(Colname.time))) \
