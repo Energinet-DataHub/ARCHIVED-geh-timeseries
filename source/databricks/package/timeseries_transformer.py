@@ -23,8 +23,8 @@ def transform(df, epoch_id, timeseries_processed_path):
 
     withTime.write \
             .partitionBy(
-                Colname.year, 
-                Colname.month, 
+                Colname.year,
+                Colname.month,
                 Colname.day) \
             .format("delta") \
             .mode("append") \
