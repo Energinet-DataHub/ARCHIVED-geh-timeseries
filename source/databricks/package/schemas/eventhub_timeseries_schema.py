@@ -14,23 +14,23 @@
 from pyspark.sql.types import StringType, StructType, StructField, ArrayType, IntegerType, DecimalType
 
 eventhub_timeseries_schema = StructType([
-    # StructField('Document', StructType([
-    #      StructField('Id', StringType(), True),
-    #      StructField('Sender', StructType([
-    #        StructField('Id', StringType(), True),
-    #        StructField('BusinessProcessRole', StringType(), True)
-    #        ]), True)]),True),
+    StructField('Document', StructType([
+          StructField('Id', StringType(), True),
+          StructField('Sender', StructType([
+            StructField('Id', StringType(), True),
+            StructField('BusinessProcessRole', StringType(), True)
+            ]), True)]),True),
     StructField('Series', ArrayType(StructType([
-                # StructField('Id', StringType(), True),
+                StructField('Id', StringType(), True),
                 StructField('TransactionId', StringType(), False),
                 StructField('MeteringPointId', StringType(), False),
-                # StructField('MeteringPointType', StringType(), True),
-                # StructField('RegistrationDateTime', StringType(), True),
-                # StructField('Product', StringType(), True),
+                StructField('MeteringPointType', StringType(), True),
+                StructField('RegistrationDateTime', StringType(), True),
+                StructField('Product', StringType(), True),
                 StructField('Period', StructType([
                     StructField('Resolution', IntegerType(), False),
                     StructField('StartDateTime', StringType(), False),
-                    # StructField('EndDateTime', StringType(), True),
+                    StructField('EndDateTime', StringType(), True),
                     StructField('Points', ArrayType(StructType([
                         StructField('Quantity', DecimalType(38, 3), False),
                         StructField('Quality', IntegerType(), False),
