@@ -34,27 +34,25 @@ class JsonTransformer():
                 col("Period.Resolution").alias(Colname.resolution),
                 explode("Period.Points").alias("Period_Point")) \
             .select("*",
-                   col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
-                   col("Period_Point.Quality").alias(Colname.quality),
-                   "Period_Point.Position") \
+                    col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
+                    col("Period_Point.Quality").alias(Colname.quality),
+                    "Period_Point.Position") \
             .drop("Period_Point")
 
         flat = flat \
-            .withColumn("TimeToAdd", 
-                                when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15) \
-                                .otherwise(col("Position") -1))
-
-        
+            .withColumn("TimeToAdd",
+                        when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15)
+                        .otherwise(col("Position") - 1))
 
         set_time_func = when(col("Resolution") == Resolution.quarter, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")) \
-                        .when(col("Resolution") == Resolution.hour, expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
-                        .when(col("Resolution") == Resolution.day, expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
-                        .when(col("Resolution") == Resolution.month, expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
-        
+            .when(col("Resolution") == Resolution.hour, expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
+            .when(col("Resolution") == Resolution.day, expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
+            .when(col("Resolution") == Resolution.month, expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
+
         withTime = flat \
             .withColumn(Colname.time, set_time_func) \
             .drop("StartDateTime", "TimeToAdd")
-        
+
         withTime = withTime \
             .withColumn(Colname.year, year(col(Colname.time))) \
             .withColumn(Colname.month, month(col(Colname.time))) \
