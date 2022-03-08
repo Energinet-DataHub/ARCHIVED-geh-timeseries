@@ -51,7 +51,7 @@ resource "databricks_job" "persister_streaming_job" {
   } 
 
   spark_python_task {
-    python_file = "dbfs:/timeseries/timeseries_persister.py"
+    python_file = "dbfs:/timeseries/timeseries_persister_streaming.py"
     parameters  = [
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_data_lake_name.value}",
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
