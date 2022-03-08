@@ -50,6 +50,7 @@ class Colname():
     product = "product"
     quality = "quality"
     quantity = "quantity"
+    registration_date_time = "registration_date_time"
     resolution = "resolution"
     result_id = "result_id"
     result_name = "result_name"

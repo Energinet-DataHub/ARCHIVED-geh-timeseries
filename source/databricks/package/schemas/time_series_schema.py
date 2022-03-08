@@ -20,4 +20,9 @@ time_series_schema = StructType([
     StructField(Colname.quantity, DecimalType(18, 3), True),
     StructField(Colname.quality, IntegerType(), True),
     StructField(Colname.time, TimestampType(), True),
+    StructField(Colname.resolution, IntegerType(), True),
+    StructField(Colname.year, IntegerType(), True),
+    StructField(Colname.month, IntegerType(), True),
+    StructField(Colname.day, IntegerType(), True),
+    StructField(Colname.registration_date_time, TimestampType(), True),
 ])
