@@ -21,6 +21,7 @@ from pyspark import SparkConf
 from pyspark.sql import SparkSession
 from delta import configure_spark_with_delta_pip
 
+
 # Create Spark Conf/Session.
 @pytest.fixture(scope="session")
 def spark():
