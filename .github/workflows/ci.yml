@@ -42,24 +42,22 @@ jobs:
             echo "$file was changed"
           done
       - name: Any changed
-        run: |
-            echo "${{ steps.changed-files.outputs.any_changed }}"
+        run: echo "${{ steps.changed-files.outputs.any_changed }}"
 
-  dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
-    with:
-      SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
-      DOTNET_VERSION: "5.0.404"      
-      USE_AZURE_FUNCTIONS_TOOLS: true
-    secrets:
-      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
-      AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
-      AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
-      AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
+  # dotnet_solution_time_series_ci:
+  #   uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
+  #   with:
+  #     SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
+  #     DOTNET_VERSION: "5.0.404"      
+  #     USE_AZURE_FUNCTIONS_TOOLS: true
+  #   secrets:
+  #     AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  #     AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+  #     AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+  #     AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
+  #     AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
-# TODO reintroduce once pipelines are sorted (This step is slow due to docker container)
 
   # databricks_ci:
   #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
@@ -69,41 +67,40 @@ jobs:
   #     ARTIFACT_NAME: 'build-databricks_artifacts'
   #     TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
-  terraform_validate:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
-    with:
-      TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
-      TERRAFORM_VERSION: "1.1.6"
+  # terraform_validate:
+  #   uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
+  #   with:
+  #     TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
+  #     TERRAFORM_VERSION: "1.1.6"
       
-  terraform_validate_streaming_cluster:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
-    with:
-      TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
-      TERRAFORM_VERSION: '1.1.6'
+  # terraform_validate_streaming_cluster:
+  #   uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
+  #   with:
+  #     TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
+  #     TERRAFORM_VERSION: '1.1.6'
 
-  time_series_bundle_ingestor_ci:
-    needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
-    with:
-      CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
-      DOTNET_VERSION: "5.0.404"
-      ARTIFACT_NAME: time_series_bundle_ingestor
+  # time_series_bundle_ingestor_ci:
+  #   needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
+  #   uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
+  #   with:
+  #     CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
+  #     DOTNET_VERSION: "5.0.404"
+  #     ARTIFACT_NAME: time_series_bundle_ingestor
 
-  wheel_ci:
-    #needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-    needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
-    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@2.4.0
-    with:
-      PYHTON_VERSION: '3.8.6'
-      ARCHITECTURE: 'x64'
-      WHEEL_WORKING_DIRECTORY: './source/databricks'
-      ARTIFACT_NAME: 'wheel'
-      ARTIFACT_PATH: './source/databricks/dist'
+  # wheel_ci:
+  #   needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
+  #   uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@2.4.0
+  #   with:
+  #     PYHTON_VERSION: '3.8.6'
+  #     ARCHITECTURE: 'x64'
+  #     WHEEL_WORKING_DIRECTORY: './source/databricks'
+  #     ARTIFACT_NAME: 'wheel'
+  #     ARTIFACT_PATH: './source/databricks/dist'
 
-  create_prerelease:
-    needs: [time_series_bundle_ingestor_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
-    with:
-      CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
-    secrets:
-      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+  # create_prerelease:
+  #   needs: [time_series_bundle_ingestor_ci]
+  #   uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
+  #   with:
+  #     CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
+  #   secrets:
+  #     PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
