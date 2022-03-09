@@ -51,7 +51,8 @@ RUN ln -s "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop" spark && \
 
 # Configure Spark
 ENV SPARK_HOME=/usr/local/spark \
-    HADOOP_HOME=/usr/local/hadoop
+    HADOOP_HOME=/usr/local/hadoop \
+    PYSPARK_SUBMIT_ARGS='--packages io.delta:delta-core_2.12:1.0.0 pyspark-shell'
 
 ENV PATH=$SPARK_HOME/bin:$HADOOP_HOME/bin:$PATH \
     PYTHONPATH="${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-${py4j_version}-src.zip" \
@@ -74,7 +75,7 @@ RUN conda install --quiet --yes --satisfied-skip-solve \
     'coverage=5.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.5.*' \
     && \
     conda install --quiet --yes --satisfied-skip-solve -c anaconda 'protobuf=3.14.*' && \
-    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf && \
+    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
