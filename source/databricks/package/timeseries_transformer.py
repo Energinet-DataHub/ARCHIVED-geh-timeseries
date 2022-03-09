@@ -77,7 +77,7 @@ def transform(df, epoch_id, timeseries_processed_path):
 
         # Determine if incomming data should be inserted based on condition that "should_update" is False and there is no existing metering point in timeseries_processed table for the given time
         to_insert = determine_df \
-            .filter(col('should_update') is False) \
+            .filter(not col('should_update')) \
             .filter(col(Colname.metering_point_id).isNull()) \
             .select(
                 col('update_metering_point_id').alias(Colname.metering_point_id),
@@ -93,7 +93,7 @@ def transform(df, epoch_id, timeseries_processed_path):
             )
 
         # Filter out data that should be updated based on "should_update" column
-        to_update = determine_df.filter(col('should_update') is True)
+        to_update = determine_df.filter(col('should_update'))
 
         # Insert data into timeseries_processed table
         to_insert \
