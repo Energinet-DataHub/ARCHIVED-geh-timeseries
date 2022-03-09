@@ -32,11 +32,18 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v17.2
+        with:
+          files: |
+            *.yml
+            **/migrate-*.sql
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+      - name: Any changed ?
+        run: |
+            echo "${{ steps.changed-files.outputs.any_changed }}"
 
   dotnet_solution_time_series_ci:
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
