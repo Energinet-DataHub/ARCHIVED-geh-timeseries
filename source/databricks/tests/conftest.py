@@ -30,15 +30,5 @@ def spark():
         .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
         .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
         .config("spark.sql.session.timeZone", "UTC")
-    
-    return configure_spark_with_delta_pip(builder).getOrCreate()
 
-    # spark_conf = SparkConf(loadDefaults=True) \
-    #     .set("spark.sql.session.timeZone", "UTC") \
-    #     .set("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-    #     .set("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
-   
-    # return SparkSession \
-    #     .builder \
-    #     .config(conf=spark_conf) \
-    #     .getOrCreate()
+    return configure_spark_with_delta_pip(builder).getOrCreate()
