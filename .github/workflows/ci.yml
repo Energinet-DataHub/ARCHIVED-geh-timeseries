@@ -59,7 +59,7 @@ jobs:
       - run: echo ${{needs.check_change.outputs.hasdotnetfiles}} ${{needs.check_change.outputs.hasdatabricksfiles}}
 
   dotnet_solution_time_series_ci:
-    if: {needs.check_change.outputs.hasdotnetfiles == 'true'
+    if: needs.check_change.outputs.hasdotnetfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
@@ -75,7 +75,7 @@ jobs:
 
 
   databricks_ci:
-    if: {needs.check_change.outputs.hasdatabricksfiles == 'true'  
+    if: needs.check_change.outputs.hasdatabricksfiles == 'true'  
     uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
     with:
       PATH_STATIC_CHECKS: './source'
@@ -85,14 +85,14 @@ jobs:
 
 
   terraform_validate:
-    if: {needs.check_change.outputs.hasterraformfiles == 'true'
+    if: needs.check_change.outputs.hasterraformfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.1.6"
       
   terraform_validate_streaming_cluster:
-    if: {needs.check_change.outputs.hasterraformfiles == 'true'
+    if: needs.check_change.outputs.hasterraformfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
     with:
       TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
