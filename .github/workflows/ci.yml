@@ -42,7 +42,9 @@ jobs:
             echo "$file was changed"
           done
       - name: Any changed
-        run: echo "${{ steps.changed-files.outputs.any_changed }}"
+        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        run: |
+          echo "One or more files listed above has changed."
 
   # dotnet_solution_time_series_ci:
   #   uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
