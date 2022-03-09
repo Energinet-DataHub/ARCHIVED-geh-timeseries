@@ -52,12 +52,6 @@ jobs:
           files: |
             build//**                
 
-  job2:
-    runs-on: ubuntu-latest
-    needs: check_change
-    steps:
-      - run: echo ${{needs.check_change.outputs.hasdotnetfiles}} ${{needs.check_change.outputs.hasdatabricksfiles}}
-
   dotnet_solution_time_series_ci:
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
