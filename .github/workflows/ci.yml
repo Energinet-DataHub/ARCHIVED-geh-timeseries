@@ -34,7 +34,7 @@ jobs:
         uses: tj-actions/changed-files@v17.3
         with:
           files: |
-            *
+            **/*.yml
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
