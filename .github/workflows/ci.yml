@@ -42,7 +42,7 @@ jobs:
             echo "$file was changed"
           done
       - name: Any changed
-        if: steps.changed-files-specific.outputs.any_changed == 'true'
+        if: steps.changed-files.outputs.any_changed == 'true'
         run: |
           echo "One or more files listed above has changed."
 
