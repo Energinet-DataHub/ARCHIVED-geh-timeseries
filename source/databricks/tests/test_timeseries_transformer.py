@@ -20,23 +20,6 @@ import pytest
 
 
 @pytest.fixture(scope="module")
-def timeseries_result_factory(spark):
-    def factory(
-        metering_point_id=1,
-        quantity=2,
-        quality=3,
-        time=datetime(2020, 1, 1, 0, 0)
-    ):
-        return spark.createDataFrame(pd.DataFrame().append([{
-            Colname.metering_point_id: metering_point_id,
-            Colname.quantity: quantity,
-            Colname.quality: quality,
-            Colname.time: time}],
-            ignore_index=True))
-    return factory
-
-
-@pytest.fixture(scope="module")
 def eventhub_timeseries_body_dataframe_factory(spark) -> pd.DataFrame:
     def factory(
         body='{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":2,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":2,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
@@ -94,3 +77,59 @@ def test__createDataframe_from_json_input_correctvalues_nextday(eventhub_timeser
     assert result.collect()[2][Colname.quantity] == 222
     assert result.collect()[2][Colname.quality] == 4
     assert result.collect()[2][Colname.time] == datetime(2022, 8, 16, 0, 0)
+
+
+def test__createDataframe_fom_json_input_can_add_months(eventhub_timeseries_body_dataframe_factory):
+    # Arrange
+    transformer = JsonTransformer()
+
+    # Act
+    result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory(body=month_body()))
+    # Assert
+    assert result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+    assert result.collect()[1][Colname.time] == datetime(2022, 9, 15, 22, 0)
+
+
+def test__createDataframe_fom_json_input_can_add_quarter(eventhub_timeseries_body_dataframe_factory):
+    # Arrange
+    transformer = JsonTransformer()
+
+    # Act
+    result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory(body=quarter_body()))
+    # Assert
+    assert result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+    assert result.collect()[1][Colname.time] == datetime(2022, 8, 15, 22, 15)
+
+
+def test__createDataframe_fom_json_input_can_add_day(eventhub_timeseries_body_dataframe_factory):
+    # Arrange
+    transformer = JsonTransformer()
+
+    # Act
+    result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory(body=day_body()))
+    # Assert
+    assert result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+    assert result.collect()[1][Colname.time] == datetime(2022, 8, 16, 22, 0)
+
+
+def test__createDataframe_fom_json_input_can_add_hour(eventhub_timeseries_body_dataframe_factory):
+    # Arrange
+    transformer = JsonTransformer()
+
+    # Act
+    result = transformer.TransformFromJsonToDataframe(eventhub_timeseries_body_dataframe_factory())
+    # Assert
+    assert result.collect()[0][Colname.time] == datetime(2022, 8, 15, 22, 0)
+    assert result.collect()[1][Colname.time] == datetime(2022, 8, 15, 23, 0)
+
+
+def month_body():
+    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":4,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":4,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
+
+
+def quarter_body():
+    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":1,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":1,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
+
+
+def day_body():
+    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":3,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":3,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
