@@ -5,8 +5,10 @@ ENV SPARK_SUBMIT_PACKAGES="org.apache.spark:spark-sql-kafka-0-10_2.12:3.2.1","io
 
 # dotnet-sdk-6.0:     Support VSCode .NET Interactive extension
 # git:                Support VSCode Git integration
+# npm and n:          In order to install azurite
 RUN apt-get update; \
     apt-get install -y apt-transport-https && \
     apt-get install -y dotnet-sdk-6.0 && \
     apt-get install -y git && \
-    apt-get update
+    apt-get update; \
+    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
