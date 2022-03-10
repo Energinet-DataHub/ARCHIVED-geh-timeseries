@@ -13,7 +13,7 @@
 # limitations under the License.
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, max
-from pyspark.sql.types import StringType, StructType, StructField, ArrayType
+from pyspark.sql.types import StringType, StructType, StructField, ArrayType, BooleanType
 from package.transforms import JsonTransformer
 from package.codelists import Colname
 from delta.tables import DeltaTable
@@ -39,7 +39,6 @@ def transform(df, epoch_id, timeseries_processed_path):
             col(Colname.day).alias('update_day'),
             col(Colname.registration_date_time).alias('update_registration_date_time')
         )
-
         # Determine min and max year, month and day from incomming dataframe
         min_max_df = df_to_merge \
             .groupBy() \
@@ -53,7 +52,6 @@ def transform(df, epoch_id, timeseries_processed_path):
             .withColumn("max_month", month("max_time")) \
             .withColumn("max_day", dayofmonth("max_time"))
         row = min_max_df.first()
-
         # Fetch existing processed timeseries within min and max year, month and day
         existing_df = spark \
             .read \
@@ -61,23 +59,20 @@ def transform(df, epoch_id, timeseries_processed_path):
             .load(timeseries_processed_path) \
             .where(f"""(year >= {row['min_year']} AND month >= {row['min_month']} AND day >= {row['min_day']})
                 AND (year <= {row['max_year']} AND month <= {row['max_month']} AND day <= {row['max_day']})""")
-
         # Left join incomming dataframe with existing data on metering point id and time
         determine_df = df_to_merge.join(existing_df, (
             df_to_merge["update_metering_point_id"] == existing_df[Colname.metering_point_id])
             & (df_to_merge["update_time"] == existing_df[Colname.time]),
             "left")
-
         # Determine if incomming data should be updated based on condition that checks that incomming data registration datetime is greater or equal to existing data
         determine_df = determine_df.withColumn('should_update',
-                                               when(col(Colname.registration_date_time).isNotNull(),
-                                                    col(Colname.registration_date_time) <= col('update_registration_date_time'))
-                                               .otherwise(lit(False)))
+                                               (when(col(Colname.registration_date_time).isNotNull(),
+                                                     col(Colname.registration_date_time) <= col('update_registration_date_time'))
+                                                .otherwise(lit(False))).cast(BooleanType()))
         # determine_df.display()
-
         # Determine if incomming data should be inserted based on condition that "should_update" is False and there is no existing metering point in timeseries_processed table for the given time
         to_insert = determine_df \
-            .filter(not col('should_update')) \
+            .filter(col('should_update') == 'False') \
             .filter(col(Colname.metering_point_id).isNull()) \
             .select(
                 col('update_metering_point_id').alias(Colname.metering_point_id),
@@ -91,10 +86,8 @@ def transform(df, epoch_id, timeseries_processed_path):
                 col('update_day').alias(Colname.day),
                 col('update_registration_date_time').alias(Colname.registration_date_time)
             )
-
         # Filter out data that should be updated based on "should_update" column
-        to_update = determine_df.filter(col('should_update'))
-
+        to_update = determine_df.filter(col('should_update') == 'True')
         # Insert data into timeseries_processed table
         to_insert \
             .write \
@@ -105,9 +98,7 @@ def transform(df, epoch_id, timeseries_processed_path):
             .format("delta") \
             .mode("append") \
             .save(timeseries_processed_path)
-
         processed_table = DeltaTable.forPath(spark, timeseries_processed_path)
-
         # Update existing data with incomming data
         processed_table \
             .alias('source') \
