@@ -7,11 +7,9 @@ USER root
 
 ARG openjdk_version="8"
 
-ARG hadoop_version="3.3.0"
-ARG hadoop_checksum="9ac5a5a8d29de4d2edfb5e554c178b04863375c5644d6fea1f6464ab4a7e22a50a6c43253ea348edbd114fc534dcde5bdd2826007e24b2a6b0ce0d704c5b4f5b"
+ARG hadoop_version="3.3.2"
 
 ARG spark_version="3.1.2"
-ARG spark_checksum="e7b580bc67356f1b36756b18a95e452307eb3825265616e399b1766124764d6e65ab4c666ad23c93e006d88b6c83a78a7d786be981b4f20696697860a459879d"
 
 ARG py4j_version="0.10.9"
 
@@ -35,15 +33,14 @@ WORKDIR /tmp
 
 RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz\?as_json | \
     python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    echo "${hadoop_checksum} *hadoop-${HADOOP_VERSION}.tar.gz" | sha512sum -c - && \
     tar xzf "hadoop-${HADOOP_VERSION}.tar.gz" -C /usr/local --owner root --group root --no-same-owner && \
     rm "hadoop-${HADOOP_VERSION}.tar.gz"
 
 RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz\?as_json | \
     python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    echo "${spark_checksum} *spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz" | sha512sum -c - && \
     tar xzf "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz" -C /usr/local --owner root --group root --no-same-owner && \
     rm "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz"
+
 
 WORKDIR /usr/local
 RUN ln -s "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop" spark && \
@@ -51,12 +48,17 @@ RUN ln -s "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop" spark && \
 
 # Configure Spark
 ENV SPARK_HOME=/usr/local/spark \
-    HADOOP_HOME=/usr/local/hadoop \
-    PYSPARK_SUBMIT_ARGS='--packages io.delta:delta-core_2.12:1.0.0 pyspark-shell'
+    HADOOP_HOME=/usr/local/hadoop
+    #PYSPARK_SUBMIT_ARGS='--packages io.delta:delta-core_2.12:1.0.0,org.apache.hadoop:hadoop-azure:3.3.2,org.apache.hadoop:hadoop-client:3.3.2 pyspark-shell'
 
 ENV PATH=$SPARK_HOME/bin:$HADOOP_HOME/bin:$PATH \
     PYTHONPATH="${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-${py4j_version}-src.zip" \
     SPARK_OPTS="--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info"
+
+
+RUN wget -P $SPARK_HOME/jars https://repo1.maven.org/maven2/io/delta/delta-core_2.12/1.0.1/delta-core_2.12-1.0.1.jar
+
+RUN wget -P $SPARK_HOME/jars https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure/3.3.2/hadoop-azure-3.3.2.jar
 
 USER $NB_UID
 

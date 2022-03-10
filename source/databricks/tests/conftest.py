@@ -19,17 +19,17 @@ defined in the geh_stream directory in our tests.
 import pytest
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-from delta import configure_spark_with_delta_pip
 
 
 # Create Spark Conf/Session.
 @pytest.fixture(scope="session")
 def spark():
+    spark_conf = SparkConf(loadDefaults=True) \
+        .set("spark.sql.session.timeZone", "UTC") \
+        .set("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
+        .set("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
 
-    builder = SparkSession.builder.appName("MyApp") \
-        .master("local[*]") \
-        .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
-        .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
-        .config("spark.sql.session.timeZone", "UTC")
-
-    return configure_spark_with_delta_pip(builder).getOrCreate()
+    return SparkSession \
+        .builder \
+        .config(conf=spark_conf) \
+        .getOrCreate()
