@@ -15,7 +15,9 @@
 		"HashiCorp.terraform",
 		"christian-kohler.path-intellisense",
 		"Gruntfuggly.todo-tree",
-		"DavidAnson.vscode-markdownlint" 
+		"DavidAnson.vscode-markdownlint",
+        "kevinglasson.cornflakes-linter",
+        "KevinRose.vsc-python-indent"
     ],
 
 	// Set *default* container specific settings.json values on container create.
