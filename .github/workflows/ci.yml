@@ -111,7 +111,6 @@ jobs:
       ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [time_series_bundle_ingestor_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
