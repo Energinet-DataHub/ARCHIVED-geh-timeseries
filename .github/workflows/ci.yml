@@ -22,27 +22,27 @@ jobs:
   ci_base:
     uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
-  # dotnet_solution_time_series_ci:
-  #   uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
-  #   with:
-  #     SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
-  #     DOTNET_VERSION: "5.0.404"      
-  #     USE_AZURE_FUNCTIONS_TOOLS: true
-  #   secrets:
-  #     AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  #     AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-  #     AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
-  #     AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
-  #     AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
-  #     AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
+  dotnet_solution_time_series_ci:
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
+    with:
+      SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
+      DOTNET_VERSION: "5.0.404"      
+      USE_AZURE_FUNCTIONS_TOOLS: true
+    secrets:
+      AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
+      AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+      AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
+      AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
-  # databricks_ci:
-  #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@5.0.4
-  #   with:
-  #     PATH_STATIC_CHECKS: './source'
-  #     IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-  #     ARTIFACT_NAME: 'build-databricks_artifacts'
-  #     TEST_REPORT_PATH: ./source/databricks/htmlcov/
+  databricks_ci:
+    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@5.0.4
+    with:
+      PATH_STATIC_CHECKS: './source'
+      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
+      ARTIFACT_NAME: 'build-databricks_artifacts'
+      TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
   terraform_validate:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
@@ -65,8 +65,8 @@ jobs:
       ARTIFACT_NAME: time_series_bundle_ingestor
 
   wheel_ci:
-  #  needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-    needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
+    needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
+   # needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
     uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@5.0.5
     with:
       PYHTON_VERSION: '3.8.6'
