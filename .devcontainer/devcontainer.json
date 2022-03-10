@@ -24,6 +24,7 @@
 
 	"overrideCommand": false,
 
-	"containerUser": "root"
+	"containerUser": "root",
 
+	"postStartCommand": "azurite-blob -l /workspaces/geh-timeseries/source/notebooks/__storage__/azurite"
 }
