@@ -26,9 +26,9 @@ jobs:
     runs-on: ubuntu-latest
     name: Test changed-files
     outputs:
-      hasdotnetfiles: ${{ steps.changed-files-dotnet.outputs.any_changed }}
-      hasdatabricksfiles: ${{ steps.changed-files-databricks.outputs.any_changed }}
-      hasterraformfiles: ${{ steps.changed-files-terraform.outputs.any_changed }}
+      hasdotnetfiles: ${{ steps.changedsteps.outputs.dotnet_changed }}
+      hasdatabricksfiles: ${{ steps.changedsteps.outputs.databricks_changed }}
+      hasterraformfiles: ${{ steps.changedsteps.outputs.terraform_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -52,8 +52,9 @@ jobs:
           files: |
             build//**
       - name: Set outputs
+        id: changedsteps
         run: |
-          echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
+          echo "::set-output name=dotnet_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
   what_is:
     runs-on: ubuntu-latest
     name: What is
