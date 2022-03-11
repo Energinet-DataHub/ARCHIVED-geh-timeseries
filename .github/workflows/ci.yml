@@ -121,6 +121,7 @@ jobs:
 
   create_prerelease:
     needs: [time_series_bundle_ingestor_ci,wheel_ci]
+    if: ${{ always() && !cancelled() && (needs.time_series_bundle_ingestor_ci.result == 'success' } || needs.wheel_ci.result == 'success' })}
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
