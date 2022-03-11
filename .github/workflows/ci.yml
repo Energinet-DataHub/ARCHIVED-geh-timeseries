@@ -103,6 +103,7 @@ jobs:
 
   time_series_bundle_ingestor_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
+    if: ${{ always() && !cancelled() && (needs.dotnet_solution_time_series_ci.result == 'success' )}}
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
