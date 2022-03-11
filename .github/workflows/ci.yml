@@ -56,6 +56,13 @@ jobs:
           for file in ${{ steps.changed-files-dotnet.outputs.all_changed_files }}; do
             echo "$file was changed"
           done                
+  what_is:
+    runs-on: ubuntu-latest
+    name: What is
+    steps:
+      - name: dotnet
+        run: |
+          echo needs.check_change.outputs.hasdotnetfiles
 
   dotnet_solution_time_series_ci:
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
