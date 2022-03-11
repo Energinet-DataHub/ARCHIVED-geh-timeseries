@@ -53,7 +53,7 @@ jobs:
             build//**
       - name: Set outputs
         run: |
-          run: echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
+          echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
   what_is:
     runs-on: ubuntu-latest
     name: What is
