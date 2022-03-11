@@ -54,6 +54,7 @@ jobs:
       - name: Set outputs
         id: changedsteps
         run: |
+          echo "${{steps.changed-files-dotnet.outputs.any_changed}}"
           echo "::set-output name=dotnet_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
   what_is:
     runs-on: ubuntu-latest
