@@ -60,7 +60,7 @@ jobs:
   dotnet_solution_time_series_ci:
     needs: [check_change]
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.2
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
       DOTNET_VERSION: "5.0.404"      
