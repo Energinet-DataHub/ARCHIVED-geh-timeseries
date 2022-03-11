@@ -62,7 +62,7 @@ jobs:
     steps:
       - name: dotnet
         run: |
-          echo  ${{needs.check_change.outputs.hasdotnetfiles}}
+          echo  "${{needs.check_change.outputs.hasdotnetfiles}}"
 
   dotnet_solution_time_series_ci:
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
