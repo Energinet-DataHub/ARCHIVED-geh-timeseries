@@ -10,7 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License..
+# limitations under the License.
 data "azurerm_key_vault" "kv_shared" {
   name                = var.shared_resources_keyvault_name
   resource_group_name = var.shared_resources_resource_group_name
