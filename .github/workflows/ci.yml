@@ -39,12 +39,13 @@ jobs:
         with:
           files: |
             **/source/TimeSeries/**
+        run: "echo "::set-output name=tany_changedest::${{steps.changed-files-dotnet.outputs.any_changed}}""
       - name: Get changed dotnet files
         id: changed-files-databricks
         uses: tj-actions/changed-files@v17.3
         with:
           files: |
-            **/source/databricks/**
+            **/source/databricks/**            
       - name: Get changed terraform files
         id: changed-files-terraform
         uses: tj-actions/changed-files@v17.3
