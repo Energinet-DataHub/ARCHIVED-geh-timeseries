@@ -39,7 +39,6 @@ jobs:
         with:
           files: |
             **/source/TimeSeries/**
-        run: echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
       - name: Get changed dotnet files
         id: changed-files-databricks
         uses: tj-actions/changed-files@v17.3
@@ -52,11 +51,9 @@ jobs:
         with:
           files: |
             build//**
-      - name: List all changed files
+      - name: Set outputs
         run: |
-          for file in ${{ steps.changed-files-dotnet.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done                
+          run: echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
   what_is:
     runs-on: ubuntu-latest
     name: What is
