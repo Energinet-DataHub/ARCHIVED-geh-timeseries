@@ -58,14 +58,17 @@ jobs:
       hasterraformfiles: ${{ steps.changedsteps.outputs.terraform_changed }}
 
   what_is:
+    needs: [check_change]
     runs-on: ubuntu-latest
     name: What is
+
     steps:
       - name: dotnet
         run: |
           echo  ${{ needs.check_change.outputs.hasdotnetfiles }}
 
   dotnet_solution_time_series_ci:
+    needs: [check_change]
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
