@@ -50,9 +50,9 @@ jobs:
       - name: Set outputs
         id: changedsteps
         run: |
-          echo "::set-output name=hasdatabricksfiles::${{steps.changed-files-databricks.outputs.any_changed}}"
+          echo "::set-output name=databricks_changed::${{steps.changed-files-databricks.outputs.any_changed}}"
           echo "::set-output name=dotnet_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
-          echo "::set-output name=hasterraformfiles::${{steps.changed-files-terraform.outputs.any_changed}}"
+          echo "::set-output name=terraform_changed::${{steps.changed-files-terraform.outputs.any_changed}}"
 
     outputs:
       hasdotnetfiles: ${{ steps.changedsteps.outputs.dotnet_changed }}
