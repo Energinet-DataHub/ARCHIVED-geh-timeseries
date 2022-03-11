@@ -39,7 +39,7 @@ jobs:
         with:
           files: |
             **/source/TimeSeries/**
-        run: "echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}""
+          run: "echo "::set-output name=any_changed::${{steps.changed-files-dotnet.outputs.any_changed}}""
       - name: Get changed dotnet files
         id: changed-files-databricks
         uses: tj-actions/changed-files@v17.3
