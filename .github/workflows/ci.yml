@@ -96,7 +96,7 @@ jobs:
       TERRAFORM_VERSION: "1.1.6"
       
   terraform_validate_streaming_cluster:
-    needs: [check_change]
+    needs: [check_change,terraform_validate]
     if: needs.check_change.outputs.hasterraformfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
     with:
@@ -124,7 +124,7 @@ jobs:
 
   create_prerelease:
     needs: [time_series_bundle_ingestor_ci,wheel_ci, terraform_validate]
-    if: ${{ always() && !cancelled() && (needs.time_series_bundle_ingestor_ci.result == 'success'  || needs.wheel_ci.result == 'success' || needs.terraform_validate.result == 'success' )}}
+    if: ${{ always() && !cancelled() && (needs.time_series_bundle_ingestor_ci.result == 'success'  || needs.wheel_ci.result == 'success' || needs.terraform_validate_streaming_cluster.result == 'success' )}}
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
