@@ -38,12 +38,14 @@ runs:
         cp -fR ${{ inputs.REPO_FOLDER_PATH }}/source/databricks/streaming-jobs ${{ inputs.RELEASE_FOLDER_PATH }} 2>/dev/null || :
 
     - name: Publish wheel to release folder
+      if: needs.check_change.outputs.hasdatabricksfiles == 'true'
       uses: actions/download-artifact@v2
       with:
         name: wheel
         path: ${{ inputs.RELEASE_FOLDER_PATH }}/wheel
 
     - name: Publish TimeSeriesBundleIngestor to release folder
+      if: needs.check_change.outputs.hasdotnetfiles == 'true'
       uses: actions/download-artifact@v2
       with:
         name: time_series_bundle_ingestor

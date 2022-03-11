@@ -22,8 +22,47 @@ jobs:
   ci_base:
     uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
+  check_change:
+    runs-on: ubuntu-latest
+    name: Test changed-files
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0  # OR "2" -> To retrieve the preceding commit.
+      - name: Get changed dotnet files
+        id: changed-files-dotnet
+        uses: tj-actions/changed-files@v17.3
+        with:
+          files: |
+            **/source/TimeSeries/**
+      - name: Get changed dotnet files
+        id: changed-files-databricks
+        uses: tj-actions/changed-files@v17.3
+        with:
+          files: |
+            **/source/databricks/**            
+      - name: Get changed terraform files
+        id: changed-files-terraform
+        uses: tj-actions/changed-files@v17.3
+        with:
+          files: |
+            build//**
+      - name: Set outputs
+        id: changedsteps
+        run: |
+          echo "::set-output name=databricks_changed::${{steps.changed-files-databricks.outputs.any_changed}}"
+          echo "::set-output name=dotnet_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
+          echo "::set-output name=terraform_changed::${{steps.changed-files-terraform.outputs.any_changed}}"
+
+    outputs:
+      hasdotnetfiles: ${{ steps.changedsteps.outputs.dotnet_changed }}
+      hasdatabricksfiles: ${{ steps.changedsteps.outputs.databricks_changed }}
+      hasterraformfiles: ${{ steps.changedsteps.outputs.terraform_changed }}
+
   dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
+    needs: [check_change]
+    if: needs.check_change.outputs.hasdotnetfiles == 'true'
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.2
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
       DOTNET_VERSION: "5.0.404"      
@@ -36,23 +75,29 @@ jobs:
       AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
-# TODO reintroduce once pipelines are sorted (This step is slow due to docker container)
 
-  # databricks_ci:
-  #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
-  #   with:
-  #     PATH_STATIC_CHECKS: './source'
-  #     IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-  #     ARTIFACT_NAME: 'build-databricks_artifacts'
-  #     TEST_REPORT_PATH: ./source/databricks/htmlcov/
+  databricks_ci:
+    needs: [check_change]
+    if: needs.check_change.outputs.hasdatabricksfiles == 'true'  
+    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
+    with:
+      PATH_STATIC_CHECKS: './source'
+      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
+      ARTIFACT_NAME: 'build-databricks_artifacts'
+      TEST_REPORT_PATH: ./source/databricks/htmlcov/
+
 
   terraform_validate:
+    needs: [check_change]
+    if: needs.check_change.outputs.hasterraformfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.1.6"
       
   terraform_validate_streaming_cluster:
+    needs: [check_change,terraform_validate]
+    if: needs.check_change.outputs.hasterraformfiles == 'true'
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
     with:
       TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
@@ -60,6 +105,7 @@ jobs:
 
   time_series_bundle_ingestor_ci:
     needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
+    if: ${{ always() && !cancelled() && (needs.dotnet_solution_time_series_ci.result == 'success' )}}
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
@@ -67,8 +113,7 @@ jobs:
       ARTIFACT_NAME: time_series_bundle_ingestor
 
   wheel_ci:
-    #needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-    needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
+    needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
     uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@2.4.0
     with:
       PYHTON_VERSION: '3.8.6'
@@ -78,7 +123,8 @@ jobs:
       ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [time_series_bundle_ingestor_ci]
+    needs: [time_series_bundle_ingestor_ci,wheel_ci, terraform_validate]
+    if: ${{ always() && !cancelled() && (needs.time_series_bundle_ingestor_ci.result == 'success'  || needs.wheel_ci.result == 'success' || needs.terraform_validate_streaming_cluster.result == 'success' )}}
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
