@@ -25,10 +25,6 @@ jobs:
   check_change:
     runs-on: ubuntu-latest
     name: Test changed-files
-    outputs:
-      hasdotnetfiles: ${{ steps.changedsteps.outputs.dotnet_changed }}
-      hasdatabricksfiles: ${{ steps.changedsteps.outputs.databricks_changed }}
-      hasterraformfiles: ${{ steps.changedsteps.outputs.terraform_changed }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -56,13 +52,18 @@ jobs:
         run: |
           echo "${{steps.changed-files-dotnet.outputs.any_changed}}"
           echo "::set-output name=dotnet_changed::${{steps.changed-files-dotnet.outputs.any_changed}}"
+    outputs:
+      hasdotnetfiles: ${{ steps.changedsteps.outputs.dotnet_changed }}
+      hasdatabricksfiles: ${{ steps.changedsteps.outputs.databricks_changed }}
+      hasterraformfiles: ${{ steps.changedsteps.outputs.terraform_changed }}
+
   what_is:
     runs-on: ubuntu-latest
     name: What is
     steps:
       - name: dotnet
         run: |
-          echo  "${{needs.check_change.outputs.hasdotnetfiles}}"
+          echo  ${{ needs.check_change.outputs.hasdotnetfiles }}
 
   dotnet_solution_time_series_ci:
     if: needs.check_change.outputs.hasdotnetfiles == 'true'
