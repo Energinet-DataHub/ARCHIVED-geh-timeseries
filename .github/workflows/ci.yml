@@ -53,7 +53,7 @@ jobs:
             build//**
       - name: List all changed files
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+          for file in ${{ steps.changed-files-dotnet.outputs.all_changed_files }}; do
             echo "$file was changed"
           done                
 
