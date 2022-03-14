@@ -62,6 +62,7 @@ class Colname():
     charge_count = "charge_count"
     sum_quantity = "sum_quantity"
     time = "time"
+    timeseries = "timeseries"
     time_window = "time_window"
     time_window_end = "time_window.end"
     time_window_start = "time_window.start"

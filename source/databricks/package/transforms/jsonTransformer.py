@@ -22,7 +22,7 @@ from package.codelists import Colname
 class JsonTransformer():
 
     def TransformFromJsonToDataframe(self, source: DataFrame) -> DataFrame:
-        structured = source.select(from_json(source.body, eventhub_timeseries_schema).alias('json'))
+        structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'))
         flat = structured \
             .select(explode("json.Series")) \
             .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period") \
