@@ -19,6 +19,7 @@ from package.codelists import Colname
 from delta.tables import DeltaTable
 
 
+# Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations
 def transform(df, epoch_id, timeseries_processed_path):
     if len(df.head(1)) > 0:
         spark = SparkSession.builder.getOrCreate()
