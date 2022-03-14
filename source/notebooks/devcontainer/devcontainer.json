@@ -1,0 +1,30 @@
+{
+	"name": "Spark Dev",
+	"build": {
+		"dockerfile": "Dockerfile",
+		"args": {
+		}
+	},
+    "extensions": [
+        "ms-dotnettools.dotnet-interactive-vscode"    
+    ],
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	"containerEnv": {
+		"GRANT_SUDO": "yes"
+	},
+
+    "forwardPorts": [5567],
+	
+    "appPort": [ "5567:5050" ],
+
+	"overrideCommand": false,
+
+	"containerUser": "root",
+
+	"postStartCommand": "azurite-blob -l /workspaces/geh-timeseries/source/notebooks/__storage__/azurite"
+}
