@@ -80,6 +80,7 @@ RUN conda install --quiet --yes --satisfied-skip-solve \
     pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+    fix-permissions "/home/${NB_USER}" && \
+    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
 
 EXPOSE 3000
