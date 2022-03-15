@@ -57,4 +57,4 @@ def timeseries_persister(event_hub_connection_key: str, delta_lake_container_nam
         writeStream. \
         option("checkpointLocation", checkpoint_path). \
         foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)). \
-        start()
+        start().awaitTermination()

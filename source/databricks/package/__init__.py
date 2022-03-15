@@ -13,4 +13,4 @@
 # limitations under the License.
 from .data_loader import initialize_spark
 from .timeseries_persister import timeseries_persister
-from .timeseries_transformer import timeseries_transformer
+from .timeseries_publisher import timeseries_publisher

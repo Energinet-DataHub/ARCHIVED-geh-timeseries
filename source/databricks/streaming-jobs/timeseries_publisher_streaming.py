@@ -18,7 +18,7 @@ sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
 
 import configargparse
 
-from package import timeseries_transformer, initialize_spark
+from package import timeseries_publisher, initialize_spark
 
 p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
@@ -35,5 +35,5 @@ spark = initialize_spark(args)
 timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
 timeseries_processed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_processed_blob_name}'
 
-# start the unprocessed timeseries transformer
-timeseries_transformer(args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path, timeseries_processed_path)
+# start the unprocessed timeseries publisher
+timeseries_publisher(args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path, timeseries_processed_path)
