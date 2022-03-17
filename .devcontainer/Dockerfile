@@ -25,6 +25,9 @@ RUN apt-get -y update && \
     "ca-certificates-java" && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+RUN apt-get update; \
+    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
+
 ENV JAVA_HOME=/usr/lib/jvm/java-${openjdk_version}-openjdk-amd64 \
     PATH=$JAVA_HOME/bin:$PATH
 
@@ -80,7 +83,6 @@ RUN conda install --quiet --yes --satisfied-skip-solve \
     pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}" && \
-    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
+    fix-permissions "/home/${NB_USER}"
 
 EXPOSE 3000
