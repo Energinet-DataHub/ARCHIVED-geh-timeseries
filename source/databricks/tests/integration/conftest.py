@@ -33,8 +33,13 @@ def azurite():
     azurite_process.terminate()
 
 
-@pytest.fixture()
-def spark(azurite):
+@pytest.fixture(scope="session")
+def spark_fs():
+    return SparkSession.builder.getOrCreate()
+
+
+@pytest.fixture(scope="session")
+def spark_azurite(azurite):
     # spark.hadoop.fs.* for Azurite storage
     spark_conf = (SparkConf(loadDefaults=True)
         .set("spark.sql.session.timeZone", "UTC")
@@ -55,33 +60,42 @@ schema = StructType(
         StructField("last_name", StringType(), True)])
 
 
-@pytest.fixture
-def time_series_persister(spark):
+time_series_json = """{"id":1,"first_name":"Saleem","last_name":"Arkcoll"}
+{"id":2,"first_name":"Brandy","last_name":"Plascott"}
+{"id":1000,"first_name":"Alic","last_name":"Furniss"}"""
+
+
+def time_series_persister(spark: SparkSession):
     input_stream = (spark
                   .readStream
                   .schema(schema)
                   .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
 
+    #input_stream = spark.read.json(spark.sparkContext.parallelize(time_series_json))
+
     job = (input_stream
              #.writeStream
              #.trigger(processingTime='5 seconds')
-             .foreachBatch(lambda df, id: (
-                 df.printSchema(),
-                 df.show(),
+            #  .foreachBatch(lambda df, id: (
+            #      df.printSchema(),
+            #      df.show(),
 
-                 (df
-                     .write
-                     .format("delta")
-                     .mode("append")
-                     .save("unprocessed_time_series"))
-             ))
-             .outputMode("append")
+            #      (df
+            #          .write
+            #          .format("delta")
+            #          .mode("append")
+            #          .save("unprocessed_time_series"))
+            #  ))
+            #  .outputMode("append")
              #.format("console")
              #.start())
              #.writeStream
+             .write
              #.format("delta")
              #.outputMode("complete")
-             .option("checkpointLocation", "/tmp/delta/eventsByCustomer/_checkpoints/streaming-agg")
-             .start("/tmp/delta/eventsByCustomer"))
+             #.option("checkpointLocation", "/tmp/delta/eventsByCustomer/_checkpoints/streaming-agg")
+             .save("./__delta/unprocessed_time_series")
+             #.start("/tmp/delta/eventsByCustomer"))
+    )
 
     return job
