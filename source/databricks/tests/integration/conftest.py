@@ -17,20 +17,8 @@ import subprocess
 
 from pyspark import SparkConf
 from pyspark.sql import SparkSession
-
-
-@pytest.fixture()
-def spark():
-    # spark.hadoop.fs.* for Azurite storage
-    spark_conf = SparkConf(loadDefaults=True) \
-        .set("spark.sql.session.timeZone", "UTC")
-        #.set("spark.hadoop.fs.defaultFS", "wasb://container@azurite") \
-        #.set("spark.hadoop.fs.azure.storage.emulator.account.name", "azurite")
-    return SparkSession \
-        .builder \
-        .config(conf=spark_conf) \
-        .config("spark.sql.streaming.schemaInference", True) \
-        .getOrCreate()
+from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
+    DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
 
 
 @pytest.fixture(scope="session")
@@ -41,3 +29,57 @@ def azurite():
     # Terminate Azurite service at end of test session
     yield
     azurite_process.terminate()
+
+
+@pytest.fixture()
+def spark(azurite):
+    # spark.hadoop.fs.* for Azurite storage
+    spark_conf = (SparkConf(loadDefaults=True)
+        .set("spark.sql.session.timeZone", "UTC")
+        .set("spark.hadoop.fs.defaultFS", "wasb://container@azurite")
+        .set("spark.hadoop.fs.azure.storage.emulator.account.name", "azurite"))
+    return (SparkSession
+        .builder
+        .config(conf=spark_conf)
+        #.config("spark.hadoop.fs.defaultFS", "wasb://container@azurite")
+        #.config("spark.hadoop.fs.azure.storage.emulator.account.name", "azurite")
+        #.config("spark.sql.streaming.schemaInference", True)
+        .getOrCreate())
+
+
+schema = StructType(
+    [StructField("id", IntegerType(), True),
+        StructField("first_name", StringType(), True),
+        StructField("last_name", StringType(), True)])
+
+
+@pytest.fixture
+def time_series_persister(spark):
+    input_stream = (spark
+                  .readStream
+                  .schema(schema)
+                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+
+    job = (input_stream
+             #.writeStream
+             #.trigger(processingTime='5 seconds')
+             .foreachBatch(lambda df, id: (
+                 df.printSchema(),
+                 df.show(),
+
+                 (df
+                     .write
+                     .format("delta")
+                     .mode("append")
+                     .save("unprocessed_time_series"))
+             ))
+             .outputMode("append")
+             #.format("console")
+             #.start())
+             #.writeStream
+             #.format("delta")
+             #.outputMode("complete")
+             .option("checkpointLocation", "/tmp/delta/eventsByCustomer/_checkpoints/streaming-agg")
+             .start("/tmp/delta/eventsByCustomer"))
+
+    return job

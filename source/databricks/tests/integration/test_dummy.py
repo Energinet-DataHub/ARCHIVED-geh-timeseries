@@ -22,85 +22,26 @@ from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
     DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
 
 
-class Task(threading.Thread):
-    def __init__(self, func):
-        threading.Thread.__init__(self)
-        self.func = func
-
-    def run(self):
-        """Target function of the thread class"""
-        self.function()
-
-
-"""
-schema = StructType(
-            [(StructField("id", IntegerType, true),
-                 StructField("first_name", StringType, true),
-                 StructField("last_name", StringType, true))])
-"""
-
-
-def spark_job(spark):
-    raw_stream = (spark
-                  .readStream
-                  # .schema(schema)
-                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
-
-    query = (raw_stream
-             .writeStream
-             .outputMode("append")
-             .format("console")
-             .start())
-
-    # query.awaitTermination()
-    return query
-
-
-@pytest.fixture
-def my_job_function(spark: SparkSession, azurite):
-    return lambda: spark_job(spark)
-
-
 """
 def test_spark(my_job_function):
     my_job_function().awaitTermination()
     print("############ Never get here")
 """
 
-"""
-def test_my_job(my_job_function):
-    task = Task(my_job_function)
-    task.start()
-    time.sleep(5)
-    task.join()
-    my_job.awaitTermination()
-"""
-
-
-async def job_task(spark):
-    raw_stream = (spark
-                  .readStream
-                  # .schema(schema)
-                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
-
-    query = (raw_stream
-             .writeStream
-             .outputMode("append")
-             .format("console")
-             .start())
+async def job_task(job):
     try:
         print("############# About to await termination")
-        query.awaitTermination()
+        job.awaitTermination()
     except asyncio.CancelledError:
         print("############# About to stop spark job")
-        query.stop()
+        job.stop()
         raise
 
 
 @pytest.mark.asyncio
-async def test_cancel(spark, azurite):
-    task = asyncio.create_task(job_task(spark))
-    # await task
-    await asyncio.sleep(30)
-    task.cancel()
+async def test_time_series_persister(time_series_persister):
+    task = asyncio.create_task(time_series_persister)
+    await task
+    #await asyncio.sleep(30)
+    #task.cancel()
     print("Done")
