@@ -18,8 +18,18 @@ import threading
 import time
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, lit, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
-    DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
+from pyspark.sql.types import (
+    StructType,
+    StructField,
+    StringType,
+    ArrayType,
+    DecimalType,
+    IntegerType,
+    TimestampType,
+    BooleanType,
+    BinaryType,
+    LongType,
+)
 
 
 class Task(threading.Thread):
@@ -41,16 +51,15 @@ schema = StructType(
 
 
 def spark_job(spark):
-    raw_stream = (spark
-                  .readStream
-                  # .schema(schema)
-                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+    raw_stream = (
+        spark.readStream
+        # .schema(schema)
+        .json(
+            "/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"
+        )
+    )
 
-    query = (raw_stream
-             .writeStream
-             .outputMode("append")
-             .format("console")
-             .start())
+    query = raw_stream.writeStream.outputMode("append").format("console").start()
 
     # query.awaitTermination()
     return query
@@ -78,21 +87,24 @@ def test_my_job(my_job_function):
 
 
 async def job_task(spark):
-    raw_stream = (spark
-                  .readStream
-                  # .schema(schema)
-                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+    raw_stream = (
+        spark.readStream
+        # .schema(schema)
+        .json(
+            "/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"
+        )
+    )
 
-    query = (raw_stream
-             .writeStream
-             .outputMode("append")
-             .format("console")
-             .start())
+    query = raw_stream.writeStream.outputMode("append").format("console").start()
     try:
+        print("")
         print("############# About to await termination")
+        print("")
         query.awaitTermination()
     except asyncio.CancelledError:
+        print("")
         print("############# About to stop spark job")
+        print("")
         query.stop()
         raise
 
