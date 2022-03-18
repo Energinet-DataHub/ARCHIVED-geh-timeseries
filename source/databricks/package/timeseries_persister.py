@@ -13,7 +13,7 @@
 # limitations under the License.
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
-from pyspark.sql.functions import year, month, dayofmonth, col
+from pyspark.sql.functions import year, month, dayofmonth
 from package.codelists import Colname
 
 
@@ -25,7 +25,7 @@ def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
             .withColumn(Colname.year, year(df.enqueuedTime)) \
             .withColumn(Colname.month, month(df.enqueuedTime)) \
             .withColumn(Colname.day, dayofmonth(df.enqueuedTime)) \
-            .withColumn(Colname.timeseries, col(df.body).cast(StringType())) \
+            .withColumn(Colname.timeseries, df.body.cast(StringType())) \
             .select(
                 Colname.timeseries,
                 Colname.year,
