@@ -25,7 +25,7 @@ def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
             .withColumn(Colname.year, year(df.enqueuedTime)) \
             .withColumn(Colname.month, month(df.enqueuedTime)) \
             .withColumn(Colname.day, dayofmonth(df.enqueuedTime)) \
-            .withColumn(Colname.timeseries, col(df.body.cast(StringType()))) \
+            .withColumn(Colname.timeseries, col(df.body).cast(StringType())) \
             .select(
                 Colname.timeseries,
                 Colname.year,
