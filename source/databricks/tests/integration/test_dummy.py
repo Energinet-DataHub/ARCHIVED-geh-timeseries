@@ -39,17 +39,18 @@ schema = StructType(
                  StructField("last_name", StringType, true))])
 """
 
+
 def spark_job(spark):
-    raw_stream =(spark
-            .readStream
-            #.schema(schema)
-            .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+    raw_stream = (spark
+                  .readStream
+                  # .schema(schema)
+                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
 
     query = (raw_stream
-        .writeStream
-        .outputMode("append")
-        .format("console")
-        .start())
+             .writeStream
+             .outputMode("append")
+             .format("console")
+             .start())
 
     # query.awaitTermination()
     return query
@@ -77,19 +78,19 @@ def test_my_job(my_job_function):
 
 
 async def job_task(spark):
-    raw_stream =(spark
-        .readStream
-        #.schema(schema)
-        .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+    raw_stream = (spark
+                  .readStream
+                  # .schema(schema)
+                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
 
     query = (raw_stream
-        .writeStream
-        .outputMode("append")
-        .format("console")
-        .start())
+             .writeStream
+             .outputMode("append")
+             .format("console")
+             .start())
     try:
         print("############# About to await termination")
-        quey.awaitTermination()
+        query.awaitTermination()
     except asyncio.CancelledError:
         print("############# About to stop spark job")
         query.stop()
@@ -99,7 +100,7 @@ async def job_task(spark):
 @pytest.mark.asyncio
 async def test_cancel(spark, azurite):
     task = asyncio.create_task(job_task(spark))
-    #await task
+    # await task
     await asyncio.sleep(30)
     task.cancel()
     print("Done")
