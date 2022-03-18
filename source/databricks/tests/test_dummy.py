@@ -9,8 +9,6 @@ from pyspark.sql.functions import col, lit, to_timestamp, explode
 from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
     DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
 
-# Hej Lasse
-
 @pytest.fixture()
 def spark():
     # spark.hadoop.fs.* for Azurite storage
