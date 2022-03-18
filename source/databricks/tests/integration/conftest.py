@@ -24,7 +24,9 @@ from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
 @pytest.fixture(scope="session")
 def azurite():
     """Fixture for starting Azurite blob service"""
-    azurite_process = subprocess.Popen(args=["azurite-blob", "-l", ".azurite-files"], stdout=subprocess.PIPE)
+    azurite_process = subprocess.Popen(
+        args=["azurite-blob", "-l", ".azurite-files"], stdout=subprocess.PIPE
+    )
 
     # Terminate Azurite service at end of test session
     yield

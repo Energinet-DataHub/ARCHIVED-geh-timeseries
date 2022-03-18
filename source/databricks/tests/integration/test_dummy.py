@@ -18,22 +18,44 @@ import threading
 import time
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, lit, to_timestamp, explode
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
-    DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
+from pyspark.sql.types import (
+    StructType,
+    StructField,
+    StringType,
+    ArrayType,
+    DecimalType,
+    IntegerType,
+    TimestampType,
+    BooleanType,
+    BinaryType,
+    LongType,
+)
 
 
-"""
-def test_spark(my_job_function):
-    my_job_function().awaitTermination()
-    print("############ Never get here")
-"""
+def spark_job(spark):
+    raw_stream = (
+        spark.readStream
+        # .schema(schema)
+        .json(
+            "/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"
+        )
+    )
+
+    query = raw_stream.writeStream.outputMode("append").format("console").start()
+
+    # query.awaitTermination()
+    return query
+
+
+@pytest.fixture
+def my_job_function(spark: SparkSession, azurite):
+    return lambda: spark_job(spark)
+
 
 async def job_task(job):
     try:
-        print("############# About to await termination")
         job.awaitTermination()
     except asyncio.CancelledError:
-        print("############# About to stop spark job")
         job.stop()
         raise
 
