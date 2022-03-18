@@ -22,21 +22,25 @@ from pyspark.sql import SparkSession
 @pytest.fixture()
 def spark():
     # spark.hadoop.fs.* for Azurite storage
-    spark_conf = SparkConf(loadDefaults=True) \
+    spark_conf = (
+        SparkConf(loadDefaults=True)
         .set("spark.sql.session.timeZone", "UTC")
-        #.set("spark.hadoop.fs.defaultFS", "wasb://container@azurite") \
-        #.set("spark.hadoop.fs.azure.storage.emulator.account.name", "azurite")
-    return SparkSession \
-        .builder \
-        .config(conf=spark_conf) \
-        .config("spark.sql.streaming.schemaInference", True) \
+        .set("spark.hadoop.fs.defaultFS", "wasb://container@azurite")
+        .set("spark.hadoop.fs.azure.storage.emulator.account.name", "azurite")
+    )
+    return (
+        SparkSession.builder.config(conf=spark_conf)
+        .config("spark.sql.streaming.schemaInference", True)
         .getOrCreate()
+    )
 
 
 @pytest.fixture(scope="session")
 def azurite():
     """Fixture for starting Azurite blob service"""
-    azurite_process = subprocess.Popen(args=["azurite-blob", "-l", ".azurite-files"], stdout=subprocess.PIPE)
+    azurite_process = subprocess.Popen(
+        args=["azurite-blob", "-l", ".azurite-files"], stdout=subprocess.PIPE
+    )
 
     # Terminate Azurite service at end of test session
     yield
