@@ -14,17 +14,30 @@
 from pyspark.sql import SparkSession
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
+from package.codelists import Colname
+
 
 # epoch_id is required in function signature, but not used
 def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
     if len(df.head(1)) > 0:
         # Append event
-        df = df.withColumn("year", year(df.enqueuedTime)) \
-            .withColumn("month", month(df.enqueuedTime)) \
-            .withColumn("day", dayofmonth(df.enqueuedTime))
+        df = df \
+            .withColumn(Colname.year, year(df.enqueuedTime)) \
+            .withColumn(Colname.month, month(df.enqueuedTime)) \
+            .withColumn(Colname.day, dayofmonth(df.enqueuedTime)) \
+            .withColumn(Colname.timeseries, df.body.cast(StringType())) \
+            .select(
+                Colname.timeseries,
+                Colname.year,
+                Colname.month,
+                Colname.day
+            )
 
         df.write \
-            .partitionBy("year", "month", "day") \
+            .partitionBy(
+                Colname.year,
+                Colname.month,
+                Colname.day) \
             .format("delta") \
             .mode("append") \
             .save(timeseries_unprocessed_path)
@@ -38,6 +51,10 @@ def timeseries_persister(event_hub_connection_key: str, delta_lake_container_nam
     input_configuration["eventhubs.connectionString"] = spark.sparkContext._gateway.jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(event_hub_connection_key)
     streamingDF = (spark.readStream.format("eventhubs").options(**input_configuration).load())
 
-    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint"
+    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-persister"
 
-    streamingDF.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)).start()
+    streamingDF. \
+        writeStream. \
+        option("checkpointLocation", checkpoint_path). \
+        foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)). \
+        start()

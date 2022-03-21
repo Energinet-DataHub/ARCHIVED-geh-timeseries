@@ -36,15 +36,13 @@ jobs:
       AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
-# TODO reintroduce once pipelines are sorted (This step is slow due to docker container)
-
-  # databricks_ci:
-  #   uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@2.6.1
-  #   with:
-  #     PATH_STATIC_CHECKS: './source'
-  #     IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-  #     ARTIFACT_NAME: 'build-databricks_artifacts'
-  #     TEST_REPORT_PATH: ./source/databricks/htmlcov/
+  databricks_ci:
+    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@5.0.4
+    with:
+      PATH_STATIC_CHECKS: './source'
+      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
+      ARTIFACT_NAME: 'build-databricks_artifacts'
+      TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
   terraform_validate:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
@@ -59,7 +57,7 @@ jobs:
       TERRAFORM_VERSION: '1.1.6'
 
   time_series_bundle_ingestor_ci:
-    needs: [ci_base, terraform_validate, dotnet_solution_time_series_ci]
+    needs: [ci_base, terraform_validate]
     uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
@@ -67,9 +65,9 @@ jobs:
       ARTIFACT_NAME: time_series_bundle_ingestor
 
   wheel_ci:
-    #needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-    needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
-    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@2.4.0
+    needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
+   # needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
+    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@5.0.5
     with:
       PYHTON_VERSION: '3.8.6'
       ARCHITECTURE: 'x64'
@@ -78,7 +76,7 @@ jobs:
       ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [time_series_bundle_ingestor_ci]
+    needs: [time_series_bundle_ingestor_ci, wheel_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
