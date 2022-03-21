@@ -124,12 +124,261 @@ def test__createDataframe_fom_json_input_can_add_hour(eventhub_timeseries_body_d
 
 
 def month_body():
-    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":4,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":4,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
+    return """{
+    "Document": {
+        "Id": "C1876453",
+        "CreatedDateTime": "2022-12-17T09:30:47Z",
+        "Sender": {
+            "Id": "5799999933317",
+            "BusinessProcessRole": 1
+        },
+        "Receiver": {
+            "Id": "5790001330552",
+            "BusinessProcessRole": 2
+        },
+        "BusinessReasonCode": 1
+    },
+    "Series": [{
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812346",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 4,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }, {
+                "Quantity": 191,
+                "Quality": 5,
+                "Position": 5
+            }, {
+                "Quantity": null,
+                "Quality": 2,
+                "Position": 6
+            }]
+        }
+    }, {
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812345",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 4,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }]
+        }
+    }]
+}"""
 
 
 def quarter_body():
-    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":1,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":1,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
+    return """{
+    "Document": {
+        "Id": "C1876453",
+        "CreatedDateTime": "2022-12-17T09:30:47Z",
+        "Sender": {
+            "Id": "5799999933317",
+            "BusinessProcessRole": 1
+        },
+        "Receiver": {
+            "Id": "5790001330552",
+            "BusinessProcessRole": 2
+        },
+        "BusinessReasonCode": 1
+    },
+    "Series": [{
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812346",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 1,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }, {
+                "Quantity": 191,
+                "Quality": 5,
+                "Position": 5
+            }, {
+                "Quantity": null,
+                "Quality": 2,
+                "Position": 6
+            }]
+        }
+    }, {
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812345",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 1,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }]
+        }
+    }]
+}"""
 
 
 def day_body():
-    return '{"Document":{"Id":"C1876453","CreatedDateTime":"2022-12-17T09:30:47Z","Sender":{"Id":"5799999933317","BusinessProcessRole":1},"Receiver":{"Id":"5790001330552","BusinessProcessRole":2},"BusinessReasonCode":1},"Series":[{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812346","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":3,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4},{"Quantity":191,"Quality":5,"Position":5},{"Quantity":null,"Quality":2,"Position":6}]}},{"Id":"C1876456","TransactionId":"C1875000","MeteringPointId":"579999993331812345","MeteringPointType":1,"RegistrationDateTime":"2022-12-17T07:30:00Z","Product":"8716867000030","MeasureUnit":1,"Period":{"Resolution":3,"StartDateTime":"2022-08-15T22:00:00Z","EndDateTime":"2022-08-15T04:00:00Z","Points":[{"Quantity":242,"Quality":3,"Position":1},{"Quantity":242,"Quality":4,"Position":2},{"Quantity":222,"Quality":4,"Position":3},{"Quantity":202,"Quality":4,"Position":4}]}}]}'
+    return """{
+    "Document": {
+        "Id": "C1876453",
+        "CreatedDateTime": "2022-12-17T09:30:47Z",
+        "Sender": {
+            "Id": "5799999933317",
+            "BusinessProcessRole": 1
+        },
+        "Receiver": {
+            "Id": "5790001330552",
+            "BusinessProcessRole": 2
+        },
+        "BusinessReasonCode": 1
+    },
+    "Series": [{
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812346",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 3,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }, {
+                "Quantity": 191,
+                "Quality": 5,
+                "Position": 5
+            }, {
+                "Quantity": null,
+                "Quality": 2,
+                "Position": 6
+            }]
+        }
+    }, {
+        "Id": "C1876456",
+        "TransactionId": "C1875000",
+        "MeteringPointId": "579999993331812345",
+        "MeteringPointType": 1,
+        "RegistrationDateTime": "2022-12-17T07:30:00Z",
+        "Product": "8716867000030",
+        "MeasureUnit": 1,
+        "Period": {
+            "Resolution": 3,
+            "StartDateTime": "2022-08-15T22:00:00Z",
+            "EndDateTime": "2022-08-15T04:00:00Z",
+            "Points": [{
+                "Quantity": 242,
+                "Quality": 3,
+                "Position": 1
+            }, {
+                "Quantity": 242,
+                "Quality": 4,
+                "Position": 2
+            }, {
+                "Quantity": 222,
+                "Quality": 4,
+                "Position": 3
+            }, {
+                "Quantity": 202,
+                "Quality": 4,
+                "Position": 4
+            }]
+        }
+    }]
+}"""
