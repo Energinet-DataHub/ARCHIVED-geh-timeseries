@@ -131,4 +131,4 @@ def timeseries_publisher(delta_lake_container_name: str, storage_account_name: s
         writeStream. \
         option("checkpointLocation", checkpoint_path). \
         foreachBatch(lambda df, epochId: publish_timeseries_batch(df, epochId, timeseries_processed_path)). \
-        start().awaitTermination()
+        start()
