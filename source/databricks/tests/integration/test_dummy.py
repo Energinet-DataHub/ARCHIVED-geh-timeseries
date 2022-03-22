@@ -57,16 +57,16 @@ def my_job_function(spark: SparkSession, azurite):
 def stop_stream_query(query, wait_time):
     """Stop a running streaming query"""
     while query.isActive:
-        msg = query.status['message']
-        data_avail = query.status['isDataAvailable']
-        trigger_active = query.status['isTriggerActive']
+        msg = query.status["message"]
+        data_avail = query.status["isDataAvailable"]
+        trigger_active = query.status["isTriggerActive"]
         if not data_avail and not trigger_active and msg != "Initializing sources":
-            print('Stopping query...')
+            print("Stopping query...")
             query.stop()
         time.sleep(0.5)
 
     # Okay wait for the stop to happen
-    print('Awaiting termination...')
+    print("Awaiting termination...")
     query.awaitTermination(wait_time)
 
 
@@ -79,44 +79,42 @@ async def job_task(job):
 
 
 schema = StructType(
-    [StructField("id", IntegerType(), True),
+    [
+        StructField("id", IntegerType(), True),
         StructField("first_name", StringType(), True),
-        StructField("last_name", StringType(), True)])
+        StructField("last_name", StringType(), True),
+    ]
+)
 
 
 path = "/workspaces/geh-timeseries/source/databricks/tests/integration/__delta__/unprocessed_time_series"
 
 
 def time_series_persister(spark: SparkSession):
-    input_stream = (spark
-                  .readStream
-                  .schema(schema)
-                  .json("/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"))
+    input_stream = spark.readStream.schema(schema).json(
+        "/workspaces/geh-timeseries/source/databricks/tests/integration/test_data*.json"
+    )
 
-    job = (input_stream
-             .writeStream
-             .trigger(processingTime='1 seconds')
-             .foreachBatch(lambda df, id: (
-                 df.printSchema(),
-                 df.show(),
-
-                 (df
-                     .write
-                     .format("delta")
-                     .mode("append")
-                     .save(path))
-             ))
-             .outputMode("append")
-             #.format("console")
-             .start()
-             #.writeStream
-             #.write
-             #.format("delta")
-             #.outputMode("complete")
-             #.option("checkpointLocation", f"{path}/_checkpoints/streaming-agg")
-             #.start(path)
-             #.start("/tmp/delta/eventsByCustomer"))
+    job = (
+        input_stream.writeStream.trigger(processingTime="1 seconds")
+        .foreachBatch(
+            lambda df, id: (
+                df.printSchema(),
+                df.show(),
+                (df.write.format("delta").mode("append").save(path)),
+            )
         )
+        .outputMode("append")
+        # .format("console")
+        .start()
+        # .writeStream
+        # .write
+        # .format("delta")
+        # .outputMode("complete")
+        # .option("checkpointLocation", f"{path}/_checkpoints/streaming-agg")
+        # .start(path)
+        # .start("/tmp/delta/eventsByCustomer"))
+    )
 
     return job
 
@@ -137,14 +135,14 @@ def read_job(spark: SparkSession):
 async def test_time_series_persister(spark_fs):
     job = time_series_persister(spark_fs)
     task = asyncio.create_task(job_task(job))
-    #await task
+    # await task
     for x in range(20000):
         print(f"### Loop {x}")
-        #await asyncio.sleep(1)
+        # await asyncio.sleep(1)
         data = read_job(spark_fs)
-        if(data != None and data.count() > 0):
+        if data != None and data.count() > 0:
             print("Yeah! Data found.")
-            #data.show()
+            # data.show()
             task.cancel()
             return
 
