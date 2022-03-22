@@ -20,31 +20,26 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     """
     epoch_id is required in function signature, but not used
     """
-    df.printSchema()
-    df.show()
 
-    if len(df.head(1)) > 0:
-        # Append event
-        df = df.withColumn("year", year(df.enqueuedTime)) \
-            .withColumn("month", month(df.enqueuedTime)) \
-            .withColumn("day", dayofmonth(df.enqueuedTime))
+    if len(df.head(1)) == 0:
+        return
 
-        df.write \
-            .partitionBy("year", "month", "day") \
-            .format("delta") \
-            .mode("append") \
-            .save(time_series_unprocessed_path)
+    df = df.withColumn("year", year(df.enqueuedTime)) \
+        .withColumn("month", month(df.enqueuedTime)) \
+        .withColumn("day", dayofmonth(df.enqueuedTime))
+
+    df.write \
+        .partitionBy("year", "month", "day") \
+        .format("delta") \
+        .mode("append") \
+        .save(time_series_unprocessed_path)
 
 
 def timeseries_persister(streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str):
-    print("Yes sir!")
-    try:
-        return (streamingDf
-        .writeStream
-        .option("checkpointLocation", checkpoint_path)
-        .foreachBatch(
-            lambda df,
-            epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path))
-        .start())
-    except Exception as e:
-        print(e)
+    return (streamingDf
+            .writeStream
+            .option("checkpointLocation", checkpoint_path)
+            .foreachBatch(
+                lambda df,
+                epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path))
+            .start())

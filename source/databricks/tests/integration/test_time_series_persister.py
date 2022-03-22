@@ -13,14 +13,25 @@
 # limitations under the License.
 
 import sys
-sys.path.append(r'/workspaces/geh-timeseries/source/databricks')
+
+sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
 import asyncio
 import pytest
 from package import timeseries_persister
 import time
-from pyspark.sql.types import StructType, StructField, StringType, ArrayType, \
-    DecimalType, IntegerType, TimestampType, BooleanType, BinaryType, LongType
+from pyspark.sql.types import (
+    StructType,
+    StructField,
+    StringType,
+    ArrayType,
+    DecimalType,
+    IntegerType,
+    TimestampType,
+    BooleanType,
+    BinaryType,
+    LongType,
+)
 
 
 # Code from https://stackoverflow.com/questions/45717433/stop-structured-streaming-query-gracefully
@@ -50,29 +61,33 @@ async def job_task(job):
 
 
 time_series_received_schema = StructType(
-        [StructField("enqueuedTime", TimestampType(), True),
-            StructField("body", StringType(), True)])
+    [
+        StructField("enqueuedTime", TimestampType(), True),
+        StructField("body", StringType(), True),
+    ]
+)
+
+
+@pytest.fixture(scope="session")
+def time_series_persister(spark, delta_lake_path, integration_tests_path):
+    checkpoint_path = f"{delta_lake_path}/unprocessed_time_series/checkpoint"
+    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
+    streamingDf = spark.readStream.schema(time_series_received_schema).json(
+        f"{integration_tests_path}/input_data/time_series_received*.json"
+    )
+    job = timeseries_persister(
+        streamingDf, checkpoint_path, time_series_unprocessed_path
+    )
+
+    return job
 
 
 @pytest.mark.asyncio
-async def test_time_series_persister(spark, delta_reader, delta_lake_path, integration_tests_path):
-    checkpoint_path = f"{delta_lake_path}/unprocessed_time_series/checkpoint"
-    time_series_unprocessed_path = f'{delta_lake_path}/unprocessed_time_series'
-    streamingDf = (spark
-                   .readStream
-                   .schema(time_series_received_schema)
-                   .json(f"{integration_tests_path}/input_data/time_series_received*.json"))
-    job = timeseries_persister(streamingDf, checkpoint_path, time_series_unprocessed_path)
-    
-    task = asyncio.create_task(job_task(job))
-    # await task
+async def test_time_series_persister(delta_reader, time_series_persister):
+    task = asyncio.create_task(job_task(time_series_persister))
     for x in range(20000):
-        #print(f"### Loop {x}")
-        # await asyncio.sleep(1)
         data = delta_reader("/unprocessed_time_series")
         if data is not None and data.count() > 0:
-            print("Yeah! Data found.")
-            # data.show()
             task.cancel()
             return
 
