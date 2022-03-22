@@ -16,10 +16,13 @@ from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
 
 
-def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
+def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     """
     epoch_id is required in function signature, but not used
     """
+    df.printSchema()
+    df.show()
+
     if len(df.head(1)) > 0:
         # Append event
         df = df.withColumn("year", year(df.enqueuedTime)) \
@@ -30,8 +33,18 @@ def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
             .partitionBy("year", "month", "day") \
             .format("delta") \
             .mode("append") \
-            .save(timeseries_unprocessed_path)
+            .save(time_series_unprocessed_path)
 
 
 def timeseries_persister(streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str):
-    streamingDf.writeStream.option("checkpointLocation", checkpoint_path).foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)).start()
+    print("Yes sir!")
+    try:
+        return (streamingDf
+        .writeStream
+        .option("checkpointLocation", checkpoint_path)
+        .foreachBatch(
+            lambda df,
+            epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path))
+        .start())
+    except Exception as e:
+        print(e)
