@@ -41,7 +41,7 @@ def delta_reader(spark: SparkSession, delta_lake_path: str):
             # print("### Starting reading from delta lake...")
             data = spark.read.format("delta").load(f"{delta_lake_path}/{path}")
             data.show()
-        except:
+        except Exception:
             # print("############################# OH NO")
             pass
         # print("### Done reading from delta lake")
