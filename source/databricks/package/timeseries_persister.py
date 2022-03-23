@@ -14,6 +14,8 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
+from package.codelists import Colname
+
 
 
 def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
