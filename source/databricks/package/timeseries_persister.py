@@ -17,7 +17,6 @@ from pyspark.sql.functions import year, month, dayofmonth
 from package.codelists import Colname
 
 
-
 def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     """
     epoch_id is required in function signature, but not used

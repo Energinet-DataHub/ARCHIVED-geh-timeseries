@@ -13,8 +13,6 @@
 # limitations under the License.
 
 import sys
-import os
-import shutil
 
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
@@ -60,30 +58,6 @@ async def job_task(job):
     except asyncio.CancelledError:
         stop_stream_query(job, 5000)
         # raise
-
-
-time_series_received_schema = StructType(
-    [
-        StructField("enqueuedTime", TimestampType(), True),
-        StructField("body", StringType(), True),
-    ]
-)
-
-
-@pytest.fixture(scope="session")
-def time_series_persister(spark, delta_lake_path, integration_tests_path):
-    checkpoint_path = f"{delta_lake_path}/unprocessed_time_series/checkpoint"
-    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    if(os.path.exists(time_series_unprocessed_path)):
-        shutil.rmtree(time_series_unprocessed_path)
-    streamingDf = spark.readStream.schema(time_series_received_schema).json(
-        f"{integration_tests_path}/input_data/time_series_received*.json"
-    )
-    job = timeseries_persister(
-        streamingDf, checkpoint_path, time_series_unprocessed_path
-    )
-
-    return job
 
 
 @pytest.mark.asyncio
