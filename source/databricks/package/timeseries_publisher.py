@@ -16,6 +16,7 @@ from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, 
 from pyspark.sql.types import BooleanType
 from package.transforms import JsonTransformer
 from package.codelists import Colname
+from package.schemas import time_series_schema
 from delta.tables import DeltaTable
 
 
@@ -53,6 +54,9 @@ def publish_timeseries_batch(df, epoch_id, timeseries_processed_path):
             .withColumn("max_month", month("max_time")) \
             .withColumn("max_day", dayofmonth("max_time"))
         row = min_max_df.first()
+
+        create_delta_table_if_empty(timeseries_processed_path, spark)
+
         # Fetch existing processed timeseries within min and max year, month and day
         existing_df = spark \
             .read \
@@ -132,3 +136,19 @@ def timeseries_publisher(delta_lake_container_name: str, storage_account_name: s
         option("checkpointLocation", checkpoint_path). \
         foreachBatch(lambda df, epochId: publish_timeseries_batch(df, epochId, timeseries_processed_path)). \
         start()
+
+
+def create_delta_table_if_empty(delta_table_path, spark):
+
+    if not DeltaTable.isDeltaTable(spark, delta_table_path):
+        emptyDF = spark.createDataFrame(spark.sparkContext.emptyRDD(), time_series_schema)
+        emptyDF \
+            .write \
+            .partitionBy(
+                Colname.year,
+                Colname.month,
+                Colname.day
+            ) \
+            .format('delta') \
+            .mode('overwrite') \
+            .save(delta_table_path)
