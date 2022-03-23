@@ -18,7 +18,9 @@ from pyspark.sql import SparkSession
 
 @pytest.fixture(scope="session")
 def spark() -> SparkSession:
-    return SparkSession.builder.config("spark.sql.streaming.schemaInference", True).getOrCreate()
+    return SparkSession.builder.config(
+        "spark.sql.streaming.schemaInference", True
+    ).getOrCreate()
 
 
 @pytest.fixture(scope="session")
@@ -36,13 +38,13 @@ def delta_reader(spark: SparkSession, delta_lake_path: str):
     def f(path: str):
         data = None
         try:
-            #print("### Starting reading from delta lake...")
+            # print("### Starting reading from delta lake...")
             data = spark.read.format("delta").load(f"{delta_lake_path}/{path}")
             data.show()
         except:
-            #print("############################# OH NO")
+            # print("############################# OH NO")
             pass
-        #print("### Done reading from delta lake")
+        # print("### Done reading from delta lake")
         return data
 
     return f
