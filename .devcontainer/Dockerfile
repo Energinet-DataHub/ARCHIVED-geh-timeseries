@@ -25,6 +25,7 @@ RUN apt-get -y update && \
     "ca-certificates-java" && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install Azurite (support wasb-protocol storage for Delta tables in integration tests)
 RUN apt-get update; \
     apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
 
