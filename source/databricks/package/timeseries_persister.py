@@ -22,9 +22,6 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     epoch_id is required in function signature, but not used
     """
 
-    if len(df.head(1)) == 0:
-        return
-
     df = df.withColumn("year", year(df.enqueuedTime)) \
         .withColumn("month", month(df.enqueuedTime)) \
         .withColumn("day", dayofmonth(df.enqueuedTime))
