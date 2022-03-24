@@ -18,7 +18,7 @@ from package.transforms import JsonTransformer
 from package.codelists import Colname
 from package.schemas import time_series_schema
 from delta.tables import DeltaTable
-from package import create_delta_table_if_empty
+from package.table_creator import create_delta_table_if_empty
 
 
 # Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations
