@@ -56,8 +56,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 throw new ArgumentNullException(nameof(container));
             }
 
-            // container.Register<ICorrelationContext, CorrelationContext>(Lifestyle.Scoped);
-            // container.Register<CorrelationIdMiddleware>(Lifestyle.Scoped);
             container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
             container.Register<IEventHubSender>(
                 () => new EventHubSender(
