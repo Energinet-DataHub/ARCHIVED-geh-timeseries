@@ -11,50 +11,41 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql import SparkSession
+from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import StringType
 from pyspark.sql.functions import year, month, dayofmonth
 from package.codelists import Colname
 
 
-# epoch_id is required in function signature, but not used
-def process_eventhub_item(df, epoch_id, timeseries_unprocessed_path):
-    if len(df.head(1)) > 0:
-        # Append event
-        df = df \
-            .withColumn(Colname.year, year(df.enqueuedTime)) \
-            .withColumn(Colname.month, month(df.enqueuedTime)) \
-            .withColumn(Colname.day, dayofmonth(df.enqueuedTime)) \
-            .withColumn(Colname.timeseries, df.body.cast(StringType())) \
-            .select(
-                Colname.timeseries,
-                Colname.year,
-                Colname.month,
-                Colname.day
+def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
+    """
+    epoch_id is required in function signature, but not used
+    """
+
+    df = (
+        df.withColumn(Colname.year, year(df.enqueuedTime))
+        .withColumn(Colname.month, month(df.enqueuedTime))
+        .withColumn(Colname.day, dayofmonth(df.enqueuedTime))
+        .withColumn(Colname.timeseries, df.body.cast(StringType()))
+        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day)
+    )
+
+    (df
+     .write.partitionBy(Colname.year, Colname.month, Colname.day)
+     .format("delta")
+     .mode("append")
+     .save(time_series_unprocessed_path))
+
+
+def timeseries_persister(
+    streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str
+):
+    return (
+        streamingDf.writeStream.option("checkpointLocation", checkpoint_path)
+        .foreachBatch(
+            lambda df, epochId: process_eventhub_item(
+                df, epochId, timeseries_unprocessed_path
             )
-
-        df.write \
-            .partitionBy(
-                Colname.year,
-                Colname.month,
-                Colname.day) \
-            .format("delta") \
-            .mode("append") \
-            .save(timeseries_unprocessed_path)
-
-
-def timeseries_persister(event_hub_connection_key: str, delta_lake_container_name: str, storage_account_name: str, timeseries_unprocessed_path):
-
-    spark = SparkSession.builder.getOrCreate()
-
-    input_configuration = {}
-    input_configuration["eventhubs.connectionString"] = spark.sparkContext._gateway.jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(event_hub_connection_key)
-    streamingDF = (spark.readStream.format("eventhubs").options(**input_configuration).load())
-
-    checkpoint_path = f"abfss://{delta_lake_container_name}@{storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-persister"
-
-    streamingDF. \
-        writeStream. \
-        option("checkpointLocation", checkpoint_path). \
-        foreachBatch(lambda df, epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path)). \
-        start()
+        )
+        .start()
+    )
