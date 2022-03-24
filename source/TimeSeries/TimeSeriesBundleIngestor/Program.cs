@@ -19,6 +19,7 @@ using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
+using Energinet.DataHub.TimeSeries.Infrastructure.Correlation;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
@@ -55,6 +56,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 throw new ArgumentNullException(nameof(container));
             }
 
+            // container.Register<ICorrelationContext, CorrelationContext>(Lifestyle.Scoped);
+            // container.Register<CorrelationIdMiddleware>(Lifestyle.Scoped);
             container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
             container.Register<IEventHubSender>(
                 () => new EventHubSender(
