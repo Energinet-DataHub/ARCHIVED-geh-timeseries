@@ -18,7 +18,7 @@ from package.transforms import JsonTransformer
 from package.codelists import Colname
 from package.schemas import time_series_schema
 from delta.tables import DeltaTable
-# TODO: Fix "from package.table_creator" when PR gate breaks on test errors
+# TODO: Fix "from package.table_creator" when PR gate breaks on test errors test
 from package import create_delta_table_if_empty
 
 
