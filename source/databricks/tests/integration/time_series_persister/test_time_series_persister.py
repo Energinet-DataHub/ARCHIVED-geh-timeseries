@@ -13,51 +13,12 @@
 # limitations under the License.
 
 import sys
-
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
 import asyncio
 import pytest
 from package import timeseries_persister
-import time
-from pyspark.sql.types import (
-    StructType,
-    StructField,
-    StringType,
-    ArrayType,
-    DecimalType,
-    IntegerType,
-    TimestampType,
-    BooleanType,
-    BinaryType,
-    LongType,
-)
-
-
-# Code from https://stackoverflow.com/questions/45717433/stop-structured-streaming-query-gracefully
-# Helper method to stop a streaming query
-def stop_stream_query(query, wait_time):
-    """Stop a running streaming query"""
-    while query.isActive:
-        msg = query.status["message"]
-        data_avail = query.status["isDataAvailable"]
-        trigger_active = query.status["isTriggerActive"]
-        if not data_avail and not trigger_active and msg != "Initializing sources":
-            print("Stopping query...")
-            query.stop()
-        time.sleep(0.5)
-
-    # Okay wait for the stop to happen
-    print("Awaiting termination...")
-    query.awaitTermination(wait_time)
-
-
-async def job_task(job):
-    try:
-        job.awaitTermination()
-    except asyncio.CancelledError:
-        stop_stream_query(job, 5000)
-        # raise
+from tests.integration.utils import job_task
 
 
 @pytest.mark.asyncio
