@@ -36,15 +36,12 @@ def integration_tests_path() -> str:
 @pytest.fixture(scope="session")
 def delta_reader(spark: SparkSession, delta_lake_path: str):
     def f(path: str):
-        data = None
+        data = spark.sparkContext.emptyRDD()
         try:
-            # print("### Starting reading from delta lake...")
             data = spark.read.format("delta").load(f"{delta_lake_path}/{path}")
             data.show()
         except Exception:
-            # print("############################# OH NO")
             pass
-        # print("### Done reading from delta lake")
         return data
 
     return f

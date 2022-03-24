@@ -18,17 +18,14 @@ sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 import asyncio
 import pytest
 from package import timeseries_persister
-from tests.integration.utils import job_task
+from tests.integration.utils import streaming_job_asserter
 
 
 @pytest.mark.asyncio
 async def test_time_series_persister(delta_reader, time_series_persister):
-    task = asyncio.create_task(job_task(time_series_persister))
-    for x in range(20000):
+    def verification_function():
         data = delta_reader("/unprocessed_time_series")
-        if data is not None and data.count() > 0:
-            task.cancel()
-            return
+        return data.count() > 0
 
-    task.cancel()
-    assert False, "No data was stored in Delta table"
+    succeeded = streaming_job_asserter(time_series_persister, verification_function)
+    assert succeeded, "No data was stored in Delta table"

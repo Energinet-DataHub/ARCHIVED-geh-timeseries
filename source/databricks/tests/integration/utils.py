@@ -39,3 +39,14 @@ async def job_task(job):
         job.awaitTermination()
     except asyncio.CancelledError:
         stop_stream_query(job, 5000)
+
+
+def streaming_job_asserter(pyspark_job, verification_function) -> bool:
+    task = asyncio.create_task(job_task(pyspark_job))
+    for x in range(20000):
+        if verification_function():
+            task.cancel()
+            return True
+
+    task.cancel()
+    return False
