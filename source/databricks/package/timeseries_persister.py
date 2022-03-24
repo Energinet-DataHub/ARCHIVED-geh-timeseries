@@ -22,22 +22,30 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     epoch_id is required in function signature, but not used
     """
 
-    df = df.withColumn("year", year(df.enqueuedTime)) \
-        .withColumn("month", month(df.enqueuedTime)) \
-        .withColumn("day", dayofmonth(df.enqueuedTime))
+    df = (
+        df.withColumn(Colname.year, year(df.enqueuedTime))
+        .withColumn(Colname.month, month(df.enqueuedTime))
+        .withColumn(Colname.day, dayofmonth(df.enqueuedTime))
+        .withColumn(Colname.timeseries, df.body.cast(StringType()))
+        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day)
+    )
 
-    df.write \
-        .partitionBy("year", "month", "day") \
-        .format("delta") \
-        .mode("append") \
-        .save(time_series_unprocessed_path)
+    (df
+     .write.partitionBy(Colname.year, Colname.month, Colname.day)
+     .format("delta")
+     .mode("append")
+     .save(time_series_unprocessed_path))
 
 
-def timeseries_persister(streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str):
-    return (streamingDf
-            .writeStream
-            .option("checkpointLocation", checkpoint_path)
-            .foreachBatch(
-                lambda df,
-                epochId: process_eventhub_item(df, epochId, timeseries_unprocessed_path))
-            .start())
+def timeseries_persister(
+    streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str
+):
+    return (
+        streamingDf.writeStream.option("checkpointLocation", checkpoint_path)
+        .foreachBatch(
+            lambda df, epochId: process_eventhub_item(
+                df, epochId, timeseries_unprocessed_path
+            )
+        )
+        .start()
+    )

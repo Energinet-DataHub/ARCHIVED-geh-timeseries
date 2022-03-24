@@ -22,7 +22,7 @@ from tests.integration.utils import streaming_job_asserter
 
 
 @pytest.mark.asyncio
-async def test_time_series_persister(delta_reader, time_series_persister):
+async def test_stores_received_time_series_in_delta_table(delta_reader, time_series_persister):
     def verification_function():
         data = delta_reader("/unprocessed_time_series")
         return data.count() > 0

@@ -18,19 +18,20 @@ from pyspark.sql import SparkSession
 
 @pytest.fixture(scope="session")
 def spark() -> SparkSession:
-    return SparkSession.builder.config(
-        "spark.sql.streaming.schemaInference", True
-    ).getOrCreate()
-
-
-@pytest.fixture(scope="session")
-def delta_lake_path() -> str:
-    return "/workspaces/geh-timeseries/source/databricks/tests/integration/__delta__"
+    return (SparkSession
+            .builder
+            .config("spark.sql.streaming.schemaInference", True)
+            .getOrCreate())
 
 
 @pytest.fixture(scope="session")
 def integration_tests_path() -> str:
     return "/workspaces/geh-timeseries/source/databricks/tests/integration"
+
+
+@pytest.fixture(scope="session")
+def delta_lake_path(integration_tests_path) -> str:
+    return f"{integration_tests_path}/__delta__"
 
 
 @pytest.fixture(scope="session")
