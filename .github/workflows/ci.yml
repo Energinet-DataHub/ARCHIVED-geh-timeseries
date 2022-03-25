@@ -41,7 +41,6 @@ jobs:
     with:
       PATH_STATIC_CHECKS: './source'
       IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-      ARTIFACT_NAME: 'build-databricks_artifacts'
       TEST_REPORT_PATH: ./source/databricks/tests/coverage.json
 
   terraform_validate:
