@@ -29,7 +29,6 @@ from pyspark.sql.types import (
     LongType,
 )
 
-
 time_series_received_schema = StructType(
     [
         StructField("enqueuedTime", TimestampType(), True),
