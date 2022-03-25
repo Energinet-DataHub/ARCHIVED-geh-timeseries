@@ -40,11 +40,11 @@
 - To run tests in a specific file navigate to the folder where the file is located in the terminal and execute the following command
 
     ```text
-    pytest file-name.py -vv -s
+    pytest file-name.py
     ```
 
 - You can also run a specific test in the file by executing the following command
 
     ```text
-    pytest file-name.py::function-name -vv -s
+    pytest file-name.py::function-name
     ```
