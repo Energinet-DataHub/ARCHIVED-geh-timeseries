@@ -29,7 +29,7 @@
     pytest
     ```
 
-- For more information on the tests use
+- For more verbose output use
 
     ```text
     pytest -vv -s
