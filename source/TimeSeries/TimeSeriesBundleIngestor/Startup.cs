@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.Infrastructure.Correlation;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
@@ -67,6 +68,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         protected virtual void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
         {
             options.UseMiddleware<SimpleInjectorScopedRequest>();
+            options.UseMiddleware<CorrelationIdMiddleware>();
         }
 
         private static void ReplaceServiceDescriptor(IServiceCollection serviceCollection)
@@ -91,6 +93,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 options.AddLogging();
             });
 
+            serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
+            serviceCollection.AddScoped<CorrelationIdMiddleware>();
             serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
             serviceCollection.AddScoped<TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
