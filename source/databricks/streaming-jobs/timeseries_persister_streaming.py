@@ -33,7 +33,7 @@ spark = initialize_spark(args)
 
 # Setup configuration for the  timeseries persister job
 timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
-checkpoint_path = f"abfss://{args.delta_lake_container_name}@{args.storage_account_name}.dfs.core.windows.net/checkpoint"
+checkpoint_path = f"abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-persister"
 input_configuration = {}
 input_configuration["eventhubs.connectionString"] = spark.sparkContext._gateway.jvm.org.apache.spark.eventhubs.EventHubsUtils.encrypt(args.event_hub_connection_key)
 streamingDF = (spark.readStream.format("eventhubs").options(**input_configuration).load())
