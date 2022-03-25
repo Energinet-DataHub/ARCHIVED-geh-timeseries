@@ -42,14 +42,23 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Correlation
         public static TraceContext Parse([NotNull] string traceContext)
         {
             if (string.IsNullOrWhiteSpace(traceContext)) return Invalid();
+
+            // 55 is the valid length of trace context.
             if (traceContext.Length != 55) return Invalid();
 
             var parts = traceContext.Split('-');
+
+            // Trace context is made up of four parts: version-format, trace-id, parent-id and trace-flags.
             if (parts.Length != 4) return Invalid();
 
             var traceId = parts[1];
             var parentId = parts[2];
-            if (traceId.Length != 32 || parentId.Length != 16) return Invalid();
+
+            // 32 is the valid length of trace-id
+            if (traceId.Length != 32) return Invalid();
+
+            // 16 is the valid length of parent-id
+            if (parentId.Length != 16) return Invalid();
 
             return Create(traceId, parentId);
         }
