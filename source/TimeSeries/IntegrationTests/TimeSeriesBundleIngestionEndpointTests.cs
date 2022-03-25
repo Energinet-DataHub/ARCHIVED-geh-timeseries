@@ -58,6 +58,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+            response.Headers.Contains("CorrelationId").Should().BeTrue();
         }
 
         [Fact]
