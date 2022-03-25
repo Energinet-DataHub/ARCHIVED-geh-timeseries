@@ -41,7 +41,7 @@ In the current program increment (PI) the planned work is captured by the stated
 
 Learn how to get started with Green Energy Hub [here](https://github.com/Energinet-DataHub/green-energy-hub/blob/main/docs/getting-started.md).
 
-[Getting started with databricks development](https://github.com/Energinet-DataHub/geh-timeseries/tree/main/source/databricks/README.md)
+[Getting started with databricks development](https://github.com/Energinet-DataHub/geh-timeseries/tree/main/source/databricks)
 
 Required or Recommended tools:
 
