@@ -48,3 +48,25 @@
     ```text
     pytest file-name.py::function-name
     ```
+
+## Debugging Tests
+
+- To debug tests you need to execute the following command
+
+    ```text
+    python -m ptvsd --host 0.0.0.0 --port 3000 --wait -m pytest
+    ```
+
+- Create a ***launch.json*** file in the ***Run and Debug*** panel and add the following
+
+    ```json
+    {
+        "name": "Python: Attach container",
+        "type": "python",
+        "request": "attach",
+        "port": 3000,
+        "host": "localhost"
+    }
+    ```
+
+- Start debugging on the ***Python: Attach container*** in the ***Run and Debug*** panel
