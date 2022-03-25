@@ -5,11 +5,11 @@
 
 - ### [Docker](https://www.docker.com/get-started)
 
-  - use WSL 2, you will get a prompt with a guide after installing docker
+    - use WSL 2, you will get a prompt with a guide after installing docker
 
 - ### [Visual Studio Code](https://code.visualstudio.com/#alt-downloads) (system installer)
 
-  - Extension called ***Remote - Containers***
+    - Extension called ***Remote - Containers***
 
 ## Get workspace ready for development
 
