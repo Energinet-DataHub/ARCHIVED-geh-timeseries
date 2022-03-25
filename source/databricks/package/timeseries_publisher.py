@@ -16,7 +16,9 @@ from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, 
 from pyspark.sql.types import BooleanType
 from package.transforms import JsonTransformer
 from package.codelists import Colname
+from package.schemas import time_series_schema
 from delta.tables import DeltaTable
+from package.table_creator import create_delta_table_if_empty
 
 
 # Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations
@@ -53,6 +55,9 @@ def publish_timeseries_batch(df, epoch_id, timeseries_processed_path):
             .withColumn("max_month", month("max_time")) \
             .withColumn("max_day", dayofmonth("max_time"))
         row = min_max_df.first()
+
+        create_delta_table_if_empty(timeseries_processed_path, time_series_schema, [Colname.year, Colname.month, Colname.day])
+
         # Fetch existing processed timeseries within min and max year, month and day
         existing_df = spark \
             .read \
