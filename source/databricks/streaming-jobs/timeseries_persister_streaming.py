@@ -20,6 +20,7 @@ import configargparse
 
 from package import timeseries_persister, initialize_spark
 
+
 p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
 p.add('--data-storage-account-key', type=str, required=True)
