@@ -35,6 +35,7 @@ hashicorp
 https
 IaC
 IntelliSense
+json
 Jupyter
 markdownlint
 matcher
