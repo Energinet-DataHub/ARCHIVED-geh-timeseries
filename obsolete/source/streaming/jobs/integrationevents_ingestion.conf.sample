@@ -1,8 +1,0 @@
-event-hub-connection-key=
-
-data-storage-account-name=mystorageacoount
-data-storage-account-key=<account-key>
-delta-lake-container-name=<>
-
-events-data-blob-name=<>
-master-data-blob-name=<>
