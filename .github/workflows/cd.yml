@@ -20,16 +20,21 @@ on:
 
 jobs:
   publish_release:
-    uses: Energinet-DataHub/.github/.github/workflows/publish-release.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/publish-release.yml@6.0.0
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
   dispatch_deployment_request:
     needs: publish_release
-    uses: Energinet-DataHub/.github/.github/workflows/dispatch-deployment-request.yml@3.0.3
+    uses: Energinet-DataHub/.github/.github/workflows/dispatch-deployment-request.yml@6.0.0
     with:
       CALLER_REPOSITORY_NAME: geh-timeseries
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
     secrets:
       PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
       ENVIRONMENT_REPOSITORY_PATH: ${{ secrets.ENVIRONMENT_REPOSITORY_PATH }}
+
+  upload_main_coverage_result_to_codecov:
+    uses: Energinet-DataHub/.github/.github/workflows/upload-coverage-to-codecov.yml@6.0.0
+    with:
+      RELEASE_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
