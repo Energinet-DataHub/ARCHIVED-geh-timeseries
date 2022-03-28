@@ -15,7 +15,6 @@
 import sys
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
-
 import asyncio
 import pytest
 from package import timeseries_persister
