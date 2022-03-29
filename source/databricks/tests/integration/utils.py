@@ -43,7 +43,7 @@ async def job_task(job):
 
 def streaming_job_asserter(pyspark_job, verification_function) -> bool:
     task = asyncio.create_task(job_task(pyspark_job))
-    for x in range(20000):
+    for x in range(200000):
         if verification_function():
             task.cancel()
             return True
