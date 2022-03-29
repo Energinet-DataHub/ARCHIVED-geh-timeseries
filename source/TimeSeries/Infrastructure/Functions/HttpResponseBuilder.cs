@@ -18,15 +18,25 @@ using System.Threading.Tasks;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Correlation;
 using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
 {
     public sealed class HttpResponseBuilder : IHttpResponseBuilder
     {
+        private readonly ICorrelationContext _correlationContext;
+
+        public HttpResponseBuilder(ICorrelationContext correlationContext)
+        {
+            _correlationContext = correlationContext;
+        }
+
         public HttpResponseData CreateAcceptedResponse(HttpRequestData request)
         {
-            return request.CreateResponse(HttpStatusCode.Accepted);
+            var httpResponseData = request.CreateResponse(HttpStatusCode.Accepted);
+            AddHeaders(httpResponseData);
+            return httpResponseData;
         }
 
         public async Task<HttpResponseData> CreateBadRequestResponseAsync(
@@ -35,8 +45,14 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
         {
             var errorResponse = new ErrorResponse(schemaValidationErrors);
             var httpResponse = request.CreateResponse(HttpStatusCode.BadRequest);
+            AddHeaders(httpResponse);
             await errorResponse.WriteAsXmlAsync(httpResponse.Body).ConfigureAwait(false);
             return httpResponse;
+        }
+
+        private void AddHeaders(HttpResponseData httpResponseData)
+        {
+            httpResponseData.Headers.Add("CorrelationId", _correlationContext.Id);
         }
     }
 }

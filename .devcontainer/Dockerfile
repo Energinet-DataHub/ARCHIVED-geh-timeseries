@@ -25,6 +25,10 @@ RUN apt-get -y update && \
     "ca-certificates-java" && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Install Azurite (support wasb-protocol storage for Delta tables in integration tests)
+RUN apt-get update; \
+    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
+
 ENV JAVA_HOME=/usr/lib/jvm/java-${openjdk_version}-openjdk-amd64 \
     PATH=$JAVA_HOME/bin:$PATH
 
@@ -77,9 +81,9 @@ RUN conda install --quiet --yes --satisfied-skip-solve \
     'coverage=5.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.5.*' \
     && \
     conda install --quiet --yes --satisfied-skip-solve -c anaconda 'protobuf=3.14.*' && \
-    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark && \
+    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark pytest-asyncio flake8 black && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-EXPOSE 3000
+EXPOSE 3000 
