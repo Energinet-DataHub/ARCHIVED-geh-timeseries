@@ -48,15 +48,3 @@ runs:
       with:
         name: time_series_bundle_ingestor
         path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/time-series-bundle-ingestor
-        
-    - name: Publish Dotnet coverage report to release folder
-      uses: actions/download-artifact@v2
-      with:
-        name: dotnettestartifact
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/testreports
-        
-    - name: Publish Python coverage report to release folder
-      uses: actions/download-artifact@v2
-      with:
-        name: pythontestartifact
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/testreports
