@@ -34,6 +34,6 @@ async def test_stores_received_time_series_in_delta_table(delta_reader, time_ser
 
 
 def test_tt(spark: SparkSession):
-    data = spark.read.format("json").load("/workspaces/geh-timeseries/source/databricks/tests/integration/__delta__/tt.json")
+    data = spark.read.format("json").load("/workspaces/geh-timeseries/source/databricks/tests/integration/tt.json")
     print(data)
     assert data
