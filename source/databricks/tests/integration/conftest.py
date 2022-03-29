@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import pytest
+import os
 from pyspark.sql import SparkSession
 
 
@@ -26,7 +27,7 @@ def spark() -> SparkSession:
 
 @pytest.fixture(scope="session")
 def integration_tests_path() -> str:
-    return "/workspaces/geh-timeseries/source/databricks/tests/integration"
+    return os.path.dirname(os.path.abspath("./"))
 
 
 @pytest.fixture(scope="session")

@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import sys
+import os
 from pyspark.sql import SparkSession
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
