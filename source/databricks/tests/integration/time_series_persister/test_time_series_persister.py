@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import sys
+from pyspark.sql import SparkSession
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
 import asyncio
@@ -29,3 +30,9 @@ async def test_stores_received_time_series_in_delta_table(delta_reader, time_ser
 
     succeeded = streaming_job_asserter(time_series_persister, verification_function)
     assert succeeded, "No data was stored in Delta table"
+
+
+def test_tt(spark: SparkSession):
+    data = spark.read.format("json").load("/workspaces/geh-timeseries/source/databricks/tests/integration/__delta__/tt.json")
+    print(data)
+    assert data
