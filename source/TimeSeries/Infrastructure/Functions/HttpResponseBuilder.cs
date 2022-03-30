@@ -18,7 +18,6 @@ using System.Threading.Tasks;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
-using Energinet.DataHub.TimeSeries.Infrastructure.Correlation;
 using Microsoft.Azure.Functions.Worker.Http;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
