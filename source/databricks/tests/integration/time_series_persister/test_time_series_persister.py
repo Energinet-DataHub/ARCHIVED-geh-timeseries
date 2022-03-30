@@ -30,7 +30,7 @@ async def test_stores_received_time_series_in_delta_table(delta_reader, time_ser
         return data.count() > 0
 
     succeeded = streaming_job_asserter(time_series_persister, verification_function)
-    assert succeeded, "No data was stored in Delta table"
+    assert succeeded, "False"
 
 
 def test_tt(spark: SparkSession):
