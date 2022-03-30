@@ -27,7 +27,7 @@ def spark() -> SparkSession:
 
 @pytest.fixture(scope="session")
 def integration_tests_path() -> str:
-    return os.path.dirname(os.path.abspath("./"))
+    return "/github/workspace/source/databricks"
 
 
 @pytest.fixture(scope="session")
