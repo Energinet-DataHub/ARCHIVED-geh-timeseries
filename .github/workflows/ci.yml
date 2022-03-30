@@ -24,7 +24,7 @@ jobs:
     uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@6.0.0
 
   dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@6.0.0
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@6.0.1
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
       DOTNET_VERSION: "5.0.404"      
