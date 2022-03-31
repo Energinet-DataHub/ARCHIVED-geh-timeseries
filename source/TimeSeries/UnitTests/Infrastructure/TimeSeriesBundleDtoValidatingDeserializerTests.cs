@@ -24,7 +24,6 @@ using Xunit;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
 {
-    [SuppressMessage("Design", "CA1062:Validate arguments of public methods", Justification = "Arguments are not null")]
     public class TimeSeriesBundleDtoValidatingDeserializerTests
     {
         private readonly TestDocuments _testDocuments;

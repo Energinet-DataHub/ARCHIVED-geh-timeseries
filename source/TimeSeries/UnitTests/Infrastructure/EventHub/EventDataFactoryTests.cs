@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.CodeAnalysis;
 using AutoFixture.Xunit2;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.TestCommon.AutoFixture.Attributes;
@@ -29,8 +28,8 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure.EventHub
         [InlineAutoMoqData]
         public void Create_WhenCalled_ReturnedEventDataHasCorrelationIdSet(
             string correlationId,
-            [Frozen] [NotNull] Mock<ICorrelationContext> correlationContext,
-            [NotNull] EventDataFactory sut)
+            [Frozen] Mock<ICorrelationContext> correlationContext,
+            EventDataFactory sut)
         {
             correlationContext.Setup(context => context.Id).Returns(correlationId);
             var actual = sut.Create(System.Array.Empty<byte>());
