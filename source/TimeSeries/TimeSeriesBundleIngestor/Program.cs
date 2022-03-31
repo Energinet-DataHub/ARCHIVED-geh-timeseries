@@ -14,6 +14,7 @@
 
 using System;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
 using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
@@ -55,11 +56,13 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 throw new ArgumentNullException(nameof(container));
             }
 
+            container.Register<IEventDataFactory, EventDataFactory>(Lifestyle.Scoped);
             container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
             container.Register<IEventHubSender>(
                 () => new EventHubSender(
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
-                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
+                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME"),
+                    container.GetInstance<IEventDataFactory>()));
             container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
             base.ConfigureContainer(container);
 
