@@ -1,0 +1,15 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "APPINSIGHTS_INSTRUMENTATIONKEY": "<App insights instrumentation key>",
+    "INTEGRATION_EVENT_LISTENER_CONNECTION_STRING": "<sb listener connection string for integration events>",
+    "EVENT_HUB_CONNECTION": "<eh connection string for internal domain events>",
+    "CONSUMPTION_METERING_POINT_CREATED_TOPIC_NAME": "consumption-metering-point-created",
+    "CONSUMPTION_METERING_POINT_CREATED_SUBSCRIPTION_NAME": "consumption-metering-point-created-to-timeseries",
+    "METERING_POINT_CONNECTED_TOPIC_NAME": "metering-point-connected",
+    "METERING_POINT_CONNECTED_SUBSCRIPTION_NAME": "metering-point-connected-to-timeseries",
+    "EVENT_HUB_NAME": "evh-integration-event-queue"
+  }
+}

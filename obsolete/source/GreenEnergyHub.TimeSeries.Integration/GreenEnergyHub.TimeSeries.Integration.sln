@@ -1,0 +1,68 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Copyright 2020 Energinet DataHub A/S
+#
+# Licensed under the Apache License, Version 2.0 (the "License2");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.Domain", "source\GreenEnergyHub.TimeSeries.Integration.Domain\GreenEnergyHub.TimeSeries.Integration.Domain.csproj", "{EF1B30D8-6433-4C34-8DC9-A79430E1DF50}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.Infrastructure", "source\GreenEnergyHub.TimeSeries.Integration.Infrastructure\GreenEnergyHub.TimeSeries.Integration.Infrastructure.csproj", "{17BEE5F8-AEC1-411D-AA9F-243C5EAD98CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.Application", "source\GreenEnergyHub.TimeSeries.Integration.Application\GreenEnergyHub.TimeSeries.Integration.Application.csproj", "{961878EC-5E57-4536-8EF1-3975BD6655EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener", "source\GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener\GreenEnergyHub.TimeSeries.Integration.IntegrationEventListener.csproj", "{2EAD9D0F-2AC7-4B1E-B138-868298BFB307}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.Tests", "source\GreenEnergyHub.TimeSeries.Integration.Tests\GreenEnergyHub.TimeSeries.Integration.Tests.csproj", "{84A9735A-63D4-4D77-A36A-0B9A01613C9C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GreenEnergyHub.TimeSeries.Integration.IntegrationTests", "source\GreenEnergyHub.TimeSeries.Integration.IntegrationTests\GreenEnergyHub.TimeSeries.Integration.IntegrationTests.csproj", "{2DB56A0A-0A06-4968-8501-7D12AC59B3EF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EF1B30D8-6433-4C34-8DC9-A79430E1DF50}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF1B30D8-6433-4C34-8DC9-A79430E1DF50}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF1B30D8-6433-4C34-8DC9-A79430E1DF50}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF1B30D8-6433-4C34-8DC9-A79430E1DF50}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17BEE5F8-AEC1-411D-AA9F-243C5EAD98CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17BEE5F8-AEC1-411D-AA9F-243C5EAD98CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17BEE5F8-AEC1-411D-AA9F-243C5EAD98CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17BEE5F8-AEC1-411D-AA9F-243C5EAD98CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{961878EC-5E57-4536-8EF1-3975BD6655EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{961878EC-5E57-4536-8EF1-3975BD6655EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{961878EC-5E57-4536-8EF1-3975BD6655EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{961878EC-5E57-4536-8EF1-3975BD6655EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EAD9D0F-2AC7-4B1E-B138-868298BFB307}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EAD9D0F-2AC7-4B1E-B138-868298BFB307}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EAD9D0F-2AC7-4B1E-B138-868298BFB307}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EAD9D0F-2AC7-4B1E-B138-868298BFB307}.Release|Any CPU.Build.0 = Release|Any CPU
+		{84A9735A-63D4-4D77-A36A-0B9A01613C9C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{84A9735A-63D4-4D77-A36A-0B9A01613C9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{84A9735A-63D4-4D77-A36A-0B9A01613C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{84A9735A-63D4-4D77-A36A-0B9A01613C9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB56A0A-0A06-4968-8501-7D12AC59B3EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB56A0A-0A06-4968-8501-7D12AC59B3EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB56A0A-0A06-4968-8501-7D12AC59B3EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB56A0A-0A06-4968-8501-7D12AC59B3EF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C6E8B17A-17AB-4B59-A092-991833458320}
+	EndGlobalSection
+EndGlobal
