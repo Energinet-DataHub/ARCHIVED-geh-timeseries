@@ -27,7 +27,8 @@ def spark() -> SparkSession:
 
 @pytest.fixture(scope="session")
 def integration_tests_path() -> str:
-    return os.path.dirname(os.path.abspath("./"))
+    return "/workspaces/geh-timeseries/source/databricks/tests/integration"
+    # return os.path.dirname(os.path.abspath("./"))
 
 
 @pytest.fixture(scope="session")
