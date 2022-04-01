@@ -27,8 +27,13 @@ def spark() -> SparkSession:
 
 @pytest.fixture(scope="session")
 def integration_tests_path() -> str:
-    return "/workspaces/geh-timeseries/source/databricks/tests/integration"
-    # return os.path.dirname(os.path.abspath("./"))
+    """
+    Returns the integration tests folder path.
+    Please note that this only works if current folder haven't been changed prior using us.chdir().
+    The correctness also relies on the prerequisite that this function is actually located in a
+    file located directly in the integration tests folder.
+    """
+    return os.path.dirname(os.path.realpath(__file__))
 
 
 @pytest.fixture(scope="session")
