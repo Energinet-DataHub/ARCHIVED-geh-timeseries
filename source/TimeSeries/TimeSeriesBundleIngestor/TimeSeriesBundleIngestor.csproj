@@ -22,6 +22,7 @@ limitations under the License.
     <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="2.2.0" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common" Version="1.0.3" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common.Abstractions" Version="1.0.3" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector" Version="1.0.3" />
