@@ -32,7 +32,7 @@ RUN mamba install --quiet --yes --satisfied-skip-solve \
     && \
     # conda install --quiet --yes --satisfied-skip-solve -c anaconda 'protobuf=3.14.*' && \
     pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark pytest-asyncio flake8 black && \
-    conda clean --all -f -y && \
+    mamba clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
