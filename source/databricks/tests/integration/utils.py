@@ -41,12 +41,17 @@ async def job_task(job):
         stop_stream_query(job, 5000)
 
 
-def streaming_job_asserter(pyspark_job, verification_function) -> bool:
+def streaming_job_asserter(pyspark_job, verification_function, timeout_seconds=20) -> bool:
     task = asyncio.create_task(job_task(pyspark_job))
-    for x in range(20000):
+    start = time.monotonic()
+    while True:
         if verification_function():
             task.cancel()
             return True
+        elapsed_seconds = time.monotonic() - start
+        if elapsed_seconds > timeout_seconds:
+            print(f"Expectation of asynchrounous job couldn't be verified in {timeout_seconds} seconds.")
+            break
 
     task.cancel()
     return False
