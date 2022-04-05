@@ -14,12 +14,16 @@
 
 using System;
 using System.Threading.Tasks;
+using Azure.Messaging.EventHubs;
+using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
+using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,6 +108,14 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             serviceCollection
                 .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
+
+            // Health check
+            serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
+            serviceCollection.AddHealthChecks()
+                .AddLiveCheck()
+                .AddAzureEventHub(name: "EventhubConnectionExists", eventHubConnectionFactory: options => new EventHubConnection(
+                    EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
         }
     }
 }

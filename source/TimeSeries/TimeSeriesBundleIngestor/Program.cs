@@ -20,6 +20,7 @@ using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
+using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
@@ -46,6 +47,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             base.ConfigureFunctionsWorkerDefaults(options);
 
             options.UseMiddleware<RequestResponseLoggingMiddleware>();
+            options.UseMiddleware<JwtTokenWrapperMiddleware>();
             options.UseMiddleware<JwtTokenMiddleware>();
         }
 
