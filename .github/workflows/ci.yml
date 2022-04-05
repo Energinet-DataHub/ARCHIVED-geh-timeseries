@@ -17,14 +17,13 @@ on:
   pull_request:
     branches:
       - main
-  workflow_dispatch: {}
 
 jobs:
   ci_base:
-    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@5.0.0
 
   dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@5.0.0
     with:
       SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
       DOTNET_VERSION: "5.0.404"      
@@ -38,27 +37,27 @@ jobs:
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
   databricks_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@6.1.3
     with:
       PATH_STATIC_CHECKS: './source'
       IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-      TEST_REPORT_PATH: ./source/databricks/tests/coverage.json
+      TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
   terraform_validate:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@5.0.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: "1.1.6"
       
   terraform_validate_streaming_cluster:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@2.6.1
     with:
       TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
       TERRAFORM_VERSION: '1.1.6'
 
   time_series_bundle_ingestor_ci:
     needs: [ci_base, terraform_validate]
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-create-function-artifact.yml@5.0.0
     with:
       CSPROJ_FILE_PATH: "source/TimeSeries/TimeSeriesBundleIngestor/TimeSeriesBundleIngestor.csproj"
       DOTNET_VERSION: "5.0.404"
@@ -67,7 +66,7 @@ jobs:
   wheel_ci:
     needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
    # needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
-    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@6.0.1
+    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@5.0.5
     with:
       PYHTON_VERSION: '3.8.6'
       ARCHITECTURE: 'x64'
@@ -77,7 +76,7 @@ jobs:
 
   create_prerelease:
     needs: [time_series_bundle_ingestor_ci, wheel_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@5.0.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
     secrets:
