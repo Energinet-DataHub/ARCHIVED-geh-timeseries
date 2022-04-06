@@ -102,13 +102,14 @@ resource "databricks_job" "publisher_streaming_job" {
 
   spark_python_task {
     python_file = "dbfs:/timeseries/timeseries_publisher_streaming.py"
+    # IMPORTANT: Be careful about changing the name of the time series points Delta table name
+    # as it is part of the public contract for published time series points
     parameters  = [
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_data_lake_name.value}",
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
          "--event-hub-connection-key=${var.evh_timeseries_listen_connection_string}",
          "--delta-lake-container-name=timeseries-data",
          "--timeseries-unprocessed-blob-name=timeseries-unprocessed",
-         # IMPORTANT: Be careful about chaning the name of the blob as it is part of the public contract for published time series points
          "--time-series-points-blob-name=time-series-points"
     ]
   }
