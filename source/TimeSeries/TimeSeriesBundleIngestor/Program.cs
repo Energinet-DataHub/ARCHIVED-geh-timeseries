@@ -47,7 +47,6 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             base.ConfigureFunctionsWorkerDefaults(options);
 
             options.UseMiddleware<RequestResponseLoggingMiddleware>();
-            options.UseMiddleware<JwtTokenWrapperMiddleware>();
             options.UseMiddleware<JwtTokenMiddleware>();
         }
 
