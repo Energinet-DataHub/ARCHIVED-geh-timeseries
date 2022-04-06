@@ -21,25 +21,35 @@ import asyncio
 import shutil
 import pytest
 from package import timeseries_publisher
+from package.codelists.colname import Colname
 from tests.integration.utils import streaming_job_asserter
 
 
 #def time_series_publisher(spark: SparkSession, timeseries_unprocessed_path: str, checkpoint_path: str, timeseries_processed_path: str):
 @pytest.fixture(scope="session")
-def time_series_publisher(spark, delta_lake_path, integration_tests_path):
+def time_series_publisher(spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string):
     checkpoint_path = f"{delta_lake_path}/time_series_points/checkpoint"
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_points_path = f"{delta_lake_path}/time_series_points_path"
+    time_series_points_path = f"{delta_lake_path}/time_series_points"
 
+    # Remove used Delta tables in order to avoid side effects from previous/other test runs
     if(os.path.exists(time_series_unprocessed_path)):
         shutil.rmtree(time_series_unprocessed_path)
     if(os.path.exists(time_series_points_path)):
         shutil.rmtree(time_series_points_path)
 
-    # streamingDf = spark.readStream.schema(time_series_received_schema).json(
-    #     f"{integration_tests_path}/time_series_persister/time_series_received*.json"
-    # )
-    
+    # Add test data to data source
+    columns = [Colname.timeseries, Colname.year, Colname.month, Colname.day]
+    time_series_data = [(unprocessed_time_series_json_string, 2022, 3, 21)]
+    (spark
+     .sparkContext
+     .parallelize(time_series_data)
+     .toDF(columns)
+     .write
+     .format("delta")
+     .save(time_series_unprocessed_path))
+
+    # Return the awaitable pyspark streaming job (the sut)
     return timeseries_publisher(spark, time_series_unprocessed_path, checkpoint_path, time_series_points_path)
 
 

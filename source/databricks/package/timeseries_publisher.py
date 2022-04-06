@@ -28,7 +28,6 @@ def publish_timeseries_batch(df, epoch_id, timeseries_processed_path):
 
     (jsonTransformer
      .TransformFromJsonToDataframe(jsonStringDataframe)
-     .filter(col(Colname.metering_point_id).isNull())
      .select(
          col(Colname.metering_point_id),
          col(Colname.transaction_id),
