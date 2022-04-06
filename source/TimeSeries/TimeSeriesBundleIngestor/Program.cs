@@ -14,20 +14,10 @@
 
 using System;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
-using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
-using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
-using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
-using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
-using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
-using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using SimpleInjector;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
@@ -38,51 +28,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             var program = new Program();
 
             var host = program.ConfigureApplication();
-            program.VerifyContainer();
             await program.ExecuteApplicationAsync(host).ConfigureAwait(false);
-        }
-
-        protected override void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
-        {
-            base.ConfigureFunctionsWorkerDefaults(options);
-
-            options.UseMiddleware<RequestResponseLoggingMiddleware>();
-            options.UseMiddleware<JwtTokenMiddleware>();
-        }
-
-        protected override void ConfigureContainer(Container container)
-        {
-            if (container == null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
-
-            container.Register<IEventDataFactory, EventDataFactory>(Lifestyle.Scoped);
-            container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
-            container.Register<IEventHubSender>(
-                () => new EventHubSender(
-                    EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
-                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME"),
-                    container.GetInstance<IEventDataFactory>()));
-            container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
-            base.ConfigureContainer(container);
-
-            var tenantId = EnvironmentHelper.GetEnv("B2C_TENANT_ID");
-            var audience = EnvironmentHelper.GetEnv("BACKEND_SERVICE_APP_ID");
-
-            container.AddJwtTokenSecurity($"https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration", audience);
-
-            container.RegisterSingleton<IRequestResponseLogging>(
-                () =>
-                {
-                    var logger = container.GetRequiredService<ILogger<RequestResponseLoggingBlobStorage>>();
-                    var storage = new RequestResponseLoggingBlobStorage(
-                        EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING"),
-                        EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME"),
-                        logger);
-                    return storage;
-                });
-            container.Register<RequestResponseLoggingMiddleware>(Lifestyle.Scoped);
         }
     }
 }

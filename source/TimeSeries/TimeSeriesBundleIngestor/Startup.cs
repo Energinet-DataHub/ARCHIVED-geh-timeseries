@@ -15,43 +15,40 @@
 using System;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs;
+
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
+
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.JsonSerialization;
+using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
+using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
+using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
-using Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
-using SimpleInjector;
+using Microsoft.Extensions.Logging;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
     public abstract class Startup
     {
-        private readonly Container _container;
-
         protected Startup()
-            : this(new Container())
         {
         }
 
-        private Startup(Container container)
-        {
-            _container = container;
-        }
-
+#pragma warning disable CA1822 // Mark members as static
         protected async Task ExecuteApplicationAsync(IHost host)
+#pragma warning restore CA1822 // Mark members as static
         {
             await host.RunAsync().ConfigureAwait(false);
-            await _container.DisposeContainerAsync().ConfigureAwait(false);
         }
 
         protected IHost ConfigureApplication()
@@ -59,57 +56,54 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             var host = new HostBuilder()
                 .ConfigureFunctionsWorkerDefaults(ConfigureFunctionsWorkerDefaults)
                 .ConfigureServices(ConfigureServices)
-                .Build()
-                .UseSimpleInjector(_container);
-
-            ConfigureContainer(_container);
-
+                .Build();
             return host;
         }
 
-        protected void VerifyContainer() => _container.Verify();
-
-        protected virtual void ConfigureContainer(Container container) { }
-
         protected virtual void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
         {
-            options.UseMiddleware<SimpleInjectorScopedRequest>();
+            options.UseMiddleware<RequestResponseLoggingMiddleware>();
+            options.UseMiddleware<JwtTokenWrapperMiddleware>();
             options.UseMiddleware<CorrelationIdMiddleware>();
             options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
         }
 
-        private static void ReplaceServiceDescriptor(IServiceCollection serviceCollection)
-        {
-            var descriptor = new ServiceDescriptor(
-                typeof(IFunctionActivator),
-                typeof(SimpleInjectorActivator),
-                ServiceLifetime.Singleton);
-            serviceCollection.Replace(descriptor);
-        }
-
         private void ConfigureServices(IServiceCollection serviceCollection)
         {
-            ReplaceServiceDescriptor(serviceCollection);
-
             serviceCollection.AddApplicationInsightsTelemetryWorkerService(
                 Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"));
 
             serviceCollection.AddLogging();
-            serviceCollection.AddSimpleInjector(_container, options =>
-            {
-                options.AddLogging();
-            });
-
             serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
             serviceCollection.AddScoped<CorrelationIdMiddleware>();
-            serviceCollection.AddScoped<JwtTokenWrapperMiddleware>();
             serviceCollection.AddScoped<FunctionTelemetryScopeMiddleware>();
             serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
             serviceCollection.AddScoped<TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection.AddScoped<IEventDataFactory, EventDataFactory>();
+            serviceCollection.AddScoped<TimeSeriesBundleIngestorEndpoint>();
             serviceCollection
                 .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
+            serviceCollection.AddScoped<IEventHubSender>(provider => new EventHubSender(
+                EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                EnvironmentHelper.GetEnv("EVENT_HUB_NAME"),
+                provider.GetService<IEventDataFactory>() !));
+
+            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+
+            serviceCollection.AddJwtTokenSecurity();
+
+            serviceCollection.AddSingleton<IRequestResponseLogging>(provider =>
+            {
+                var logger = provider.GetService<ILogger<RequestResponseLoggingBlobStorage>>();
+                var storage = new RequestResponseLoggingBlobStorage(
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME"),
+                    logger!);
+                return storage;
+            });
+            serviceCollection.AddScoped<RequestResponseLoggingMiddleware>();
 
             // Health check
             serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
