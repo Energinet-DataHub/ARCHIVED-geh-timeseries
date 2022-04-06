@@ -13,12 +13,15 @@
 // limitations under the License.
 
 using System;
+using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
@@ -27,15 +30,18 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
+        private readonly ILogger<TimeSeriesBundleIngestorEndpoint> _logger;
 
         public TimeSeriesBundleIngestorEndpoint(
             ITimeSeriesForwarder timeSeriesForwarder,
             IHttpResponseBuilder httpResponseBuilder,
-            ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer)
+            ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer,
+            ILogger<TimeSeriesBundleIngestorEndpoint> logger)
         {
             _timeSeriesForwarder = timeSeriesForwarder;
             _httpResponseBuilder = httpResponseBuilder;
             _timeSeriesBundleDtoValidatingDeserializer = timeSeriesBundleDtoValidatingDeserializer;
+            _logger = logger;
         }
 
         [Function(TimeSeriesFunctionNames.TimeSeriesBundleIngestor)]
@@ -51,6 +57,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
             if (deserializationResult.HasErrors)
             {
+                _logger.LogInformation($"Returning errors to consumer {deserializationResult.Errors.Select(e => e.Description)}");
                 return await _httpResponseBuilder
                     .CreateBadRequestResponseAsync(req, deserializationResult.Errors)
                     .ConfigureAwait(false);
