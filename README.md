@@ -1,5 +1,20 @@
 # Time Series
 
+## Getting Started
+
+Learn how to get started with Green Energy Hub [here](https://github.com/Energinet-DataHub/green-energy-hub/blob/main/docs/getting-started.md).
+
+[Getting started with Databricks development](source/databricks)
+
+Required or Recommended tools:
+
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+* [Terraform](https://www.terraform.io) for infrastructure as code
+* `Rider` or `Visual Studio` for .NET development
+* .NET 5 SDK
+* Visual Studio Code for PySpark streaming development
+* Docker
+
 ## Intro
 
 The time series domain focuses primarily on receiving, validating, storing and distributing time series data to relevant market participants to be used for billing, etc.
@@ -36,21 +51,6 @@ This sections documents the data flows to and from the time series domain.
 In the current program increment (PI) the planned work is captured by the stated PI goal:
 
 1. When a Grid Access Provider submits a time series for a metering point, the Time Series domain stores it, so that the data is available for calculations done by the Aggregations domain.
-
-## Getting Started
-
-Learn how to get started with Green Energy Hub [here](https://github.com/Energinet-DataHub/green-energy-hub/blob/main/docs/getting-started.md).
-
-[Getting started with Databricks development](source/databricks)
-
-Required or Recommended tools:
-
-* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-* [Terraform](https://www.terraform.io) for infrastructure as code
-* `Rider` or `Visual Studio` for .NET development
-* .NET 5 SDK
-* Visual Studio Code for PySpark streaming development
-* Docker
 
 ## Where can I get more help?
 
