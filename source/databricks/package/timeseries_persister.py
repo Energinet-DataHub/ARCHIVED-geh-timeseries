@@ -38,9 +38,7 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
      .save(time_series_unprocessed_path))
 
 
-def timeseries_persister(
-    streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str
-):
+def timeseries_persister(streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str):
     return (
         streamingDf.writeStream.option("checkpointLocation", checkpoint_path)
         .foreachBatch(

@@ -35,5 +35,7 @@ spark = initialize_spark(args)
 timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
 timeseries_processed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_processed_blob_name}'
 
+checkpoint_path = f"abfss://{args.delta_lake_container_name}@{args.storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-publisher"
+
 # start the unprocessed timeseries publisher
-timeseries_publisher(args.delta_lake_container_name, args.data_storage_account_name, timeseries_unprocessed_path, timeseries_processed_path)
+timeseries_publisher(spark, timeseries_unprocessed_path, checkpoint_path, timeseries_processed_path)
