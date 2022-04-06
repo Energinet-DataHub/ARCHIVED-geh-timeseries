@@ -108,7 +108,8 @@ resource "databricks_job" "publisher_streaming_job" {
          "--event-hub-connection-key=${var.evh_timeseries_listen_connection_string}",
          "--delta-lake-container-name=timeseries-data",
          "--timeseries-unprocessed-blob-name=timeseries-unprocessed",
-         "--timeseries-processed-blob-name=timeseries-processed"
+         # IMPORTANT: Be careful about chaning the name of the blob as it is part of the public contract for published time series points
+         "--time-series-points-blob-name=time-series-points"
     ]
   }
 

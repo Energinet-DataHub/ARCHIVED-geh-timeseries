@@ -25,7 +25,6 @@ from package.codelists.colname import Colname
 from tests.integration.utils import streaming_job_asserter
 
 
-#def time_series_publisher(spark: SparkSession, timeseries_unprocessed_path: str, checkpoint_path: str, timeseries_processed_path: str):
 @pytest.fixture(scope="session")
 def time_series_publisher(spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string):
     # Setup paths

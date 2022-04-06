@@ -26,15 +26,15 @@ p.add('--data-storage-account-key', type=str, required=True)
 p.add('--event-hub-connection-key', type=str, required=True)
 p.add('--delta-lake-container-name', type=str, required=True)
 p.add('--timeseries-unprocessed-blob-name', type=str, required=True)
-p.add('--timeseries-processed-blob-name', type=str, required=True)
+p.add('--time-series-points-blob-name', type=str, required=True)
 
 args, unknown_args = p.parse_known_args()
 
 spark = initialize_spark(args)
 
 timeseries_unprocessed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_unprocessed_blob_name}'
-timeseries_processed_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.timeseries_processed_blob_name}'
+time_series_points_path = f'abfss://{args.delta_lake_container_name}@{args.data_storage_account_name}.dfs.core.windows.net/{args.time_series_points_blob_name}'
 checkpoint_path = f"abfss://{args.delta_lake_container_name}@{args.storage_account_name}.dfs.core.windows.net/checkpoint-timeseries-publisher"
 
 # Start the timeseries publisher
-timeseries_publisher(spark, timeseries_unprocessed_path, checkpoint_path, timeseries_processed_path)
+timeseries_publisher(spark, timeseries_unprocessed_path, checkpoint_path, time_series_points_path)

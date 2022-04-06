@@ -22,7 +22,7 @@ from package.table_creator import create_delta_table_if_empty
 
 
 # Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations
-def publish_timeseries_batch(df, epoch_id, timeseries_processed_path):
+def publish_timeseries_batch(df, epoch_id, time_series_points_path):
     jsonStringDataframe = df.select(Colname.timeseries)
     jsonTransformer = JsonTransformer()
 
@@ -47,11 +47,11 @@ def publish_timeseries_batch(df, epoch_id, timeseries_processed_path):
          Colname.day)
      .format("delta")
      .mode("append")
-     .save(timeseries_processed_path))
+     .save(time_series_points_path))
 
 
-def timeseries_publisher(spark: SparkSession, timeseries_unprocessed_path: str, checkpoint_path: str, timeseries_processed_path: str):
-    create_delta_table_if_empty(spark, timeseries_processed_path, time_series_schema, [Colname.year, Colname.month, Colname.day])
+def timeseries_publisher(spark: SparkSession, timeseries_unprocessed_path: str, checkpoint_path: str, time_series_points_path: str):
+    create_delta_table_if_empty(spark, time_series_points_path, time_series_schema, [Colname.year, Colname.month, Colname.day])
 
     return (spark
             .readStream
@@ -59,5 +59,5 @@ def timeseries_publisher(spark: SparkSession, timeseries_unprocessed_path: str, 
             .load(timeseries_unprocessed_path)
             .writeStream
             .option("checkpointLocation", checkpoint_path)
-            .foreachBatch(lambda df, epochId: publish_timeseries_batch(df, epochId, timeseries_processed_path))
+            .foreachBatch(lambda df, epochId: publish_timeseries_batch(df, epochId, time_series_points_path))
             .start())
