@@ -13,13 +13,14 @@
 # limitations under the License.
 
 import sys
-import os
-from pyspark.sql import SparkSession
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
 import asyncio
 import shutil
 import pytest
+import os
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import to_timestamp
 from package import timeseries_publisher
 from package.codelists.colname import Colname
 from tests.integration.utils import streaming_job_asserter
@@ -39,12 +40,13 @@ def time_series_publisher(spark, delta_lake_path, integration_tests_path, unproc
         shutil.rmtree(time_series_points_path)
 
     # Add test data to data source
-    columns = [Colname.timeseries, Colname.year, Colname.month, Colname.day]
-    time_series_data = [(unprocessed_time_series_json_string, 2022, 3, 21)]
+    columns = [Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.system_receival_time]
+    time_series_data = [(unprocessed_time_series_json_string, 2022, 3, 21, "2022-12-17T09:30:47Z")]
     (spark
      .sparkContext
      .parallelize(time_series_data)
      .toDF(columns)
+     .withColumn(Colname.system_receival_time, to_timestamp(Colname.system_receival_time))
      .write
      .format("delta")
      .save(time_series_unprocessed_path))

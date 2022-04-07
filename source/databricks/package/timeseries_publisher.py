@@ -14,20 +14,20 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, max
 from pyspark.sql.types import BooleanType
-from package.transforms import JsonTransformer
+from package.transforms import transform_unprocessed_time_series_to_points
 from package.codelists import Colname
-from package.schemas import time_series_schema
+from package.schemas import time_series_points_schema
 from delta.tables import DeltaTable
 from package.table_creator import create_delta_table_if_empty
 
 
-# Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations
-def publish_timeseries_batch(df, epoch_id, time_series_points_path):
-    jsonStringDataframe = df.select(Colname.timeseries)
-    jsonTransformer = JsonTransformer()
+def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_points_path):
+    """
+    Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations.
+    The table is partitioned by the 
+    """
 
-    (jsonTransformer
-     .TransformFromJsonToDataframe(jsonStringDataframe)
+    (transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
      .select(
          col(Colname.metering_point_id),
          col(Colname.transaction_id),
@@ -38,8 +38,7 @@ def publish_timeseries_batch(df, epoch_id, time_series_points_path):
          col(Colname.year),
          col(Colname.month),
          col(Colname.day),
-         col(Colname.registration_date_time)
-     )
+         col(Colname.system_receival_time))
      .write
      .partitionBy(
          Colname.year,
@@ -51,7 +50,7 @@ def publish_timeseries_batch(df, epoch_id, time_series_points_path):
 
 
 def timeseries_publisher(spark: SparkSession, timeseries_unprocessed_path: str, checkpoint_path: str, time_series_points_path: str):
-    create_delta_table_if_empty(spark, time_series_points_path, time_series_schema, [Colname.year, Colname.month, Colname.day])
+    create_delta_table_if_empty(spark, time_series_points_path, time_series_points_schema, [Colname.year, Colname.month, Colname.day])
 
     return (spark
             .readStream

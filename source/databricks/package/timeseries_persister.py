@@ -20,15 +20,19 @@ from package.codelists import Colname
 
 def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     """
-    epoch_id is required in function signature, but not used
-    """
+    Store received time series partitioned by the time of receival.
 
+    Time of receival is currently defined as the time the messages are enqueued
+    on the EventHub.
+    """
     df = (
-        df.withColumn(Colname.year, year(df.enqueuedTime))
-        .withColumn(Colname.month, month(df.enqueuedTime))
-        .withColumn(Colname.day, dayofmonth(df.enqueuedTime))
+        df.withColumn(Colname.system_receival_time, df.enqueuedTime)
+        .withColumn(Colname.year, year(Colname.system_receival_time))
+        .withColumn(Colname.month, month(Colname.system_receival_time))
+        .withColumn(Colname.day, dayofmonth(Colname.system_receival_time))
         .withColumn(Colname.timeseries, df.body.cast(StringType()))
-        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day)
+        
+        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.system_receival_time)
     )
 
     (df
