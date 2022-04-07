@@ -31,7 +31,6 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
         .withColumn(Colname.month, month(Colname.system_receival_time))
         .withColumn(Colname.day, dayofmonth(Colname.system_receival_time))
         .withColumn(Colname.timeseries, df.body.cast(StringType()))
-        
         .select(Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.system_receival_time)
     )
 

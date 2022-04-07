@@ -24,7 +24,7 @@ from package.table_creator import create_delta_table_if_empty
 def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_points_path):
     """
     Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations.
-    The table is partitioned by the 
+    The table is partitioned by the time of the actual consumption/production/exchange.
     """
 
     (transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
