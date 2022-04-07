@@ -19,55 +19,54 @@ from package.codelists import Resolution
 from package.codelists import Colname
 
 
-class JsonTransformer():
+def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
+    structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'), Colname.system_receival_time)
+    flat = structured \
+        .select(explode("json.Series"), Colname.system_receival_time) \
+        .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", Colname.system_receival_time) \
+        .select(
+            col("MeteringPointId").alias(Colname.metering_point_id),
+            col("TransactionId").alias(Colname.transaction_id),
+            to_timestamp(col("RegistrationDateTime")).alias(Colname.registration_date_time),
+            to_timestamp(col("Period.StartDateTime")).alias("StartDateTime"),
+            col("Period.Resolution").alias(Colname.resolution),
+            Colname.system_receival_time,
+            explode("Period.Points").alias("Period_Point")) \
+        .select("*",
+                col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
+                col("Period_Point.Quality").alias(Colname.quality),
+                "Period_Point.Position") \
+        .drop("Period_Point")
 
-    def TransformFromJsonToDataframe(self, source: DataFrame) -> DataFrame:
-        structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'))
-        flat = structured \
-            .select(explode("json.Series")) \
-            .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period") \
-            .select(
-                col("MeteringPointId").alias(Colname.metering_point_id),
-                col("TransactionId").alias(Colname.transaction_id),
-                to_timestamp(col("RegistrationDateTime")).alias(Colname.registration_date_time),
-                to_timestamp(col("Period.StartDateTime")).alias("StartDateTime"),
-                col("Period.Resolution").alias(Colname.resolution),
-                explode("Period.Points").alias("Period_Point")) \
-            .select("*",
-                    col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
-                    col("Period_Point.Quality").alias(Colname.quality),
-                    "Period_Point.Position") \
-            .drop("Period_Point")
+    flat = flat \
+        .withColumn("TimeToAdd",
+                    when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15)
+                    .otherwise(col("Position") - 1))
 
-        flat = flat \
-            .withColumn("TimeToAdd",
-                        when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15)
-                        .otherwise(col("Position") - 1))
+    set_time_func = when(col("Resolution") == Resolution.quarter, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")) \
+        .when(col("Resolution") == Resolution.hour, expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
+        .when(col("Resolution") == Resolution.day, expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
+        .when(col("Resolution") == Resolution.month, expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
 
-        set_time_func = when(col("Resolution") == Resolution.quarter, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")) \
-            .when(col("Resolution") == Resolution.hour, expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
-            .when(col("Resolution") == Resolution.day, expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
-            .when(col("Resolution") == Resolution.month, expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
+    withTime = flat \
+        .withColumn(Colname.time, set_time_func) \
+        .drop("StartDateTime", "TimeToAdd")
 
-        withTime = flat \
-            .withColumn(Colname.time, set_time_func) \
-            .drop("StartDateTime", "TimeToAdd")
+    withTime = withTime \
+        .withColumn(Colname.year, year(col(Colname.time))) \
+        .withColumn(Colname.month, month(col(Colname.time))) \
+        .withColumn(Colname.day, dayofmonth(col(Colname.time))) \
+        .select(
+            Colname.metering_point_id,
+            Colname.transaction_id,
+            Colname.quantity,
+            Colname.quality,
+            Colname.time,
+            Colname.resolution,
+            Colname.year,
+            Colname.month,
+            Colname.day,
+            Colname.system_receival_time
+        )
 
-        withTime = withTime \
-            .withColumn(Colname.year, year(col(Colname.time))) \
-            .withColumn(Colname.month, month(col(Colname.time))) \
-            .withColumn(Colname.day, dayofmonth(col(Colname.time))) \
-            .select(
-                Colname.metering_point_id,
-                Colname.transaction_id,
-                Colname.quantity,
-                Colname.quality,
-                Colname.time,
-                Colname.resolution,
-                Colname.year,
-                Colname.month,
-                Colname.day,
-                Colname.registration_date_time
-            )
-
-        return withTime
+    return withTime
