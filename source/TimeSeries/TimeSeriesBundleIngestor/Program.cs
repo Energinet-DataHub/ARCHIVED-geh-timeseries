@@ -13,22 +13,94 @@
 // limitations under the License.
 
 using System;
-using System.Threading.Tasks;
+using Azure.Messaging.EventHubs;
+
+using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
+
+using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
+using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
+using Energinet.DataHub.TimeSeries.Application;
+using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
+using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
+using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class Program : Startup
+    public static class Program
     {
-        public static async Task Main()
+        public static void Main()
         {
-            var program = new Program();
+            var host = new HostBuilder()
+                .ConfigureFunctionsWorkerDefaults(ConfigureFunctionsWorkerDefaults)
+                .ConfigureServices(ConfigureServices)
+                .Build();
 
-            var host = program.ConfigureApplication();
-            await program.ExecuteApplicationAsync(host).ConfigureAwait(false);
+            host.Run();
+        }
+
+        private static void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
+        {
+            //options.UseMiddleware<CorrelationIdMiddleware>();
+            //options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
+            //options.UseMiddleware<RequestResponseLoggingMiddleware>();
+            //options.UseMiddleware<JwtTokenMiddleware>();
+        }
+
+        private static void ConfigureServices(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddApplicationInsightsTelemetryWorkerService(
+                Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"));
+
+            serviceCollection.AddLogging();
+            serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
+            serviceCollection.AddScoped<CorrelationIdMiddleware>();
+            serviceCollection.AddScoped<FunctionTelemetryScopeMiddleware>();
+            serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
+            serviceCollection.AddScoped<TimeSeriesBundleDtoValidatingDeserializer>();
+            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection.AddScoped<IEventDataFactory, EventDataFactory>();
+            serviceCollection.AddScoped<TimeSeriesBundleIngestorEndpoint>();
+            serviceCollection
+                .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
+            serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
+            serviceCollection.AddScoped<IEventHubSender>(provider => new EventHubSender(
+                EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                EnvironmentHelper.GetEnv("EVENT_HUB_NAME"),
+                provider.GetService<IEventDataFactory>() !));
+
+            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+
+            serviceCollection.AddJwtTokenSecurity();
+
+            serviceCollection.AddSingleton<IRequestResponseLogging>(provider =>
+            {
+                var logger = provider.GetService<ILogger<RequestResponseLoggingBlobStorage>>();
+                var storage = new RequestResponseLoggingBlobStorage(
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME"),
+                    logger!);
+                return storage;
+            });
+            serviceCollection.AddScoped<RequestResponseLoggingMiddleware>();
+
+            // Health check
+            serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
+            serviceCollection.AddHealthChecks()
+                .AddLiveCheck()
+                .AddAzureEventHub(name: "EventhubConnectionExists", eventHubConnectionFactory: options => new EventHubConnection(
+                    EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
         }
     }
 }
