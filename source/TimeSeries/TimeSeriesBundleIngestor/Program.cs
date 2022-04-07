@@ -14,7 +14,7 @@
 
 using System;
 using Azure.Messaging.EventHubs;
-
+using Azure.Messaging.EventHubs.Producer;
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
 
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
@@ -51,10 +51,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         private static void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
         {
-            //options.UseMiddleware<CorrelationIdMiddleware>();
-            //options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
-            //options.UseMiddleware<RequestResponseLoggingMiddleware>();
-            //options.UseMiddleware<JwtTokenMiddleware>();
+            options.UseMiddleware<CorrelationIdMiddleware>();
+            options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
+            options.UseMiddleware<RequestResponseLoggingMiddleware>();
+            options.UseMiddleware<JwtTokenWrapperMiddleware>();
         }
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
@@ -67,17 +67,16 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             serviceCollection.AddScoped<CorrelationIdMiddleware>();
             serviceCollection.AddScoped<FunctionTelemetryScopeMiddleware>();
             serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
-            serviceCollection.AddScoped<TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
             serviceCollection.AddScoped<IEventDataFactory, EventDataFactory>();
-            serviceCollection.AddScoped<TimeSeriesBundleIngestorEndpoint>();
-            serviceCollection
-                .AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
+            serviceCollection.AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
+
             serviceCollection.AddScoped<IEventHubSender>(provider => new EventHubSender(
-                EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
-                EnvironmentHelper.GetEnv("EVENT_HUB_NAME"),
-                provider.GetService<IEventDataFactory>() !));
+                provider.GetRequiredService<IEventDataFactory>(),
+                new EventHubProducerClient(
+                    EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME"))));
 
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
 

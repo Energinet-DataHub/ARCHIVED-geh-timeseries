@@ -13,12 +13,14 @@
 // limitations under the License.
 
 using System;
+using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Extensions.Logging;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
@@ -28,10 +30,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
 
-        public TimeSeriesBundleIngestorEndpoint(
-            ITimeSeriesForwarder timeSeriesForwarder,
-            IHttpResponseBuilder httpResponseBuilder,
-            ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer)
+        public TimeSeriesBundleIngestorEndpoint(ITimeSeriesForwarder timeSeriesForwarder, ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer, IHttpResponseBuilder httpResponseBuilder)
         {
             _timeSeriesForwarder = timeSeriesForwarder;
             _httpResponseBuilder = httpResponseBuilder;
@@ -40,14 +39,14 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         [Function(TimeSeriesFunctionNames.TimeSeriesBundleIngestor)]
         public async Task<HttpResponseData> RunAsync(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = null)] HttpRequestData req)
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post")] HttpRequestData req)
         {
             if (req == null)
                 throw new ArgumentNullException(nameof(req));
 
             var deserializationResult = await _timeSeriesBundleDtoValidatingDeserializer
                 .ValidateAndDeserializeAsync(req.Body)
-                .ConfigureAwait(false);
+                .ConfigureAwait(true);
 
             if (deserializationResult.HasErrors)
             {
