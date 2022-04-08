@@ -70,15 +70,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         /// <inheritdoc/>
         protected override async Task OnInitializeFunctionAppDependenciesAsync(IConfiguration localSettingsSnapshot)
         {
-            try
-            {
-                AzuriteManager.StartAzurite();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            AzuriteManager.StartAzurite();
 
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
