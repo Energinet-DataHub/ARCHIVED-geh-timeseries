@@ -25,7 +25,6 @@ using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
-using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
@@ -54,7 +53,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             options.UseMiddleware<CorrelationIdMiddleware>();
             options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
             options.UseMiddleware<RequestResponseLoggingMiddleware>();
-            options.UseMiddleware<JwtTokenWrapperMiddleware>();
+            options.UseMiddleware<JwtTokenMiddleware>();
         }
 
         private static void ConfigureServices(IServiceCollection serviceCollection)

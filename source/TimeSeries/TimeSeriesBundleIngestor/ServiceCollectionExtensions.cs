@@ -19,7 +19,6 @@ using Energinet.DataHub.Core.App.Common.Abstractions.Security;
 using Energinet.DataHub.Core.App.Common.Identity;
 using Energinet.DataHub.Core.App.Common.Security;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
-using Energinet.DataHub.TimeSeries.Infrastructure.Authentication;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -37,12 +36,14 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             var audience = EnvironmentHelper.GetEnv(EnvironmentSettingNames.BackendServiceAppId);
             var metadataAddress = $"https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration";
 
-            serviceCollection.AddScoped<JwtTokenWrapperMiddleware>();
-            serviceCollection.AddScoped<JwtTokenMiddleware>();
             serviceCollection.AddScoped<IJwtTokenValidator, JwtTokenValidator>();
             serviceCollection.AddScoped<IClaimsPrincipalAccessor, ClaimsPrincipalAccessor>();
             serviceCollection.AddScoped<ClaimsPrincipalContext>();
             serviceCollection.AddScoped(_ => new OpenIdSettings(metadataAddress, audience));
+            serviceCollection.AddScoped(_ => new JwtTokenMiddleware(
+                _.GetRequiredService<ClaimsPrincipalContext>(),
+                _.GetRequiredService<IJwtTokenValidator>(),
+                new[] { "HealthCheck" }));
         }
     }
 }
