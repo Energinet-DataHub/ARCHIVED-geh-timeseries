@@ -20,21 +20,15 @@ using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
-    public class EventHubSender : IEventHubSender, IAsyncDisposable
+    public class EventHubSender : IEventHubSender
     {
         private readonly IEventDataFactory _eventDataFactory;
         private readonly EventHubProducerClient _eventHubProducerClient;
 
-        public EventHubSender(string connectionString, string eventHubName, IEventDataFactory eventDataFactory)
+        public EventHubSender(IEventDataFactory eventDataFactory, EventHubProducerClient eventHubProducerClient)
         {
             _eventDataFactory = eventDataFactory;
-            _eventHubProducerClient = new EventHubProducerClient(connectionString, eventHubName);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _eventHubProducerClient.DisposeAsync().ConfigureAwait(false);
-            GC.SuppressFinalize(this);
+            _eventHubProducerClient = eventHubProducerClient;
         }
 
         public async Task SendAsync(byte[] body)
