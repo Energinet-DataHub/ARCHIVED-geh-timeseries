@@ -25,17 +25,9 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
 {
     public sealed class HttpResponseBuilder : IHttpResponseBuilder
     {
-        private readonly ICorrelationContext _correlationContext;
-
-        public HttpResponseBuilder(ICorrelationContext correlationContext)
-        {
-            _correlationContext = correlationContext;
-        }
-
         public HttpResponseData CreateAcceptedResponse(HttpRequestData request)
         {
             var httpResponseData = request.CreateResponse(HttpStatusCode.Accepted);
-            AddHeaders(httpResponseData);
             return httpResponseData;
         }
 
@@ -45,14 +37,8 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
         {
             var errorResponse = new ErrorResponse(schemaValidationErrors);
             var httpResponse = request.CreateResponse(HttpStatusCode.BadRequest);
-            AddHeaders(httpResponse);
             await errorResponse.WriteAsXmlAsync(httpResponse.Body).ConfigureAwait(false);
             return httpResponse;
-        }
-
-        private void AddHeaders(HttpResponseData httpResponseData)
-        {
-            httpResponseData.Headers.Add("CorrelationId", _correlationContext.Id);
         }
     }
 }
