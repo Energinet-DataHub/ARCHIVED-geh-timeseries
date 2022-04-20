@@ -46,7 +46,7 @@ jobs:
         uses: tj-actions/changed-files@v17.3
         with:
           files: |
-            build//**
+            build/**
       - name: Set outputs
         id: changedsteps
         run: |
