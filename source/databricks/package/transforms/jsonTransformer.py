@@ -20,17 +20,17 @@ from package.codelists import Colname
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'), Colname.system_receival_time)
+    structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'), Colname.registration_time)
     flat = structured \
-        .select(explode("json.Series"), Colname.system_receival_time) \
-        .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", Colname.system_receival_time) \
+        .select(explode("json.Series"), Colname.registration_time) \
+        .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", Colname.registration_time) \
         .select(
             col("MeteringPointId").alias(Colname.metering_point_id),
             col("TransactionId").alias(Colname.transaction_id),
             to_timestamp(col("RegistrationDateTime")).alias(Colname.registration_date_time),
             to_timestamp(col("Period.StartDateTime")).alias("StartDateTime"),
             col("Period.Resolution").alias(Colname.resolution),
-            Colname.system_receival_time,
+            Colname.registration_time,
             explode("Period.Points").alias("Period_Point")) \
         .select("*",
                 col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
@@ -66,7 +66,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             Colname.year,
             Colname.month,
             Colname.day,
-            Colname.system_receival_time
+            Colname.registration_time
         )
 
     return withTime

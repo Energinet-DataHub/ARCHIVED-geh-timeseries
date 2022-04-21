@@ -26,12 +26,12 @@ def process_eventhub_item(df, epoch_id, time_series_unprocessed_path):
     on the EventHub.
     """
     df = (
-        df.withColumn(Colname.system_receival_time, df.enqueuedTime)
-        .withColumn(Colname.year, year(Colname.system_receival_time))
-        .withColumn(Colname.month, month(Colname.system_receival_time))
-        .withColumn(Colname.day, dayofmonth(Colname.system_receival_time))
+        df.withColumn(Colname.registration_time, df.enqueuedTime)
+        .withColumn(Colname.year, year(Colname.registration_time))
+        .withColumn(Colname.month, month(Colname.registration_time))
+        .withColumn(Colname.day, dayofmonth(Colname.registration_time))
         .withColumn(Colname.timeseries, df.body.cast(StringType()))
-        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.system_receival_time)
+        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.registration_time)
     )
 
     (df
