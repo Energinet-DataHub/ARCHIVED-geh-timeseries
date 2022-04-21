@@ -31,8 +31,7 @@ def eventhub_timeseries_body_dataframe_factory(spark) -> pd.DataFrame:
                 .createDataFrame(
                     pd
                     .DataFrame()
-                    .append([{'timeseries': body, Colname.registration_time: "2022-12-17T09:30:47Z"}]))
-                .withColumn(Colname.registration_time, to_timestamp(Colname.registration_time)))
+                    .append([{'timeseries': body}])))
     return factory
 
 
