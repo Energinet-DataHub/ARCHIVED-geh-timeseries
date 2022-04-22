@@ -63,7 +63,7 @@ class Colname():
     snapshot_id = "snapshot_id"
     start = "start"
     start_datetime = "start_datetime"
-    registration_time = "registration_time"
+    registration_date_time = "registration_date_time"
     """When the (individual) time series was received by the system."""
     sum_quantity = "sum_quantity"
     time = "time"
