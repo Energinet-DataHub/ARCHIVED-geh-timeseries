@@ -24,5 +24,5 @@ time_series_points_schema = StructType([
     StructField(Colname.year, IntegerType(), True),
     StructField(Colname.month, IntegerType(), True),
     StructField(Colname.day, IntegerType(), True),
-    StructField(Colname.system_receival_time, TimestampType(), True),
+    StructField(Colname.registration_date_time, TimestampType(), True),
 ])
