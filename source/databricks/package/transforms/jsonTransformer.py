@@ -20,7 +20,7 @@ from package.codelists import Colname
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    "asdkfjæasdlkfj"
+    "RegistrationDateTime will be overwritten with CreatedDateTime if it has no value"
     structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'))
     flat = structured \
         .select(explode("json.Series"), col("json.Document.CreatedDateTime").alias("CreatedDateTime")) \
