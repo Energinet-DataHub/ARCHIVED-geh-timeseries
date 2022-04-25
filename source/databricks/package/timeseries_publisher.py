@@ -38,7 +38,7 @@ def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_p
          col(Colname.year),
          col(Colname.month),
          col(Colname.day),
-         col(Colname.system_receival_time))
+         col(Colname.registration_date_time))
      .write
      .partitionBy(
          Colname.year,

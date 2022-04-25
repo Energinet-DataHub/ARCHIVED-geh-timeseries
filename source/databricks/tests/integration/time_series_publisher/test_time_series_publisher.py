@@ -40,13 +40,13 @@ def time_series_publisher(spark, delta_lake_path, integration_tests_path, unproc
         shutil.rmtree(time_series_points_path)
 
     # Add test data to data source
-    columns = [Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.system_receival_time]
+    columns = [Colname.timeseries, Colname.year, Colname.month, Colname.day, Colname.registration_date_time]
     time_series_data = [(unprocessed_time_series_json_string, 2022, 3, 21, "2022-12-17T09:30:47Z")]
     (spark
      .sparkContext
      .parallelize(time_series_data)
      .toDF(columns)
-     .withColumn(Colname.system_receival_time, to_timestamp(Colname.system_receival_time))
+     .withColumn(Colname.registration_date_time, to_timestamp(Colname.registration_date_time))
      .write
      .format("delta")
      .save(time_series_unprocessed_path))

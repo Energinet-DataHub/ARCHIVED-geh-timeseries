@@ -20,17 +20,18 @@ from package.codelists import Colname
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'), Colname.system_receival_time)
+    "RegistrationDateTime will be overwritten with CreatedDateTime if it has no value"
+    structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'))
     flat = structured \
-        .select(explode("json.Series"), Colname.system_receival_time) \
-        .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", Colname.system_receival_time) \
+        .select(explode("json.Series"), col("json.Document.CreatedDateTime").alias("CreatedDateTime")) \
+        .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", "CreatedDateTime") \
         .select(
             col("MeteringPointId").alias(Colname.metering_point_id),
             col("TransactionId").alias(Colname.transaction_id),
+            to_timestamp(col("CreatedDateTime")).alias("CreatedDateTime"),
             to_timestamp(col("RegistrationDateTime")).alias(Colname.registration_date_time),
             to_timestamp(col("Period.StartDateTime")).alias("StartDateTime"),
             col("Period.Resolution").alias(Colname.resolution),
-            Colname.system_receival_time,
             explode("Period.Points").alias("Period_Point")) \
         .select("*",
                 col("Period_Point.Quantity").cast("decimal(18,3)").alias(Colname.quantity),
@@ -56,6 +57,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(Colname.year, year(col(Colname.time))) \
         .withColumn(Colname.month, month(col(Colname.time))) \
         .withColumn(Colname.day, dayofmonth(col(Colname.time))) \
+        .withColumn(Colname.registration_date_time, when(col(Colname.registration_date_time).isNull(), col("CreatedDateTime")).otherwise(col(Colname.registration_date_time))) \
         .select(
             Colname.metering_point_id,
             Colname.transaction_id,
@@ -66,7 +68,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             Colname.year,
             Colname.month,
             Colname.day,
-            Colname.system_receival_time
+            Colname.registration_date_time
         )
 
     return withTime
