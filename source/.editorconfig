@@ -517,3 +517,12 @@ dotnet_diagnostic.SA1651.severity = error
 dotnet_diagnostic.SA1652.severity = none
 dotnet_diagnostic.SX1101.severity = error
 dotnet_diagnostic.SX1309.severity = error
+
+###############################
+# Code Style rules (IDE)      #
+###############################
+
+# See rules here: https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/style-rules/
+
+# IDE0079: Remove unnecessary suppression
+dotnet_diagnostic.IDE0079.severity = warning
