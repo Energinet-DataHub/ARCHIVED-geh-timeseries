@@ -35,10 +35,10 @@ jobs:
       ENVIRONMENT_REPOSITORY_PATH: ${{ secrets.ENVIRONMENT_REPOSITORY_PATH }}
 
   update_coverage_report_dotnet:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@6.0.1
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@6.1.0
     with:
-      SOLUTION_FILE_PATH: "source/TimeSeries/TimeSeries.sln"
-      DOTNET_VERSION: "5.0.404"      
+      SOLUTION_FILE_PATH: 'source/TimeSeries/TimeSeries.sln'
+      DOTNET_VERSION: '6.0.201'
       USE_AZURE_FUNCTIONS_TOOLS: true
     secrets:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
