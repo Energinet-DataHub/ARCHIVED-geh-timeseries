@@ -43,7 +43,7 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
         {
             var rootNamespace = GetType().Namespace;
             var assembly = GetType().Assembly;
-            return assembly.GetManifestResourceStream($"{rootNamespace}.{documentName}") !;
+            return assembly.GetManifestResourceStream($"{rootNamespace}.{documentName}")!;
         }
     }
 }
