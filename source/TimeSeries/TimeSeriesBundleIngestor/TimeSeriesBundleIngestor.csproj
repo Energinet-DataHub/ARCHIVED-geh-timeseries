@@ -15,8 +15,8 @@ limitations under the License.
 -->
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <AzureFunctionsVersion>V3</AzureFunctionsVersion>
+    <TargetFramework>net6.0</TargetFramework>
+    <AzureFunctionsVersion>V4</AzureFunctionsVersion>
     <OutputType>Exe</OutputType>
     <AssemblyName>Energinet.DataHub.TimeSeries.MessageReceiver</AssemblyName>
     <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver</RootNamespace>

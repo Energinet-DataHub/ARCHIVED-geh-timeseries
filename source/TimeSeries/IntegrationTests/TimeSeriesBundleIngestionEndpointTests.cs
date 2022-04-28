@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -70,6 +71,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
         }
 
         [Fact]
+        [SuppressMessage("Usage", "VSTHRD103:Call async methods when in an async method", Justification = "TODO: Fix analyzer warning")]
         public async Task When_RequestIsReceived_Then_RequestAndResponseAreLogged()
         {
             // Arrange

@@ -16,7 +16,7 @@ limitations under the License.
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <AssemblyName>Energinet.DataHub.TimeSeries.Infrastructure</AssemblyName>
     <RootNamespace>Energinet.DataHub.TimeSeries.Infrastructure</RootNamespace>
   </PropertyGroup>
