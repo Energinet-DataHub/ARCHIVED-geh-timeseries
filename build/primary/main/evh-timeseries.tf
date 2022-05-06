@@ -23,6 +23,7 @@ module "evhnm_timeseries" {
   location                        = azurerm_resource_group.this.location
   sku                             = "Standard"
   capacity                        = 1
+  log_analytics_workspace_id      = data.azurerm_key_vault_secret.log_shared_id.value
   private_endpoint_subnet_id      = data.azurerm_key_vault_secret.snet_private_endpoints_id.value
 
   tags                            = azurerm_resource_group.this.tags
