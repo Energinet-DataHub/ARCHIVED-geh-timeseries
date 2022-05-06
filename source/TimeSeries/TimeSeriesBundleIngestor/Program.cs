@@ -13,72 +13,92 @@
 // limitations under the License.
 
 using System;
-using System.Threading.Tasks;
-using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
-using Energinet.DataHub.Core.FunctionApp.Common.SimpleInjector;
+using Azure.Messaging.EventHubs;
+using Azure.Messaging.EventHubs.Producer;
+using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
+
+using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
+using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
+using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using SimpleInjector;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
-    public class Program : Startup
+    public static class Program
     {
-        public static async Task Main()
+        public static void Main()
         {
-            var program = new Program();
+            var host = new HostBuilder()
+                .ConfigureFunctionsWorkerDefaults(ConfigureFunctionsWorkerDefaults)
+                .ConfigureServices(ConfigureServices)
+                .Build();
 
-            var host = program.ConfigureApplication();
-            program.VerifyContainer();
-            await program.ExecuteApplicationAsync(host).ConfigureAwait(false);
+            host.Run();
         }
 
-        protected override void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
+        private static void ConfigureFunctionsWorkerDefaults(IFunctionsWorkerApplicationBuilder options)
         {
-            base.ConfigureFunctionsWorkerDefaults(options);
-
+            options.UseMiddleware<CorrelationIdMiddleware>();
+            options.UseMiddleware<FunctionTelemetryScopeMiddleware>();
             options.UseMiddleware<RequestResponseLoggingMiddleware>();
             options.UseMiddleware<JwtTokenMiddleware>();
         }
 
-        protected override void ConfigureContainer(Container container)
+        private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            if (container == null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            serviceCollection.AddApplicationInsightsTelemetryWorkerService(
+                Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"));
 
-            container.Register<TimeSeriesBundleIngestorEndpoint>(Lifestyle.Scoped);
-            container.Register<IEventHubSender>(
-                () => new EventHubSender(
+            serviceCollection.AddLogging();
+            serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
+            serviceCollection.AddScoped<CorrelationIdMiddleware>();
+            serviceCollection.AddScoped<FunctionTelemetryScopeMiddleware>();
+            serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
+            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection.AddScoped<IEventDataFactory, EventDataFactory>();
+            serviceCollection.AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
+            serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
+
+            serviceCollection.AddScoped<IEventHubSender>(provider => new EventHubSender(
+                provider.GetRequiredService<IEventDataFactory>(),
+                new EventHubProducerClient(
+                    EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("EVENT_HUB_NAME"))));
+
+            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+
+            serviceCollection.AddJwtTokenSecurity();
+
+            serviceCollection.AddSingleton<IRequestResponseLogging>(provider =>
+            {
+                var logger = provider.GetService<ILogger<RequestResponseLoggingBlobStorage>>();
+                var storage = new RequestResponseLoggingBlobStorage(
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING"),
+                    EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME"),
+                    logger!);
+                return storage;
+            });
+            serviceCollection.AddScoped<RequestResponseLoggingMiddleware>();
+
+            // Health check
+            serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
+            serviceCollection.AddHealthChecks()
+                .AddLiveCheck()
+                .AddAzureEventHub(name: "EventhubConnectionExists", eventHubConnectionFactory: options => new EventHubConnection(
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
-            container.Register<ITimeSeriesForwarder, TimeSeriesForwarder>(Lifestyle.Scoped);
-            base.ConfigureContainer(container);
-
-            var tenantId = EnvironmentHelper.GetEnv("B2C_TENANT_ID");
-            var audience = EnvironmentHelper.GetEnv("BACKEND_SERVICE_APP_ID");
-
-            container.AddJwtTokenSecurity($"https://login.microsoftonline.com/{tenantId}/v2.0/.well-known/openid-configuration", audience);
-
-            container.RegisterSingleton<IRequestResponseLogging>(
-                () =>
-                {
-                    var logger = container.GetRequiredService<ILogger<RequestResponseLoggingBlobStorage>>();
-                    var storage = new RequestResponseLoggingBlobStorage(
-                        EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING"),
-                        EnvironmentHelper.GetEnv("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME"),
-                        logger);
-                    return storage;
-                });
-            container.Register<RequestResponseLoggingMiddleware>(Lifestyle.Scoped);
         }
     }
 }

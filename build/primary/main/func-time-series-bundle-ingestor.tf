@@ -22,9 +22,13 @@ module "time_series_bundle_ingestor" {
   location                                  = azurerm_resource_group.this.location
   vnet_integration_subnet_id                = data.azurerm_key_vault_secret.snet_vnet_integrations_id.value
   private_endpoint_subnet_id                = data.azurerm_key_vault_secret.snet_private_endpoints_id.value
-  private_dns_resource_group_name           = data.azurerm_key_vault_secret.pdns_resource_group_name.value
   app_service_plan_id                       = data.azurerm_key_vault_secret.plan_shared_id.value
-  application_insights_instrumentation_key  = data.azurerm_key_vault_secret.appi_instrumentation_key.value
+  application_insights_instrumentation_key  = data.azurerm_key_vault_secret.appi_shared_instrumentation_key.value
+  log_analytics_workspace_id                = data.azurerm_key_vault_secret.log_shared_id.value
+  always_on                                 = true
+  health_check_path                         = "/api/monitor/ready"
+  health_check_alert_action_group_id        = data.azurerm_key_vault_secret.primary_action_group_id.value
+  health_check_alert_enabled                = var.enable_health_check_alerts
   app_settings                              = {
     # Region: Default Values
     WEBSITE_ENABLE_SYNC_UPDATE_SITE                     = true
@@ -39,6 +43,6 @@ module "time_series_bundle_ingestor" {
     EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"]
     EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
   }
-  
+
   tags                                      = azurerm_resource_group.this.tags
 }

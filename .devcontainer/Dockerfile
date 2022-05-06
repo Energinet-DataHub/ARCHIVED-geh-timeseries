@@ -1,85 +1,42 @@
-#FKT 24 Feb 2021: Fixed to specific version because of build errors
-FROM jupyter/scipy-notebook:016833b15ceb
+# Copyright 2020 Energinet DataHub A/S
+#
+# Licensed under the Apache License, Version 2.0 (the "License2");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+FROM jupyter/pyspark-notebook:spark-3.1.2
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
-
-ARG openjdk_version="8"
-
-ARG hadoop_version="3.3.2"
-
-ARG spark_version="3.1.2"
-
-ARG py4j_version="0.10.9"
-
-ENV APACHE_SPARK_VERSION="${spark_version}" \
-    HADOOP_VERSION="${hadoop_version}"
-
-RUN apt-get -y update && \
-    apt-get install --no-install-recommends -y \
-    "openjdk-${openjdk_version}-jre-headless" \
-    "openssh-client" "git" "bash-completion" \
-    "aspell" "aspell-en" \
-    "flake8" \
-    "ca-certificates-java" && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-
-ENV JAVA_HOME=/usr/lib/jvm/java-${openjdk_version}-openjdk-amd64 \
-    PATH=$JAVA_HOME/bin:$PATH
-
-# Spark and Hadoop installation
-WORKDIR /tmp
-
-RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.cgi/hadoop/common/hadoop-${HADOOP_VERSION}/hadoop-${HADOOP_VERSION}.tar.gz\?as_json | \
-    python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    tar xzf "hadoop-${HADOOP_VERSION}.tar.gz" -C /usr/local --owner root --group root --no-same-owner && \
-    rm "hadoop-${HADOOP_VERSION}.tar.gz"
-
-RUN wget -q $(wget -qO- https://www.apache.org/dyn/closer.lua/spark/spark-${APACHE_SPARK_VERSION}/spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz\?as_json | \
-    python -c "import sys, json; content=json.load(sys.stdin); print(content['preferred']+content['path_info'])") && \
-    tar xzf "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz" -C /usr/local --owner root --group root --no-same-owner && \
-    rm "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop.tgz"
+# This replaces the default spark configuration in the docker image with the ones defined in the sibling file
+COPY spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
-WORKDIR /usr/local
-RUN ln -s "spark-${APACHE_SPARK_VERSION}-bin-without-hadoop" spark && \
-    ln -s "hadoop-${HADOOP_VERSION}" hadoop
+# Install Azurite (support wasb-protocol storage for Delta tables in integration tests)
+RUN apt-get update; \
+    apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
 
-# Configure Spark
-ENV SPARK_HOME=/usr/local/spark \
-    HADOOP_HOME=/usr/local/hadoop
-    #PYSPARK_SUBMIT_ARGS='--packages io.delta:delta-core_2.12:1.0.0,org.apache.hadoop:hadoop-azure:3.3.2,org.apache.hadoop:hadoop-client:3.3.2 pyspark-shell'
+# Install spark packages with mamba 
+RUN mamba install --quiet --yes --satisfied-skip-solve \
+    'pyarrow=2.0.*' 'rope=0.18.*' 'pytest=7.1.*' 'autopep8=1.5.*' 'configargparse=1.2.3'  \
+    'coverage=6.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.7.*'
 
+# Install python packages used in pyspark development 
+RUN pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark pytest-asyncio flake8 black dataclasses-json
+# Below will make everything in the directory owned by the group ${NB_GID}
+RUN fix-permissions "${CONDA_DIR}"
+
+# Set misc environment variables required for properly run spark 
+# note the amount of memory used on the driver is adjusted here
 ENV PATH=$SPARK_HOME/bin:$HADOOP_HOME/bin:$PATH \
-    PYTHONPATH="${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-${py4j_version}-src.zip" \
+    PYTHONPATH="${SPARK_HOME}/python:${SPARK_HOME}/python/lib/py4j-0.10.9-src.zip" \
     SPARK_OPTS="--driver-java-options=-Xms1024M --driver-java-options=-Xmx4096M --driver-java-options=-Dlog4j.logLevel=info"
-
-
-RUN wget -P $SPARK_HOME/jars https://repo1.maven.org/maven2/io/delta/delta-core_2.12/1.0.1/delta-core_2.12-1.0.1.jar
-
-RUN wget -P $SPARK_HOME/jars https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-azure/3.3.2/hadoop-azure-3.3.2.jar
-
-USER $NB_UID
-
-ENV PATH=$JAVA_HOME/bin:$SPARK_HOME/bin:$HADOOP_HOME/bin:$PATH
-RUN echo "export SPARK_DIST_CLASSPATH=$(hadoop classpath)" >> $HOME/.bashrc
-
-WORKDIR $HOME
-
-# [Optional] Uncomment to install a different version of Python than the default
-# RUN conda install -y python=3.5 \
-#     && pip install --no-cache-dir pipx \
-#     && pipx reinstall-all
-
-RUN conda install --quiet --yes --satisfied-skip-solve \
-    'pyarrow=2.0.*' 'rope=0.18.*' 'pytest=6.1.*' 'autopep8=1.5.*' 'configargparse=1.2.3' 'applicationinsights=0.11.9' \
-    'coverage=5.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.5.*' \
-    && \
-    conda install --quiet --yes --satisfied-skip-solve -c anaconda 'protobuf=3.14.*' && \
-    pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark && \
-    conda clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-EXPOSE 3000

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -70,20 +71,26 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
         }
 
         [Fact]
+        [SuppressMessage("Usage", "VSTHRD103:Call async methods when in an async method", Justification = "TODO: Fix analyzer warning")]
         public async Task When_RequestIsReceived_Then_RequestAndResponseAreLogged()
         {
             // Arrange
             const string expectedHttpDataResponseType = "response";
             const string expectedHttpDataRequestType = "request";
             var content = _testDocuments.ValidTimeSeries;
+            var blobItemsBeforeRequest = Fixture.LogContainerClient.GetBlobs().ToArray();
 
             // Act
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+            using var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
 
             // Assert
-            var blobItems = Fixture.LogContainerClient.GetBlobs().TakeLast(2).ToArray();
-            var actualHttpDataRequestType = blobItems[0].Metadata["httpdatatype"];
-            var actualHttpDataResponse = blobItems[1].Metadata["httpdatatype"];
+            var blobItemsAfterRequest = Fixture.LogContainerClient.GetBlobs().OrderBy(e => e.Properties.CreatedOn).ToArray();
+            var twoNewest = blobItemsAfterRequest.TakeLast(2).ToArray();
+
+            Assert.True(blobItemsAfterRequest.Length - blobItemsBeforeRequest.Length == 2);
+            var actualHttpDataRequestType = twoNewest[0].Metadata["httpdatatype"];
+            var actualHttpDataResponse = twoNewest[1].Metadata["httpdatatype"];
             actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
             actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
         }

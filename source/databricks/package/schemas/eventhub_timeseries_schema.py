@@ -16,6 +16,7 @@ from pyspark.sql.types import StringType, StructType, StructField, ArrayType, In
 eventhub_timeseries_schema = StructType([
     StructField('Document', StructType([
         StructField('Id', StringType(), True),
+        StructField('CreatedDateTime', StringType(), False),
         StructField('Sender', StructType([
             StructField('Id', StringType(), True),
             StructField('BusinessProcessRole', StringType(), True)

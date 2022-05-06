@@ -16,29 +16,27 @@ using System;
 using System.Threading.Tasks;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
-    public class EventHubSender : IEventHubSender, IAsyncDisposable
+    public class EventHubSender : IEventHubSender
     {
+        private readonly IEventDataFactory _eventDataFactory;
         private readonly EventHubProducerClient _eventHubProducerClient;
 
-        public EventHubSender(string connectionString, string eventHubName)
+        public EventHubSender(IEventDataFactory eventDataFactory, EventHubProducerClient eventHubProducerClient)
         {
-            _eventHubProducerClient = new EventHubProducerClient(connectionString, eventHubName);
-        }
-
-        public async ValueTask DisposeAsync()
-        {
-            await _eventHubProducerClient.DisposeAsync().ConfigureAwait(false);
-            GC.SuppressFinalize(this);
+            _eventDataFactory = eventDataFactory;
+            _eventHubProducerClient = eventHubProducerClient;
         }
 
         public async Task SendAsync(byte[] body)
         {
             using var eventDataBatch =
                 await _eventHubProducerClient.CreateBatchAsync().ConfigureAwait(false);
-            eventDataBatch.TryAdd(new EventData(body));
+            var eventData = _eventDataFactory.Create(body);
+            eventDataBatch.TryAdd(eventData);
             await _eventHubProducerClient.SendAsync(eventDataBatch).ConfigureAwait(false);
         }
     }

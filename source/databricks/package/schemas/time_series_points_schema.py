@@ -14,7 +14,7 @@
 from package.codelists import Colname
 from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType
 
-time_series_schema = StructType([
+time_series_points_schema = StructType([
     StructField(Colname.metering_point_id, StringType(), True),
     StructField(Colname.transaction_id, StringType(), True),
     StructField(Colname.quantity, DecimalType(18, 3), True),

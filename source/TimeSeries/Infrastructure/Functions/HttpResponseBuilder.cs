@@ -15,6 +15,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.SchemaValidation;
 using Energinet.DataHub.Core.SchemaValidation.Errors;
 using Energinet.DataHub.Core.SchemaValidation.Extensions;
@@ -26,7 +27,8 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Functions
     {
         public HttpResponseData CreateAcceptedResponse(HttpRequestData request)
         {
-            return request.CreateResponse(HttpStatusCode.Accepted);
+            var httpResponseData = request.CreateResponse(HttpStatusCode.Accepted);
+            return httpResponseData;
         }
 
         public async Task<HttpResponseData> CreateBadRequestResponseAsync(

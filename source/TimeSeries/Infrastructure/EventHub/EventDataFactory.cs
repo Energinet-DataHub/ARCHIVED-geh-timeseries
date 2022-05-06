@@ -12,28 +12,23 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
-using SimpleInjector;
+using Azure.Messaging.EventHubs;
+using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.SimpleInjector
+namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
 {
-    public class SimpleInjectorServiceProviderAdapter : IServiceProvider
+    public class EventDataFactory : IEventDataFactory
     {
-        private readonly Container _container;
+        private readonly ICorrelationContext _correlationContext;
 
-        public SimpleInjectorServiceProviderAdapter(Container container)
+        public EventDataFactory(ICorrelationContext correlationContext)
         {
-            _container = container;
+            _correlationContext = correlationContext;
         }
 
-        public object? GetService(Type serviceType)
+        public EventData Create(byte[] body)
         {
-            if (serviceType == null)
-            {
-                throw new ArgumentNullException(nameof(serviceType));
-            }
-
-            return _container.GetInstance(serviceType);
+            return new EventData(body) { CorrelationId = _correlationContext.Id };
         }
     }
 }

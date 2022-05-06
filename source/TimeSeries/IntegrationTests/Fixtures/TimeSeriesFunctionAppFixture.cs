@@ -61,7 +61,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             }
 
             var buildConfiguration = GetBuildConfiguration();
-            hostSettings.FunctionApplicationPath = $"..\\..\\..\\..\\TimeSeriesBundleIngestor\\bin\\{buildConfiguration}\\net5.0";
+            hostSettings.FunctionApplicationPath = $"..\\..\\..\\..\\TimeSeriesBundleIngestor\\bin\\{buildConfiguration}\\net6.0";
 
             // The log message we expect in the host log when the host is started and ready to server.
             hostSettings.HostStartedEvent = "Worker process started and initialized";
