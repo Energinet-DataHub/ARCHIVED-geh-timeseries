@@ -25,7 +25,9 @@ module "evhnm_timeseries" {
   capacity                        = 1
   log_analytics_workspace_id      = data.azurerm_key_vault_secret.log_shared_id.value
   private_endpoint_subnet_id      = data.azurerm_key_vault_secret.snet_private_endpoints_id.value
-  approved_sender_subnet_id       = data.azurerm_key_vault_secret.snet_vnet_integrations_id.value
+  virtual_network_rules           = [
+    data.azurerm_key_vault_secret.snet_vnet_integrations_id.value
+  ]
 
   tags                            = azurerm_resource_group.this.tags
 }
