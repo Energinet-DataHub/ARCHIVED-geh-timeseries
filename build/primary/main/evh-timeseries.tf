@@ -31,6 +31,7 @@ module "evhnm_timeseries" {
       data.azurerm_key_vault_secret.dbw_public_network_id.value
     ]
   }
+  private_dns_resource_group_name = data.azurerm_key_vault_secret.dbw_private_dns_resource_group_name.value
 
   tags                            = azurerm_resource_group.this.tags
 }
