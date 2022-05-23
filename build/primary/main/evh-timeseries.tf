@@ -13,22 +13,31 @@
 # limitations under the License.
 
 module "evhnm_timeseries" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub-namespace?ref=5.1.0"
+  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub-namespace?ref=6.0.0"
 
-  name                      = "timeseries"
-  project_name              = var.domain_name_short
-  environment_short         = var.environment_short
-  environment_instance      = var.environment_instance
-  resource_group_name       = azurerm_resource_group.this.name
-  location                  = azurerm_resource_group.this.location
-  sku                       = "Standard"
-  capacity                  = 1
+  name                            = "timeseries"
+  project_name                    = var.domain_name_short
+  environment_short               = var.environment_short
+  environment_instance            = var.environment_instance
+  resource_group_name             = azurerm_resource_group.this.name
+  location                        = azurerm_resource_group.this.location
+  sku                             = "Standard"
+  capacity                        = 1
+  log_analytics_workspace_id      = data.azurerm_key_vault_secret.log_shared_id.value
+  private_endpoint_subnet_id      = data.azurerm_key_vault_secret.snet_private_endpoints_id.value
+  network_ruleset                 = {
+    allowed_subnet_ids              = [
+      data.azurerm_key_vault_secret.snet_vnet_integrations_id.value,
+      data.azurerm_key_vault_secret.dbw_public_network_id.value
+    ]
+  }
+  private_dns_resource_group_name = data.azurerm_key_vault_secret.dbw_private_dns_resource_group_name.value
 
-  tags                      = azurerm_resource_group.this.tags
+  tags                            = azurerm_resource_group.this.tags
 }
 
 module "evh_received_timeseries" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub?ref=5.1.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub?ref=6.0.0"
 
   name                      = "received-timeseries"
   namespace_name            = module.evhnm_timeseries.name
