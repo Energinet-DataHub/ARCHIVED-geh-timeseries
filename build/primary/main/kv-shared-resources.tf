@@ -65,3 +65,23 @@ data "azurerm_key_vault_secret" "log_shared_id" {
   name         = "log-shared-id"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
 }
+
+data "azurerm_key_vault_secret" "snet_private_endpoints_id" {
+  name         = "snet-private-endpoints-id"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
+
+data "azurerm_key_vault_secret" "snet_vnet_integrations_id" {
+  name         = "snet-vnet-integrations-id"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
+
+data "azurerm_key_vault_secret" "dbw_public_network_id" {
+  name         = "dbw-public-network-id"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
+
+data "azurerm_key_vault_secret" "dbw_private_dns_resource_group_name" {
+  name         = "databricks-private-dns-resource-group-name"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
