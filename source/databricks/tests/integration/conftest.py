@@ -40,7 +40,15 @@ def integration_tests_path() -> str:
 def delta_lake_path(integration_tests_path) -> str:
     return f"{integration_tests_path}/__delta__"
 
-
+@pytest.fixture(scope="session")
+def databricks_path() -> str:
+    """
+    Returns the source/databricks folder path.
+    Please note that this only works if current folder haven't been changed prior using us.chdir().
+    The correctness also relies on the prerequisite that this function is actually located in a
+    file located directly in the integration tests folder.
+    """
+    return os.path.dirname(os.path.realpath(__file__)) + "/../.."
 @pytest.fixture(scope="session")
 def delta_reader(spark: SparkSession, delta_lake_path: str):
     def f(path: str):
