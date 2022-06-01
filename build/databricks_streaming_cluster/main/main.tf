@@ -56,8 +56,8 @@ resource "databricks_job" "persister_streaming_job" {
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_data_lake_name.value}",
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
          "--event-hub-connection-key=${var.evh_timeseries_listen_connection_string}",
-         "--timeseries_unprocessed_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
-         "--checkpoint_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-persister"
+         "--time_series_unprocessed_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
+         "--time_series_checkpoint_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-persister"
 
     ]
   }
@@ -109,9 +109,9 @@ resource "databricks_job" "publisher_streaming_job" {
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_data_lake_name.value}",
          "--data-storage-account-key=${data.azurerm_key_vault_secret.st_data_lake_primary_access_key.value}",
          "--event-hub-connection-key=${var.evh_timeseries_listen_connection_string}",
-         "--timeseries_unprocessed_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
-         "--timeseries_points_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/time-series-points",
-         "--checkpoint_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
+         "--time_series_unprocessed_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
+         "--time_series_points_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/time-series-points",
+         "--time_series_checkpoint_path=abfss://${timeseries-data}@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
     ]
   }
 

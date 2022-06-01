@@ -23,16 +23,16 @@ from package import timeseries_publisher, initialize_spark
 p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
 p.add('--data-storage-account-key', type=str, required=True)
-p.add('--timeseries_unprocessed_path', type=str, required=True)
+p.add('--time_series_unprocessed_path', type=str, required=True)
 p.add('--time_series_points_path', type=str, required=True)
-p.add('--checkpoint_path', type=str, required=True)
+p.add('--time_series_checkpoint_path', type=str, required=True)
 
 args, unknown_args = p.parse_known_args()
 spark = initialize_spark(args)
 
-timeseries_unprocessed_path = f"{args.timeseries_unprocessed_path}"
+time_series_unprocessed_path = f"{args.time_series_unprocessed_path}"
 time_series_points_path = f"{args.time_series_points_path}"
-checkpoint_path = f"{args.checkpoint_path}"
+time_series_checkpoint_path = f"{args.time_series_checkpoint_path}"
 
 # Start the timeseries publisher
-timeseries_publisher(spark, timeseries_unprocessed_path, checkpoint_path, time_series_points_path)
+timeseries_publisher(spark, time_series_unprocessed_path, time_series_checkpoint_path, time_series_points_path)
