@@ -65,7 +65,7 @@ def test_timeseries_publisher_returns_0(
         ])
 
     # Assert
-    assert exit_code == 0, "Preparation job did not return exit code 0"
+    assert exit_code == 0, "Time-series publisher job did not return exit code 0"
 
 
 @pytest.fixture(scope="session")
