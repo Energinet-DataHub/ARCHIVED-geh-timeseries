@@ -45,6 +45,7 @@ def test_timeseries_publisher_returns_0(
     # Assert
     assert exit_code == 0, "Preparation job did not return exit code 0"
 
+
 @pytest.fixture(scope="session")
 def time_series_publisher(spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string):
     # Setup paths
