@@ -15,5 +15,9 @@
 name: 'PySpark execution'
 description: 'This action allows you to execute code, written for Spark, Databricks or other similar engines.'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: composite
+  steps:
+    - name: Execute entrypoint.sh
+      shell: bash
+      run: |
+        docker-compose -f .devcontainer/docker-compose.yml run -u root -w //workspaces/geh-aggregations aggregations ./.github/actions/databricks-unit-test/entrypoint.sh
