@@ -1,0 +1,1 @@
+        python ../../streaming-jobs/timeseries_persister_streaming.py --data-storage-account-name data-storage-account-name --data-storage-account-key data-storage-account-key --time_series_unprocessed_path testtest/unprocessed_time_series --time_series_raw_path testtest/raw_time_series --time_series_checkpoint_path testtest/raw_time_series-checkpoint
