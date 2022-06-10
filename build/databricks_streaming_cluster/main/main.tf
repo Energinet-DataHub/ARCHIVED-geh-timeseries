@@ -113,6 +113,7 @@ resource "databricks_job" "publisher_streaming_job" {
          "--time_series_unprocessed_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
          "--time_series_points_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/time-series-points",
          "--time_series_checkpoint_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
+
     ]
   }
 
