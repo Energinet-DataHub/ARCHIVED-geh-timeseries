@@ -35,6 +35,8 @@ namespace Energinet.DataHub.TimeSeries.Application
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
+            var jsonCreate = new JsonCreator();
+            var json = jsonCreate.Create(timeSeriesBundle);
             var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
             await _eventHubSender.SendAsync(body).ConfigureAwait(false);
         }
