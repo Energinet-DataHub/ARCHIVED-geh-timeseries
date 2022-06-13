@@ -25,7 +25,7 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
     Time of receival is currently defined as the time the messages are enqueued
     on the EventHub.
     """
-    print("procesing")
+
     df = (
         df.withColumn(Colname.year, year(df.enqueuedTime))
         .withColumn(Colname.month, month(df.enqueuedTime))

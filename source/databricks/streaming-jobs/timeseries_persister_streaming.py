@@ -39,7 +39,6 @@ time_series_unprocessed_path = f"{args.time_series_unprocessed_path}"
 time_series_raw_path = f"{args.time_series_raw_path}"
 checkpoint_path = f"{args.time_series_checkpoint_path}"
 
-#streamingDF = (spark.readStream.format("").options(**input_configuration).load())
 from package.codelists import Colname
 from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType
 
@@ -58,5 +57,3 @@ if args.test == "true":
     timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path).awaitTermination(20)
 else:
     timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)
-
-
