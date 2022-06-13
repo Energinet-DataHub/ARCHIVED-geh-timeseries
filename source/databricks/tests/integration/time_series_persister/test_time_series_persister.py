@@ -25,21 +25,23 @@ from package import timeseries_persister
 from tests.integration.utils import streaming_job_asserter
 
 
-@pytest.mark.asyncio
 def test_timeseries_persister_returns_0(
     spark,
     databricks_path,
     delta_lake_path
-):
+):    
     time_series_raw_path = f"{delta_lake_path}/raw_time_series"
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
+    time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
 
     # Remove test folders in order to avoid side effects from previous/other test runs
     if(os.path.exists(time_series_unprocessed_path)):
         shutil.rmtree(time_series_unprocessed_path)
     if(os.path.exists(time_series_raw_path)):
         shutil.rmtree(time_series_raw_path)
-
+    if(os.path.exists(time_series_checkpointpath)):
+        shutil.rmtree(time_series_checkpointpath)
+    
     os.makedirs(time_series_raw_path)
     f = open(f"{time_series_raw_path}/test.json", 'w')
     f.write('{"time": "2022-06-09T12:09:15+00:00", "body": {"id": "111"}}')
@@ -53,11 +55,48 @@ def test_timeseries_persister_returns_0(
         "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
         "--time_series_raw_path", f"{delta_lake_path}/raw_time_series",
         "--time_series_checkpoint_path", f"{delta_lake_path}/raw_time_series-checkpoint"
-        ])
+    ])
 
     # Assert
     assert exit_code == 0, "Time-series publisher job did not return exit code 0"
-    
+
+def test_timeseries_persister_proccess_files(
+    spark,
+    databricks_path,
+    delta_lake_path
+):
+    time_series_raw_path = f"{delta_lake_path}/raw_time_series"
+    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
+    time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
+
+    # Remove test folders in order to avoid side effects from previous/other test runs
+    if(os.path.exists(time_series_unprocessed_path)):
+        shutil.rmtree(time_series_unprocessed_path)
+    if(os.path.exists(time_series_raw_path)):
+        shutil.rmtree(time_series_raw_path)
+    if(os.path.exists(time_series_checkpointpath)):
+        shutil.rmtree(time_series_checkpointpath)
+
+    os.makedirs(time_series_raw_path)
+    f = open(f"{time_series_raw_path}/test.json", 'w')
+    f.write('{"time": "2022-06-09T12:09:15+00:00", "body": {"id": "111"}}')
+    f.close()
+
+    exit_code = subprocess.call([
+        "python",
+        f"{databricks_path}/streaming-jobs/timeseries_persister_streaming.py",
+        "--data-storage-account-name", "data-storage-account-name",
+        "--data-storage-account-key", "data-storage-account-key",
+        "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
+        "--time_series_raw_path", f"{delta_lake_path}/raw_time_series",
+        "--time_series_checkpoint_path", f"{delta_lake_path}/raw_time_series-checkpoint",
+        "--test", f"true"
+    ])
+
+    spark.read.parquet(time_series_unprocessed_path).show()
+
+    # Assert
+    assert spark.read.parquet(time_series_unprocessed_path).count() == 1, "Time-series publisher job did not proccess files"
 
 
 ##@pytest.mark.asyncio
