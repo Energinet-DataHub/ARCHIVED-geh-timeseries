@@ -99,11 +99,11 @@ def test_timeseries_persister_proccess_files(
     assert spark.read.parquet(time_series_unprocessed_path).count() == 1, "Time-series publisher job did not proccess files"
 
 
-##@pytest.mark.asyncio
-##async def test_stores_received_time_series_in_delta_table(delta_reader, time_series_persister):
-##    def verification_function():
-##        data = delta_reader("/unprocessed_time_series")
-##        return data.count() > 0
-##
-##    succeeded = streaming_job_asserter(time_series_persister, verification_function)
-##    assert succeeded, "No data was stored in Delta table"
+@pytest.mark.asyncio
+async def test_stores_received_time_series_in_delta_table(delta_reader, time_series_persister):
+    def verification_function():
+        data = delta_reader("/unprocessed_time_series")
+        return data.count() > 0
+
+    succeeded = streaming_job_asserter(time_series_persister, verification_function)
+    assert succeeded, "No data was stored in Delta table"
