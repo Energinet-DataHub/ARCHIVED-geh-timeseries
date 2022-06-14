@@ -27,12 +27,12 @@ namespace Energinet.DataHub.TimeSeries.UnitTests;
 public class JsonCreatorTest
 {
     private readonly TestDocuments _testDocuments;
-    private readonly JsonCreator _jsonCreator;
+    private readonly TimeSeriesBundleToJsonConverter _timeSeriesBundleToJsonConverter;
 
     public JsonCreatorTest()
     {
         _testDocuments = new TestDocuments();
-        _jsonCreator = new JsonCreator(new JsonSerializer());
+        _timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(new JsonSerializer());
     }
 
     [Fact]
@@ -97,7 +97,7 @@ public class JsonCreatorTest
         };
 
         // Act
-        var actual = _jsonCreator.Create(testData);
+        var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testData);
         var expected = _testDocuments.JsonCreatorTestResult;
 
         // Assert
