@@ -27,11 +27,9 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
     """
 
     df = (
-        df.withColumn(Colname.year, year(df.enqueuedTime))
-        .withColumn(Colname.month, month(df.enqueuedTime))
-        .withColumn(Colname.day, dayofmonth(df.enqueuedTime))
-        .withColumn(Colname.timeseries, df.body.cast(StringType()))
-        .select(Colname.timeseries, Colname.year, Colname.month, Colname.day)
+        df.withColumn(Colname.year, year(df.CreatedDateTime))
+        .withColumn(Colname.month, month(df.CreatedDateTime))
+        .withColumn(Colname.day, dayofmonth(df.CreatedDateTime))
     )
 
     (df
