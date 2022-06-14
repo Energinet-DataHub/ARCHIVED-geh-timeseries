@@ -60,6 +60,7 @@ def test_timeseries_persister_returns_0(
     # Assert
     assert exit_code == 0, "Time-series publisher job did not return exit code 0"
 
+
 def test_timeseries_persister_proccess_files(
     spark,
     databricks_path,
@@ -84,7 +85,7 @@ def test_timeseries_persister_proccess_files(
     f.write('{"DocId":"3","CreatedDateTime":"2022-06-09T12:09:15+00:00","Sender":{"Id":"3","BusinessProcessRole":0},"Receiver":{"Id":"2","BusinessProcessRole":0},"BusinessReasonCode":0,"SeriesId":"1","TransactionId":"1","MeteringPointId":"1","MeteringPointType":2,"RegistrationDateTime":"2022-06-09T12:09:15+00:00","Product":"1","MeasureUnit":0,"Period":{"Resolution":2,"StartDateTime":"2022-06-10T12:09:15+00:00","EndDateTime":"2022-06-11T12:09:15+00:00","Points":[{"Quantity":1.1,"Quality":3,"Position":1},{"Quantity":1.1,"Quality":3,"Position":1}]}}\n')
     f.close()
 
-    exit_code = subprocess.call([
+    subprocess.call([
         "python",
         f"{databricks_path}/streaming-jobs/timeseries_persister_streaming.py",
         "--data-storage-account-name", "data-storage-account-name",
@@ -92,18 +93,8 @@ def test_timeseries_persister_proccess_files(
         "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
         "--time_series_raw_path", f"{delta_lake_path}/raw_time_series",
         "--time_series_checkpoint_path", f"{delta_lake_path}/raw_time_series-checkpoint",
-        "--test", f"true"
+        "--test", "true"
     ])
  
     # Assert
     assert spark.read.parquet(time_series_unprocessed_path).count() == 3, "Time-series publisher job did not proccess files"
-
-
-@pytest.mark.asyncio
-async def test_stores_received_time_series_in_delta_table(delta_reader, time_series_persister):
-    def verification_function():
-        data = delta_reader("/unprocessed_time_series")
-        return data.count() > 0
-
-    succeeded = streaming_job_asserter(time_series_persister, verification_function)
-    assert succeeded, "No data was stored in Delta table"
