@@ -68,7 +68,7 @@ time_series_points_schema = StructType([
     StructField("RegistrationDateTime", TimestampType(), True),
     StructField("Sender", StructType([
         StructField("BusinessProcessRole", LongType(), True),
-        StructField("Id", StringType(), True) 
+        StructField("Id", StringType(), True)
     ])),
     StructField("SeriesId", StringType(), True),
     StructField("TransactionId", StringType(), True)
@@ -77,7 +77,7 @@ time_series_points_schema = StructType([
 streamingDF = (spark
                .readStream
                .schema(time_series_points_schema)
-               .json(time_series_raw_path)) 
+               .json(time_series_raw_path))
 
 # start the timeseries persister job
 if args.test == "true":

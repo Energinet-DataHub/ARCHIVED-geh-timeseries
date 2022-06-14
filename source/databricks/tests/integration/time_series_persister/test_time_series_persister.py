@@ -29,7 +29,7 @@ def test_timeseries_persister_returns_0(
     spark,
     databricks_path,
     delta_lake_path
-):    
+):
     time_series_raw_path = f"{delta_lake_path}/raw_time_series"
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
     time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
@@ -41,7 +41,7 @@ def test_timeseries_persister_returns_0(
         shutil.rmtree(time_series_raw_path)
     if(os.path.exists(time_series_checkpointpath)):
         shutil.rmtree(time_series_checkpointpath)
-    
+
     os.makedirs(time_series_raw_path)
     f = open(f"{time_series_raw_path}/test.json", 'w')
     f.write('{"time": "2022-06-09T12:09:15+00:00", "body": {"id": "111"}}')
@@ -95,6 +95,7 @@ def test_timeseries_persister_proccess_files(
         "--time_series_checkpoint_path", f"{delta_lake_path}/raw_time_series-checkpoint",
         "--test", "true"
     ])
- 
+
     # Assert
     assert spark.read.parquet(time_series_unprocessed_path).count() == 3, "Time-series publisher job did not proccess files"
+    
