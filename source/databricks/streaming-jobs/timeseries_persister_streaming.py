@@ -75,9 +75,9 @@ time_series_points_schema = StructType([
 ])
 
 streamingDF = (spark
-              .readStream
-              .schema(time_series_points_schema)
-              .json(time_series_raw_path)) 
+               .readStream
+               .schema(time_series_points_schema)
+               .json(time_series_raw_path)) 
 
 # start the timeseries persister job
 if args.test == "true":
