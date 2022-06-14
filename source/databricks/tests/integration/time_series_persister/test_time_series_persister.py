@@ -98,4 +98,3 @@ def test_timeseries_persister_proccess_files(
 
     # Assert
     assert spark.read.parquet(time_series_unprocessed_path).count() == 3, "Time-series publisher job did not proccess files"
-    
