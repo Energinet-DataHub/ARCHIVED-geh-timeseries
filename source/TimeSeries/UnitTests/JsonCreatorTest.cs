@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.Collections.Generic;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
+using Energinet.DataHub.TimeSeries.TestCore.Assets;
+using FluentAssertions;
 using NodaTime;
 using Xunit;
 
@@ -24,9 +26,19 @@ namespace Energinet.DataHub.TimeSeries.UnitTests;
 
 public class JsonCreatorTest
 {
+    private readonly TestDocuments _testDocuments;
+    private readonly JsonCreator _jsonCreator;
+
+    public JsonCreatorTest()
+    {
+        _testDocuments = new TestDocuments();
+        _jsonCreator = new JsonCreator(new JsonSerializer());
+    }
+
     [Fact]
     public void TestCreate()
     {
+        // Arrange
         var testData = new TimeSeriesBundleDto
         {
             Document = new DocumentDto
@@ -83,7 +95,12 @@ public class JsonCreatorTest
                 },
             },
         };
-        var jsonCreator = new JsonCreator();
-        var result = jsonCreator.Create(testData);
+
+        // Act
+        var actual = _jsonCreator.Create(testData);
+        var expected = _testDocuments.JsonCreatorTestResult;
+
+        // Assert
+        actual.Should().Be(expected);
     }
 }

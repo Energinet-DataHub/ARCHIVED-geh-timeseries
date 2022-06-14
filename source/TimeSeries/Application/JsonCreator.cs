@@ -12,8 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.Collections.Generic;
-using System.Text.Json;
+using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
 using NodaTime;
@@ -22,7 +23,14 @@ namespace Energinet.DataHub.TimeSeries.Application;
 
 public class JsonCreator
 {
-    public List<string> Create(TimeSeriesBundleDto timeSeriesBundle)
+    private readonly IJsonSerializer _jsonSerializer;
+
+    public JsonCreator(IJsonSerializer jsonSerializer)
+    {
+        _jsonSerializer = jsonSerializer;
+    }
+
+    public string Create(TimeSeriesBundleDto timeSeriesBundle)
     {
         var timeSeriesJsonDtoList = new List<TimeSeriesJsonDto>();
         foreach (var series in timeSeriesBundle.Series)
@@ -48,10 +56,10 @@ public class JsonCreator
         var jsonFileList = new List<string>();
         foreach (var item in timeSeriesJsonDtoList)
         {
-            jsonFileList.Add(JsonSerializer.Serialize(item));
+            jsonFileList.Add(_jsonSerializer.Serialize(item));
         }
 
-        return jsonFileList;
+        return string.Join(Environment.NewLine, jsonFileList);
     }
 }
 
