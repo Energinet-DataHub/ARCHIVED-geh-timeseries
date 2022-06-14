@@ -24,6 +24,7 @@ using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
@@ -68,6 +69,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
 
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection.AddScoped<IBlobHandler, BlobHandler>();
 
             serviceCollection.AddJwtTokenSecurity();
 

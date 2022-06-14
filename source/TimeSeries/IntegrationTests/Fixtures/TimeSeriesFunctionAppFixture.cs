@@ -37,6 +37,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
+            JsonContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-raw");
         }
 
         [NotNull]
@@ -45,6 +46,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
         public BlobContainerClient LogContainerClient { get; }
+
+        public BlobContainerClient JsonContainerClient { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -74,6 +77,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await JsonContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // => Event Hub
             // Overwrite event hub related settings, so the function app uses the names we have control of in the test
@@ -94,6 +98,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY", IntegrationTestConfiguration.ApplicationInsightsInstrumentationKey);
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
+            Environment.SetEnvironmentVariable("STORAGE_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
         }
