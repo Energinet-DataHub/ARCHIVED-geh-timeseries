@@ -14,6 +14,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
@@ -32,10 +33,7 @@ public class JsonCreator
 
     public string Create(TimeSeriesBundleDto timeSeriesBundle)
     {
-        var timeSeriesJsonDtoList = new List<TimeSeriesJsonDto>();
-        foreach (var series in timeSeriesBundle.Series)
-        {
-            timeSeriesJsonDtoList.Add(new TimeSeriesJsonDto
+        var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new TimeSeriesJsonDto
             {
                 DocId = timeSeriesBundle.Document.Id,
                 CreatedDateTime = timeSeriesBundle.Document.CreatedDateTime,
@@ -50,14 +48,10 @@ public class JsonCreator
                 Product = series.Product,
                 MeasureUnit = series.MeasureUnit,
                 Period = series.Period,
-            });
-        }
+            })
+            .ToList();
 
-        var jsonFileList = new List<string>();
-        foreach (var item in timeSeriesJsonDtoList)
-        {
-            jsonFileList.Add(_jsonSerializer.Serialize(item));
-        }
+        var jsonFileList = timeSeriesJsonDtoList.Select(timeSeriesJsonDto => _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList();
 
         return string.Join(Environment.NewLine, jsonFileList);
     }
