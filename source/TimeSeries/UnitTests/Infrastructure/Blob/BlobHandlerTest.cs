@@ -13,12 +13,21 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
+using Xunit;
 
-namespace Energinet.DataHub.TimeSeries.Application
+namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure.Blob;
+
+public class BlobHandlerTest
 {
-    public interface ITimeSeriesForwarder
+    [Fact]
+    public async Task TestAsync()
     {
-        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string env);
+        var fileName = "123";
+        var content = "json string";
+        var connectionString = "UseDevelopmentStorage=true";
+        var blobContainerName = "json-blob";
+        var blob = new BlobHandler();
+        await blob.SaveAsync(fileName, content, connectionString, blobContainerName);
     }
 }

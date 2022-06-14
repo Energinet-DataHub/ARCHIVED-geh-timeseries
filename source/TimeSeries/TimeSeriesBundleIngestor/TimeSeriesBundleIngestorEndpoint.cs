@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -56,7 +57,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             }
 
             await _timeSeriesForwarder
-                .HandleAsync(deserializationResult.TimeSeriesBundleDto)
+                .HandleAsync(deserializationResult.TimeSeriesBundleDto, EnvironmentHelper.GetEnv(EnvironmentSettingNames.BackendServiceAppId))
                 .ConfigureAwait(false);
 
             return _httpResponseBuilder.CreateAcceptedResponse(req);

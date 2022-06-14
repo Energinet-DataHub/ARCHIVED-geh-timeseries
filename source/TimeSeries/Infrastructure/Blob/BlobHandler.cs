@@ -12,13 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
+using System.IO;
 using System.Threading.Tasks;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Azure.Storage.Blobs;
 
-namespace Energinet.DataHub.TimeSeries.Application
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
+
+public class BlobHandler : IBlobHandler
 {
-    public interface ITimeSeriesForwarder
+    public async Task SaveAsync(string fileName, string content, string connectionString, string blobContainerName)
     {
-        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string env);
+        var containerClient = new BlobContainerClient(connectionString, blobContainerName);
+        await containerClient.CreateIfNotExistsAsync();
+        BlobClient blobClient = containerClient.GetBlobClient(fileName);
+
+        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
     }
 }

@@ -13,32 +13,31 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
-using Energinet.DataHub.TimeSeries.TestCore.Assets;
-using FluentAssertions;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using NodaTime;
 using Xunit;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests;
 
-public class JsonCreatorTest
+public class TimeSeriesForwarderTest
 {
-    private readonly TestDocuments _testDocuments;
-    private readonly TimeSeriesBundleToJsonConverter _timeSeriesBundleToJsonConverter;
+    private readonly TimeSeriesForwarder _timeSeriesForwarder;
 
-    public JsonCreatorTest()
+    public TimeSeriesForwarderTest()
     {
-        _testDocuments = new TestDocuments();
-        _timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(new JsonSerializer());
+        IJsonSerializer jsonSerializer = new JsonSerializer();
+        IBlobHandler blobHandler = new BlobHandler();
+        _timeSeriesForwarder = new TimeSeriesForwarder(jsonSerializer, blobHandler);
     }
 
     [Fact]
-    public void TestCreate()
+    public async Task TestHandleAsync()
     {
-        // Arrange
         var testData = new TimeSeriesBundleDto
         {
             Document = new DocumentDto
@@ -51,7 +50,7 @@ public class JsonCreatorTest
             },
             Series = new List<SeriesDto>
             {
-                new SeriesDto
+                new()
                 {
                     Id = "1",
                     TransactionId = "1",
@@ -67,12 +66,12 @@ public class JsonCreatorTest
                         EndDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
                         Points = new List<PointDto>
                         {
-                            new PointDto { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
-                            new PointDto { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
                         },
                     },
                 },
-                new SeriesDto
+                new()
                 {
                     Id = "1",
                     TransactionId = "1",
@@ -88,19 +87,13 @@ public class JsonCreatorTest
                         EndDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
                         Points = new List<PointDto>
                         {
-                            new PointDto { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
-                            new PointDto { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
                         },
                     },
                 },
             },
         };
-
-        // Act
-        var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testData);
-        var expected = _testDocuments.JsonCreatorTestResult;
-
-        // Assert
-        actual.Should().Be(expected);
+        await _timeSeriesForwarder.HandleAsync(testData, "UseDevelopmentStorage=true");
     }
 }

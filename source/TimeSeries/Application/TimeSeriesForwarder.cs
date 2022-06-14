@@ -12,33 +12,31 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Text;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        private readonly IEventHubSender _eventHubSender;
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly IBlobHandler _blobHandler;
 
         public TimeSeriesForwarder(
-            IEventHubSender eventHubSender,
-            IJsonSerializer jsonSerializer)
+            IJsonSerializer jsonSerializer,
+            IBlobHandler blobHandler)
         {
-            _eventHubSender = eventHubSender;
             _jsonSerializer = jsonSerializer;
+            _blobHandler = blobHandler;
         }
 
-        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
+        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string connectionString)
         {
-            var jsonCreate = new TimeSeriesBundleToJsonConverter(_jsonSerializer);
-            var json = jsonCreate.ConvertToJson(timeSeriesBundle);
-            var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
-            await _eventHubSender.SendAsync(body).ConfigureAwait(false);
+            var timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(_jsonSerializer);
+            var json = timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
+            await _blobHandler.SaveAsync(timeSeriesBundle.Document.Id, json, connectionString, "timeseries-raw").ConfigureAwait(false);
         }
     }
 }

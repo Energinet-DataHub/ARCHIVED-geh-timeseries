@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Azure.Messaging.EventHubs.Primitives;
+
 namespace Energinet.DataHub.TimeSeries.MessageReceiver
 {
     public static class EnvironmentSettingNames
@@ -19,5 +21,11 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
         public static string B2CTenantId => "B2C_TENANT_ID";
 
         public static string BackendServiceAppId => "BACKEND_SERVICE_APP_ID";
+
+        public static string StorageAccountName => "STORAGE_ACCOUNT_NAME";
+
+        public static string StorageConnectionString => "STORAGE_CONNECTION_STRING";
+
+        public static string StorageKey => "STORAGE_KEY";
     }
 }
