@@ -89,10 +89,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
             var twoNewest = blobItemsAfterRequest.TakeLast(2).ToArray();
 
             Assert.True(blobItemsAfterRequest.Length - blobItemsBeforeRequest.Length == 2);
-            var actualHttpDataRequestType = twoNewest[0].Metadata["httpdatatype"];
-            var actualHttpDataResponse = twoNewest[1].Metadata["httpdatatype"];
-            actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
-            actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
+            twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataRequestType);
+            twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataResponseType);
         }
 
 //         [Fact]
