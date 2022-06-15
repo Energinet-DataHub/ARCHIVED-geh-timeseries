@@ -22,10 +22,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
         public static string BackendServiceAppId => "BACKEND_SERVICE_APP_ID";
 
-        public static string StorageAccountName => "STORAGE_ACCOUNT_NAME";
+        public static string StorageAccountName => "DATA_LAKE_ACCOUNT_NAME";
 
-        public static string StorageConnectionString => "STORAGE_CONNECTION_STRING";
+        public static string StorageConnectionString => "DATA_LAKE_CONNECTION_STRING";
 
-        public static string StorageKey => "STORAGE_KEY";
+        public static string StorageKey => "DATA_LAKE_KEY";
     }
 }
