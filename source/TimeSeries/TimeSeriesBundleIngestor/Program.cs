@@ -70,7 +70,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
 
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
-            serviceCollection.AddScoped<IBlobHandler, BlobHandler>();
+            serviceCollection.AddScoped<IRawTimeSeriesStorageClient, RawTimeSeriesStorageClient>();
             serviceCollection.AddSingleton(
                 _ => new BlobContainerClient(
                     EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageConnectionString),

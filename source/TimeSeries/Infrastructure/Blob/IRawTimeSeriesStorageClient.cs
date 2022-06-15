@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
-public interface IBlobHandler
+public interface IRawTimeSeriesStorageClient
 {
     Task SaveAsync(string fileName, string content);
 }

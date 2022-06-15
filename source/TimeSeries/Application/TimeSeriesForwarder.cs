@@ -22,21 +22,21 @@ namespace Energinet.DataHub.TimeSeries.Application
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
         private readonly IJsonSerializer _jsonSerializer;
-        private readonly IBlobHandler _blobHandler;
+        private readonly IRawTimeSeriesStorageClient _rawTimeSeriesStorageClient;
 
         public TimeSeriesForwarder(
             IJsonSerializer jsonSerializer,
-            IBlobHandler blobHandler)
+            IRawTimeSeriesStorageClient rawTimeSeriesStorageClient)
         {
             _jsonSerializer = jsonSerializer;
-            _blobHandler = blobHandler;
+            _rawTimeSeriesStorageClient = rawTimeSeriesStorageClient;
         }
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(_jsonSerializer);
             var json = timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
-            await _blobHandler.SaveAsync(timeSeriesBundle.Document.Id, json).ConfigureAwait(false);
+            await _rawTimeSeriesStorageClient.SaveAsync(timeSeriesBundle.Document.Id, json).ConfigureAwait(false);
         }
     }
 }

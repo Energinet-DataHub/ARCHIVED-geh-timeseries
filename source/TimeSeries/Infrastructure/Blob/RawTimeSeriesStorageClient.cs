@@ -18,11 +18,11 @@ using Azure.Storage.Blobs;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
-public class BlobHandler : IBlobHandler
+public class RawTimeSeriesStorageClient : IRawTimeSeriesStorageClient
 {
     private readonly BlobContainerClient _blobContainerClient;
 
-    public BlobHandler(BlobContainerClient blobContainerClient)
+    public RawTimeSeriesStorageClient(BlobContainerClient blobContainerClient)
     {
         _blobContainerClient = blobContainerClient;
     }
