@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Azure.Messaging.EventHubs.Primitives;
-
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public static class EnvironmentSettingNames
     {

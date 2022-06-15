@@ -22,8 +22,9 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures;
+using Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 using FluentAssertions;
 using Microsoft.Identity.Client;
 using NodaTime;
@@ -31,7 +32,7 @@ using Xunit;
 using Xunit.Abstractions;
 using Xunit.Categories;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
+namespace Energinet.DataHub.TimeSeries.IntegrationTests
 {
     [IntegrationTest]
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]

@@ -16,7 +16,6 @@ using System;
 using Azure.Messaging.EventHubs;
 using Azure.Storage.Blobs;
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
-
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
@@ -33,7 +32,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public static class Program
     {

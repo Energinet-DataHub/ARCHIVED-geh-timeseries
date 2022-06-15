@@ -26,7 +26,7 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ResourceProvider;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.FunctionAppHost;
 using Microsoft.Extensions.Configuration;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     public class TimeSeriesFunctionAppFixture : FunctionAppFixture
     {

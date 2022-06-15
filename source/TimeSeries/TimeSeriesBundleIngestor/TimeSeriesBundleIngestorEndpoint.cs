@@ -13,17 +13,14 @@
 // limitations under the License.
 
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
-using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Logging;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public class TimeSeriesBundleIngestorEndpoint
     {

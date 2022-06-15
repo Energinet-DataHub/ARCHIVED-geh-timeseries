@@ -18,8 +18,8 @@ limitations under the License.
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
-    <AssemblyName>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</AssemblyName>
-    <RootNamespace>Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests</RootNamespace>
+    <AssemblyName>Energinet.DataHub.TimeSeries.IntegrationTests</AssemblyName>
+    <RootNamespace>Energinet.DataHub.TimeSeries.IntegrationTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.TestCommon" Version="1.3.0" />
