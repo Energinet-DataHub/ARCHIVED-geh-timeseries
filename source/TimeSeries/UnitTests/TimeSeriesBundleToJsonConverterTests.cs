@@ -36,7 +36,7 @@ public class TimeSeriesBundleToJsonConverterTests
     }
 
     [Fact]
-    public void TestCreate()
+    public void TimeSeriesBundleDto_ConvertToJson_TimeSeriesBundleJsonString()
     {
         // Arrange
         var testTimeSeriesBundleDto = CreateTestTimeSeriesBundleDto();
