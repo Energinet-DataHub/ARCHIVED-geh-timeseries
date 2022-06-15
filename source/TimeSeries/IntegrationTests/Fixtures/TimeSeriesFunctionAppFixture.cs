@@ -37,7 +37,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
-            JsonContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-raw");
+            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-raw");
         }
 
         [NotNull]
@@ -47,7 +47,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
         public BlobContainerClient LogContainerClient { get; }
 
-        public BlobContainerClient JsonContainerClient { get; }
+        public BlobContainerClient TimeSeriesContainerClient { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -77,7 +77,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
-            await JsonContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await TimeSeriesContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // => Event Hub
             // Overwrite event hub related settings, so the function app uses the names we have control of in the test
