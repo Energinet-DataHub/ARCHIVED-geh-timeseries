@@ -35,7 +35,7 @@ public class TimeSeriesBundleToJsonConverter
     {
         var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
             {
-                DocId = timeSeriesBundle.Document.Id,
+                DocumentId = timeSeriesBundle.Document.Id,
                 timeSeriesBundle.Document.CreatedDateTime,
                 timeSeriesBundle.Document.Sender,
                 timeSeriesBundle.Document.Receiver,
