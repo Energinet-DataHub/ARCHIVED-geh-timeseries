@@ -21,9 +21,11 @@ using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using FluentAssertions;
 using NodaTime;
 using Xunit;
+using Xunit.Categories;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests;
 
+[UnitTest]
 public class TimeSeriesBundleToJsonConverterTests
 {
     private readonly TestDocuments _testDocuments;
