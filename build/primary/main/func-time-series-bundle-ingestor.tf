@@ -35,7 +35,7 @@ module "time_series_bundle_ingestor" {
     WEBSITE_RUN_FROM_PACKAGE                            = 1
     WEBSITES_ENABLE_APP_SERVICE_STORAGE                 = true
     FUNCTIONS_WORKER_RUNTIME                            = "dotnet-isolated"
-    STORAGE_ACCOUNT_NAME                                = data.azurerm_key_vault_secret.st_data_lake_name.value
+    STORAGE_ACCOUNT_NAME                                = data.azurerm_key_vault_secret.st_shared_data_lake_name.value
     STORAGE_CONNECTION_STRING                           = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=kvs_t_data_lake_primary_connection_string)"
     STORAGE_KEY                                         = data.azurerm_key_vault_secret.kvs_st_data_lake_primary_access_key.value
     # Shared resources logging
