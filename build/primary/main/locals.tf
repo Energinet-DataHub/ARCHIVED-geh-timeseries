@@ -14,5 +14,5 @@
 locals {
   DATA_LAKE_TIMESERIES_UNPROCESSED_BLOB_NAME    = "timeseries-unprocessed"
   DATA_LAKE_DATA_CONTAINER_NAME                 = "timeseries-data"
-  TIME_SERIES_RAW                               = "timeseries-raw"
+  DATA_LAKE_TIME_SERIES_RAW_BLOB_FOLDER         = "timeseries-raw"
   }

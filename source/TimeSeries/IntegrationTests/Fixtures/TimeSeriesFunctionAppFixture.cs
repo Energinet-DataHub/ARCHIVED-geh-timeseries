@@ -99,7 +99,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
             Environment.SetEnvironmentVariable("DATA_LAKE_CONNECTION_STRING", "UseDevelopmentStorage=true");
-            Environment.SetEnvironmentVariable("TIME_SERIES_RAW", "timeseries-raw");
+            Environment.SetEnvironmentVariable("DATA_LAKE_TIME_SERIES_RAW_BLOB_FOLDER", "timeseries-raw");
             Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
         }
