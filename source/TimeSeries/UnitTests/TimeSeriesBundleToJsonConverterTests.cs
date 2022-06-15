@@ -39,7 +39,19 @@ public class TimeSeriesBundleToJsonConverterTests
     public void TestCreate()
     {
         // Arrange
-        var testData = new TimeSeriesBundleDto
+        var testTimeSeriesBundleDto = CreateTestTimeSeriesBundleDto();
+        var expected = _testDocuments.JsonCreatorTestResult;
+
+        // Act
+        var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testTimeSeriesBundleDto);
+
+        // Assert
+        actual.Should().Be(expected);
+    }
+
+    private TimeSeriesBundleDto CreateTestTimeSeriesBundleDto()
+    {
+        return new TimeSeriesBundleDto
         {
             Document = new DocumentDto
             {
@@ -95,12 +107,5 @@ public class TimeSeriesBundleToJsonConverterTests
                 },
             },
         };
-
-        // Act
-        var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testData);
-        var expected = _testDocuments.JsonCreatorTestResult;
-
-        // Assert
-        actual.Should().Be(expected);
     }
 }
