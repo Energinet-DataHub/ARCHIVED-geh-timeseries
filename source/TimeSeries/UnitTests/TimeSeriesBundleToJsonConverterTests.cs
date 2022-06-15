@@ -24,12 +24,12 @@ using Xunit;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests;
 
-public class TimeSeriesBundleToJsonConverterTest
+public class TimeSeriesBundleToJsonConverterTests
 {
     private readonly TestDocuments _testDocuments;
     private readonly TimeSeriesBundleToJsonConverter _timeSeriesBundleToJsonConverter;
 
-    public TimeSeriesBundleToJsonConverterTest()
+    public TimeSeriesBundleToJsonConverterTests()
     {
         _testDocuments = new TestDocuments();
         _timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(new JsonSerializer());
