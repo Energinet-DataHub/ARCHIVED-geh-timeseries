@@ -28,7 +28,7 @@ limitations under the License.
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Assets\Json_Creator_Test_Result.json" />
+    <EmbeddedResource Include="Assets\Time_Series_Bundle.json" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quality.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quantity.xml" />
     <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />

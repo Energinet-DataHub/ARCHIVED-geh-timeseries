@@ -32,7 +32,7 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 
         public Stream ValidMultipleTimeSeriesMissingQuantity => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quantity.xml");
 
-        public string JsonCreatorTestResult => GetDocumentAsString("Json_Creator_Test_Result.json");
+        public string TimeSeriesBundleJson => GetDocumentAsString("Time_Series_Bundle.json");
 
         private string GetDocumentAsString(string documentName)
         {

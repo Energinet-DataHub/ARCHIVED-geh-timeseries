@@ -40,7 +40,7 @@ public class TimeSeriesBundleToJsonConverterTests
     {
         // Arrange
         var testTimeSeriesBundleDto = CreateTestTimeSeriesBundleDto();
-        var expected = _testDocuments.JsonCreatorTestResult;
+        var expected = _testDocuments.TimeSeriesBundleJson;
 
         // Act
         var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testTimeSeriesBundleDto);
