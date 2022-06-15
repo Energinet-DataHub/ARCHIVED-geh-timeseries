@@ -22,9 +22,11 @@ using FluentAssertions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Categories;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
 {
+    [IntegrationTest]
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
     public class HealthCheckTests : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {

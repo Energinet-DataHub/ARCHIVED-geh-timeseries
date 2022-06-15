@@ -29,9 +29,11 @@ using Microsoft.Identity.Client;
 using NodaTime;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Categories;
 
 namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
 {
+    [IntegrationTest]
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
     public class TimeSeriesBundleIngestionEndpoint : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {
