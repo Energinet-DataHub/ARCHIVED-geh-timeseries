@@ -19,6 +19,6 @@ namespace Energinet.DataHub.TimeSeries.Application
 {
     public interface ITimeSeriesForwarder
     {
-        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string env);
+        Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle);
     }
 }

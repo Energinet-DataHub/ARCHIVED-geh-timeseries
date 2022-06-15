@@ -20,11 +20,16 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
 public class BlobHandler : IBlobHandler
 {
-    public async Task SaveAsync(string fileName, string content, string connectionString, string blobContainerName)
+    private readonly BlobContainerClient _blobContainerClient;
+
+    public BlobHandler(BlobContainerClient blobContainerClient)
     {
-        var containerClient = new BlobContainerClient(connectionString, blobContainerName);
-        await containerClient.CreateIfNotExistsAsync();
-        BlobClient blobClient = containerClient.GetBlobClient(fileName);
+        _blobContainerClient = blobContainerClient;
+    }
+
+    public async Task SaveAsync(string fileName, string content)
+    {
+        var blobClient = _blobContainerClient.GetBlobClient(fileName);
 
         await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
     }

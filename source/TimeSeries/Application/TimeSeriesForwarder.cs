@@ -32,11 +32,11 @@ namespace Energinet.DataHub.TimeSeries.Application
             _blobHandler = blobHandler;
         }
 
-        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string connectionString)
+        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(_jsonSerializer);
             var json = timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
-            await _blobHandler.SaveAsync(timeSeriesBundle.Document.Id, json, connectionString, "timeseries-raw").ConfigureAwait(false);
+            await _blobHandler.SaveAsync(timeSeriesBundle.Document.Id, json).ConfigureAwait(false);
         }
     }
 }

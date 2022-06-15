@@ -14,6 +14,7 @@
 
 using System;
 using Azure.Messaging.EventHubs;
+using Azure.Storage.Blobs;
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
 
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
@@ -70,6 +71,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
 
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
             serviceCollection.AddScoped<IBlobHandler, BlobHandler>();
+            serviceCollection.AddSingleton(
+                _ => new BlobContainerClient(
+                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageConnectionString),
+                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.TimeSeriesRaw)));
 
             serviceCollection.AddJwtTokenSecurity();
 
