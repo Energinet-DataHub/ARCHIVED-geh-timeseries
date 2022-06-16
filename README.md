@@ -1,4 +1,3 @@
-[![codecov](https://codecov.io/gh/Energinet-DataHub/geh-timeseries/branch/main/graph/badge.svg?token=CXGH54CZ85)](https://codecov.io/gh/Energinet-DataHub/geh-timeseries)
 # Time Series
 
 ## Intro
