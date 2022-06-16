@@ -26,6 +26,6 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 
         public static string StorageKey => "DATA_LAKE_KEY";
 
-        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_BLOB_FOLDER";
+        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_BLOB_NAME";
     }
 }
