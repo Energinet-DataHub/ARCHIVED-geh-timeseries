@@ -17,44 +17,43 @@ using System.Linq;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 
-namespace Energinet.DataHub.TimeSeries.Application
+namespace Energinet.DataHub.TimeSeries.Application;
+
+public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
 {
-    public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
+    private readonly IJsonSerializer _jsonSerializer;
+
+    public TimeSeriesBundleToJsonConverter(IJsonSerializer jsonSerializer)
     {
-        private readonly IJsonSerializer _jsonSerializer;
+        _jsonSerializer = jsonSerializer;
+    }
 
-        public TimeSeriesBundleToJsonConverter(IJsonSerializer jsonSerializer)
-        {
-            _jsonSerializer = jsonSerializer;
-        }
+    public string ConvertToJson(TimeSeriesBundleDto timeSeriesBundle)
+    {
+        var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
+            {
+                DocumentId = timeSeriesBundle.Document.Id,
+                timeSeriesBundle.Document.CreatedDateTime,
+                timeSeriesBundle.Document.Sender,
+                timeSeriesBundle.Document.Receiver,
+                timeSeriesBundle.Document.BusinessReasonCode,
+                SeriesId = series.Id,
+                series.TransactionId,
+                series.MeteringPointId,
+                series.MeteringPointType,
+                series.RegistrationDateTime,
+                series.Product,
+                series.MeasureUnit,
+                series.Period,
+            })
+            .ToList();
 
-        public string ConvertToJson(TimeSeriesBundleDto timeSeriesBundle)
-        {
-            var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
-                {
-                    DocumentId = timeSeriesBundle.Document.Id,
-                    timeSeriesBundle.Document.CreatedDateTime,
-                    timeSeriesBundle.Document.Sender,
-                    timeSeriesBundle.Document.Receiver,
-                    timeSeriesBundle.Document.BusinessReasonCode,
-                    SeriesId = series.Id,
-                    series.TransactionId,
-                    series.MeteringPointId,
-                    series.MeteringPointType,
-                    series.RegistrationDateTime,
-                    series.Product,
-                    series.MeasureUnit,
-                    series.Period,
-                })
-                .ToList();
-
-            // Returns a single string where each json string is seperated with new line.
-            // This is to make it easier to read in databricks
-            return string.Join(
-                Environment.NewLine,
-                timeSeriesJsonDtoList.Select(
-                    timeSeriesJsonDto =>
-                        _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList());
-        }
+        // Returns a single string where each json string is seperated with new line.
+        // This is to make it easier to read in databricks
+        return string.Join(
+            Environment.NewLine,
+            timeSeriesJsonDtoList.Select(
+                timeSeriesJsonDto =>
+                    _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList());
     }
 }
