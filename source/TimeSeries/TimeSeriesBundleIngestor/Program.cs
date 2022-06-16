@@ -69,6 +69,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
             serviceCollection.AddSingleton<IJsonSerializer, JsonSerializer>();
 
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
+            serviceCollection.AddScoped<ITimeSeriesBundleToJsonConverter, TimeSeriesBundleToJsonConverter>();
             serviceCollection.AddScoped<IRawTimeSeriesStorageClient, RawTimeSeriesStorageClient>();
             serviceCollection.AddSingleton(
                 _ => new BlobContainerClient(

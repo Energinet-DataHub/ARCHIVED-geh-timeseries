@@ -13,7 +13,6 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
@@ -21,21 +20,20 @@ namespace Energinet.DataHub.TimeSeries.Application
 {
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        private readonly IJsonSerializer _jsonSerializer;
+        private readonly ITimeSeriesBundleToJsonConverter _timeSeriesBundleToJsonConverter;
         private readonly IRawTimeSeriesStorageClient _rawTimeSeriesStorageClient;
 
         public TimeSeriesForwarder(
-            IJsonSerializer jsonSerializer,
+            ITimeSeriesBundleToJsonConverter timeSeriesBundleToJsonConverter,
             IRawTimeSeriesStorageClient rawTimeSeriesStorageClient)
         {
-            _jsonSerializer = jsonSerializer;
+            _timeSeriesBundleToJsonConverter = timeSeriesBundleToJsonConverter;
             _rawTimeSeriesStorageClient = rawTimeSeriesStorageClient;
         }
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
-            var timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(_jsonSerializer);
-            var json = timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
+            var json = _timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
             await _rawTimeSeriesStorageClient.SaveAsync(timeSeriesBundle.Document.Id, json).ConfigureAwait(false);
         }
     }

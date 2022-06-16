@@ -22,7 +22,7 @@ using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Application;
 
-public class TimeSeriesBundleToJsonConverter
+public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
 {
     private readonly IJsonSerializer _jsonSerializer;
 
