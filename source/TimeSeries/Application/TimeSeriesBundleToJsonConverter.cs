@@ -13,12 +13,9 @@
 // limitations under the License.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.Application.Enums;
-using NodaTime;
 
 namespace Energinet.DataHub.TimeSeries.Application;
 
@@ -52,7 +49,7 @@ public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
             .ToList();
 
         // Returns a single string where each json string is seperated with new line.
-        // This is to make it easier to read in databrick
+        // This is to make it easier to read in databricks
         return string.Join(
             Environment.NewLine,
             timeSeriesJsonDtoList.Select(
