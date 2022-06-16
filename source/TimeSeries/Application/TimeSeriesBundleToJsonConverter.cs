@@ -51,8 +51,12 @@ public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
             })
             .ToList();
 
-        var jsonStrings = timeSeriesJsonDtoList.Select(timeSeriesJsonDto => _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList();
-
-        return string.Join(Environment.NewLine, jsonStrings);
+        // Returns a single string where each json string is seperated with new line.
+        // This is to make it easier to read in databrick
+        return string.Join(
+            Environment.NewLine,
+            timeSeriesJsonDtoList.Select(
+                timeSeriesJsonDto =>
+                    _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList());
     }
 }
