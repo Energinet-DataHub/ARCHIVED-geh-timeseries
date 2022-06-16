@@ -34,7 +34,7 @@ namespace Energinet.DataHub.TimeSeries.Application
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var json = _timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
-            await _rawTimeSeriesStorageClient.SaveAsync(timeSeriesBundle.Document.Id, json).ConfigureAwait(false);
+            await _rawTimeSeriesStorageClient.SaveAsync($"{timeSeriesBundle.Document.Id}.json", json).ConfigureAwait(false);
         }
     }
 }
