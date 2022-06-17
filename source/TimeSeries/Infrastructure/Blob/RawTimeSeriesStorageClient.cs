@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
 
@@ -27,10 +28,10 @@ public class RawTimeSeriesStorageClient : IRawTimeSeriesStorageClient
         _blobContainerClient = blobContainerClient;
     }
 
-    public async Task SaveAsync(string fileName, string content)
+    public async Task SaveAsync(string fileName, Stream content)
     {
         var blobClient = _blobContainerClient.GetBlobClient(fileName);
 
-        await blobClient.UploadAsync(BinaryData.FromString(content), overwrite: true);
+        await blobClient.UploadAsync(await BinaryData.FromStreamAsync(content), overwrite: true);
     }
 }

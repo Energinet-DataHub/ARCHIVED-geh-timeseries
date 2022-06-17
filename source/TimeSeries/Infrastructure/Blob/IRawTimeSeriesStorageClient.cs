@@ -12,11 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
 public interface IRawTimeSeriesStorageClient
 {
-    Task SaveAsync(string fileName, string content);
+    Task SaveAsync(string fileName, Stream content);
 }
