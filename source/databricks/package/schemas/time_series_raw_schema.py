@@ -14,7 +14,7 @@
 from package.codelists import Colname
 from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType, LongType, ArrayType
 
-time_series_unprocessed_schema = StructType([
+time_series_raw_schema = StructType([
     StructField("BusinessReasonCode", LongType(), True),
     StructField("CreatedDateTime", TimestampType(), True),
     StructField("DocumentId", StringType(), True),
@@ -44,8 +44,5 @@ time_series_unprocessed_schema = StructType([
         StructField("Id", StringType(), True)
     ])),
     StructField("SeriesId", StringType(), True),
-    StructField("TransactionId", StringType(), True),
-    StructField("year", IntegerType(), True),
-    StructField("month", IntegerType(), True),
-    StructField("day", IntegerType(), True)
+    StructField("TransactionId", StringType(), True)
 ])

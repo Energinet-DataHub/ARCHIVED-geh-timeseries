@@ -17,7 +17,7 @@ import sys
 sys.path.append(r'/workspaces/geh-timeseries/source/databricks')
 sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
 
-from package.schemas import time_series_unprocessed_schema
+from package.schemas import time_series_raw_schema
 from package import timeseries_persister, initialize_spark
 import configargparse
 
@@ -40,7 +40,7 @@ checkpoint_path = f"{args.time_series_checkpoint_path}"
 
 streamingDF = (spark
                .readStream
-               .schema(time_series_unprocessed_schema)
+               .schema(time_series_raw_schema)
                .json(time_series_raw_path))
 
 # start the timeseries persister job

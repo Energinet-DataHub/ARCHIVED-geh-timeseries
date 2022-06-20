@@ -19,6 +19,7 @@ from package.codelists import Resolution
 from package.codelists import Colname
 
 def transform_unprocessed_time_series_to_points_v2(source: DataFrame) -> DataFrame:
+    source.show(truncate = False)
     return source
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
