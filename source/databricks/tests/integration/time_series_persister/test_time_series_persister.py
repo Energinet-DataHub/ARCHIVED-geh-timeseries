@@ -23,6 +23,7 @@ import asyncio
 import pytest
 from package import timeseries_persister
 from tests.integration.utils import streaming_job_asserter
+from package.schemas import time_series_raw_schema
 
 
 def test_timeseries_persister_returns_0(
@@ -61,11 +62,9 @@ def test_timeseries_persister_returns_0(
     assert exit_code == 0, "Time-series publisher job did not return exit code 0"
 
 
-def test_timeseries_persister_proccess_files(
-    spark,
-    databricks_path,
-    delta_lake_path
-):
+@pytest.fixture(scope="session")
+def time_series_persister(spark, delta_lake_path):
+    # Setup paths
     time_series_raw_path = f"{delta_lake_path}/raw_time_series"
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
     time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
@@ -85,15 +84,18 @@ def test_timeseries_persister_proccess_files(
     f.write('{"DocumentId":"3","CreatedDateTime":"2022-06-09T12:09:15+00:00","Sender":{"Id":"3","BusinessProcessRole":0},"Receiver":{"Id":"2","BusinessProcessRole":0},"BusinessReasonCode":0,"SeriesId":"1","TransactionId":"1","MeteringPointId":"1","MeteringPointType":2,"RegistrationDateTime":"2022-06-09T12:09:15+00:00","Product":"1","MeasureUnit":0,"Period":{"Resolution":2,"StartDateTime":"2022-06-10T12:09:15+00:00","EndDateTime":"2022-06-11T12:09:15+00:00","Points":[{"Quantity":1.1,"Quality":3,"Position":1},{"Quantity":1.1,"Quality":3,"Position":1}]}}\n')
     f.close()
 
-    subprocess.call([
-        "python",
-        f"{databricks_path}/streaming-jobs/timeseries_persister_streaming.py",
-        "--data-storage-account-name", "data-storage-account-name",
-        "--data-storage-account-key", "data-storage-account-key",
-        "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
-        "--time_series_raw_path", f"{delta_lake_path}/raw_time_series",
-        "--time_series_checkpoint_path", f"{delta_lake_path}/raw_time_series-checkpoint",
-        "--test", "true"
-    ])
-    # Assert
-    assert spark.read.parquet(time_series_unprocessed_path).count() == 3, "Time-series publisher job did not proccess files"
+    streamingDF = (spark
+               .readStream
+               .schema(time_series_raw_schema)
+               .json(time_series_raw_path))
+    # Return the awaitable pyspark streaming job (the sut)
+    return timeseries_persister(streamingDF, time_series_checkpointpath, time_series_unprocessed_path)
+
+@pytest.mark.asyncio
+async def test_process_json(parquet_reader, time_series_persister):
+    def verification_function():
+        data = parquet_reader("/unprocessed_time_series")
+        return data.count() > 0
+
+    succeeded = streaming_job_asserter(time_series_persister, verification_function)
+    assert succeeded, "No data was stored in Delta table"
