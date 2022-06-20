@@ -13,14 +13,14 @@
 # limitations under the License.
 
 import sys
-from pyspark.sql.types import StringType, StructType
 
 sys.path.append(r'/workspaces/geh-timeseries/source/databricks')
 sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
 
+from package.schemas import time_series_unprocessed_schema
+from package import timeseries_persister, initialize_spark
 import configargparse
 
-from package import timeseries_persister, initialize_spark
 
 p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
 p.add('--data-storage-account-name', type=str, required=True)
@@ -38,45 +38,9 @@ time_series_unprocessed_path = f"{args.time_series_unprocessed_path}"
 time_series_raw_path = f"{args.time_series_raw_path}"
 checkpoint_path = f"{args.time_series_checkpoint_path}"
 
-from package.codelists import Colname
-from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType, LongType, ArrayType
-
-time_series_points_schema = StructType([
-    StructField("BusinessReasonCode", LongType(), True),
-    StructField("CreatedDateTime", TimestampType(), True),
-    StructField("DocId", StringType(), True),
-    StructField("MeasureUnit", LongType(), True),
-    StructField("MeteringPointId", StringType(), True),
-    StructField("MeteringPointType", LongType(), True),
-    StructField("Period", StructType([
-        StructField("EndDateTime", TimestampType(), True),
-        StructField("Points", ArrayType(
-            StructType([
-                StructField("Position", LongType(), True),
-                StructField("Quality", LongType(), True),
-                StructField("Quantity", StringType(), True)
-            ])
-        )),
-        StructField("Resolution", LongType(), True),
-        StructField("StartDateTime", TimestampType(), True)
-    ])),
-    StructField("Product", StringType(), True),
-    StructField("Receiver", StructType([
-        StructField("BusinessProcessRole", LongType(), True),
-        StructField("Id", StringType(), True)
-    ])),
-    StructField("RegistrationDateTime", TimestampType(), True),
-    StructField("Sender", StructType([
-        StructField("BusinessProcessRole", LongType(), True),
-        StructField("Id", StringType(), True)
-    ])),
-    StructField("SeriesId", StringType(), True),
-    StructField("TransactionId", StringType(), True)
-])
-
 streamingDF = (spark
                .readStream
-               .schema(time_series_points_schema)
+               .schema(time_series_unprocessed_schema)
                .json(time_series_raw_path))
 
 # start the timeseries persister job
