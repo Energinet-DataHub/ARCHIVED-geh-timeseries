@@ -12,3 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .jsonTransformer import transform_unprocessed_time_series_to_points_v2
+
+from .jsonTransformer import transform_unprocessed_time_series_to_points
