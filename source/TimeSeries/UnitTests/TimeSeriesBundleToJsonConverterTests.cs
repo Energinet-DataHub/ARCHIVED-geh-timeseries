@@ -32,12 +32,12 @@ namespace Energinet.DataHub.TimeSeries.UnitTests;
 public class TimeSeriesBundleToJsonConverterTests
 {
     private readonly TestDocuments _testDocuments;
-    private readonly TimeSeriesBundleToJsonConverter _timeSeriesBundleToJsonConverter;
+    private readonly TimeSeriesBundleConverter _timeSeriesBundleConverter;
 
     public TimeSeriesBundleToJsonConverterTests()
     {
         _testDocuments = new TestDocuments();
-        _timeSeriesBundleToJsonConverter = new TimeSeriesBundleToJsonConverter(new JsonSerializer());
+        _timeSeriesBundleConverter = new TimeSeriesBundleConverter(new JsonSerializer());
     }
 
     [Fact]
@@ -49,7 +49,7 @@ public class TimeSeriesBundleToJsonConverterTests
         var stream = new MemoryStream();
 
         // Act
-        await _timeSeriesBundleToJsonConverter.ConvertAsync(testTimeSeriesBundleDto, stream);
+        await _timeSeriesBundleConverter.ConvertAsync(testTimeSeriesBundleDto, stream);
         var actual = Encoding.UTF8.GetString(stream.ToArray());
 
         // Assert

@@ -25,11 +25,11 @@ using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Energinet.DataHub.TimeSeries.Application;
 
-public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
+public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
 {
     private readonly IJsonSerializer _jsonSerializer;
 
-    public TimeSeriesBundleToJsonConverter(IJsonSerializer jsonSerializer)
+    public TimeSeriesBundleConverter(IJsonSerializer jsonSerializer)
     {
         _jsonSerializer = jsonSerializer;
     }

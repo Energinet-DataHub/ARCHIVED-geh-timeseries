@@ -77,7 +77,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME"))));
 
-            serviceCollection.AddScoped<ITimeSeriesBundleToJsonConverter, TimeSeriesBundleToJsonConverter>();
+            serviceCollection.AddScoped<ITimeSeriesBundleConverter, TimeSeriesBundleConverter>();
             serviceCollection.AddScoped<IRawTimeSeriesStorageClient, RawTimeSeriesStorageClient>();
             serviceCollection.AddSingleton(
                 _ => new BlobContainerClient(
