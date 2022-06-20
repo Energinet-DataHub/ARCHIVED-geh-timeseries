@@ -25,7 +25,7 @@ resource "azurerm_storage_container" "container" {
 }
 
 module "kvs_st_data_lake_container_name" {
-  source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=7.0.0"
+  source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=5.1.0"
 
   name          = "st-data-lake-timeseries-container-name"
   value         = local.DATA_LAKE_DATA_CONTAINER_NAME
@@ -35,7 +35,7 @@ module "kvs_st_data_lake_container_name" {
 }
 
 module "kvs_st_data_lake_timeseries_unprocessed_blob_name" {
-  source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=7.0.0"
+  source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=5.1.0"
 
   name          = "st-data-lake-timeseries-unprocessed-blob-name"
   value         = local.DATA_LAKE_TIMESERIES_UNPROCESSED_BLOB_NAME

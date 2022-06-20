@@ -12,14 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 terraform {
-  required_version = "=1.2.2"
+  required_version = "1.1.6"
 
   required_providers {
     # It is recommended to pin to a given version of the Azure provider
-    azurerm = "=3.9.0"
+    azurerm = "=2.98.0"
+	null = "~> 2.1"
   }
 }
 
 provider "azurerm" {
-  features {}
+  # It is recommended to pin to a given version of the Provider
+  features {
+    key_vault {
+      purge_soft_delete_on_destroy = true
+    }
+  }
 }
