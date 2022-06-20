@@ -25,8 +25,10 @@ def transform_unprocessed_time_series_to_points_v2(source: DataFrame) -> DataFra
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
+
     "RegistrationDateTime will be overwritten with CreatedDateTime if it has no value"
     structured = source.select(from_json(Colname.timeseries, eventhub_timeseries_schema).alias('json'))
+    structured.show(truncate=False)
     flat = structured \
         .select(explode("json.Series"), col("json.Document.CreatedDateTime").alias("CreatedDateTime")) \
         .select("col.MeteringPointId", "col.TransactionId", "col.RegistrationDateTime", "col.Period", "CreatedDateTime") \
@@ -43,7 +45,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
                 col("Period_Point.Quality").alias(Colname.quality),
                 "Period_Point.Position") \
         .drop("Period_Point")
-
+    flat.show()
     flat = flat \
         .withColumn("TimeToAdd",
                     when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15)
@@ -57,6 +59,8 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
     withTime = flat \
         .withColumn(Colname.time, set_time_func) \
         .drop("StartDateTime", "TimeToAdd")
+
+    withTime.show()
 
     withTime = withTime \
         .withColumn(Colname.year, year(col(Colname.time))) \
@@ -75,5 +79,5 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             Colname.day,
             Colname.registration_date_time
         )
-
+    withTime.show()
     return withTime

@@ -28,7 +28,6 @@ p.add('--data-storage-account-key', type=str, required=True)
 p.add('--time_series_unprocessed_path', type=str, required=True)
 p.add('--time_series_raw_path', type=str, required=True)
 p.add('--time_series_checkpoint_path', type=str, required=True)
-p.add('--test', type=str, required=False)
 
 args, unknown_args = p.parse_known_args()
 
@@ -44,7 +43,4 @@ streamingDF = (spark
                .json(time_series_raw_path))
 
 # start the timeseries persister job
-if args.test == "true":
-    timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path).awaitTermination(25)
-else:
-    timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)
+timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)
