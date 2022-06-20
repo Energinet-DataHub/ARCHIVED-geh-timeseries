@@ -29,6 +29,8 @@ module "time_series_bundle_ingestor" {
   health_check_path                         = "/api/monitor/ready"
   health_check_alert_action_group_id        = data.azurerm_key_vault_secret.primary_action_group_id.value
   health_check_alert_enabled                = var.enable_health_check_alerts
+  dotnet_framework_version                  = "6"
+  use_dotnet_isolated_runtime               = true
   app_settings                              = {
     # Region: Default Values
     WEBSITE_ENABLE_SYNC_UPDATE_SITE                     = true
@@ -43,7 +45,7 @@ module "time_series_bundle_ingestor" {
     REQUEST_RESPONSE_LOGGING_CONTAINER_NAME             = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=st-marketoplogs-container-name)",
     B2C_TENANT_ID                                       = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=b2c-tenant-id)",
     BACKEND_SERVICE_APP_ID                              = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=backend-service-app-id)",
-    EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"]
+    EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"],
     EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
   }
 
