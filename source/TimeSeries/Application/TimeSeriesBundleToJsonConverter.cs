@@ -14,6 +14,7 @@
 
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
@@ -53,17 +54,19 @@ public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
             })
             .ToList();
 
+        var newLine = Encoding.UTF8.GetBytes("\n");
+
         var options = new JsonSerializerOptions();
         options.Converters.Add(NodaConverters.InstantConverter);
         options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
         for (var index = 0; index < timeSeriesJsonDtoList.Count; index++)
         {
-            var item = timeSeriesJsonDtoList[index];
             if (index != 0)
             {
-                stream.WriteByte(10);
+                await stream.WriteAsync(newLine).ConfigureAwait(false);
             }
 
+            var item = timeSeriesJsonDtoList[index];
             await JsonSerializer.SerializeAsync(stream, item, options);
         }
     }

@@ -62,53 +62,58 @@ public class TimeSeriesBundleToJsonConverterTests
         {
             Document = new DocumentDto
             {
-                Id = "1",
-                CreatedDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
-                Sender = new MarketParticipantDto { Id = "1", BusinessProcessRole = MarketParticipantRole.Unknown },
-                Receiver = new MarketParticipantDto { Id = "2", BusinessProcessRole = MarketParticipantRole.Unknown },
-                BusinessReasonCode = BusinessReasonCode.Unknown,
+                Id = "C1876453",
+                CreatedDateTime = Instant.FromUtc(2022, 12, 17, 9, 30, 47),
+                Sender = new MarketParticipantDto { Id = "5799999933317", BusinessProcessRole = MarketParticipantRole.MeteredDataResponsible },
+                Receiver = new MarketParticipantDto { Id = "5790001330552", BusinessProcessRole = MarketParticipantRole.MeteredDataAdministrator },
+                BusinessReasonCode = BusinessReasonCode.PeriodicMetering,
             },
             Series = new List<SeriesDto>
             {
                 new()
                 {
-                    Id = "1",
-                    TransactionId = "1",
-                    MeteringPointId = "1",
-                    MeteringPointType = MeteringPointType.Production,
-                    RegistrationDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
-                    Product = "1",
-                    MeasureUnit = MeasureUnit.Unknown,
+                    Id = "C123456",
+                    TransactionId = "C1875000",
+                    MeteringPointId = "579999993331812345",
+                    MeteringPointType = MeteringPointType.Consumption,
+                    RegistrationDateTime = Instant.FromUtc(2022, 12, 17, 7, 30),
+                    Product = "8716867000030",
+                    MeasureUnit = MeasureUnit.KiloWattHour,
                     Period = new PeriodDto
                     {
                         Resolution = Resolution.Hour,
-                        StartDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
-                        EndDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
+                        StartDateTime = Instant.FromUtc(2022, 8, 15, 22, 0),
+                        EndDateTime = Instant.FromUtc(2022, 8, 16, 4, 0),
                         Points = new List<PointDto>
                         {
-                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(242), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(242), Quality = Quality.AsProvided, Position = 2, },
+                            new() { Quantity = new decimal(222), Quality = Quality.AsProvided, Position = 3, },
+                            new() { Quantity = new decimal(202), Quality = Quality.AsProvided, Position = 4, },
+                            new() { Quantity = new decimal(191), Quality = Quality.Incomplete, Position = 5, },
+                            new() { Quantity = null, Quality = Quality.NotAvailable, Position = 6, },
                         },
                     },
                 },
                 new()
                 {
-                    Id = "1",
-                    TransactionId = "1",
-                    MeteringPointId = "1",
+                    Id = "C789123",
+                    TransactionId = "C7445231",
+                    MeteringPointId = "579999997778885555",
                     MeteringPointType = MeteringPointType.Production,
-                    RegistrationDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
-                    Product = "1",
-                    MeasureUnit = MeasureUnit.Unknown,
+                    RegistrationDateTime = Instant.FromUtc(2022, 12, 18, 07, 30),
+                    Product = "8716867000030",
+                    MeasureUnit = MeasureUnit.KiloWattHour,
                     Period = new PeriodDto
                     {
                         Resolution = Resolution.Hour,
-                        StartDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
-                        EndDateTime = Instant.FromUtc(2022, 6, 13, 12, 0),
+                        StartDateTime = Instant.FromUtc(2022, 8, 16, 22, 0),
+                        EndDateTime = Instant.FromUtc(2022, 8, 17, 1, 0),
                         Points = new List<PointDto>
                         {
-                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = new decimal(1.1), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(10.123), Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = new decimal(12), Quality = Quality.AsProvided, Position = 2, },
+                            new() { Quantity = new decimal(756), Quality = Quality.AsProvided, Position = 3, },
                         },
                     },
                 },

@@ -68,11 +68,18 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         [Fact]
         public async Task When_RequestReceivedWithValidJwtToken_Then_JsonStreamUploadedToBlobStorage()
         {
+            // Arrange
+            var expected = _testDocuments.TimeSeriesBundleJson;
             var content = _testDocuments.ValidMultipleTimeSeriesAsString;
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+
+            // Act
             var response = await Fixture.TimeSeriesContainerClient.GetBlobClient("C1876453.json").DownloadAsync();
-            var value = await new StreamReader(response.Value.Content).ReadToEndAsync();
+            var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
+
+            // Assert
+            actual.Should().Be(expected);
         }
 
         [Fact]
