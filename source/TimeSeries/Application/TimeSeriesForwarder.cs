@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
@@ -43,10 +42,10 @@ namespace Energinet.DataHub.TimeSeries.Application
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
-            var json = _timeSeriesBundleToJsonConverter.ConvertToJson(timeSeriesBundle);
-            var stream = new MemoryStream(Encoding.UTF8.GetBytes(json));
             var fileName = $"{timeSeriesBundle.Document.Id}.json";
-            await _rawTimeSeriesStorageClient.SaveAsync(fileName, stream).ConfigureAwait(false);
+            await using var stream = await _rawTimeSeriesStorageClient.OpenWriteAsync(fileName);
+            await _timeSeriesBundleToJsonConverter.ConvertAsync(timeSeriesBundle, stream);
+
             var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
             await _eventHubSender.SendAsync(body).ConfigureAwait(false);
         }

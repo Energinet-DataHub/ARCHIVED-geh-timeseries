@@ -14,6 +14,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -62,6 +63,16 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
             var response = await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
             response.StatusCode.Should().Be(HttpStatusCode.Accepted);
+        }
+
+        [Fact]
+        public async Task When_RequestReceivedWithValidJwtToken_Then_JsonStreamUploadedToBlobStorage()
+        {
+            var content = _testDocuments.ValidMultipleTimeSeriesAsString;
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient("C1876453.json").DownloadAsync();
+            var value = await new StreamReader(response.Value.Content).ReadToEndAsync();
         }
 
         [Fact]

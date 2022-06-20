@@ -13,6 +13,9 @@
 // limitations under the License.
 
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
@@ -38,14 +41,16 @@ public class TimeSeriesBundleToJsonConverterTests
     }
 
     [Fact]
-    public void TimeSeriesBundleDto_ConvertToJson_TimeSeriesBundleJsonString()
+    public async Task TimeSeriesBundleDto_ConvertToJsonAsync_TimeSeriesBundleJsonString()
     {
         // Arrange
         var testTimeSeriesBundleDto = CreateTestTimeSeriesBundleDto();
         var expected = _testDocuments.TimeSeriesBundleJson;
+        var stream = new MemoryStream();
 
         // Act
-        var actual = _timeSeriesBundleToJsonConverter.ConvertToJson(testTimeSeriesBundleDto);
+        await _timeSeriesBundleToJsonConverter.ConvertAsync(testTimeSeriesBundleDto, stream);
+        var actual = Encoding.UTF8.GetString(stream.ToArray());
 
         // Assert
         actual.Should().Be(expected);

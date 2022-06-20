@@ -12,10 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
+using System.IO;
 using System.Linq;
+using System.Text.Json;
+using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using NodaTime;
+using NodaTime.Serialization.SystemTextJson;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Energinet.DataHub.TimeSeries.Application;
 
@@ -28,7 +33,7 @@ public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
         _jsonSerializer = jsonSerializer;
     }
 
-    public string ConvertToJson(TimeSeriesBundleDto timeSeriesBundle)
+    public async Task ConvertAsync(TimeSeriesBundleDto timeSeriesBundle, Stream stream)
     {
         var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
             {
@@ -38,22 +43,28 @@ public class TimeSeriesBundleToJsonConverter : ITimeSeriesBundleToJsonConverter
                 timeSeriesBundle.Document.Receiver,
                 timeSeriesBundle.Document.BusinessReasonCode,
                 SeriesId = series.Id,
-                series.TransactionId,
+                TransactionId = (string?)series.TransactionId,
                 series.MeteringPointId,
                 series.MeteringPointType,
                 series.RegistrationDateTime,
-                series.Product,
+                Product = (string?)series.Product,
                 series.MeasureUnit,
                 series.Period,
             })
             .ToList();
 
-        // Returns a single string where each json string is seperated with new line.
-        // This is to make it easier to read in databricks
-        return string.Join(
-            Environment.NewLine,
-            timeSeriesJsonDtoList.Select(
-                timeSeriesJsonDto =>
-                    _jsonSerializer.Serialize(timeSeriesJsonDto)).ToList());
+        var options = new JsonSerializerOptions();
+        options.Converters.Add(NodaConverters.InstantConverter);
+        options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+        for (var index = 0; index < timeSeriesJsonDtoList.Count; index++)
+        {
+            var item = timeSeriesJsonDtoList[index];
+            if (index != 0)
+            {
+                stream.WriteByte(10);
+            }
+
+            await JsonSerializer.SerializeAsync(stream, item, options);
+        }
     }
 }

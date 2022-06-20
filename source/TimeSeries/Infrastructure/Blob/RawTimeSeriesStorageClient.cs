@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.IO;
 using System.Threading.Tasks;
 using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
 
 namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
@@ -28,10 +28,8 @@ public class RawTimeSeriesStorageClient : IRawTimeSeriesStorageClient
         _blobContainerClient = blobContainerClient;
     }
 
-    public async Task SaveAsync(string fileName, Stream content)
+    public async Task<Stream> OpenWriteAsync(string fileName)
     {
-        var blobClient = _blobContainerClient.GetBlobClient(fileName);
-
-        await blobClient.UploadAsync(await BinaryData.FromStreamAsync(content), overwrite: true);
+        return await _blobContainerClient.GetBlockBlobClient(fileName).OpenWriteAsync(true);
     }
 }

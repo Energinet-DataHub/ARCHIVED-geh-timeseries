@@ -19,5 +19,5 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 
 public interface IRawTimeSeriesStorageClient
 {
-    Task SaveAsync(string fileName, Stream content);
+    Task<Stream> OpenWriteAsync(string fileName);
 }

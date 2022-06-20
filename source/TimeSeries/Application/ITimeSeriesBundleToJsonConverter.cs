@@ -12,11 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.IO;
+using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 
 namespace Energinet.DataHub.TimeSeries.Application;
 
 public interface ITimeSeriesBundleToJsonConverter
 {
-    string ConvertToJson(TimeSeriesBundleDto timeSeriesBundle);
+    Task ConvertAsync(TimeSeriesBundleDto timeSeriesBundle, Stream stream);
 }
