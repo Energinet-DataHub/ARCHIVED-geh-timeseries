@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -54,7 +55,7 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
             })
             .ToList();
 
-        var newLine = Encoding.UTF8.GetBytes("\n");
+        var newLine = Encoding.UTF8.GetBytes(Environment.NewLine);
 
         var options = new JsonSerializerOptions();
         options.Converters.Add(NodaConverters.InstantConverter);
