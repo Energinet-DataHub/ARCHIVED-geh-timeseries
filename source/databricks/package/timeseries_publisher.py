@@ -38,7 +38,6 @@ def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_p
 
 
 def timeseries_publisher(spark: SparkSession, time_series_unprocessed_path: str, time_series_checkpoint_path: str, time_series_points_path: str):
-    ##create_delta_table_if_empty(spark, time_series_points_path, time_series_points_schema, [Colname.year, Colname.month, Colname.day])
 
     return (spark
             .readStream

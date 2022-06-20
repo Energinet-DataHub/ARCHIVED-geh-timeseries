@@ -64,6 +64,7 @@ def delta_reader(spark: SparkSession, delta_lake_path: str):
 
     return f
 
+
 @pytest.fixture(scope="session")
 def parquet_reader(spark: SparkSession, delta_lake_path: str):
     def f(path: str):

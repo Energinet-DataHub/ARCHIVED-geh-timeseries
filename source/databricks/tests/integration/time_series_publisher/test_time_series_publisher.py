@@ -27,6 +27,7 @@ from package.codelists.colname import Colname
 from tests.integration.utils import streaming_job_asserter
 from package.schemas import time_series_unprocessed_schema
 
+
 def test_timeseries_publisher_returns_0(
     spark,
     databricks_path,
@@ -95,7 +96,6 @@ def time_series_publisher(spark, delta_lake_path, integration_tests_path, unproc
         shutil.rmtree(time_series_checkpoint_path)
     if(os.path.exists(time_series_unprocessed_path_json)):
         shutil.rmtree(time_series_unprocessed_path_json)
-
 
     os.makedirs(time_series_unprocessed_path_json)
     f = open(f"{time_series_unprocessed_path_json}/test.json", 'w')

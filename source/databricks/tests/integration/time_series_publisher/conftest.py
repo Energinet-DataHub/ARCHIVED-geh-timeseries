@@ -16,39 +16,38 @@ import pytest
 
 
 @pytest.fixture(scope="session")
-
 def unprocessed_time_series_json_string():
     return """
-{
-	"BusinessReasonCode": 0,
-	"CreatedDateTime": "2022-06-09T12:09:15.000Z",
-	"MeasureUnit": 0,
-	"MeteringPointId": "1",
-	"MeteringPointType": 2,
-	"Period": {
-		"EndDateTime": "2022-06-09T12:09:15.000Z",
-		"Points": [{
-			"Position": 1,
-			"Quality": 3,
-			"Quantity": "1.1"
-		}, {
-			"Position": 1,
-			"Quality": 3,
-			"Quantity": "1.1"
-		}],
-		"Resolution": 2,
-		"StartDateTime": "2022-06-08T12:09:15.000Z"
-	},
-	"Product": "1",
-	"Receiver": {
-		"BusinessProcessRole": 0,
-		"Id": "2"
-	},
-	"RegistrationDateTime": "2022-06-09T12:09:15.000Z",
-	"Sender": {
-		"BusinessProcessRole": 0,
-		"Id": "1"
-	},
-	"SeriesId": "1",
-	"TransactionId": "1"
-}"""
+    {
+      "BusinessReasonCode": 0,
+      "CreatedDateTime": "2022-06-09T12:09:15.000Z",
+      "MeasureUnit": 0,
+      "MeteringPointId": "1",
+      "MeteringPointType": 2,
+      "Period": {
+        "EndDateTime": "2022-06-09T12:09:15.000Z",
+        "Points": [{
+          "Position": 1,
+          "Quality": 3,
+          "Quantity": "1.1"
+        }, {
+          "Position": 1,
+          "Quality": 3,
+          "Quantity": "1.1"
+        }],
+        "Resolution": 2,
+        "StartDateTime": "2022-06-08T12:09:15.000Z"
+      },
+      "Product": "1",
+      "Receiver": {
+        "BusinessProcessRole": 0,
+        "Id": "2"
+      },
+      "RegistrationDateTime": "2022-06-09T12:09:15.000Z",
+      "Sender": {
+        "BusinessProcessRole": 0,
+        "Id": "1"
+      },
+      "SeriesId": "1",
+      "TransactionId": "1"
+    }"""
