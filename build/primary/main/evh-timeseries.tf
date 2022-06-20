@@ -13,7 +13,7 @@
 # limitations under the License.
 
 module "evhnm_timeseries" {
-  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub-namespace?ref=6.0.0"
+  source                          = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub-namespace?ref=7.0.0"
 
   name                            = "timeseries"
   project_name                    = var.domain_name_short
@@ -37,7 +37,7 @@ module "evhnm_timeseries" {
 }
 
 module "evh_received_timeseries" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub?ref=6.0.0"
+  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/eventhub?ref=7.0.0"
 
   name                      = "received-timeseries"
   namespace_name            = module.evhnm_timeseries.name
