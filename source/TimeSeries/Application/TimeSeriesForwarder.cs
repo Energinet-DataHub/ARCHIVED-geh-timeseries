@@ -43,8 +43,8 @@ namespace Energinet.DataHub.TimeSeries.Application
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var fileName = $"{timeSeriesBundle.Document.Id}.json";
-            await using var stream = await _rawTimeSeriesStorageClient.OpenWriteAsync(fileName);
-            await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, stream);
+            await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(fileName);
+            await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
 
             var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
             await _eventHubSender.SendAsync(body).ConfigureAwait(false);
