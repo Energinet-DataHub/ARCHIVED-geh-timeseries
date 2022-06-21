@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Energinet.DataHub.Core.App.Common;
-using Energinet.DataHub.Core.App.Common.Abstractions.Actor;
 using Energinet.DataHub.Core.App.Common.Abstractions.Identity;
 using Energinet.DataHub.Core.App.Common.Abstractions.Security;
 using Energinet.DataHub.Core.App.Common.Identity;
@@ -22,7 +20,7 @@ using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     internal static class ServiceCollectionExtensions
     {

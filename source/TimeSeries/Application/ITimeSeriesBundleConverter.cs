@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
+using System.IO;
+using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Application.Dtos;
+
+namespace Energinet.DataHub.TimeSeries.Application;
+
+public interface ITimeSeriesBundleConverter
 {
-    public static class EnvironmentSettingNames
-    {
-        public static string B2CTenantId => "B2C_TENANT_ID";
-
-        public static string BackendServiceAppId => "BACKEND_SERVICE_APP_ID";
-
-        public static string StorageAccountName => "DATA_LAKE_ACCOUNT_NAME";
-
-        public static string StorageConnectionString => "DATA_LAKE_CONNECTION_STRING";
-
-        public static string StorageKey => "DATA_LAKE_KEY";
-
-        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME";
-    }
+    Task ConvertAsync(TimeSeriesBundleDto timeSeriesBundle, Stream stream);
 }

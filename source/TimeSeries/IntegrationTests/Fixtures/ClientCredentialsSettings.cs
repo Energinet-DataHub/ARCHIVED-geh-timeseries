@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     /// <summary>
     /// Settings necessary for aquiring an access token from the B2C tenant using the client credentials flow.
