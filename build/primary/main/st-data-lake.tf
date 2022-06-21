@@ -13,7 +13,7 @@
 # limitations under the License.
 
 resource "azurerm_storage_blob" "azurerm_storage_blob" {
-  name                    = "${local.DATA_LAKE_TIMESERIES_UNPROCESSED_BLOB_NAME}/notused"
+  name                    = "${local.DATA_LAKE_TIMESERIES_UNPROCESSED_FOLDER_NAME}/notused"
   storage_account_name    = data.azurerm_key_vault_secret.st_shared_data_lake_name.value
   storage_container_name  = local.DATA_LAKE_DATA_CONTAINER_NAME
   type                    = "Block"
@@ -34,11 +34,11 @@ module "kvs_st_data_lake_container_name" {
   tags          = azurerm_resource_group.this.tags
 }
 
-module "kvs_st_data_lake_timeseries_unprocessed_blob_name" {
+module "kvs_st_data_lake_timeseries_unprocessed_folder_name" {
   source        = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-secret?ref=7.0.0"
 
   name          = "st-data-lake-timeseries-unprocessed-blob-name"
-  value         = local.DATA_LAKE_TIMESERIES_UNPROCESSED_BLOB_NAME
+  value         = local.DATA_LAKE_TIMESERIES_UNPROCESSED_FOLDER_NAME
   key_vault_id  = data.azurerm_key_vault.kv_shared_resources.id
 
   tags          = azurerm_resource_group.this.tags

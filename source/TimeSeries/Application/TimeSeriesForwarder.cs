@@ -16,6 +16,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 
 namespace Energinet.DataHub.TimeSeries.Application
@@ -24,17 +25,27 @@ namespace Energinet.DataHub.TimeSeries.Application
     {
         private readonly IEventHubSender _eventHubSender;
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly IRawTimeSeriesStorageClient _rawTimeSeriesStorageClient;
+        private readonly ITimeSeriesBundleConverter _timeSeriesBundleConverter;
 
         public TimeSeriesForwarder(
+            ITimeSeriesBundleConverter timeSeriesBundleConverter,
+            IRawTimeSeriesStorageClient rawTimeSeriesStorageClient,
             IEventHubSender eventHubSender,
             IJsonSerializer jsonSerializer)
         {
+            _timeSeriesBundleConverter = timeSeriesBundleConverter;
+            _rawTimeSeriesStorageClient = rawTimeSeriesStorageClient;
             _eventHubSender = eventHubSender;
             _jsonSerializer = jsonSerializer;
         }
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
+            var fileName = $"{timeSeriesBundle.Document.Id}.json";
+            await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(fileName);
+            await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
+
             var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
             await _eventHubSender.SendAsync(body).ConfigureAwait(false);
         }

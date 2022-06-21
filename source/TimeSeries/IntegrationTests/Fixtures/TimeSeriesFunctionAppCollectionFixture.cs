@@ -14,7 +14,7 @@
 
 using Xunit;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     /// <summary>
     /// A xUnit collection fixture for ensuring tests don't run in parallel.

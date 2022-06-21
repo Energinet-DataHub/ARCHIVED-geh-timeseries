@@ -24,9 +24,10 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.Configuration;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ResourceProvider;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.FunctionAppHost;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 using Microsoft.Extensions.Configuration;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     public class TimeSeriesFunctionAppFixture : FunctionAppFixture
     {
@@ -37,6 +38,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
+            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-raw");
         }
 
         [NotNull]
@@ -45,6 +47,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
         public BlobContainerClient LogContainerClient { get; }
+
+        public BlobContainerClient TimeSeriesContainerClient { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -74,6 +78,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await TimeSeriesContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // => Event Hub
             // Overwrite event hub related settings, so the function app uses the names we have control of in the test
@@ -94,8 +99,10 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY", IntegrationTestConfiguration.ApplicationInsightsInstrumentationKey);
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
-            Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
-            Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageConnectionString, "UseDevelopmentStorage=true");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, "timeseries-raw");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
         }
 
         /// <inheritdoc/>

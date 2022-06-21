@@ -17,7 +17,7 @@ using System.Collections.Generic;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.Configuration;
 using Microsoft.Extensions.Configuration;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     /// <summary>
     /// Responsible for extracting secrets for authorization needed for performing endpoint tests.

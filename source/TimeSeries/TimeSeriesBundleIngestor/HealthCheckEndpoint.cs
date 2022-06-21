@@ -17,7 +17,7 @@ using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public class HealthCheckEndpoint
     {
