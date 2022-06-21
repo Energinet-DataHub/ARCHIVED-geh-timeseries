@@ -72,13 +72,13 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             var expected = _testDocuments.TimeSeriesBundleJson;
             var content = _testDocuments.ValidMultipleTimeSeriesAsString;
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
-            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
 
             // Act
-            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient("C1876453.json").DownloadAsync();
-            var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
+            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
 
             // Assert
+            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient("C1876453.json").DownloadAsync();
+            var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
             actual.Should().Be(expected);
         }
 
