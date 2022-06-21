@@ -45,29 +45,33 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
                 timeSeriesBundle.Document.Receiver,
                 timeSeriesBundle.Document.BusinessReasonCode,
                 SeriesId = series.Id,
-                TransactionId = (string?)series.TransactionId,
+                TransactionId = (string?)series.TransactionId, // (string?) i needed to mitigate nullability anonymous type error
                 series.MeteringPointId,
                 series.MeteringPointType,
                 series.RegistrationDateTime,
-                Product = (string?)series.Product,
+                Product = (string?)series.Product, // (string?) i needed to mitigate nullability anonymous type error
                 series.MeasureUnit,
                 series.Period,
             })
             .ToList();
-
         var newLine = Encoding.UTF8.GetBytes(Environment.NewLine);
 
+        // Options will be remove when SerializeAsync has been implemented in custom JsonSerializer
         var options = new JsonSerializerOptions();
         options.Converters.Add(NodaConverters.InstantConverter);
         options.ConfigureForNodaTime(DateTimeZoneProviders.Tzdb);
+
         for (var index = 0; index < timeSeriesJsonDtoList.Count; index++)
         {
             if (index != 0)
             {
+                // Places each json object on a new line to make it easier to consume in databricks
                 await stream.WriteAsync(newLine).ConfigureAwait(false);
             }
 
             var item = timeSeriesJsonDtoList[index];
+
+            // JsonSerializer.SerializeAsync will be replaced with custom implementation when ready
             await JsonSerializer.SerializeAsync(stream, item, options);
         }
     }
