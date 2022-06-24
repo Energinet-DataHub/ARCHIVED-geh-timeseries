@@ -82,7 +82,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
             serviceCollection.AddSingleton(
                 _ => new BlobContainerClient(
                     EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageConnectionString),
-                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.TimeSeriesRaw)).CreateIfNotExistsAsync());
+                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.TimeSeriesRaw)));
 
             serviceCollection.AddJwtTokenSecurity();
 
