@@ -16,7 +16,7 @@ from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, 
 from pyspark.sql.types import BooleanType
 from package.transforms import transform_unprocessed_time_series_to_points
 from package.codelists import Colname
-from package.schemas import time_series_points_schema
+from package.schemas import time_series_points_schema, time_series_unprocessed_schema
 from delta.tables import DeltaTable
 from package.table_creator import create_delta_table_if_empty
 
@@ -28,33 +28,21 @@ def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_p
     """
 
     (transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
-     .select(
-         col(Colname.metering_point_id),
-         col(Colname.transaction_id),
-         col(Colname.quantity),
-         col(Colname.quality),
-         col(Colname.time),
-         col(Colname.resolution),
-         col(Colname.year),
-         col(Colname.month),
-         col(Colname.day),
-         col(Colname.registration_date_time))
      .write
      .partitionBy(
          Colname.year,
          Colname.month,
          Colname.day)
-     .format("delta")
-     .mode("append")
+     .format("parquet")
      .save(time_series_points_path))
 
 
 def timeseries_publisher(spark: SparkSession, time_series_unprocessed_path: str, time_series_checkpoint_path: str, time_series_points_path: str):
-    create_delta_table_if_empty(spark, time_series_points_path, time_series_points_schema, [Colname.year, Colname.month, Colname.day])
 
     return (spark
             .readStream
-            .format("delta")
+            .format("parquet")
+            .schema(time_series_unprocessed_schema)
             .load(time_series_unprocessed_path)
             .writeStream
             .option("checkpointLocation", time_series_checkpoint_path)
