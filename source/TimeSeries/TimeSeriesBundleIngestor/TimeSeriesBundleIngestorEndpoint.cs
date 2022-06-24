@@ -54,7 +54,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
             }
 
             await _timeSeriesForwarder
-                .HandleAsync(deserializationResult.TimeSeriesBundleDto, EnvironmentSettingNames.TimeSeriesRaw)
+                .HandleAsync(deserializationResult.TimeSeriesBundleDto)
                 .ConfigureAwait(false);
 
             return _httpResponseBuilder.CreateAcceptedResponse(req);

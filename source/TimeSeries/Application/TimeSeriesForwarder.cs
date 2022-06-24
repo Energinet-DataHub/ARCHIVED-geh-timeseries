@@ -40,9 +40,9 @@ namespace Energinet.DataHub.TimeSeries.Application
             _jsonSerializer = jsonSerializer;
         }
 
-        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle, string blobFolder)
+        public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
-            var blobName = $"{blobFolder}/{timeSeriesBundle.Document.Id}.json";
+            var blobName = $"timeseries-raw/{timeSeriesBundle.Document.Id}.json";
             await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(blobName);
             await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
 

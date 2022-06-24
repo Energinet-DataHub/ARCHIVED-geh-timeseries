@@ -38,7 +38,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
-            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-raw");
+            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "timeseries-data");
         }
 
         [NotNull]
@@ -100,7 +100,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageConnectionString, "UseDevelopmentStorage=true");
-            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, "timeseries-raw");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageContainerName, "timeseries-data");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
         }
