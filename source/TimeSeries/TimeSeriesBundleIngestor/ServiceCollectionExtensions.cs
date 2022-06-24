@@ -17,6 +17,7 @@ using Energinet.DataHub.Core.App.Common.Abstractions.Security;
 using Energinet.DataHub.Core.App.Common.Identity;
 using Energinet.DataHub.Core.App.Common.Security;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
+using Energinet.DataHub.TimeSeries.Infrastructure;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -24,7 +24,7 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.Configuration;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ResourceProvider;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.FunctionAppHost;
-using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+using Energinet.DataHub.TimeSeries.Infrastructure;
 using Microsoft.Extensions.Configuration;
 
 namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
@@ -101,6 +101,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageConnectionString, "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageContainerName, "timeseries-data");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, "timeseries-raw");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
         }
