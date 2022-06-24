@@ -28,8 +28,8 @@ public class RawTimeSeriesStorageClient : IRawTimeSeriesStorageClient
         _blobContainerClient = blobContainerClient;
     }
 
-    public async Task<Stream> OpenWriteAsync(string fileName)
+    public async Task<Stream> OpenWriteAsync(string blobName)
     {
-        return await _blobContainerClient.GetBlockBlobClient(fileName).OpenWriteAsync(true);
+        return await _blobContainerClient.GetBlockBlobClient(blobName).OpenWriteAsync(true);
     }
 }

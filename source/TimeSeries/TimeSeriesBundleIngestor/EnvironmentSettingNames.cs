@@ -22,6 +22,8 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 
         public static string StorageAccountName => "DATA_LAKE_ACCOUNT_NAME";
 
+        public static string StorageContainerName => "DATA_LAKE_DATA_CONTAINER_NAME";
+
         public static string StorageConnectionString => "DATA_LAKE_CONNECTION_STRING";
 
         public static string StorageKey => "DATA_LAKE_KEY";
