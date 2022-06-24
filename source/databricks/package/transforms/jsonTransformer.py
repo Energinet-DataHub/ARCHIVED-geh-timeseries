@@ -21,10 +21,10 @@ from package.codelists import Colname
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    set_time_func = when(col("Resolution") == Resolution.quarter, expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")) \
-        .when(col("Resolution") == Resolution.hour, expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
-        .when(col("Resolution") == Resolution.day, expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
-        .when(col("Resolution") == Resolution.month, expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
+    set_time_func = when(col("Resolution") == Resolution.quarter, expr(f"{Colname.start_datetime} + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)")) \
+        .when(col("Resolution") == Resolution.hour, expr(f"{Colname.start_datetime} + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)")) \
+        .when(col("Resolution") == Resolution.day, expr(f"{Colname.start_datetime} + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)")) \
+        .when(col("Resolution") == Resolution.month, expr(f"{Colname.start_datetime} + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"))
 
     df = (source.select(
           col("*"),
