@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 module "time_series_bundle_ingestor" {
-  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/function-app?ref=6.0.0"
+  source                                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/function-app?ref=7.0.0"
 
   name                                      = "time-series-bundle-ingestor"
   project_name                              = var.domain_name_short
@@ -29,13 +29,12 @@ module "time_series_bundle_ingestor" {
   health_check_path                         = "/api/monitor/ready"
   health_check_alert_action_group_id        = data.azurerm_key_vault_secret.primary_action_group_id.value
   health_check_alert_enabled                = var.enable_health_check_alerts
+  dotnet_framework_version                  = "6"
+  use_dotnet_isolated_runtime               = true
   app_settings                              = {
-    # Region: Default Values
-    WEBSITE_ENABLE_SYNC_UPDATE_SITE                     = true
-    WEBSITE_RUN_FROM_PACKAGE                            = 1
-    WEBSITES_ENABLE_APP_SERVICE_STORAGE                 = true
-    FUNCTIONS_WORKER_RUNTIME                            = "dotnet-isolated"
-    # Shared resources logging
+    DATA_LAKE_ACCOUNT_NAME                              = data.azurerm_key_vault_secret.st_shared_data_lake_name.value
+    DATA_LAKE_CONNECTION_STRING                         = data.azurerm_key_vault_secret.kvs_st_data_lake_primary_connection_string.value
+    DATA_LAKE_KEY                                       = data.azurerm_key_vault_secret.kvs_st_data_lake_primary_access_key.value
     REQUEST_RESPONSE_LOGGING_CONNECTION_STRING          = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=st-marketoplogs-primary-connection-string)",
     REQUEST_RESPONSE_LOGGING_CONTAINER_NAME             = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=st-marketoplogs-container-name)",
     B2C_TENANT_ID                                       = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=b2c-tenant-id)",

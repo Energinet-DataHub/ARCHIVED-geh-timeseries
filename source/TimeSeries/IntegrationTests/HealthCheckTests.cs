@@ -16,15 +16,17 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.FunctionApp.TestCommon;
-using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures;
-using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.TestHelpers;
+using Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures;
+using Energinet.DataHub.TimeSeries.IntegrationTests.TestHelpers;
 using FluentAssertions;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Categories;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
+namespace Energinet.DataHub.TimeSeries.IntegrationTests
 {
+    [IntegrationTest]
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
     public class HealthCheckTests : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {

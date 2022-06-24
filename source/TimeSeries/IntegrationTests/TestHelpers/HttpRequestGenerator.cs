@@ -15,7 +15,7 @@
 using System;
 using System.Net.Http;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.TestHelpers
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.TestHelpers
 {
     public static class HttpRequestGenerator
     {

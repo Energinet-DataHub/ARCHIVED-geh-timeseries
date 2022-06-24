@@ -12,20 +12,24 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
+using System.IO;
+using System.Threading.Tasks;
+using Azure.Storage.Blobs;
+using Azure.Storage.Blobs.Specialized;
+
+namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
+
+public class RawTimeSeriesStorageClient : IRawTimeSeriesStorageClient
 {
-    public static class EnvironmentSettingNames
+    private readonly BlobContainerClient _blobContainerClient;
+
+    public RawTimeSeriesStorageClient(BlobContainerClient blobContainerClient)
     {
-        public static string B2CTenantId => "B2C_TENANT_ID";
+        _blobContainerClient = blobContainerClient;
+    }
 
-        public static string BackendServiceAppId => "BACKEND_SERVICE_APP_ID";
-
-        public static string StorageAccountName => "DATA_LAKE_ACCOUNT_NAME";
-
-        public static string StorageConnectionString => "DATA_LAKE_CONNECTION_STRING";
-
-        public static string StorageKey => "DATA_LAKE_KEY";
-
-        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME";
+    public async Task<Stream> OpenWriteAsync(string fileName)
+    {
+        return await _blobContainerClient.GetBlockBlobClient(fileName).OpenWriteAsync(true);
     }
 }
