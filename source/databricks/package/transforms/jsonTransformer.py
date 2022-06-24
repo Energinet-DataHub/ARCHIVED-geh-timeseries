@@ -31,22 +31,22 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
           explode("Period.Points").alias("Points")
           )
           .select(
-              "MeteringPointId",
-              "TransactionId",
-              col("Points.quantity").alias("quantity"),
-              col("Points.quality").alias("quality"),
-              col("Points.position").alias("position"),
-              col("Period.resolution").alias("resolution"),
-              col("Period.StartDateTime").alias("StartDateTime"),
-              "RegistrationDateTime"
+              col("MeteringPointId").alias(Colname.metering_point_id),
+              col("TransactionId").alias(Colname.transaction_id),
+              col("Points.quantity").alias(Colname.quantity),
+              col("Points.quality").alias(Colname.quality),
+              col("Points.position").alias(Colname.position),
+              col("Period.resolution").alias(Colname.resolution),
+              col("Period.StartDateTime").alias(Colname.start_datetime),
+              col("RegistrationDateTime").alias(Colname.registration_date_time)
           )
           .withColumn("TimeToAdd",
-                      when(col("resolution") == Resolution.quarter, (col("position") - 1) * 15)
-                      .otherwise(col("position") - 1))
-          .withColumn("time", set_time_func)
+                      when(col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15)
+                      .otherwise(col("Position") - 1))
+          .withColumn(Colname.time, set_time_func)
           .withColumn(Colname.year, year(col(Colname.time)))
           .withColumn(Colname.month, month(col(Colname.time)))
           .withColumn(Colname.day, dayofmonth(col(Colname.time)))
-          .drop("position" "StartDateTime", "TimeToAdd"))
+          .drop("Position" "StartDateTime", "TimeToAdd"))
 
     return df
