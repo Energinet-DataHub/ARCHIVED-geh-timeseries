@@ -85,11 +85,12 @@ def time_series_persister(spark, delta_lake_path):
     f.close()
 
     streamingDF = (spark
-               .readStream
-               .schema(time_series_raw_schema)
-               .json(time_series_raw_path))
+                   .readStream
+                   .schema(time_series_raw_schema)
+                   .json(time_series_raw_path))
     # Return the awaitable pyspark streaming job (the sut)
     return timeseries_persister(streamingDF, time_series_checkpointpath, time_series_unprocessed_path)
+
 
 @pytest.mark.asyncio
 async def test_process_json(parquet_reader, time_series_persister):

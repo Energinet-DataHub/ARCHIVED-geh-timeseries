@@ -121,7 +121,7 @@ def time_series_publisher(spark, delta_lake_path, integration_tests_path, unproc
 async def test_publishes_points(parquet_reader, time_series_publisher):
     def verification_function():
         data = parquet_reader("/time_series_points")
-        return data.count() > 0
+        return data.count() == 6
 
     succeeded = streaming_job_asserter(time_series_publisher, verification_function)
     assert succeeded, "No data was stored in Delta table"

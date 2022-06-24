@@ -14,7 +14,7 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, max
 from pyspark.sql.types import BooleanType
-from package.transforms import transform_unprocessed_time_series_to_points_v2
+from package.transforms import transform_unprocessed_time_series_to_points
 from package.codelists import Colname
 from package.schemas import time_series_points_schema, time_series_unprocessed_schema
 from delta.tables import DeltaTable
@@ -27,7 +27,7 @@ def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_p
     The table is partitioned by the time of the actual consumption/production/exchange.
     """
 
-    (transform_unprocessed_time_series_to_points_v2(unprocessed_time_series_df)
+    (transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
      .write
      .partitionBy(
          Colname.year,
