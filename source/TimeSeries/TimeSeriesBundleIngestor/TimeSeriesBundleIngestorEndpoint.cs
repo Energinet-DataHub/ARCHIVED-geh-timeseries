@@ -24,9 +24,9 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public class TimeSeriesBundleIngestorEndpoint
     {
-        private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
+        private readonly ITimeSeriesForwarder _timeSeriesForwarder;
 
         public TimeSeriesBundleIngestorEndpoint(ITimeSeriesForwarder timeSeriesForwarder, ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer, IHttpResponseBuilder httpResponseBuilder)
         {
@@ -54,7 +54,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
             }
 
             await _timeSeriesForwarder
-                .HandleAsync(deserializationResult.TimeSeriesBundleDto)
+                .HandleAsync(deserializationResult.TimeSeriesBundleDto, EnvironmentSettingNames.TimeSeriesRaw)
                 .ConfigureAwait(false);
 
             return _httpResponseBuilder.CreateAcceptedResponse(req);
