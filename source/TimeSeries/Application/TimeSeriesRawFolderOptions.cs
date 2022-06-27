@@ -16,10 +16,5 @@ namespace Energinet.DataHub.TimeSeries.Application;
 
 public class TimeSeriesRawFolderOptions
 {
-    public TimeSeriesRawFolderOptions(string folderName)
-    {
-        FolderName = folderName;
-    }
-
-    public string FolderName { get; set; }
+    public string? FolderName { get; set; }
 }
