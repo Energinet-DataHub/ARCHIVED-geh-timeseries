@@ -71,6 +71,9 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             // Arrange
             var expected = _testDocuments.TimeSeriesBundleJson;
             var content = _testDocuments.ValidMultipleTimeSeriesAsString;
+            var guid = Guid.NewGuid().ToString();
+            content = content.Replace("C1876453", guid);
+            expected = expected.Replace("C1876453", guid);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
 
             // Act
@@ -78,7 +81,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
 
             // Assert
             var s = Fixture.TimeSeriesContainerClient.GetBlobsAsync();
-            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient("timeseries-raw/C1876453.json").DownloadAsync();
+            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient($"timeseries-raw/{guid}.json").DownloadAsync();
             var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
             actual.Should().Be(expected);
         }
