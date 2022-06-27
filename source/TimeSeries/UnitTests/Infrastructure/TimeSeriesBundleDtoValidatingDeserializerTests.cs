@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.TestCommon.AutoFixture.Attributes;
@@ -21,9 +20,11 @@ using Energinet.DataHub.TimeSeries.Application.Enums;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using FluentAssertions;
 using Xunit;
+using Xunit.Categories;
 
 namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
 {
+    [UnitTest]
     public class TimeSeriesBundleDtoValidatingDeserializerTests
     {
         private readonly TestDocuments _testDocuments;

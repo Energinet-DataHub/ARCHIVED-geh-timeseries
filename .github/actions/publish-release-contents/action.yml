@@ -24,27 +24,18 @@ runs:
     - name: Publish Infrastructure to release folder
       shell: bash
       run: |
-        mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
-        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/primary 2>/dev/null || :
-
-    - name: Publish Streaming cluster Infrastructure to release folder
-      shell: bash
-      run: |
-        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/databricks_streaming_cluster ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure/databricks_streaming_cluster 2>/dev/null || :
-
-    - name: Publish streaming-jobs to release folder
-      shell: bash
-      run: |
-        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/source/databricks/streaming-jobs ${{ inputs.RELEASE_FOLDER_PATH }} 2>/dev/null || :
+        mkdir ${{ inputs.RELEASE_FOLDER_PATH }}
+        mkdir ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
+        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/infrastructure/main ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure 2>/dev/null || :
 
     - name: Publish wheel to release folder
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: wheel
         path: ${{ inputs.RELEASE_FOLDER_PATH }}/wheel
 
-    - name: Publish TimeSeriesBundleIngestor to release folder
-      uses: actions/download-artifact@v2
+    - name: Publish dotnet artifact to release folder
+      uses: actions/download-artifact@v3
       with:
-        name: time_series_bundle_ingestor
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/time-series-bundle-ingestor
+        name: dotnet
+        path: ${{ inputs.RELEASE_FOLDER_PATH }}

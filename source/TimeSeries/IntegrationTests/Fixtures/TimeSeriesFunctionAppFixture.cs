@@ -24,19 +24,27 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon.Configuration;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ResourceProvider;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.FunctionAppHost;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 using Microsoft.Extensions.Configuration;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
+namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     public class TimeSeriesFunctionAppFixture : FunctionAppFixture
     {
+        private const string TimeSeriesDataContainerName = "timeseries-data";
+
+        private const string TimeSeriesRawFolderName = "timeseries-raw";
+
+        private const string MarketOpLogs = "marketoplogs";
+
         public TimeSeriesFunctionAppFixture()
         {
             AzuriteManager = new AzuriteManager();
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
-            LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", "marketoplogs");
+            LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", MarketOpLogs);
+            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", TimeSeriesDataContainerName);
         }
 
         [NotNull]
@@ -45,6 +53,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
         public BlobContainerClient LogContainerClient { get; }
+
+        public BlobContainerClient TimeSeriesContainerClient { get; }
 
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
@@ -74,6 +84,7 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
 
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
+            await TimeSeriesContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
 
             // => Event Hub
             // Overwrite event hub related settings, so the function app uses the names we have control of in the test
@@ -93,9 +104,15 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("AzureWebJobsStorage", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY", IntegrationTestConfiguration.ApplicationInsightsInstrumentationKey);
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
-            Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", "marketoplogs");
-            Environment.SetEnvironmentVariable("B2C_TENANT_ID", AuthorizationConfiguration.B2cTenantId);
-            Environment.SetEnvironmentVariable("BACKEND_SERVICE_APP_ID", AuthorizationConfiguration.BackendAppId);
+            Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", MarketOpLogs);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageConnectionString, "UseDevelopmentStorage=true");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageContainerName, TimeSeriesDataContainerName);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, TimeSeriesRawFolderName);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiToken, "INSERT TOKEN HERE");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiUri, "https://adb-5870161604877074.14.azuredatabricks.net");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksHealthCheckEnabled, "False");
         }
 
         /// <inheritdoc/>

@@ -11,21 +11,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 terraform {
-  required_version = "1.1.6"
+  required_version = "=1.2.2"
 
   required_providers {
+    databricks = {
+      source = "databrickslabs/databricks"
+      version = "0.5.1"
+    }
     # It is recommended to pin to a given version of the Azure provider
-    azurerm = "=2.98.0"
-	null = "~> 2.1"
+    azurerm = "=3.9.0"
   }
 }
 
+provider "databricks" {
+  auth_type = "pat"
+  host      = "https://${data.azurerm_key_vault_secret.dbw_databricks_workspace_url.value}"
+  token     = data.azurerm_key_vault_secret.dbw_databricks_workspace_token.value
+}
+
 provider "azurerm" {
-  # It is recommended to pin to a given version of the Provider
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy = true
-    }
-  }
+  use_oidc = true
+  features {}
 }

@@ -13,10 +13,11 @@
 // limitations under the License.
 
 using System;
+using System.Net.Http;
 using Azure.Messaging.EventHubs;
 using Azure.Messaging.EventHubs.Producer;
+using Azure.Storage.Blobs;
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
-
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
@@ -25,16 +26,16 @@ using Energinet.DataHub.Core.Logging.RequestResponseMiddleware;
 using Energinet.DataHub.Core.Logging.RequestResponseMiddleware.Storage;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public static class Program
     {
@@ -77,8 +78,13 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME"))));
 
-            serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
-
+            serviceCollection.AddScoped<ITimeSeriesBundleConverter, TimeSeriesBundleConverter>();
+            serviceCollection.AddScoped<IRawTimeSeriesStorageClient, RawTimeSeriesStorageClient>();
+            serviceCollection.AddSingleton(
+                _ => new BlobContainerClient(
+                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageConnectionString),
+                    EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageContainerName)));
+            serviceCollection.AddOptions<TimeSeriesRawFolderOptions>("TimeSeriesRawFolder");
             serviceCollection.AddJwtTokenSecurity();
 
             serviceCollection.AddSingleton<IRequestResponseLogging>(provider =>
@@ -91,6 +97,14 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 return storage;
             });
             serviceCollection.AddScoped<RequestResponseLoggingMiddleware>();
+            serviceCollection.AddSingleton<IDatabricksClient>(x =>
+            {
+                var httpClient = new HttpClient();
+                httpClient.BaseAddress = new Uri("https://" + EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksApiUri));
+                httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksApiToken)}");
+
+                return new DatabricksClient(httpClient);
+            });
 
             // Health check
             serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
@@ -99,6 +113,11 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver
                 .AddAzureEventHub(name: "EventhubConnectionExists", eventHubConnectionFactory: options => new EventHubConnection(
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
+
+            if (EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksHealthCheckEnabled).ToUpper() != "FALSE")
+            {
+                serviceCollection.AddHealthChecks().AddJobDatabricksCheck("Databricks", EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPresisterStreamingJob), EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPublisherStreamingJob));
+            }
         }
     }
 }

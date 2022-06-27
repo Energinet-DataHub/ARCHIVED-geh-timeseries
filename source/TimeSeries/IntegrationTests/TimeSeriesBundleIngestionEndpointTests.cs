@@ -14,6 +14,7 @@
 
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -22,16 +23,19 @@ using Energinet.DataHub.Core.FunctionApp.TestCommon;
 using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests.Fixtures;
+using Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 using FluentAssertions;
 using Microsoft.Identity.Client;
 using NodaTime;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Categories;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
+namespace Energinet.DataHub.TimeSeries.IntegrationTests
 {
+    [IntegrationTest]
     [Collection(nameof(TimeSeriesFunctionAppCollectionFixture))]
     public class TimeSeriesBundleIngestionEndpoint : FunctionAppTestBase<TimeSeriesFunctionAppFixture>
     {
@@ -62,6 +66,26 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
         }
 
         [Fact]
+        public async Task When_RequestReceivedWithValidJwtToken_Then_JsonStreamUploadedToBlobStorage()
+        {
+            // Arrange
+            var baseFileName = Guid.NewGuid().ToString();
+            var senderMarketParticipantId = "5799999933317";
+            var blobName = $"timeseries-raw/actor={senderMarketParticipantId}-document={baseFileName}.json";
+            var expected = _testDocuments.TimeSeriesBundleJsonAsStringWithGuid(baseFileName);
+            var content = _testDocuments.ValidMultipleTimeSeriesAsStringWithGuid(baseFileName);
+            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
+
+            // Act
+            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
+
+            // Assert
+            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient(blobName).DownloadAsync();
+            var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
+            actual.Should().Be(expected);
+        }
+
+        [Fact]
         public async Task When_RequestReceivedWithJwtTokenAndSchemaInvalid_Then_BadRequestResponseReturned()
         {
             var content = _testDocuments.InvalidTimeSeriesMissingId;
@@ -89,10 +113,8 @@ namespace Energinet.DataHub.TimeSeries.MessageReceiver.IntegrationTests
             var twoNewest = blobItemsAfterRequest.TakeLast(2).ToArray();
 
             Assert.True(blobItemsAfterRequest.Length - blobItemsBeforeRequest.Length == 2);
-            var actualHttpDataRequestType = twoNewest[0].Metadata["httpdatatype"];
-            var actualHttpDataResponse = twoNewest[1].Metadata["httpdatatype"];
-            actualHttpDataRequestType.Should().Be(expectedHttpDataRequestType);
-            actualHttpDataResponse.Should().Be(expectedHttpDataResponseType);
+            twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataRequestType);
+            twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataResponseType);
         }
 
         [Fact]

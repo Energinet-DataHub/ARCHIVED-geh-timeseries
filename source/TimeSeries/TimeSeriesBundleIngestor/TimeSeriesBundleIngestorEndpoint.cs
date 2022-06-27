@@ -13,22 +13,20 @@
 // limitations under the License.
 
 using System;
-using System.Net;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
-using Microsoft.Extensions.Logging;
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public class TimeSeriesBundleIngestorEndpoint
     {
-        private readonly ITimeSeriesForwarder _timeSeriesForwarder;
         private readonly IHttpResponseBuilder _httpResponseBuilder;
         private readonly ITimeSeriesBundleDtoValidatingDeserializer _timeSeriesBundleDtoValidatingDeserializer;
+        private readonly ITimeSeriesForwarder _timeSeriesForwarder;
 
         public TimeSeriesBundleIngestorEndpoint(ITimeSeriesForwarder timeSeriesForwarder, ITimeSeriesBundleDtoValidatingDeserializer timeSeriesBundleDtoValidatingDeserializer, IHttpResponseBuilder httpResponseBuilder)
         {

@@ -12,12 +12,36 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.MessageReceiver
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {
     public static class EnvironmentSettingNames
     {
         public static string B2CTenantId => "B2C_TENANT_ID";
 
         public static string BackendServiceAppId => "BACKEND_SERVICE_APP_ID";
+
+        public static string StorageAccountName => "DATA_LAKE_ACCOUNT_NAME";
+
+        public static string StorageContainerName => "DATA_LAKE_CONTAINER_NAME";
+
+        public static string StorageConnectionString => "DATA_LAKE_CONNECTION_STRING";
+
+        public static string StorageKey => "DATA_LAKE_KEY";
+
+<<<<<<< HEAD
+        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME";
+
+        public static string DatabricksApiToken => "DATABRICKS_API_TOKEN";
+
+        public static string DatabricksApiUri => "DATABRICKS_API_URI";
+
+        public static string DatabricksPresisterStreamingJob => "DATABRICKS_PRESISTER_STREAMING_JOB_NAME";
+
+        public static string DatabricksPublisherStreamingJob => "DATABRICKS_PUBLISHER_STREAMING_JOB_NAME";
+
+        public static string DatabricksHealthCheckEnabled => "DATABRICKS_HEALTH_CHECK_ENABLED";
+=======
+        public static string TimeSeriesRaw => "TimeSeriesRawFolder:FolderName";
+>>>>>>> 37f9977... fix: upload json file to correct blob location
     }
 }

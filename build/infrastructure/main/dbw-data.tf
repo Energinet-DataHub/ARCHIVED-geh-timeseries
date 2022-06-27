@@ -12,9 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-module "kv_shared_access_policy_time_series_bundle_ingestor" {
-  source                    = "git::https://github.com/Energinet-DataHub/geh-terraform-modules.git//azure/key-vault-access-policy?ref=6.1.0"
-
-  key_vault_id              = data.azurerm_key_vault.kv_shared_resources.id
-  app_identity              = module.time_series_bundle_ingestor.identity.0
+data "databricks_spark_version" "latest_lts" {
+  long_term_support = true
 }

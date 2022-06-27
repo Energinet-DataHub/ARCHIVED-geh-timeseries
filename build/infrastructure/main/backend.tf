@@ -12,21 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 terraform {
-  required_version = "1.1.6"
-
-  required_providers {
-    databricks = {
-      source = "databrickslabs/databricks"
-      version = "0.5.1"
-    }
-    azurerm = "=2.98.0"
+  backend "azurerm" {
+    resource_group_name   = "@resource_group_name"
+    storage_account_name  = "@storage_account_name"
+    container_name        = "tfstate"
+    key                   = "terraform_infra.tfstate"
+    use_oidc              = true
+    subscription_id       = "@azure_subscription_id"
+    tenant_id             = "@azure_tenant_id"
   }
-}
-
-provider "databricks" {
-  azure_workspace_resource_id = data.azurerm_key_vault_secret.dbw_databricks_workspace_id.value
-}
-
-provider "azurerm" {
-  features {}
 }
