@@ -30,7 +30,6 @@ using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -84,9 +83,9 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                 _ => new BlobContainerClient(
                     EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageConnectionString),
                     EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageContainerName)));
-            serviceCollection.AddOptions<TimeSeriesRawFolderOptions>().Configure<IConfiguration>((settings, configuration) =>
+            serviceCollection.AddOptions().Configure<TimeSeriesRawFolderOptions>(settings =>
             {
-                configuration.GetSection("TimeSeriesRawFolderOptions").Bind(settings);
+                settings.FolderName = EnvironmentHelper.GetEnv(EnvironmentSettingNames.TimeSeriesRaw);
             });
             serviceCollection.AddJwtTokenSecurity();
 
