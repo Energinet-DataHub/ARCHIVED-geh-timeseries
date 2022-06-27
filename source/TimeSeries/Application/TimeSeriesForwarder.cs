@@ -16,10 +16,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
-using Energinet.DataHub.TimeSeries.Infrastructure;
 using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
-using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
@@ -44,8 +42,7 @@ namespace Energinet.DataHub.TimeSeries.Application
 
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
-            var folder = EnvironmentHelper.GetEnv(EnvironmentSettingNames.TimeSeriesRaw);
-            var blobName = $"{folder}/{timeSeriesBundle.Document.Id}.json";
+            var blobName = $"timeseries-raw/{timeSeriesBundle.Document.Id}.json";
             await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(blobName);
             await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
 
