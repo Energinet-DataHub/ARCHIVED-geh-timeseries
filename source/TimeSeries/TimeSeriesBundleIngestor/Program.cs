@@ -86,7 +86,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                     EnvironmentHelper.GetEnv(EnvironmentSettingNames.StorageContainerName)));
             serviceCollection.AddOptions<TimeSeriesRawFolderOptions>().Configure<IConfiguration>((settings, configuration) =>
             {
-                configuration.GetSection(TimeSeriesRawFolderOptions.TimeSeriesRawFolder).Bind(settings);
+                configuration.GetSection("TimeSeriesRawFolder").Bind(settings);
             });
             serviceCollection.AddJwtTokenSecurity();
 
