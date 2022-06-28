@@ -20,10 +20,10 @@ on:
 
 jobs:
   ci_base:
-    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@7.6.0
 
   dotnet_solution_time_series_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@7.6.0
     with:
       SOLUTION_FILE_PATH: 'source/TimeSeries/TimeSeries.sln'
       DOTNET_VERSION: '6.0.301'
@@ -32,33 +32,32 @@ jobs:
     secrets:
       AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID }}
-      AZURE_SPN_SECRET: ${{ secrets.AZURE_SPN_SECRET }}
+      AZURE_SPN_ID: ${{ secrets.AZURE_SPN_ID_OIDC }}
       AZURE_KEYVAULT_URL: ${{ secrets.AZURE_KEYVAULT_URL }}
       AZURE_SECRETS_KEYVAULT_URL: ${{ secrets.AZURE_SECRETS_KEYVAULT_URL }}
 
   databricks_ci:
-    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@7.6.0
     with:
       PATH_STATIC_CHECKS: './source'
       IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
       TEST_REPORT_PATH: ./source/databricks/htmlcov/
 
   terraform_validate:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@7.6.0
     with:
       TERRAFORM_WORKING_DIR_PATH: "./build/primary/main"
       TERRAFORM_VERSION: '1.2.2'
 
   terraform_validate_streaming_cluster:
-    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@7.6.0
     with:
       TERRAFORM_WORKING_DIR_PATH: './build/databricks_streaming_cluster'
       TERRAFORM_VERSION: '1.2.2'
 
   wheel_ci:
     needs: [databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@7.5.0
+    uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@7.6.0
     with:
       PYHTON_VERSION: '3.8.6'
       ARCHITECTURE: 'x64'
@@ -68,7 +67,7 @@ jobs:
 
   create_prerelease:
     needs: [ci_base, dotnet_solution_time_series_ci, wheel_ci]
-    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@7.5.0
+    uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@7.6.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
     secrets:
