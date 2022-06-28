@@ -70,6 +70,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         {
             // Arrange
             var guid = Guid.NewGuid();
+            var blobName = $"timeseries-raw/{guid}.json";
             var expected = _testDocuments.TimeSeriesBundleJsonAsStringWithGuid(guid);
             var content = _testDocuments.ValidMultipleTimeSeriesAsStringWithGuid(guid);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
@@ -79,7 +80,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
 
             // Assert
             var s = Fixture.TimeSeriesContainerClient.GetBlobsAsync();
-            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient($"timeseries-raw/{guid}.json").DownloadAsync();
+            var response = await Fixture.TimeSeriesContainerClient.GetBlobClient(blobName).DownloadAsync();
             var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
             actual.Should().Be(expected);
         }
