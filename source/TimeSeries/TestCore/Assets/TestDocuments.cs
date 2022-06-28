@@ -35,14 +35,14 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 
         public string TimeSeriesBundleJsonAsString => GetDocumentAsString("TimeSeriesBundleJson.Time_Series_Bundle.json");
 
-        public string ValidMultipleTimeSeriesAsStringWithGuid(Guid guid) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", guid);
+        public string ValidMultipleTimeSeriesAsStringWithGuid(Guid baseFileName) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", baseFileName);
 
-        public string TimeSeriesBundleJsonAsStringWithGuid(Guid guid) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", guid);
+        public string TimeSeriesBundleJsonAsStringWithGuid(Guid baseFileName) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", baseFileName);
 
-        private string GetDocumentAsStringReplaceIdWithGuid(string documentName, Guid guid)
+        private string GetDocumentAsStringReplaceIdWithGuid(string documentName, Guid baseFileName)
         {
             var document = GetDocumentAsString(documentName);
-            return document.Replace("C1876453", guid.ToString());
+            return document.Replace("C1876453", baseFileName.ToString());
         }
 
         private string GetDocumentAsString(string documentName)
