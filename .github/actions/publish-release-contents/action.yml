@@ -38,13 +38,13 @@ runs:
         cp -fR ${{ inputs.REPO_FOLDER_PATH }}/source/databricks/streaming-jobs ${{ inputs.RELEASE_FOLDER_PATH }} 2>/dev/null || :
 
     - name: Publish wheel to release folder
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: wheel
         path: ${{ inputs.RELEASE_FOLDER_PATH }}/wheel
 
-    - name: Publish TimeSeriesBundleIngestor to release folder
-      uses: actions/download-artifact@v2
+    - name: Publish dotnet artifact to release folder
+      uses: actions/download-artifact@v3
       with:
-        name: time_series_bundle_ingestor
-        path: ${{ inputs.RELEASE_FOLDER_PATH }}/functions/time-series-bundle-ingestor
+        name: dotnet
+        path: ${{ inputs.RELEASE_FOLDER_PATH }}
