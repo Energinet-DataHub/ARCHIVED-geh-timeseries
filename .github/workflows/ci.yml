@@ -57,8 +57,7 @@ jobs:
       TERRAFORM_VERSION: '1.2.2'
 
   wheel_ci:
-    needs: [ci_base, databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
-   # needs: [ci_base, terraform_validate, terraform_validate_streaming_cluster]
+    needs: [databricks_ci, terraform_validate, terraform_validate_streaming_cluster]
     uses:  Energinet-DataHub/.github/.github/workflows/python-wheel-ci.yml@7.5.0
     with:
       PYHTON_VERSION: '3.8.6'
@@ -68,7 +67,7 @@ jobs:
       ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [dotnet_solution_time_series_ci, wheel_ci]
+    needs: [ci_base, dotnet_solution_time_series_ci, wheel_ci]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@7.5.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
