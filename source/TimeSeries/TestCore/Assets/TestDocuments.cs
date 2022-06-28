@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using System.IO;
 
 namespace Energinet.DataHub.TimeSeries.TestCore.Assets
@@ -28,13 +29,19 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 
         public Stream ValidMultipleTimeSeries => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries.xml");
 
-        public string ValidMultipleTimeSeriesAsString => GetDocumentAsString("Valid_Hourly_CIM_MultipleTimeSeries.xml");
-
         public Stream ValidMultipleTimeSeriesMissingQuality => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quality.xml");
 
         public Stream ValidMultipleTimeSeriesMissingQuantity => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quantity.xml");
 
-        public string TimeSeriesBundleJson => GetDocumentAsString("TimeSeriesBundleJson.Time_Series_Bundle.json");
+        public string ValidMultipleTimeSeriesAsString(Guid guid) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", guid);
+
+        public string TimeSeriesBundleJson(Guid guid) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", guid);
+
+        private string GetDocumentAsStringReplaceIdWithGuid(string documentName, Guid guid)
+        {
+            var document = GetDocumentAsString(documentName);
+            return document.Replace("C1876453", guid.ToString());
+        }
 
         private string GetDocumentAsString(string documentName)
         {

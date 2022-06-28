@@ -69,10 +69,9 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         public async Task When_RequestReceivedWithValidJwtToken_Then_JsonStreamUploadedToBlobStorage()
         {
             // Arrange
-            // Create guid to replace id of the test file to make sure each run of the test save a new version of the file to blob storage, so it does not give false positive
-            var guid = Guid.NewGuid().ToString();
-            var expected = _testDocuments.TimeSeriesBundleJson.Replace("C1876453", guid);
-            var content = _testDocuments.ValidMultipleTimeSeriesAsString.Replace("C1876453", guid);
+            var guid = Guid.NewGuid();
+            var expected = _testDocuments.TimeSeriesBundleJson(guid);
+            var content = _testDocuments.ValidMultipleTimeSeriesAsString(guid);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
 
             // Act
