@@ -16,5 +16,7 @@ namespace Energinet.DataHub.TimeSeries.Application;
 
 public class TimeSeriesRawFolderOptions
 {
+    public const string TimeSeriesRawFolder = "TimeSeriesRawFolder";
+
     public string? FolderName { get; set; }
 }

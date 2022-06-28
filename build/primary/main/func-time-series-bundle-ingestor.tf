@@ -42,7 +42,7 @@ module "time_series_bundle_ingestor" {
     EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"]
     EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
     DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME               = local.DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME
-    DATA_LAKE_CONTAINER_NAME                            = local.DATA_LAKE_CONTAINER_NAME
+    "TimeSeriesRawFolder:FolderName"                    = local.DATA_LAKE_CONTAINER_NAME
   }
 
   tags                                      = azurerm_resource_group.this.tags
