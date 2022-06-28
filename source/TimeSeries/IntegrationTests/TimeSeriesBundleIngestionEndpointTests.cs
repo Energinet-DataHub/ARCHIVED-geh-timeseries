@@ -70,8 +70,8 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         {
             // Arrange
             var guid = Guid.NewGuid();
-            var expected = _testDocuments.TimeSeriesBundleJson(guid);
-            var content = _testDocuments.ValidMultipleTimeSeriesAsString(guid);
+            var expected = _testDocuments.TimeSeriesBundleJsonAsStringWithGuid(guid);
+            var content = _testDocuments.ValidMultipleTimeSeriesAsStringWithGuid(guid);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
 
             // Act

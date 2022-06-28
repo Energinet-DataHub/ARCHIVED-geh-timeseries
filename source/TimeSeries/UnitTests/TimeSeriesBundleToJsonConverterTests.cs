@@ -45,7 +45,7 @@ public class TimeSeriesBundleToJsonConverterTests
     {
         // Arrange
         var testTimeSeriesBundleDto = CreateTestTimeSeriesBundleDto();
-        var expected = _testDocuments.TimeSeriesBundleJson;
+        var expected = _testDocuments.TimeSeriesBundleJsonAsString;
         var stream = new MemoryStream();
 
         // Act
