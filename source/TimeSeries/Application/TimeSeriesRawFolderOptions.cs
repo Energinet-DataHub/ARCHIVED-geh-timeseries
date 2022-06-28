@@ -12,12 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.IO;
-using System.Threading.Tasks;
+namespace Energinet.DataHub.TimeSeries.Application;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.Blob;
-
-public interface IRawTimeSeriesStorageClient
+public class TimeSeriesRawFolderOptions
 {
-    Task<Stream> OpenWriteAsync(string blobName);
+    public string? FolderName { get; set; }
 }
