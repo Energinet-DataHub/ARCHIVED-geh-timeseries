@@ -79,7 +79,6 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
 
             // Assert
-            var s = Fixture.TimeSeriesContainerClient.GetBlobsAsync();
             var response = await Fixture.TimeSeriesContainerClient.GetBlobClient(blobName).DownloadAsync();
             var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
             actual.Should().Be(expected);
