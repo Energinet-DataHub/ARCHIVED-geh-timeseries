@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System;
 using System.IO;
 
 namespace Energinet.DataHub.TimeSeries.TestCore.Assets
@@ -35,11 +34,11 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 
         public string TimeSeriesBundleJsonAsString => GetDocumentAsString("TimeSeriesBundleJson.Time_Series_Bundle.json");
 
-        public string ValidMultipleTimeSeriesAsStringWithGuid(Guid baseFileName) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", baseFileName, "C1876453");
+        public string ValidMultipleTimeSeriesAsStringWithGuid(string baseFileName) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", baseFileName, "C1876453");
 
-        public string TimeSeriesBundleJsonAsStringWithGuid(Guid baseFileName) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", baseFileName, "C1876453");
+        public string TimeSeriesBundleJsonAsStringWithGuid(string baseFileName) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", baseFileName, "C1876453");
 
-        private string GetDocumentAsStringReplaceIdWithGuid(string documentName, Guid baseFileName, string oldBaseFileName)
+        private string GetDocumentAsStringReplaceIdWithGuid(string documentName, string baseFileName, string oldBaseFileName)
         {
             var document = GetDocumentAsString(documentName);
             return document.Replace(oldBaseFileName, baseFileName.ToString());

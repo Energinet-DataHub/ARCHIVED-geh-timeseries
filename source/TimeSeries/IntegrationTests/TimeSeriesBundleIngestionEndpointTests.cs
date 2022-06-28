@@ -69,7 +69,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         public async Task When_RequestReceivedWithValidJwtToken_Then_JsonStreamUploadedToBlobStorage()
         {
             // Arrange
-            var baseFileName = Guid.NewGuid();
+            var baseFileName = Guid.NewGuid().ToString();
             var blobName = $"timeseries-raw/{baseFileName}.json";
             var expected = _testDocuments.TimeSeriesBundleJsonAsStringWithGuid(baseFileName);
             var content = _testDocuments.ValidMultipleTimeSeriesAsStringWithGuid(baseFileName);
