@@ -13,6 +13,6 @@
 # limitations under the License.
 locals {
   DATA_LAKE_TIMESERIES_UNPROCESSED_FOLDER_NAME  = "timeseries-unprocessed"
-  DATA_LAKE_DATA_CONTAINER_NAME                 = "timeseries-data"
+  DATA_LAKE_CONTAINER_NAME                 = "timeseries-data"
   DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME         = "timeseries-raw"
   }
