@@ -31,9 +31,9 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 {
     public class TimeSeriesFunctionAppFixture : FunctionAppFixture
     {
-        private const string TimeSeriesData = "timeseries-data";
+        private const string TimeSeriesDataContainerName = "timeseries-data";
 
-        private const string TimeSeriesRaw = "timeseries-raw";
+        private const string TimeSeriesRawFolderName = "timeseries-raw";
 
         private const string MarketOpLogs = "marketoplogs";
 
@@ -44,7 +44,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             AuthorizationConfiguration = new AuthorizationConfiguration();
             EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", MarketOpLogs);
-            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", TimeSeriesData);
+            TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", TimeSeriesDataContainerName);
         }
 
         [NotNull]
@@ -106,8 +106,8 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONNECTION_STRING", "UseDevelopmentStorage=true");
             Environment.SetEnvironmentVariable("REQUEST_RESPONSE_LOGGING_CONTAINER_NAME", MarketOpLogs);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageConnectionString, "UseDevelopmentStorage=true");
-            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageContainerName, TimeSeriesData);
-            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, TimeSeriesRaw);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.StorageContainerName, TimeSeriesDataContainerName);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.TimeSeriesRaw, TimeSeriesRawFolderName);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
         }
