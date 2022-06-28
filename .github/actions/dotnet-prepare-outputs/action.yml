@@ -35,7 +35,7 @@ runs:
       shell: bash
       run: |
         dotnet publish \
-          '.\source\TimeSeries\TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj'
+          '.\source\TimeSeries\TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj' \
           --no-build \
           --no-restore \
           --configuration Release \
