@@ -33,6 +33,7 @@ def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_p
          Colname.year,
          Colname.month,
          Colname.day)
+     .mode('append')
      .format("parquet")
      .save(time_series_points_path))
 
