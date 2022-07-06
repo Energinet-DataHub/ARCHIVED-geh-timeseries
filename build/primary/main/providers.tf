@@ -11,13 +11,22 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 terraform {
   required_version = "=1.2.2"
 
   required_providers {
+    databricks = {
+      source = "databrickslabs/databricks"
+      version = "0.5.1"
+    }
     # It is recommended to pin to a given version of the Azure provider
     azurerm = "=3.9.0"
   }
+}
+
+provider "databricks" {
+  azure_workspace_resource_id = data.azurerm_key_vault_secret.dbw_databricks_workspace_id.value
 }
 
 provider "azurerm" {

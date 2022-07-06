@@ -36,11 +36,6 @@ data "azurerm_key_vault_secret" "kvs_st_data_lake_primary_access_key" {
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
 }
 
-data "azurerm_key_vault_secret" "dbw_shared_workspace_url" {
-  name         = "dbw-shared-workspace-url"
-  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
-}
-
 data "azurerm_key_vault_secret" "plan_shared_id" {
   name         = "plan-services-id"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
@@ -73,5 +68,10 @@ data "azurerm_key_vault_secret" "dbw_public_network_id" {
 
 data "azurerm_key_vault_secret" "dbw_private_dns_resource_group_name" {
   name         = "databricks-private-dns-resource-group-name"
+  key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
+}
+
+data "azurerm_key_vault_secret" "dbw_databricks_workspace_id" {
+  name         = "dbw-shared-workspace-id"
   key_vault_id = data.azurerm_key_vault.kv_shared_resources.id
 }

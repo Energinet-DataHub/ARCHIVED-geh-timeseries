@@ -11,14 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-output evh_timeseries_listen_connection_string {
-  description = "Connectionstring for the eventhub"
-  value       = module.evh_received_timeseries.primary_connection_strings["listen"]
-  sensitive   = true
-}
 
-output databricks_workspace_url {
-  description = "URL of the created Databricks workspace"
-  value       = data.azurerm_key_vault_secret.dbw_shared_workspace_url.value
-  sensitive   = true
+data "databricks_spark_version" "latest_lts" {
+  long_term_support = true
 }
