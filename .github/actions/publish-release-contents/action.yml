@@ -25,7 +25,7 @@ runs:
       shell: bash
       run: |
         mkdir -p ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure
-        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build/primary ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure 2>/dev/null || :
+        cp -fR ${{ inputs.REPO_FOLDER_PATH }}/build ${{ inputs.RELEASE_FOLDER_PATH }}/infrastructure 2>/dev/null || :
 
     - name: Publish Databricks jobs to release folder
       shell: bash
