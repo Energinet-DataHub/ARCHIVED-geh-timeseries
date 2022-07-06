@@ -19,8 +19,8 @@ on:
       - main
 
 jobs:
-  ci_base:
-    uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@7.6.0
+  # ci_base:
+  #   uses: Energinet-DataHub/.github/.github/workflows/ci-base.yml@7.6.0
 
   # dotnet_solution_time_series_ci:
   #   uses: Energinet-DataHub/.github/.github/workflows/dotnet-solution-ci.yml@7.6.0
@@ -60,7 +60,7 @@ jobs:
   #     ARTIFACT_PATH: './source/databricks/dist'
 
   create_prerelease:
-    needs: [ci_base, dotnet_solution_time_series_ci, wheel_ci, terraform_validate]
+    # needs: [ci_base, dotnet_solution_time_series_ci, wheel_ci, terraform_validate]
     uses: Energinet-DataHub/.github/.github/workflows/create-prerelease.yml@7.6.0
     with:
       CALLER_REPOSITORY_PATH: Energinet-DataHub/geh-timeseries
