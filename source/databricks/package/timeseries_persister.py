@@ -35,6 +35,7 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
     (df
      .write.partitionBy(Colname.year, Colname.month, Colname.day)
      .format("parquet")
+     .mode("append")
      .save(time_series_unprocessed_path))
 
 
