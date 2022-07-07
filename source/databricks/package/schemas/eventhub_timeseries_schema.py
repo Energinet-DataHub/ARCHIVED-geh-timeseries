@@ -11,8 +11,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pyspark.sql.types import StringType, StructType, StructField, ArrayType, IntegerType, DecimalType
+from pyspark.sql.types import (
+    StringType,
+    StructType,
+    StructField,
+    ArrayType,
+    IntegerType,
+    DecimalType,
+)
 
+# Black formatting make this StructType less readable, so we turn off formatting for the rest of the file
+# fmt: off
 eventhub_timeseries_schema = StructType([
     StructField('Document', StructType([
         StructField('Id', StringType(), True),

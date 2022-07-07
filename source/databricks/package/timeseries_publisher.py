@@ -21,31 +21,39 @@ from delta.tables import DeltaTable
 from package.table_creator import create_delta_table_if_empty
 
 
-def publish_timeseries_batch(unprocessed_time_series_df, epoch_id, time_series_points_path):
+def publish_timeseries_batch(
+    unprocessed_time_series_df, epoch_id, time_series_points_path
+):
     """
     Transform raw timeseries from eventhub into timeseries with defined schema suited for aggregations.
     The table is partitioned by the time of the actual consumption/production/exchange.
     """
 
-    (transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
-     .write
-     .partitionBy(
-         Colname.year,
-         Colname.month,
-         Colname.day)
-     .mode('append')
-     .format("parquet")
-     .save(time_series_points_path))
+    (
+        transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
+        .write.partitionBy(Colname.year, Colname.month, Colname.day)
+        .mode("append")
+        .format("parquet")
+        .save(time_series_points_path)
+    )
 
 
-def timeseries_publisher(spark: SparkSession, time_series_unprocessed_path: str, time_series_checkpoint_path: str, time_series_points_path: str):
+def timeseries_publisher(
+    spark: SparkSession,
+    time_series_unprocessed_path: str,
+    time_series_checkpoint_path: str,
+    time_series_points_path: str,
+):
 
-    return (spark
-            .readStream
-            .format("parquet")
-            .schema(time_series_unprocessed_schema)
-            .load(time_series_unprocessed_path)
-            .writeStream
-            .option("checkpointLocation", time_series_checkpoint_path)
-            .foreachBatch(lambda df, epochId: publish_timeseries_batch(df, epochId, time_series_points_path))
-            .start())
+    return (
+        spark.readStream.format("parquet")
+        .schema(time_series_unprocessed_schema)
+        .load(time_series_unprocessed_path)
+        .writeStream.option("checkpointLocation", time_series_checkpoint_path)
+        .foreachBatch(
+            lambda df, epochId: publish_timeseries_batch(
+                df, epochId, time_series_points_path
+            )
+        )
+        .start()
+    )

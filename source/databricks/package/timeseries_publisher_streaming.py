@@ -13,8 +13,9 @@
 # limitations under the License.
 
 import sys
-sys.path.append(r'/workspaces/geh-timeseries/source/databricks')
-sys.path.append(r'/opt/conda/lib/python3.8/site-packages')
+
+sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
+sys.path.append(r"/opt/conda/lib/python3.8/site-packages")
 
 import configargparse
 
@@ -22,12 +23,15 @@ from package import timeseries_publisher, initialize_spark
 
 
 def start():
-    p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
-    p.add('--data-storage-account-name', type=str, required=True)
-    p.add('--data-storage-account-key', type=str, required=True)
-    p.add('--time_series_unprocessed_path', type=str, required=True)
-    p.add('--time_series_points_path', type=str, required=True)
-    p.add('--time_series_checkpoint_path', type=str, required=True)
+    p = configargparse.ArgParser(
+        description="Timeseries etl stream",
+        formatter_class=configargparse.ArgumentDefaultsHelpFormatter,
+    )
+    p.add("--data-storage-account-name", type=str, required=True)
+    p.add("--data-storage-account-key", type=str, required=True)
+    p.add("--time_series_unprocessed_path", type=str, required=True)
+    p.add("--time_series_points_path", type=str, required=True)
+    p.add("--time_series_checkpoint_path", type=str, required=True)
 
     args, unknown_args = p.parse_known_args()
     spark = initialize_spark(args)
@@ -37,4 +41,9 @@ def start():
     time_series_checkpoint_path = f"{args.time_series_checkpoint_path}"
 
     # Start the timeseries publisher
-    timeseries_publisher(spark, time_series_unprocessed_path, time_series_checkpoint_path, time_series_points_path)
+    timeseries_publisher(
+        spark,
+        time_series_unprocessed_path,
+        time_series_checkpoint_path,
+        time_series_points_path,
+    )

@@ -13,21 +13,24 @@
 # limitations under the License.
 from setuptools import setup, find_packages
 
-setup(name='package',
-      version=1.0,
-      description='Tools for timeseries streaming',
-      long_description='',
-      long_description_content_type='text/markdown',
-      license='MIT',
-      packages=find_packages(),
-      install_requires=[
-          'delta==0.4.2',
-          'ConfigArgParse==1.5.3',
-          'pyspark==3.3.0',
-          'azure-storage-blob==12.7.1'
-      ],
-      entry_points={
-            'console_scripts': ['start_publisher = package.timeseries_publisher_streaming:start',
-                                'start_persister = package.timeseries_persister_streaming:start']
-      }
-      )
+setup(
+    name="package",
+    version=1.0,
+    description="Tools for timeseries streaming",
+    long_description="",
+    long_description_content_type="text/markdown",
+    license="MIT",
+    packages=find_packages(),
+    install_requires=[
+        "delta==0.4.2",
+        "ConfigArgParse==1.5.3",
+        "pyspark==3.3.0",
+        "azure-storage-blob==12.7.1",
+    ],
+    entry_points={
+        "console_scripts": [
+            "start_publisher = package.timeseries_publisher_streaming:start",
+            "start_persister = package.timeseries_persister_streaming:start",
+        ]
+    },
+)

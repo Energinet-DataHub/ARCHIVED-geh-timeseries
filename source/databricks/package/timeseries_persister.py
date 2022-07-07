@@ -32,14 +32,17 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
         .withColumn(Colname.day, dayofmonth(df.CreatedDateTime))
     )
 
-    (df
-     .write.partitionBy(Colname.year, Colname.month, Colname.day)
-     .format("parquet")
-     .mode("append")
-     .save(time_series_unprocessed_path))
+    (
+        df.write.partitionBy(Colname.year, Colname.month, Colname.day)
+        .format("parquet")
+        .mode("append")
+        .save(time_series_unprocessed_path)
+    )
 
 
-def timeseries_persister(streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str):
+def timeseries_persister(
+    streamingDf: DataFrame, checkpoint_path: str, timeseries_unprocessed_path: str
+):
     return (
         streamingDf.writeStream.option("checkpointLocation", checkpoint_path)
         .foreachBatch(
