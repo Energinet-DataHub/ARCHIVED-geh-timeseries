@@ -15,8 +15,12 @@
 resource "databricks_job" "publisher_streaming_job" {
   name = "PublisherStreamingJob"
   max_retries = 2
-  max_concurrent_runs = 1   
+  max_concurrent_runs = 1
   always_running = true
+
+  task {
+     # The job must be recreated with each deployment and this is achieved using a unique resource id.
+    task_key = "unique_job_${uuid()}"
 
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id
@@ -48,6 +52,7 @@ resource "databricks_job" "publisher_streaming_job" {
          "--time_series_checkpoint_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
     ]
   }
+}
 
   email_notifications {
     no_alert_for_skipped_runs = true
