@@ -15,8 +15,11 @@
 resource "databricks_job" "publisher_streaming_job" {
   name = "PublisherStreamingJob"
   max_retries = 2
-  max_concurrent_runs = 1   
+  max_concurrent_runs = 1
   always_running = true
+
+  task {
+    task_key = "unique_job_${uuid()}"
 
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id
