@@ -75,6 +75,7 @@ Url
 visualstudio
 vscode
 VSCode
+Whitespace
 witout
 WSL
 www
