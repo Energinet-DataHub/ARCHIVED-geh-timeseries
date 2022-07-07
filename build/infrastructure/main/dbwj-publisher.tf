@@ -31,23 +31,12 @@ resource "databricks_job" "publisher_streaming_job" {
   }
 
   library {
-    pypi {
-      package = "configargparse==1.2.3"
-    }
-  }
-
-  library {
-    pypi {
-      package = "azure-storage-blob==12.7.1"
-    }
-  }
-
-  library {
     whl = "dbfs:/package/package-1.0-py3-none-any.whl"
   } 
 
-  spark_python_task {
-    python_file = "dbfs:/timeseries/timeseries_publisher_streaming.py"
+  python_wheel_task {
+    package_name = "package"
+    entry_point = "start_publisher"
     # IMPORTANT: Be careful about changing the name of the time series points Delta table name
     # as it is part of the public contract for published time series points
     parameters  = [

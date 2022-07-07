@@ -21,26 +21,26 @@ from package.schemas import time_series_raw_schema
 from package import timeseries_persister, initialize_spark
 import configargparse
 
+def start():
+    p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
+    p.add('--data-storage-account-name', type=str, required=True)
+    p.add('--data-storage-account-key', type=str, required=True)
+    p.add('--time_series_unprocessed_path', type=str, required=True)
+    p.add('--time_series_raw_path', type=str, required=True)
+    p.add('--time_series_checkpoint_path', type=str, required=True)
 
-p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
-p.add('--data-storage-account-name', type=str, required=True)
-p.add('--data-storage-account-key', type=str, required=True)
-p.add('--time_series_unprocessed_path', type=str, required=True)
-p.add('--time_series_raw_path', type=str, required=True)
-p.add('--time_series_checkpoint_path', type=str, required=True)
+    args, unknown_args = p.parse_known_args()
 
-args, unknown_args = p.parse_known_args()
+    spark = initialize_spark(args)
 
-spark = initialize_spark(args)
+    time_series_unprocessed_path = f"{args.time_series_unprocessed_path}"
+    time_series_raw_path = f"{args.time_series_raw_path}"
+    checkpoint_path = f"{args.time_series_checkpoint_path}"
 
-time_series_unprocessed_path = f"{args.time_series_unprocessed_path}"
-time_series_raw_path = f"{args.time_series_raw_path}"
-checkpoint_path = f"{args.time_series_checkpoint_path}"
-
-streamingDF = (spark
+    streamingDF = (spark
                .readStream
                .schema(time_series_raw_schema)
                .json(time_series_raw_path))
 
-# start the timeseries persister job
-timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)
+    # start the timeseries persister job
+    timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)
