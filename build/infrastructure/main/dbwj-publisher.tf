@@ -21,7 +21,7 @@ resource "databricks_job" "publisher_streaming_job" {
   task {
      # The job must be recreated with each deployment and this is achieved using a unique resource id.
     task_key = "unique_job_${uuid()}"
-
+  }
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id
     node_type_id            = "Standard_DS3_v2"
