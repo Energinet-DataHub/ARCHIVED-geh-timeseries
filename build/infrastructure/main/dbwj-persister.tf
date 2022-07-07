@@ -21,7 +21,7 @@ resource "databricks_job" "persister_streaming_job" {
   task {
      # The job must be recreated with each deployment and this is achieved using a unique resource id.
     task_key = "unique_job_${uuid()}"
-  }
+  
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id
     node_type_id            = "Standard_DS3_v2"
@@ -49,8 +49,8 @@ resource "databricks_job" "persister_streaming_job" {
          "--time_series_raw_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/timeseries-raw",
          "--time_series_checkpoint_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-persister"
     ]
+   }
   }
-
 
   email_notifications {
     no_alert_for_skipped_runs = true
