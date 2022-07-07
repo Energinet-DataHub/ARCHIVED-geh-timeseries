@@ -2,12 +2,12 @@
 
 ## Table of content
 
-- [Intro](#intro)
-- [Architecture](#architecture)
-- [Context Streams](#context-streams)
-- [Domain Road Map](#domain-road-map)
-- [Getting Started](#getting-started)
-- [Where can I get more help?](#where-can-i-get-more-help)
+* [Intro](#intro)
+* [Architecture](#architecture)
+* [Context Streams](#context-streams)
+* [Domain Road Map](#domain-road-map)
+* [Getting Started](#getting-started)
+* [Where can I get more help?](#where-can-i-get-more-help)
 
 ## Intro
 
@@ -54,12 +54,12 @@ Learn how to get started with Green Energy Hub [here](https://github.com/Energin
 
 Required or Recommended tools:
 
-- [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
-- [Terraform](https://www.terraform.io) for infrastructure as code
-- `Rider` or `Visual Studio` for .NET development
-- .NET 5 SDK
-- Visual Studio Code for PySpark streaming development
-- Docker
+* [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli)
+* [Terraform](https://www.terraform.io) for infrastructure as code
+* `Rider` or `Visual Studio` for .NET development
+* .NET 5 SDK
+* Visual Studio Code for PySpark streaming development
+* Docker
 
 ## Where can I get more help?
 
