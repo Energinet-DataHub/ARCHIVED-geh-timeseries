@@ -26,7 +26,7 @@ setup(name='package',
           'pyspark==3.3.0',
           'azure-storage-blob==12.7.1'
       ],
-       entry_points={
+      entry_points={
             'console_scripts': ['start_publisher = package.timeseries_publisher_streaming:start',
                                 'start_persister = package.timeseries_persister_streaming:start']
       }

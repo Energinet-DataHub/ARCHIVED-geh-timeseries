@@ -21,6 +21,7 @@ from package.schemas import time_series_raw_schema
 from package import timeseries_persister, initialize_spark
 import configargparse
 
+
 def start():
     p = configargparse.ArgParser(description='Timeseries events stream ingestor', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
     p.add('--data-storage-account-name', type=str, required=True)
@@ -38,9 +39,9 @@ def start():
     checkpoint_path = f"{args.time_series_checkpoint_path}"
 
     streamingDF = (spark
-               .readStream
-               .schema(time_series_raw_schema)
-               .json(time_series_raw_path))
+                   .readStream
+                   .schema(time_series_raw_schema)
+                   .json(time_series_raw_path))
 
     # start the timeseries persister job
     timeseries_persister(streamingDF, checkpoint_path, time_series_unprocessed_path)

@@ -20,6 +20,7 @@ import configargparse
 
 from package import timeseries_publisher, initialize_spark
 
+
 def start():
     p = configargparse.ArgParser(description='Timeseries etl stream', formatter_class=configargparse.ArgumentDefaultsHelpFormatter)
     p.add('--data-storage-account-name', type=str, required=True)
