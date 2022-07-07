@@ -23,7 +23,11 @@
 	// Set *default* container specific settings.json values on container create.
 	"settings": { 
 		"terminal.integrated.shell.linux": "/bin/bash",
-        "python.linting.flake8Enabled": true
+        "python.linting.flake8Enabled": true,
+		"editor.formatOnSave": true,
+		"python.formatting.provider": "black",
+		"python.defaultInterpreterPath": "/opt/conda/bin/python",
+		"python.languageServer": "Jedi"
 	},
 
 	"containerEnv": {
