@@ -12,40 +12,71 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from package.codelists import Colname
-from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType, LongType, ArrayType
+from pyspark.sql.types import (
+    DecimalType,
+    StructType,
+    StructField,
+    StringType,
+    TimestampType,
+    IntegerType,
+    LongType,
+    ArrayType,
+)
 
-time_series_unprocessed_schema = StructType([
-    StructField("BusinessReasonCode", LongType(), True),
-    StructField("CreatedDateTime", TimestampType(), True),
-    StructField("DocumentId", StringType(), True),
-    StructField("MeasureUnit", LongType(), True),
-    StructField("MeteringPointId", StringType(), True),
-    StructField("MeteringPointType", LongType(), True),
-    StructField("Period", StructType([
-        StructField("EndDateTime", TimestampType(), True),
-        StructField("Points", ArrayType(
-            StructType([
-                StructField("Position", LongType(), True),
-                StructField("Quality", LongType(), True),
-                StructField("Quantity", StringType(), True)
-            ])
-        )),
-        StructField("Resolution", LongType(), True),
-        StructField("StartDateTime", TimestampType(), True)
-    ])),
-    StructField("Product", StringType(), True),
-    StructField("Receiver", StructType([
-        StructField("BusinessProcessRole", LongType(), True),
-        StructField("Id", StringType(), True)
-    ])),
-    StructField("RegistrationDateTime", TimestampType(), True),
-    StructField("Sender", StructType([
-        StructField("BusinessProcessRole", LongType(), True),
-        StructField("Id", StringType(), True)
-    ])),
-    StructField("SeriesId", StringType(), True),
-    StructField("TransactionId", StringType(), True),
-    StructField("year", IntegerType(), True),
-    StructField("month", IntegerType(), True),
-    StructField("day", IntegerType(), True)
-])
+time_series_unprocessed_schema = StructType(
+    [
+        StructField("BusinessReasonCode", LongType(), True),
+        StructField("CreatedDateTime", TimestampType(), True),
+        StructField("DocumentId", StringType(), True),
+        StructField("MeasureUnit", LongType(), True),
+        StructField("MeteringPointId", StringType(), True),
+        StructField("MeteringPointType", LongType(), True),
+        StructField(
+            "Period",
+            StructType(
+                [
+                    StructField("EndDateTime", TimestampType(), True),
+                    StructField(
+                        "Points",
+                        ArrayType(
+                            StructType(
+                                [
+                                    StructField("Position", LongType(), True),
+                                    StructField("Quality", LongType(), True),
+                                    StructField("Quantity", StringType(), True),
+                                ]
+                            )
+                        ),
+                    ),
+                    StructField("Resolution", LongType(), True),
+                    StructField("StartDateTime", TimestampType(), True),
+                ]
+            ),
+        ),
+        StructField("Product", StringType(), True),
+        StructField(
+            "Receiver",
+            StructType(
+                [
+                    StructField("BusinessProcessRole", LongType(), True),
+                    StructField("Id", StringType(), True),
+                ]
+            ),
+        ),
+        StructField("RegistrationDateTime", TimestampType(), True),
+        StructField(
+            "Sender",
+            StructType(
+                [
+                    StructField("BusinessProcessRole", LongType(), True),
+                    StructField("Id", StringType(), True),
+                ]
+            ),
+        ),
+        StructField("SeriesId", StringType(), True),
+        StructField("TransactionId", StringType(), True),
+        StructField("year", IntegerType(), True),
+        StructField("month", IntegerType(), True),
+        StructField("day", IntegerType(), True),
+    ]
+)

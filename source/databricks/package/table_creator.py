@@ -17,16 +17,16 @@ from pyspark.sql.types import StructType
 from delta.tables import DeltaTable
 
 
-def create_delta_table_if_empty(spark: SparkSession, delta_table_path: str, schema: StructType, partitionCols: List[str]):
+def create_delta_table_if_empty(
+    spark: SparkSession,
+    delta_table_path: str,
+    schema: StructType,
+    partitionCols: List[str],
+):
     if DeltaTable.isDeltaTable(spark, delta_table_path):
         return
 
     emptyDF = spark.createDataFrame(spark.sparkContext.emptyRDD(), schema)
-    emptyDF \
-        .write \
-        .partitionBy(
-            partitionCols
-        ) \
-        .format('delta') \
-        .mode('overwrite') \
-        .save(delta_table_path)
+    emptyDF.write.partitionBy(partitionCols).format("delta").mode("overwrite").save(
+        delta_table_path
+    )
