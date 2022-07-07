@@ -1,5 +1,14 @@
 # Time Series
 
+## Table of content
+
+* [Intro](#intro)
+* [Architecture](#architecture)
+* [Context Streams](#context-streams)
+* [Domain Road Map](#domain-road-map)
+* [Getting Started](#getting-started)
+* [Where can I get more help?](#where-can-i-get-more-help)
+
 ## Intro
 
 The time series domain focuses primarily on receiving, validating, storing and distributing time series data to relevant market participants to be used for billing, etc.
