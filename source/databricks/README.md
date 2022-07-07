@@ -79,3 +79,14 @@
     ```
 
 - Start debugging on the ***Python: Attach container*** in the ***Run and Debug*** panel
+
+
+## Styling and Formatting
+We try to follow [PEP8](https://peps.python.org/pep-0008/) as much as possible, we do this by using [Flake8](https://flake8.pycqa.org/en/latest/) and [Black](https://black.readthedocs.io/en/stable/)
+The following Flake8 codes are ignored:
+- Module imported but unused ([F401](https://www.flake8rules.com/rules/F401.html))
+- Module level import not at top of file ([E402](https://www.flake8rules.com/rules/E402.html))
+- Whitespace before ':' ([E203](https://www.flake8rules.com/rules/E203.html)) (*Needed for black you work well with Flake8, see documentation [here](https://github.com/psf/black/blob/main/docs/guides/using_black_with_other_tools.md#flake8)*)
+- Line too long (82 &gt; 79 characters) ([E501](https://www.flake8rules.com/rules/E501.html)) (*Only ignored in CI step*)
+
+We are using standard [Black code style ](https://github.com/psf/black/blob/main/docs/the_black_code_style/current_style.md#the-black-code-style).
