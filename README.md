@@ -2,12 +2,12 @@
 
 ## Table of content
 
-* [Intro](#intro)
-* [Architecture](#architecture)
-* [Context Streams](#context-streams)
-* [Domain Road Map](#domain-road-map)
-* [Getting Started](#getting-started)
-* [Where can I get more help?](#where-can-i-get-more-help)
+- [Intro](#intro)
+- [Architecture](#architecture)
+- [Context Streams](#context-streams)
+- [Domain Road Map](#domain-road-map)
+- [Getting Started](#getting-started)
+- [Where can I get more help?](#where-can-i-get-more-help)
 
 ## Intro
 
