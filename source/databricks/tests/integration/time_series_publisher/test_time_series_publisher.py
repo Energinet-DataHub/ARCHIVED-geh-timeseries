@@ -67,7 +67,7 @@ def test_timeseries_publisher_returns_0(
 
     exit_code = subprocess.call([
         "python",
-        f"{databricks_path}/streaming-jobs/timeseries_publisher_streaming.py",
+        f"{databricks_path}/package/timeseries_publisher_streaming.py",
         "--data-storage-account-name", "data-storage-account-name",
         "--data-storage-account-key", "data-storage-account-key",
         "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
