@@ -12,17 +12,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from package.codelists import Colname
-from pyspark.sql.types import DecimalType, StructType, StructField, StringType, TimestampType, IntegerType
+from pyspark.sql.types import (
+    DecimalType,
+    StructType,
+    StructField,
+    StringType,
+    TimestampType,
+    IntegerType,
+)
 
-time_series_points_schema = StructType([
-    StructField(Colname.metering_point_id, StringType(), True),
-    StructField(Colname.transaction_id, StringType(), True),
-    StructField(Colname.quantity, DecimalType(18, 3), True),
-    StructField(Colname.quality, IntegerType(), True),
-    StructField(Colname.time, TimestampType(), True),
-    StructField(Colname.resolution, IntegerType(), True),
-    StructField(Colname.year, IntegerType(), True),
-    StructField(Colname.month, IntegerType(), True),
-    StructField(Colname.day, IntegerType(), True),
-    StructField(Colname.registration_date_time, TimestampType(), True),
-])
+time_series_points_schema = StructType(
+    [
+        StructField(Colname.metering_point_id, StringType(), True),
+        StructField(Colname.transaction_id, StringType(), True),
+        StructField(Colname.quantity, DecimalType(18, 3), True),
+        StructField(Colname.quality, IntegerType(), True),
+        StructField(Colname.time, TimestampType(), True),
+        StructField(Colname.resolution, IntegerType(), True),
+        StructField(Colname.year, IntegerType(), True),
+        StructField(Colname.month, IntegerType(), True),
+        StructField(Colname.day, IntegerType(), True),
+        StructField(Colname.registration_date_time, TimestampType(), True),
+    ]
+)

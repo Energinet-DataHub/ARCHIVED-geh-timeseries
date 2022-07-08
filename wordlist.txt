@@ -12,6 +12,7 @@ cov
 csv
 Databricks
 dataframe
+debugz
 deserialize
 dev
 devcontainer
@@ -44,8 +45,8 @@ MPL
 namespace
 NRules
 NSubstitute
-NuGet
 nuget
+NuGet
 POCO
 proto
 protobuf
@@ -55,8 +56,8 @@ Pylance
 pypi
 PySpark
 pyspelling
-Pytest
 pytest
+Pytest
 pytests
 rojopolis
 rted
@@ -65,15 +66,16 @@ SDK
 servicebus
 StyleCop
 suisei
-Terraform
 terraform
+Terraform
 timeseries
 TODO
 UI
 Url
 visualstudio
-VSCode
 vscode
+VSCode
+Whitespace
 witout
 WSL
 www

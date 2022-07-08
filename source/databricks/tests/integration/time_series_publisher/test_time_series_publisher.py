@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import sys
+
 sys.path.append(r"/workspaces/geh-timeseries/source/databricks")
 
 import asyncio
@@ -29,92 +30,117 @@ from package.schemas import time_series_unprocessed_schema
 
 
 def test_timeseries_publisher_returns_0(
-    spark,
-    databricks_path,
-    delta_lake_path,
-    unprocessed_time_series_json_string
+    spark, databricks_path, delta_lake_path, unprocessed_time_series_json_string
 ):
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
     time_series_points_path = f"{delta_lake_path}/time_series_points"
     time_series_checkpoint_path = f"{delta_lake_path}/time_series_points_checkpoint"
-    time_series_unprocessed_path_json = f"{delta_lake_path}/unprocessed_time_series_json"
+    time_series_unprocessed_path_json = (
+        f"{delta_lake_path}/unprocessed_time_series_json"
+    )
 
     # Remove used Delta tables in order to avoid side effects from previous/other test runs
-    if(os.path.exists(time_series_unprocessed_path)):
+    if os.path.exists(time_series_unprocessed_path):
         shutil.rmtree(time_series_unprocessed_path)
-    if(os.path.exists(time_series_points_path)):
+    if os.path.exists(time_series_points_path):
         shutil.rmtree(time_series_points_path)
-    if(os.path.exists(time_series_checkpoint_path)):
+    if os.path.exists(time_series_checkpoint_path):
         shutil.rmtree(time_series_checkpoint_path)
-    if(os.path.exists(time_series_unprocessed_path_json)):
+    if os.path.exists(time_series_unprocessed_path_json):
         shutil.rmtree(time_series_unprocessed_path_json)
 
     # Add test data to data source
     os.makedirs(time_series_unprocessed_path_json)
-    f = open(f"{time_series_unprocessed_path_json}/test.json", 'w')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-09T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-08T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"1"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-10T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-09T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"2"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-11T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-10T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"3"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
+    f = open(f"{time_series_unprocessed_path_json}/test.json", "w")
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-09T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-08T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"1"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-10T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-09T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"2"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-11T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-10T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"3"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
     f.close()
     # Add test data to data source
-    (spark
-     .read
-     .schema(time_series_unprocessed_schema)
-     .json(time_series_unprocessed_path_json)
-     .write
-     .format("parquet")
-     .save(time_series_unprocessed_path))
+    (
+        spark.read.schema(time_series_unprocessed_schema)
+        .json(time_series_unprocessed_path_json)
+        .write.format("parquet")
+        .save(time_series_unprocessed_path)
+    )
 
-    exit_code = subprocess.call([
-        "python",
-        f"{databricks_path}/package/timeseries_publisher_streaming.py",
-        "--data-storage-account-name", "data-storage-account-name",
-        "--data-storage-account-key", "data-storage-account-key",
-        "--time_series_unprocessed_path", f"{delta_lake_path}/unprocessed_time_series",
-        "--time_series_points_path", f"{delta_lake_path}/time_series_points",
-        "--time_series_checkpoint_path", f"{delta_lake_path}/time_series_points_checkpoint",
-    ])
+    exit_code = subprocess.call(
+        [
+            "python",
+            f"{databricks_path}/package/timeseries_publisher_streaming.py",
+            "--data-storage-account-name",
+            "data-storage-account-name",
+            "--data-storage-account-key",
+            "data-storage-account-key",
+            "--time_series_unprocessed_path",
+            f"{delta_lake_path}/unprocessed_time_series",
+            "--time_series_points_path",
+            f"{delta_lake_path}/time_series_points",
+            "--time_series_checkpoint_path",
+            f"{delta_lake_path}/time_series_points_checkpoint",
+        ]
+    )
 
     # Assert
     assert exit_code == 0, "Time-series publisher job did not return exit code 0"
 
 
 @pytest.fixture(scope="session")
-def time_series_publisher(spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string):
+def time_series_publisher(
+    spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string
+):
     # Setup paths
     time_series_checkpoint_path = f"{delta_lake_path}/time_series_points_checkpoint"
     time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_unprocessed_path_json = f"{delta_lake_path}/unprocessed_time_series_json"
+    time_series_unprocessed_path_json = (
+        f"{delta_lake_path}/unprocessed_time_series_json"
+    )
     time_series_points_path = f"{delta_lake_path}/time_series_points"
 
     # Remove used Delta tables in order to avoid side effects from previous/other test runs
-    if(os.path.exists(time_series_unprocessed_path)):
+    if os.path.exists(time_series_unprocessed_path):
         shutil.rmtree(time_series_unprocessed_path)
-    if(os.path.exists(time_series_points_path)):
+    if os.path.exists(time_series_points_path):
         shutil.rmtree(time_series_points_path)
-    if(os.path.exists(time_series_checkpoint_path)):
+    if os.path.exists(time_series_checkpoint_path):
         shutil.rmtree(time_series_checkpoint_path)
-    if(os.path.exists(time_series_unprocessed_path_json)):
+    if os.path.exists(time_series_unprocessed_path_json):
         shutil.rmtree(time_series_unprocessed_path_json)
 
     os.makedirs(time_series_unprocessed_path_json)
-    f = open(f"{time_series_unprocessed_path_json}/test.json", 'w')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"1","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-09T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-08T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"1"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"2","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-10T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-09T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"2"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
-    f.write('{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"3","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-11T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-10T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"3"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n')
+    f = open(f"{time_series_unprocessed_path_json}/test.json", "w")
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"1","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-09T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-08T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"1"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"2","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-10T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-09T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"2"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
+    f.write(
+        '{"BusinessReasonCode":0,"CreatedDateTime":"2022-06-09T12:09:15.000Z","DocumentId":"3","MeasureUnit":0,"MeteringPointId":"1","MeteringPointType":2,"Period":{"EndDateTime":"2022-06-11T12:09:15.000Z","Points":[{"Position":1,"Quality":3,"Quantity":"1.1"},{"Position":1,"Quality":3,"Quantity":"1.1"}],"Resolution":2,"StartDateTime":"2022-06-10T12:09:15.000Z"},"Product":"1","Receiver":{"BusinessProcessRole":0,"Id":"2"},"RegistrationDateTime":"2022-06-09T12:09:15.000Z","Sender":{"BusinessProcessRole":0,"Id":"3"},"SeriesId":"1","TransactionId":"1","year":2022,"month":6,"day":9}\n'
+    )
 
     f.close()
     # Add test data to data source
-    (spark
-     .read
-     .schema(time_series_unprocessed_schema)
-     .json(time_series_unprocessed_path_json)
-     .write
-     .format("parquet")
-     .save(time_series_unprocessed_path))
+    (
+        spark.read.schema(time_series_unprocessed_schema)
+        .json(time_series_unprocessed_path_json)
+        .write.format("parquet")
+        .save(time_series_unprocessed_path)
+    )
 
     # Return the awaitable pyspark streaming job (the sut)
-    return timeseries_publisher(spark, time_series_unprocessed_path, time_series_checkpoint_path, time_series_points_path)
+    return timeseries_publisher(
+        spark,
+        time_series_unprocessed_path,
+        time_series_checkpoint_path,
+        time_series_points_path,
+    )
 
 
 @pytest.mark.asyncio
