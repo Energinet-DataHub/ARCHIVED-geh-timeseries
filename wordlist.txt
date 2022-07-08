@@ -3,6 +3,7 @@ Architechtural
 aroch
 autopep
 avto
+ci
 CLI
 cn
 composable
@@ -35,6 +36,7 @@ GUID
 hashicorp
 https
 IaC
+ini
 IntelliSense
 json
 Jupyter
@@ -70,6 +72,7 @@ terraform
 Terraform
 timeseries
 TODO
+tox
 UI
 Url
 visualstudio
@@ -81,3 +84,4 @@ WSL
 www
 xt
 xunit
+yml
