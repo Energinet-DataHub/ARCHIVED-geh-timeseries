@@ -70,7 +70,8 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
         {
             // Arrange
             var baseFileName = Guid.NewGuid().ToString();
-            var blobName = $"timeseries-raw/{baseFileName}.json";
+            var senderMarketParticipantId = "5799999933317";
+            var blobName = $"timeseries-raw/actor={senderMarketParticipantId}-document={baseFileName}.json";
             var expected = _testDocuments.TimeSeriesBundleJsonAsStringWithGuid(baseFileName);
             var content = _testDocuments.ValidMultipleTimeSeriesAsStringWithGuid(baseFileName);
             using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
