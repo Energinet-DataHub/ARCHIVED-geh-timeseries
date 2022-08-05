@@ -14,7 +14,7 @@
 
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import StringType, StructType
-from pyspark.sql.functions import year, month, dayofmonth
+from pyspark.sql.functions import year, month, dayofmonth, current_timestamp
 from package.codelists import Colname
 
 
@@ -27,9 +27,10 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
     """
 
     df = (
-        df.withColumn(Colname.year, year(df.CreatedDateTime))
-        .withColumn(Colname.month, month(df.CreatedDateTime))
-        .withColumn(Colname.day, dayofmonth(df.CreatedDateTime))
+        df.withColumn("storedTime", current_timestamp())
+        .withColumn(Colname.year, year("storedTime"))
+        .withColumn(Colname.month, month("storedTime"))
+        .withColumn(Colname.day, dayofmonth("storedTime"))
     )
 
     (
