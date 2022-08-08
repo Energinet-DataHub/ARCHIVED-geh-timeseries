@@ -25,6 +25,7 @@ from pyspark.sql.functions import (
     month,
     dayofmonth,
     lit,
+    current_timestamp
 )
 from pyspark.sql.dataframe import DataFrame
 from package.codelists import Resolution
@@ -77,6 +78,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
                 col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15
             ).otherwise(col("Position") - 1),
         )
+        .withColumn("storedTime", current_timestamp())
         .withColumn(Colname.time, set_time_func)
         .withColumn(Colname.year, year(col(Colname.time)))
         .withColumn(Colname.month, month(col(Colname.time)))
