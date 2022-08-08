@@ -25,7 +25,7 @@ from pyspark.sql.functions import (
     month,
     dayofmonth,
     lit,
-    current_timestamp
+    current_timestamp,
 )
 from pyspark.sql.dataframe import DataFrame
 from package.codelists import Resolution
@@ -71,6 +71,12 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             col("Period.resolution").alias(Colname.resolution),
             col("Period.StartDateTime").alias(Colname.start_datetime),
             col("RegistrationDateTime").alias(Colname.registration_date_time),
+        )
+        .withColumn(
+            Colname.registration_date_time,
+            when(
+                col(Colname.registration_date_time) == "", col(Colname.start_datetime)
+            ).otherwise(col(Colname.registration_date_time)),
         )
         .withColumn(
             "TimeToAdd",
