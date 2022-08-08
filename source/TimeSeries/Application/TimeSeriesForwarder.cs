@@ -48,11 +48,11 @@ namespace Energinet.DataHub.TimeSeries.Application
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var folder = _timeSeriesRawFolderOptions.FolderName;
-            var fileNameRaw = $"actor={timeSeriesBundle.Document.Sender.Id}-document={timeSeriesBundle.Document.Id}.json";
 
-            // Prevent blob names with invalid format causing e.g.
+            // Prevent blob names with invalid format causing errors like the following by using HTTP url encoding:
             //    URISyntaxException: Relative path in absolute URI: actor=8200000007739-document=DocId2022-08-08T09:22:20.459Z.json
-            var blobName = $"{folder}/{WebUtility.UrlEncode(fileNameRaw)}";
+            // This problem may be solved when validation of RSM-012 messages is being added to the domain.
+            var blobName = $"{folder}/actor={WebUtility.UrlEncode(timeSeriesBundle.Document.Sender.Id)}-document={WebUtility.UrlEncode(timeSeriesBundle.Document.Id)}.json";
 
             await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(blobName);
             await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
