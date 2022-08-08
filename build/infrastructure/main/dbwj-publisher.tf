@@ -35,7 +35,7 @@ resource "databricks_job" "publisher_streaming_job" {
   }
 
   library {
-    whl = "dbfs:/package/package-1.0-py3-none-any.whl"
+    whl = "dbfs:/geh-timeseries/package-1.0-py3-none-any.whl"
   } 
 
   python_wheel_task {
