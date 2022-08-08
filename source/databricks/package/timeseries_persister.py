@@ -28,9 +28,9 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
 
     df = (
         df.withColumn("storedTime", current_timestamp())
-        .withColumn(Colname.year, year("storedTime"))
-        .withColumn(Colname.month, month("storedTime"))
-        .withColumn(Colname.day, dayofmonth("storedTime"))
+        .withColumn("year", year(col("storedTime")))
+        .withColumn("month", month(col("storedTime")))
+        .withColumn("day", dayofmonth(col("storedTime")))
     )
 
     (
