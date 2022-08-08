@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.JsonSerialization;
@@ -47,7 +48,12 @@ namespace Energinet.DataHub.TimeSeries.Application
         public async Task HandleAsync(TimeSeriesBundleDto timeSeriesBundle)
         {
             var folder = _timeSeriesRawFolderOptions.FolderName;
-            var blobName = $"{folder}/actor-{timeSeriesBundle.Document.Sender.Id}-document-{timeSeriesBundle.Document.Id}.json";
+            var blobNameRaw = $"{folder}/actor={timeSeriesBundle.Document.Sender.Id}-document={timeSeriesBundle.Document.Id}.json";
+
+            // Prevent blob names with invalid format causing e.g.
+            //    URISyntaxException: Relative path in absolute URI: actor=8200000007739-document=DocId2022-08-08T09:22:20.459Z.json
+            var blobName = WebUtility.UrlEncode(blobNameRaw);
+
             await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(blobName);
             await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
 
