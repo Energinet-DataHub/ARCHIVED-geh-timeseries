@@ -41,27 +41,13 @@ module "time_series_bundle_ingestor" {
     BACKEND_SERVICE_APP_ID                              = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=backend-service-app-id)",
     EVENT_HUB_CONNECTION_STRING                         = module.evh_received_timeseries.primary_connection_strings["send"]
     EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
-<<<<<<< HEAD
-    DATABRICKS_API_TOKEN                                = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-token)"
-    DATABRICKS_API_URI                                  = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-url)"
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
     "TimeSeriesRawFolder:FolderName"                    = local.DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME
     DATA_LAKE_CONTAINER_NAME                            = local.DATA_LAKE_CONTAINER_NAME
->>>>>>> 37f9977... fix: upload json file to correct blob location
-=======
-=======
-    DATABRICKS_PRESISTER_STREAMING_JOB_NAME             = databricks_job.persister_streaming_job.name
-    DATABRICKS_PUBLISHER_STREAMING_JOB_NAME             = databricks_job.publisher_streaming_job.name
->>>>>>> cfe6e03... Get jobs names from terraform and inject into app settings
-=======
+    DATABRICKS_API_TOKEN                                = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-token)"
+    DATABRICKS_API_URI                                  = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-url)"
     DATABRICKS_PRESISTER_STREAMING_JOB_NAME             = databricks_job.persister_streaming_job.id
     DATABRICKS_PUBLISHER_STREAMING_JOB_NAME             = databricks_job.publisher_streaming_job.id
->>>>>>> 7a27c6b... Fix terraform app settings problems, and remove magic string
     DATABRICKS_HEALTH_CHECK_ENABLED                     = "True"
->>>>>>> d355b03... Missing app setting to enable databricks health check
   }
 
   tags                                      = azurerm_resource_group.this.tags

@@ -28,8 +28,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 
         public static string StorageKey => "DATA_LAKE_KEY";
 
-<<<<<<< HEAD
-        public static string TimeSeriesRaw => "DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME";
+        public static string TimeSeriesRaw => "TimeSeriesRawFolder:FolderName";
 
         public static string DatabricksApiToken => "DATABRICKS_API_TOKEN";
 
@@ -40,8 +39,5 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
         public static string DatabricksPublisherStreamingJob => "DATABRICKS_PUBLISHER_STREAMING_JOB_NAME";
 
         public static string DatabricksHealthCheckEnabled => "DATABRICKS_HEALTH_CHECK_ENABLED";
-=======
-        public static string TimeSeriesRaw => "TimeSeriesRawFolder:FolderName";
->>>>>>> 37f9977... fix: upload json file to correct blob location
     }
 }
