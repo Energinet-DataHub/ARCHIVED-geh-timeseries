@@ -13,10 +13,11 @@
 // limitations under the License.
 
 using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
 namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 
-public interface IDatabricksClient
+public interface IDatabricksHealthCheckClient
 {
     Task<Root?> GetClustersAsync();
 }

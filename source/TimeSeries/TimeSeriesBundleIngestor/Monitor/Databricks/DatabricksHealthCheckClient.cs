@@ -12,19 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
-namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
-public class DatabricksClient : IDatabricksClient
+public class DatabricksHealthCheckClient : IDatabricksHealthCheckClient
 {
     private readonly HttpClient _httpClient;
 
-    public DatabricksClient(HttpClient httpClient)
+    public DatabricksHealthCheckClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
@@ -36,31 +34,4 @@ public class DatabricksClient : IDatabricksClient
         await using var stream = await response.Content.ReadAsStreamAsync();
         return JsonSerializer.Deserialize<Root>(stream);
     }
-}
-
-public class Root
-{
-    [JsonPropertyName("clusters")]
-    public List<Cluster>? Clusters { get; set; }
-}
-
-public class Cluster
-{
-    [JsonPropertyName("cluster_id")]
-    public string? ClusterId { get; set; }
-
-    [JsonPropertyName("state")]
-    public string? State { get; set; }
-
-    [JsonPropertyName("default_tags")]
-    public DefaultTags? DefaultTags { get; set; }
-}
-
-public class DefaultTags
-{
-    public string? ClusterName { get; set; }
-
-    public string? JobId { get; set; }
-
-    public string? RunName { get; set; }
 }

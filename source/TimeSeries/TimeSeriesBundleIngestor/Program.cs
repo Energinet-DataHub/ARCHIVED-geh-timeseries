@@ -30,6 +30,7 @@ using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
 using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Energinet.DataHub.TimeSeries.Infrastructure.Functions;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -97,13 +98,13 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                 return storage;
             });
             serviceCollection.AddScoped<RequestResponseLoggingMiddleware>();
-            serviceCollection.AddSingleton<IDatabricksClient>(x =>
+            serviceCollection.AddSingleton<IDatabricksHealthCheckClient>(x =>
             {
                 var httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri("https://" + EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksApiUri));
                 httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksApiToken)}");
 
-                return new DatabricksClient(httpClient);
+                return new DatabricksHealthCheckClient(httpClient);
             });
 
             // Health check

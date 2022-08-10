@@ -20,18 +20,18 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 
-namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
 public class DatabricksHealthCheck : IHealthCheck
 {
-    private readonly IDatabricksClient _client;
+    private readonly IDatabricksHealthCheckClient _healthCheckClient;
     private readonly string[] _jobNames;
     private readonly ILogger<DatabricksHealthCheck> _logger;
 
-    public DatabricksHealthCheck(string[] jobNames, IDatabricksClient client, ILogger<DatabricksHealthCheck> logger)
+    public DatabricksHealthCheck(string[] jobNames, IDatabricksHealthCheckClient healthCheckClient, ILogger<DatabricksHealthCheck> logger)
     {
         _jobNames = jobNames;
-        _client = client;
+        _healthCheckClient = healthCheckClient;
         _logger = logger;
     }
 
@@ -41,7 +41,7 @@ public class DatabricksHealthCheck : IHealthCheck
 
         try
         {
-            response = await _client.GetClustersAsync();
+            response = await _healthCheckClient.GetClustersAsync();
         }
         catch (HttpRequestException e)
         {

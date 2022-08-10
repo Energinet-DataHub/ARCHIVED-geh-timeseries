@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -34,7 +35,7 @@ public class DatabricksHealthCheckTests
     public async Task GivenTwoDatabricksTaskRuns_Return_CorrectHealthStatus(string state1, string state2, HealthStatus healthStatus)
     {
         var loggerMock = new Mock<ILogger<DatabricksHealthCheck>>();
-        var databricksClientMock = new Mock<IDatabricksClient>();
+        var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
         databricksClientMock.Setup(x => x.GetClustersAsync()).ReturnsAsync(new Root
         {
             Clusters = new List<Cluster>
@@ -74,7 +75,7 @@ public class DatabricksHealthCheckTests
     public async Task GivenDatabricksHasBadToken_Return_UnHealthy()
     {
         var loggerMock = new Mock<ILogger<DatabricksHealthCheck>>();
-        var databricksClientMock = new Mock<IDatabricksClient>();
+        var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
         databricksClientMock.Setup(x => x.GetClustersAsync()).Throws(new HttpRequestException());
 
         var sut = new DatabricksHealthCheck(new string[] { }, databricksClientMock.Object, loggerMock.Object);

@@ -21,6 +21,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 using Moq;
 using Moq.Protected;
 using Xunit;
@@ -43,7 +44,7 @@ public class DatabricksClientTests
     {
         var httpClient = MockHttpClient(HttpStatusCode.OK);
 
-        var client = new DatabricksClient(httpClient);
+        var client = new DatabricksHealthCheckClient(httpClient);
         var result = await client.GetClustersAsync();
 
         Assert.NotNull(result);
@@ -62,7 +63,7 @@ public class DatabricksClientTests
     public async Task WrongToken_ThrowException()
     {
         var httpClient = MockHttpClient(HttpStatusCode.Forbidden);
-        var client = new DatabricksClient(httpClient);
+        var client = new DatabricksHealthCheckClient(httpClient);
         await Assert.ThrowsAsync<HttpRequestException>(() => client.GetClustersAsync());
     }
 

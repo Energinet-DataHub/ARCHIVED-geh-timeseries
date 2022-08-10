@@ -14,7 +14,7 @@
 
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
 public static class DatabricksHealthCheckExtension
 {
