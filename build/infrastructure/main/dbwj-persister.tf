@@ -13,7 +13,7 @@
 # limitations under the License.
 
 resource "databricks_job" "persister_streaming_job" {
-  name = "PersisterStreamingJob"
+  name = "persister_streaming_job"
   max_retries = -1
   max_concurrent_runs = 1
   always_running = true
