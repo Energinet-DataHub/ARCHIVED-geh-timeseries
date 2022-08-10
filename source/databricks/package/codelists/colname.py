@@ -26,6 +26,7 @@ class Colname:
     charge_tax = "charge_tax"
     charge_type = "charge_type"
     connection_state = "connection_state"
+    created_date_time = "created_date_time"
     currency = "currency"
     date = "date"
     day = "day"

@@ -71,13 +71,13 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             col("Period.resolution").alias(Colname.resolution),
             col("Period.StartDateTime").alias(Colname.start_datetime),
             col("RegistrationDateTime").alias(Colname.registration_date_time),
+            col("CreatedDateTime").alias(Colname.created_date_time),
         )
         .withColumn(
             Colname.registration_date_time,
             when(
-                col(Colname.registration_date_time).isNull(),
-                col(Colname.start_datetime),
-            )
+                col(Colname.registration_date_time) == "", col(Colname.created_date_time)
+            ).otherwise(col(Colname.registration_date_time)),
         )
         .withColumn(
             "TimeToAdd",
