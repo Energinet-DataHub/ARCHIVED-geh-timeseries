@@ -34,7 +34,6 @@ limitations under the License.
     <EmbeddedResource Include="Assets\Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_MultipleTimeSeries.xml" />
     <EmbeddedResource Include="Assets\Valid_Hourly_CIM_TimeSeries.xml" />
-    <None Remove="Assets\DatabricksClustersListResponse.json" />
     <EmbeddedResource Include="Assets\DatabricksClustersListResponse.json" />
   </ItemGroup>
 
