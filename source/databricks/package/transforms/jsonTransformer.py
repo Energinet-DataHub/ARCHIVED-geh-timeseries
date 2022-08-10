@@ -75,8 +75,9 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             Colname.registration_date_time,
             when(
-                col(Colname.registration_date_time) == "", col(Colname.start_datetime)
-            ).otherwise(col(Colname.registration_date_time)),
+                col(Colname.registration_date_time).isNull(),
+                col(Colname.start_datetime),
+            )
         )
         .withColumn(
             "TimeToAdd",
@@ -91,5 +92,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(Colname.day, dayofmonth(col(Colname.time)))
         .drop("Position" "StartDateTime", "TimeToAdd")
     )
+
+    df.show()  # skriv test der viser at den kan skifte?
 
     return df
