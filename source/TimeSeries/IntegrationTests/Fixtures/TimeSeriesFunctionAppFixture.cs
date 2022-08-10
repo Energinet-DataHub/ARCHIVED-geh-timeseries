@@ -37,6 +37,8 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
 
         private const string MarketOpLogs = "marketoplogs";
 
+        private const string EuWestDatabricksWorkspaceUrl = "https://adb-5870161604877074.14.azuredatabricks.net";
+
         public TimeSeriesFunctionAppFixture()
         {
             AzuriteManager = new AzuriteManager();
@@ -111,7 +113,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.B2CTenantId, AuthorizationConfiguration.B2cTenantId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiToken, "INSERT TOKEN HERE");
-            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiUri, "https://adb-5870161604877074.14.azuredatabricks.net");
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiUri, EuWestDatabricksWorkspaceUrl);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksHealthCheckEnabled, "False");
         }
 
