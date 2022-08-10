@@ -20,7 +20,7 @@ resource "databricks_job" "persister_streaming_job" {
 
   task {
      # The job must be recreated with each deployment and this is achieved using a unique resource id.
-    task_key = "${databricks_job.persister_streaming_job.id}_${uuid()}"
+    task_key = "persister_streaming_job_${uuid()}"
   
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id
