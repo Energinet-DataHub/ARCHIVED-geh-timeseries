@@ -114,7 +114,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
 
-            if (EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksHealthCheckEnabled).ToUpper() != "FALSE")
+            if (EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksHealthCheckEnabled).ToUpper() == "TRUE")
             {
                 serviceCollection.AddHealthChecks().AddJobDatabricksCheck("Databricks", EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPresisterStreamingJob), EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPublisherStreamingJob));
             }
