@@ -112,7 +112,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.BackendServiceAppId, AuthorizationConfiguration.BackendAppId);
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiToken, "THIS IS A DUMMY TOKEN");
             Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksApiUri, "https://fakedatabricksworkspaceurl.azuredatabricks.net");
-            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksHealthCheckEnabled, bool.TrueString);
+            Environment.SetEnvironmentVariable(EnvironmentSettingNames.DatabricksHealthCheckEnabled, bool.FalseString);
         }
 
         /// <inheritdoc/>
