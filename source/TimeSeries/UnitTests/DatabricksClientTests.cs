@@ -45,7 +45,7 @@ public class DatabricksClientTests
         var httpClient = MockHttpClient(HttpStatusCode.OK);
 
         var client = new DatabricksHealthCheckClient(httpClient);
-        var result = await client.GetClustersAsync();
+        var result = await client.GetClusterListAsync();
 
         Assert.NotNull(result);
         Assert.Equal(32, result!.Clusters!.Count);
@@ -53,7 +53,6 @@ public class DatabricksClientTests
         var cluster = result.Clusters.Last();
 
         Assert.Equal("TERMINATED", cluster.State);
-        Assert.Equal("0801-195819-8boihzib", cluster.ClusterId);
         Assert.Equal("job-266905437853558-run-155586", cluster.DefaultTags!.ClusterName);
         Assert.Equal("266905437853558", cluster.DefaultTags!.JobId);
         Assert.Equal("unique_job_af6d694e-5619-6586-c65d-a3ef9ae4869a", cluster.DefaultTags!.RunName);
@@ -64,7 +63,7 @@ public class DatabricksClientTests
     {
         var httpClient = MockHttpClient(HttpStatusCode.Forbidden);
         var client = new DatabricksHealthCheckClient(httpClient);
-        await Assert.ThrowsAsync<HttpRequestException>(() => client.GetClustersAsync());
+        await Assert.ThrowsAsync<HttpRequestException>(() => client.GetClusterListAsync());
     }
 
     private HttpClient MockHttpClient(HttpStatusCode httpStatusCode)

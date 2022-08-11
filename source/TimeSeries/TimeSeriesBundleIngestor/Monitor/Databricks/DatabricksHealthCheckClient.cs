@@ -27,11 +27,11 @@ public class DatabricksHealthCheckClient : IDatabricksHealthCheckClient
         _httpClient = httpClient;
     }
 
-    public async Task<Root?> GetClustersAsync()
+    public async Task<DatabricksClusterListResponse?> GetClusterListAsync()
     {
         using var response = await _httpClient.GetAsync("api/2.0/clusters/list");
         response.EnsureSuccessStatusCode();
         await using var stream = await response.Content.ReadAsStreamAsync();
-        return JsonSerializer.Deserialize<Root>(stream);
+        return JsonSerializer.Deserialize<DatabricksClusterListResponse>(stream);
     }
 }

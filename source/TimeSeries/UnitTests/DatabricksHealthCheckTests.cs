@@ -36,14 +36,13 @@ public class DatabricksHealthCheckTests
     {
         var loggerMock = new Mock<ILogger<DatabricksHealthCheck>>();
         var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
-        databricksClientMock.Setup(x => x.GetClustersAsync()).ReturnsAsync(new Root
+        databricksClientMock.Setup(x => x.GetClusterListAsync()).ReturnsAsync(new DatabricksClusterListResponse
         {
             Clusters = new List<Cluster>
             {
                 new()
                 {
                     State = state1,
-                    ClusterId = "0803-094100-sgoe7sd9",
                     DefaultTags = new DefaultTags
                     {
                         JobId = "412860718888051",
@@ -54,7 +53,6 @@ public class DatabricksHealthCheckTests
                 new()
                 {
                     State = state2,
-                    ClusterId = "0803-094100-sgoe7sd9",
                     DefaultTags = new DefaultTags
                     {
                         JobId = "412860718888051",
@@ -76,7 +74,7 @@ public class DatabricksHealthCheckTests
     {
         var loggerMock = new Mock<ILogger<DatabricksHealthCheck>>();
         var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
-        databricksClientMock.Setup(x => x.GetClustersAsync()).Throws(new HttpRequestException());
+        databricksClientMock.Setup(x => x.GetClusterListAsync()).Throws(new HttpRequestException());
 
         var sut = new DatabricksHealthCheck(new string[] { }, databricksClientMock.Object);
 

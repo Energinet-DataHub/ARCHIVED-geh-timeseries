@@ -19,5 +19,5 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 
 public interface IDatabricksHealthCheckClient
 {
-    Task<Root?> GetClustersAsync();
+    Task<DatabricksClusterListResponse?> GetClusterListAsync();
 }

@@ -17,7 +17,7 @@ using System.Text.Json.Serialization;
 
 namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
-public class Root
+public class DatabricksClusterListResponse
 {
     [JsonPropertyName("clusters")]
     public List<Cluster>? Clusters { get; set; }

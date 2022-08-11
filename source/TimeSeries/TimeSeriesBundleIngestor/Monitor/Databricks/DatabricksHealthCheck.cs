@@ -35,11 +35,11 @@ public class DatabricksHealthCheck : IHealthCheck
 
     public async Task<HealthCheckResult> CheckHealthAsync(HealthCheckContext context, CancellationToken cancellationToken = default)
     {
-        Root? response;
+        DatabricksClusterListResponse? response;
 
         try
         {
-            response = await _healthCheckClient.GetClustersAsync();
+            response = await _healthCheckClient.GetClusterListAsync();
         }
         catch (HttpRequestException e)
         {
