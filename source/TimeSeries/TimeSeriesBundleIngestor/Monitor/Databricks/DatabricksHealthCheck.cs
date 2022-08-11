@@ -66,11 +66,11 @@ public class DatabricksHealthCheck : IHealthCheck
             }
         }
 
-        if (!notRunningJobs.Any())
+        if (notRunningJobs.Any())
         {
-            return HealthCheckResult.Healthy($@"Running jobs {string.Join(", ", runningJobs)}");
+            return HealthCheckResult.Unhealthy($@"Not running jobs {string.Join(", ", notRunningJobs)} and running jobs {string.Join(", ", runningJobs)}");
         }
 
-        return HealthCheckResult.Unhealthy($@"Not running jobs {string.Join(", ", notRunningJobs)} and running jobs {string.Join(", ", runningJobs)}");
+        return HealthCheckResult.Healthy($@"Running jobs {string.Join(", ", runningJobs)}");
     }
 }
