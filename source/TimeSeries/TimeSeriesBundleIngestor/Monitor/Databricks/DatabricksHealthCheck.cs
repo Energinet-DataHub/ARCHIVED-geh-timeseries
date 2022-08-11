@@ -49,7 +49,7 @@ public class DatabricksHealthCheck : IHealthCheck
         }
 
         if (response?.Clusters == null)
-            return HealthCheckResult.Unhealthy("Was not able to get a get clusters from Databricks API");
+            return HealthCheckResult.Unhealthy("Failed to get clusters from Databricks API");
 
         var notRunningJobs = new List<string>();
         var runningJobs = new List<string>();
