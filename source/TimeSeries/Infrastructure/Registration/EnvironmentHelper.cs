@@ -27,13 +27,15 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Registration
         public static bool GetEnvBool(string variableName)
         {
             var env = GetEnv(variableName);
-            var upper = env.ToUpper();
-            return upper switch
+
+            try
             {
-                "TRUE" => true,
-                "FALSE" => false,
-                _ => throw new ArgumentException($"{env}" + " was neither TRUE or FALSE, value was: {0}", env),
-            };
+                return bool.Parse(env);
+            }
+            catch (Exception e)
+            {
+                throw new ArgumentException($"{env}" + " was neither TRUE or FALSE, value was: {0}", env, e);
+            }
         }
     }
 }
