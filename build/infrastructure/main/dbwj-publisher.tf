@@ -13,14 +13,14 @@
 # limitations under the License.
 
 resource "databricks_job" "publisher_streaming_job" {
-  name = "PublisherStreamingJob"
+  name = "publisher_streaming_job"
   max_retries = -1
   max_concurrent_runs = 1
   always_running = true
 
   task {
      # The job must be recreated with each deployment and this is achieved using a unique resource id.
-    task_key = "unique_job_${uuid()}"
+    task_key = "publisher_streaming_job_${uuid()}"
 
   new_cluster {
     spark_version           = data.databricks_spark_version.latest_lts.id

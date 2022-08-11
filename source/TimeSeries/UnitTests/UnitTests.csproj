@@ -48,6 +48,7 @@ limitations under the License.
     <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\TestCore\TestCore.csproj" />
+    <ProjectReference Include="..\TimeSeriesBundleIngestor\TimeSeriesBundleIngestor.csproj" />
   </ItemGroup>
 
 </Project>

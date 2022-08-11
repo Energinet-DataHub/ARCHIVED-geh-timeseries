@@ -18,30 +18,33 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
 {
     public class TestDocuments
     {
-        public string ValidTimeSeries => GetDocumentAsString("Valid_Hourly_CIM_TimeSeries.xml");
+        public string ValidTimeSeries => GetDocumentAsString("TimeSeriesXMLDocuments.Valid_Hourly_CIM_TimeSeries.xml");
 
-        public string InvalidTimeSeriesMissingId => GetDocumentAsString("Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
+        public string InvalidTimeSeriesMissingId => GetDocumentAsString("TimeSeriesXMLDocuments.Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
 
-        public Stream InvalidTimeSeriesMissingIdAsStream => GetDocumentStream("Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
+        public Stream InvalidTimeSeriesMissingIdAsStream => GetDocumentStream("TimeSeriesXMLDocuments.Invalid_Hourly_CIM_TimeSeries_missing_mRID.xml");
 
-        public string ValidMultipleTimeSeriesMissingId => GetDocumentAsString("Valid_Hourly_CIM_MultipleTimeSeries.xml");
+        public string ValidMultipleTimeSeriesMissingId => GetDocumentAsString("TimeSeriesXMLDocuments.Valid_Hourly_CIM_MultipleTimeSeries.xml");
 
-        public Stream ValidMultipleTimeSeries => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries.xml");
+        public Stream ValidMultipleTimeSeries => GetDocumentStream("TimeSeriesXMLDocuments.Valid_Hourly_CIM_MultipleTimeSeries.xml");
 
-        public Stream ValidMultipleTimeSeriesMissingQuality => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quality.xml");
+        public Stream ValidMultipleTimeSeriesMissingQuality => GetDocumentStream("TimeSeriesXMLDocuments.Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quality.xml");
 
-        public Stream ValidMultipleTimeSeriesMissingQuantity => GetDocumentStream("Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quantity.xml");
+        public Stream ValidMultipleTimeSeriesMissingQuantity => GetDocumentStream("TimeSeriesXMLDocuments.Valid_Hourly_CIM_MultipleTimeSeries_With_Missing_Quantity.xml");
 
         public string TimeSeriesBundleJsonAsString => GetDocumentAsString("TimeSeriesBundleJson.Time_Series_Bundle.json");
 
-        public string ValidMultipleTimeSeriesAsStringWithGuid(string baseFileName) => GetDocumentAsStringReplaceIdWithGuid("Valid_Hourly_CIM_MultipleTimeSeries.xml", baseFileName, "C1876453");
+        public string DatabricksClustersListResponse => GetDocumentAsString("DatabricksClustersListResponse.json");
+
+        public string ValidMultipleTimeSeriesAsStringWithGuid(string baseFileName) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesXMLDocuments.Valid_Hourly_CIM_MultipleTimeSeries.xml", baseFileName, "C1876453");
 
         public string TimeSeriesBundleJsonAsStringWithGuid(string baseFileName) => GetDocumentAsStringReplaceIdWithGuid("TimeSeriesBundleJson.Time_Series_Bundle.json", baseFileName, "C1876453");
 
         private string GetDocumentAsStringReplaceIdWithGuid(string documentName, string baseFileName, string oldBaseFileName)
         {
             var document = GetDocumentAsString(documentName);
-            return document.Replace(oldBaseFileName, baseFileName.ToString());
+
+            return document.Replace(oldBaseFileName, baseFileName);
         }
 
         private string GetDocumentAsString(string documentName)
