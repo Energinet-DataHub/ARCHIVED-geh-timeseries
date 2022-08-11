@@ -65,7 +65,7 @@ public class DatabricksHealthCheckTests
             },
         });
 
-        var sut = new DatabricksHealthCheck(new[] { "persister_streaming_job", "publisher_streaming_job" }, databricksClientMock.Object, loggerMock.Object);
+        var sut = new DatabricksHealthCheck(new[] { "persister_streaming_job", "publisher_streaming_job" }, databricksClientMock.Object);
 
         var result = await sut.CheckHealthAsync(new HealthCheckContext());
         Assert.Equal(healthStatus, result.Status);
@@ -78,7 +78,7 @@ public class DatabricksHealthCheckTests
         var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
         databricksClientMock.Setup(x => x.GetClustersAsync()).Throws(new HttpRequestException());
 
-        var sut = new DatabricksHealthCheck(new string[] { }, databricksClientMock.Object, loggerMock.Object);
+        var sut = new DatabricksHealthCheck(new string[] { }, databricksClientMock.Object);
 
         var result = await sut.CheckHealthAsync(new HealthCheckContext());
         Assert.Equal(HealthStatus.Unhealthy, result.Status);
