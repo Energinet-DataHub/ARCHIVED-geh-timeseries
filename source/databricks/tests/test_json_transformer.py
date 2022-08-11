@@ -32,8 +32,10 @@ date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 def test_time_series(time_series_unprocessed_factory):
     df = time_series_unprocessed_factory(
-        StartDateTime="2022-06-08T12:09:15.000Z",
-        RegistrationDateTime="2022-06-09T12:09:15.000Z",
+        StartDateTime=datetime.strptime(
+            "2022-06-08T12:09:15.000Z", date_time_formatting_string
+        ),
+        RegistrationDateTime="",
     )
     df2 = transform_unprocessed_time_series_to_points(df)
     df2.show()
@@ -58,9 +60,7 @@ def time_series_unprocessed_factory(spark):
                 "MeteringPointId": "1",
                 "MeteringPointType": 2,
                 "Period": {
-                    "EndDateTime": datetime.strptime(
-                        StartDateTime, date_time_formatting_string
-                    ),
+                    "EndDateTime": StartDateTime,
                     "Points": [
                         {"Position": 1, "Quality": 3, "Quantity": "1.1"},
                         {"Position": 1, "Quality": 3, "Quantity": "1.1"},
@@ -72,9 +72,7 @@ def time_series_unprocessed_factory(spark):
                 },
                 "Product": "1",
                 "Receiver": {"BusinessProcessRole": 0, "Id": "2"},
-                "RegistrationDateTime": datetime.strptime(
-                    RegistrationDateTime, date_time_formatting_string
-                ),
+                "RegistrationDateTime": RegistrationDateTime,
                 "Sender": {"BusinessProcessRole": 0, "Id": "1"},
                 "SeriesId": "1",
                 "TransactionId": "1",
