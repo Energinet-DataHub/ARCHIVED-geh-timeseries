@@ -65,20 +65,19 @@ public class DatabricksHealthCheckTests
 
         var sut = new DatabricksHealthCheck(new[] { "persister_streaming_job", "publisher_streaming_job" }, databricksClientMock.Object);
 
-        var result = await sut.CheckHealthAsync(new HealthCheckContext());
-        Assert.Equal(healthStatus, result.Status);
+        var actual = await sut.CheckHealthAsync(new HealthCheckContext());
+        Assert.Equal(healthStatus, actual.Status);
     }
 
     [Fact]
     public async Task GivenDatabricksHasBadToken_Return_UnHealthy()
     {
-        var loggerMock = new Mock<ILogger<DatabricksHealthCheck>>();
         var databricksClientMock = new Mock<IDatabricksHealthCheckClient>();
         databricksClientMock.Setup(x => x.GetClusterListAsync()).Throws(new HttpRequestException());
 
         var sut = new DatabricksHealthCheck(new string[] { }, databricksClientMock.Object);
 
-        var result = await sut.CheckHealthAsync(new HealthCheckContext());
-        Assert.Equal(HealthStatus.Unhealthy, result.Status);
+        var actual = await sut.CheckHealthAsync(new HealthCheckContext());
+        Assert.Equal(HealthStatus.Unhealthy, actual.Status);
     }
 }
