@@ -115,22 +115,11 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
                     EnvironmentHelper.GetEnv("EVENT_HUB_CONNECTION_STRING"),
                     EnvironmentHelper.GetEnv("EVENT_HUB_NAME")));
 
-            if (ParseEnvironmentSettingAsBool(EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksHealthCheckEnabled)))
+            if (EnvironmentHelper.GetEnvBool(EnvironmentSettingNames.DatabricksHealthCheckEnabled))
             {
                 serviceCollection.AddHealthChecks()
                     .AddJobDatabricksCheck("Databricks", EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPresisterStreamingJob), EnvironmentHelper.GetEnv(EnvironmentSettingNames.DatabricksPublisherStreamingJob));
             }
-        }
-
-        private static bool ParseEnvironmentSettingAsBool(string environmentSetting)
-        {
-            var upper = environmentSetting.ToUpper();
-            return upper switch
-            {
-                "TRUE" => true,
-                "FALSE" => false,
-                _ => throw new ArgumentException($"{environmentSetting}" + " was neither TRUE or FALSE, value was: {0}", environmentSetting),
-            };
         }
     }
 }

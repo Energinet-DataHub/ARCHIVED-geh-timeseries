@@ -23,5 +23,17 @@ namespace Energinet.DataHub.TimeSeries.Infrastructure.Registration
             return Environment.GetEnvironmentVariable(variableName) ??
                    throw new Exception($"TimeSeriesBundleIngestor is missing required environment variable '{variableName}'");
         }
+
+        public static bool GetEnvBool(string variableName)
+        {
+            var env = GetEnv(variableName);
+            var upper = env.ToUpper();
+            return upper switch
+            {
+                "TRUE" => true,
+                "FALSE" => false,
+                _ => throw new ArgumentException($"{env}" + " was neither TRUE or FALSE, value was: {0}", env),
+            };
+        }
     }
 }

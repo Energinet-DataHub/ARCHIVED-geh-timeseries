@@ -43,7 +43,8 @@ namespace Energinet.DataHub.TimeSeries.TestCore.Assets
         private string GetDocumentAsStringReplaceIdWithGuid(string documentName, string baseFileName, string oldBaseFileName)
         {
             var document = GetDocumentAsString(documentName);
-            return document.Replace(oldBaseFileName, baseFileName.ToString());
+
+            return document.Replace(oldBaseFileName, baseFileName);
         }
 
         private string GetDocumentAsString(string documentName)
