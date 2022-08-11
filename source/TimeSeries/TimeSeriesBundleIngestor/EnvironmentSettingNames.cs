@@ -29,5 +29,15 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
         public static string StorageKey => "DATA_LAKE_KEY";
 
         public static string TimeSeriesRaw => "TimeSeriesRawFolder:FolderName";
+
+        public static string DatabricksApiToken => "DATABRICKS_API_TOKEN";
+
+        public static string DatabricksApiUri => "DATABRICKS_API_URI";
+
+        public static string DatabricksPresisterStreamingJob => "DATABRICKS_PRESISTER_STREAMING_JOB_NAME";
+
+        public static string DatabricksPublisherStreamingJob => "DATABRICKS_PUBLISHER_STREAMING_JOB_NAME";
+
+        public static string DatabricksHealthCheckEnabled => "DATABRICKS_HEALTH_CHECK_ENABLED";
     }
 }

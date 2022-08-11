@@ -43,6 +43,11 @@ module "time_series_bundle_ingestor" {
     EVENT_HUB_NAME                                      = module.evh_received_timeseries.name
     "TimeSeriesRawFolder:FolderName"                    = local.DATA_LAKE_TIME_SERIES_RAW_FOLDER_NAME
     DATA_LAKE_CONTAINER_NAME                            = local.DATA_LAKE_CONTAINER_NAME
+    DATABRICKS_API_TOKEN                                = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-token)"
+    DATABRICKS_API_URI                                  = "@Microsoft.KeyVault(VaultName=${var.shared_resources_keyvault_name};SecretName=dbw-shared-workspace-url)"
+    DATABRICKS_PRESISTER_STREAMING_JOB_NAME             = databricks_job.persister_streaming_job.name
+    DATABRICKS_PUBLISHER_STREAMING_JOB_NAME             = databricks_job.publisher_streaming_job.name
+    DATABRICKS_HEALTH_CHECK_ENABLED                     = "True"
   }
 
   tags                                      = azurerm_resource_group.this.tags

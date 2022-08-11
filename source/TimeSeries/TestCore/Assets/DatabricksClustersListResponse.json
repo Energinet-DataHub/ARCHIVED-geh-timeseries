@@ -1,0 +1,1824 @@
+﻿{
+    "clusters": [
+        {
+            "cluster_id": "0524-072257-cjn6bokn",
+            "creator_user_name": "mail@mail.com",
+            "driver": {
+                "private_ip": "10.140.96.5",
+                "public_dns": "20.107.23.254",
+                "node_id": "595f8fcdb07847b0bd01cfe2231875f8",
+                "instance_id": "6667989743f64fea884cbd5d00666c7c",
+                "start_timestamp": 1659597010616,
+                "node_attributes": {
+                    "is_spot": false
+                },
+                "host_private_ip": "10.140.97.5"
+            },
+            "executors": [
+                {
+                    "private_ip": "10.140.96.7",
+                    "public_dns": "20.107.96.141",
+                    "node_id": "40d578e548da4a84a1fd166e70f77526",
+                    "instance_id": "a0ec3ee8e9e649c2874a1ca4f69804c3",
+                    "start_timestamp": 1659597010644,
+                    "node_attributes": {
+                        "is_spot": false
+                    },
+                    "host_private_ip": "10.140.97.7"
+                }
+            ],
+            "spark_context_id": 4827520250602485251,
+            "jdbc_port": 10000,
+            "cluster_name": "seb test",
+            "spark_version": "10.4.x-scala2.12",
+            "spark_conf": {
+                "fs.azure.account.key.stdatalakesharedresu001.dfs.core.windows.net": "123"
+            },
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "spark_env_vars": {
+                "PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+            },
+            "autotermination_minutes": 60,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "UI",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "RUNNING",
+            "state_message": "",
+            "start_time": 1653376977182,
+            "last_state_loss_time": 1659597075859,
+            "last_activity_time": 1659602400912,
+            "last_restarted_time": 1659597075986,
+            "autoscale": {
+                "min_workers": 1,
+                "max_workers": 8
+            },
+            "cluster_memory_mb": 28672,
+            "cluster_cores": 8.0,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "mail@mail.com",
+                "ClusterName": "seb test",
+                "ClusterId": "0524-072257-cjn6bokn",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0804-080526-3svpsp6b",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "driver": {
+                "private_ip": "10.140.96.6",
+                "public_dns": "20.23.241.81",
+                "node_id": "781b41e2b8e34547b277f7dd5491d5cf",
+                "instance_id": "dc57cbc3077a4595a62c7c29d67579f8",
+                "start_timestamp": 1659600331288,
+                "node_attributes": {
+                    "is_spot": false
+                },
+                "host_private_ip": "10.140.97.6"
+            },
+            "executors": [
+                {
+                    "private_ip": "10.140.96.4",
+                    "public_dns": "20.107.96.228",
+                    "node_id": "099cbf8eb44d49ca994f53eecaed7e01",
+                    "instance_id": "696cd779652f44769f023fc6bf5d6710",
+                    "start_timestamp": 1659600331314,
+                    "node_attributes": {
+                        "is_spot": false
+                    },
+                    "host_private_ip": "10.140.97.4"
+                }
+            ],
+            "spark_context_id": 268695350695879951,
+            "jdbc_port": 10000,
+            "cluster_name": "job-809769652709771-run-182870",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "RUNNING",
+            "state_message": "",
+            "start_time": 1659600326906,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659600348319,
+            "last_restarted_time": 1659600363780,
+            "num_workers": 1,
+            "cluster_memory_mb": 28672,
+            "cluster_cores": 8.0,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-182870",
+                "ClusterId": "0804-080526-3svpsp6b",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_cd296dee-8dd4-a575-8aa6-6e4b229c40e7",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0804-071010-gzzhrvz4",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 6815007347626649770,
+            "cluster_name": "job-809769652709771-run-180610",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659597010632,
+            "terminated_time": 1659600327230,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659597064382,
+            "last_restarted_time": 1659597079946,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-180610",
+                "ClusterId": "0804-071010-gzzhrvz4",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_ffdee890-2b11-e901-8e12-7279269692f1",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0804-072241-o4k1z6a6",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 5270927376787581899,
+            "cluster_name": "job-719602696800681-run-181586",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659597761612,
+            "terminated_time": 1659598087507,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659597936719,
+            "last_restarted_time": 1659597951051,
+            "autoscale": {
+                "min_workers": 1,
+                "max_workers": 4
+            },
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-719602696800681-run-181586",
+                "ClusterId": "0804-072241-o4k1z6a6",
+                "JobId": "719602696800681",
+                "RunName": "unique_job_865186ef-cf20-43cd-6d69-26a18ea48309",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-130309-v5mdsp0",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 4829941888104855880,
+            "cluster_name": "job-809769652709771-run-179475",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659531789348,
+            "terminated_time": 1659597007971,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659531810705,
+            "last_restarted_time": 1659531826477,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-179475",
+                "ClusterId": "0803-130309-v5mdsp0",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_8c182bb4-948f-e9cc-af00-86ad031be9bc",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-125546-hzfluhbj",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7531202032497321410,
+            "cluster_name": "job-809769652709771-run-178119",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659531346246,
+            "terminated_time": 1659531789285,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659531366358,
+            "last_restarted_time": 1659531382338,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-178119",
+                "ClusterId": "0803-125546-hzfluhbj",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_5d509c71-c570-d49a-0399-4ac9630ac9b2",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-124842-max958yr",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 8183786788880326618,
+            "cluster_name": "job-809769652709771-run-176864",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659530922837,
+            "terminated_time": 1659531344190,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659530944675,
+            "last_restarted_time": 1659530960606,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-176864",
+                "ClusterId": "0803-124842-max958yr",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_58b84038-63f3-79f0-ad02-944c67fd146c",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-124026-rvgbxgg1",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 4576827669073557346,
+            "cluster_name": "job-809769652709771-run-175114",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659530426779,
+            "terminated_time": 1659530923304,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659530448876,
+            "last_restarted_time": 1659530464175,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-175114",
+                "ClusterId": "0803-124026-rvgbxgg1",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_f35c27a6-7972-1f1a-4fa3-4a0e0fe825a5",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-123231-72u80xal",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 2713903546584070022,
+            "cluster_name": "job-809769652709771-run-174110",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659529951289,
+            "terminated_time": 1659530428121,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659529973479,
+            "last_restarted_time": 1659529989358,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-174110",
+                "ClusterId": "0803-123231-72u80xal",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_02091a24-37f5-7dfe-475d-c4be9c90245c",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-120211-y1ckle0s",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 4960118272797485573,
+            "cluster_name": "job-809769652709771-run-172995",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659528131718,
+            "terminated_time": 1659529949983,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659528152966,
+            "last_restarted_time": 1659528168678,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-172995",
+                "ClusterId": "0803-120211-y1ckle0s",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_a7e21aff-6a92-2a8e-55f7-5f4e2e11fc63",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-114246-z1nxw7qc",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 5676214817578879159,
+            "cluster_name": "job-809769652709771-run-172008",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659526966042,
+            "terminated_time": 1659528129414,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659526988144,
+            "last_restarted_time": 1659527004175,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-172008",
+                "ClusterId": "0803-114246-z1nxw7qc",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_76c17713-ce72-627c-d0e7-cb31d44577c4",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-114232-qdcsnyip",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7161346167224982768,
+            "cluster_name": "job-943649254931947-run-170346",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659526953004,
+            "terminated_time": 1659527113404,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659526975852,
+            "last_restarted_time": 1659526995091,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-943649254931947-run-170346",
+                "ClusterId": "0803-114232-qdcsnyip",
+                "JobId": "943649254931947",
+                "RunName": "unique_job_fb71afa1-a71c-24db-64be-d7b515512549",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-114232-vespngy0",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7365532428017370716,
+            "cluster_name": "job-266905437853558-run-170853",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659526953004,
+            "terminated_time": 1659527106709,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659526978103,
+            "last_restarted_time": 1659526998245,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-266905437853558-run-170853",
+                "ClusterId": "0803-114232-vespngy0",
+                "JobId": "266905437853558",
+                "RunName": "unique_job_e04277b0-cd36-ba2d-b987-191275f7d0a4",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-104635-bxfpxq1g",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 2077028806339006651,
+            "cluster_name": "job-809769652709771-run-170143",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659523595641,
+            "terminated_time": 1659526966414,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659523617737,
+            "last_restarted_time": 1659523633904,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-170143",
+                "ClusterId": "0803-104635-bxfpxq1g",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_385013e6-cf96-8200-1e00-aaa1c9cb4d89",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-100328-kfmo98lg",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 5809755206226916331,
+            "cluster_name": "job-266905437853558-run-168415",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659521008174,
+            "terminated_time": 1659526952849,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659521217144,
+            "last_restarted_time": 1659521234398,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-266905437853558-run-168415",
+                "ClusterId": "0803-100328-kfmo98lg",
+                "JobId": "266905437853558",
+                "RunName": "unique_job_0d6ac446-60d6-acf1-7be1-b9b2ee084cdd",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-100328-n8h79xnr",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 3622342752809497116,
+            "cluster_name": "job-943649254931947-run-169690",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659521008176,
+            "terminated_time": 1659526952659,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659521207622,
+            "last_restarted_time": 1659521225088,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-943649254931947-run-169690",
+                "ClusterId": "0803-100328-n8h79xnr",
+                "JobId": "943649254931947",
+                "RunName": "unique_job_24f941aa-a069-5c5c-f115-44317c0e40a9",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-092759-evkuv3a5",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 2005717771486982982,
+            "cluster_name": "job-809769652709771-run-165379",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659518879359,
+            "terminated_time": 1659523593146,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659518900887,
+            "last_restarted_time": 1659518917055,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-165379",
+                "ClusterId": "0803-092759-evkuv3a5",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_4df6d3f6-597c-b295-436e-336095e5143d",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-094100-sgoe7sd9",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7572599042751097802,
+            "cluster_name": "job-412860718888051-run-167631",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659519660926,
+            "terminated_time": 1659519791926,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659519683097,
+            "last_restarted_time": 1659519698815,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-412860718888051-run-167631",
+                "ClusterId": "0803-094100-sgoe7sd9",
+                "JobId": "412860718888051",
+                "RunName": "PublisherStreamingJob",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-093842-v6iuyoqc",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 2307440712126871277,
+            "cluster_name": "job-412860718888051-run-166634",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659519522285,
+            "terminated_time": 1659519661188,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659519545774,
+            "last_restarted_time": 1659519561951,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-412860718888051-run-166634",
+                "ClusterId": "0803-093842-v6iuyoqc",
+                "JobId": "412860718888051",
+                "RunName": "PublisherStreamingJob",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-093332-ac3r8khq",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 4373994468626680037,
+            "cluster_name": "job-412860718888051-run-166221",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659519212895,
+            "terminated_time": 1659519524044,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659519407196,
+            "last_restarted_time": 1659519422250,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-412860718888051-run-166221",
+                "ClusterId": "0803-093332-ac3r8khq",
+                "JobId": "412860718888051",
+                "RunName": "PublisherStreamingJob",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-092204-4ac60lw5",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 8358069387818180412,
+            "cluster_name": "job-809769652709771-run-164761",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659518524700,
+            "terminated_time": 1659518878235,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659518547262,
+            "last_restarted_time": 1659518563012,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-164761",
+                "ClusterId": "0803-092204-4ac60lw5",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_d543c8e5-3578-da75-9a8e-6ffd463b7e03",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-090818-t9qrjhcb",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 3850493404804314262,
+            "cluster_name": "job-809769652709771-run-162654",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659517698968,
+            "terminated_time": 1659518526632,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659517720505,
+            "last_restarted_time": 1659517736116,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-162654",
+                "ClusterId": "0803-090818-t9qrjhcb",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_4e0c62df-da90-a8a1-e6b3-9012928a9c42",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-091320-mu9ocp0x",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 3106451920503381323,
+            "cluster_name": "job-719602696800681-run-163021",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659518000979,
+            "terminated_time": 1659518343423,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659518182751,
+            "last_restarted_time": 1659518198016,
+            "autoscale": {
+                "min_workers": 1,
+                "max_workers": 4
+            },
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-719602696800681-run-163021",
+                "ClusterId": "0803-091320-mu9ocp0x",
+                "JobId": "719602696800681",
+                "RunName": "unique_job_1a0d410f-831f-e992-a66a-a76adafea155",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-082531-qjod0iya",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 2836089412627681247,
+            "cluster_name": "job-809769652709771-run-160876",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659515131830,
+            "terminated_time": 1659517691531,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659515188015,
+            "last_restarted_time": 1659515203994,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-160876",
+                "ClusterId": "0803-082531-qjod0iya",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_b62f793d-f382-2ebe-f761-87f4ca0ddc5f",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0803-082123-couvtk2e",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 3216618932484773294,
+            "cluster_name": "job-266905437853558-run-159721",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659514883659,
+            "terminated_time": 1659515214398,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659515094314,
+            "last_restarted_time": 1659515111233,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-266905437853558-run-159721",
+                "ClusterId": "0803-082123-couvtk2e",
+                "JobId": "266905437853558",
+                "RunName": "unique_job_22cd82ae-d4d1-0877-6fb0-9a314745f70e",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0802-123953-zjpl6yb6",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7931208785697933341,
+            "cluster_name": "job-809769652709771-run-159017",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659443993958,
+            "terminated_time": 1659515130268,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659444049789,
+            "last_restarted_time": 1659444065301,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-159017",
+                "ClusterId": "0802-123953-zjpl6yb6",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_d906dd68-c701-9438-dd4b-62c0f60475d4",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0802-123541-vvtm7w93",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 4824752468601582719,
+            "cluster_name": "job-943649254931947-run-156810",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659443741971,
+            "terminated_time": 1659444071362,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659443941970,
+            "last_restarted_time": 1659443961575,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-943649254931947-run-156810",
+                "ClusterId": "0802-123541-vvtm7w93",
+                "JobId": "943649254931947",
+                "RunName": "unique_job_164ebb97-0e07-ffd4-c5d4-fa32f16ad241",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0802-123542-d986pnny",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 6914069133533120006,
+            "cluster_name": "job-266905437853558-run-157359",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659443742665,
+            "terminated_time": 1659444047957,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659443927624,
+            "last_restarted_time": 1659443945556,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-266905437853558-run-157359",
+                "ClusterId": "0802-123542-d986pnny",
+                "JobId": "266905437853558",
+                "RunName": "unique_job_22cd82ae-d4d1-0877-6fb0-9a314745f70e",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0801-195813-7x3fdapa",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 7852167798732608977,
+            "cluster_name": "job-809769652709771-run-154359",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659383893544,
+            "terminated_time": 1659443992361,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659383915139,
+            "last_restarted_time": 1659383930911,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-809769652709771-run-154359",
+                "ClusterId": "0801-195813-7x3fdapa",
+                "JobId": "809769652709771",
+                "RunName": "unique_job_03fcd589-c88a-b4dc-ebd4-070dacf35ea0",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0802-061941-4t8dr7pv",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 1209036017719796692,
+            "cluster_name": "job-719602696800681-run-155923",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659421181965,
+            "terminated_time": 1659421547557,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659421391665,
+            "last_restarted_time": 1659421406638,
+            "autoscale": {
+                "min_workers": 1,
+                "max_workers": 4
+            },
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-719602696800681-run-155923",
+                "ClusterId": "0802-061941-4t8dr7pv",
+                "JobId": "719602696800681",
+                "RunName": "unique_job_ae1c72e0-b616-60e7-fe39-eb9f975d715d",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0801-195818-qs757erg",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 8754673949013027624,
+            "cluster_name": "job-943649254931947-run-154822",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659383898795,
+            "terminated_time": 1659384053509,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659383922085,
+            "last_restarted_time": 1659383941247,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-943649254931947-run-154822",
+                "ClusterId": "0801-195818-qs757erg",
+                "JobId": "943649254931947",
+                "RunName": "unique_job_177f1b97-2b3b-f147-5352-92fb326af29c",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        },
+        {
+            "cluster_id": "0801-195819-8boihzib",
+            "creator_user_name": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+            "spark_context_id": 6070706156533845369,
+            "cluster_name": "job-266905437853558-run-155586",
+            "spark_version": "10.4.x-scala2.12",
+            "azure_attributes": {
+                "first_on_demand": 1,
+                "availability": "ON_DEMAND_AZURE",
+                "spot_bid_max_price": -1.0
+            },
+            "node_type_id": "Standard_DS3_v2",
+            "driver_node_type_id": "Standard_DS3_v2",
+            "autotermination_minutes": 0,
+            "enable_elastic_disk": true,
+            "disk_spec": {},
+            "cluster_source": "JOB",
+            "enable_local_disk_encryption": false,
+            "instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "driver_instance_source": {
+                "node_type_id": "Standard_DS3_v2"
+            },
+            "effective_spark_version": "10.4.x-scala2.12",
+            "state": "TERMINATED",
+            "state_message": "",
+            "start_time": 1659383899743,
+            "terminated_time": 1659384039891,
+            "last_state_loss_time": 0,
+            "last_activity_time": 1659383921288,
+            "last_restarted_time": 1659383936711,
+            "num_workers": 1,
+            "default_tags": {
+                "Vendor": "Databricks",
+                "Creator": "3ded9149-294c-4b64-aadc-fb9be4a04ee3",
+                "ClusterName": "job-266905437853558-run-155586",
+                "ClusterId": "0801-195819-8boihzib",
+                "JobId": "266905437853558",
+                "RunName": "unique_job_af6d694e-5619-6586-c65d-a3ef9ae4869a",
+                "Environment": "U",
+                "BusinessServiceITServiceOwner": "name",
+                "BusinessServiceNumber": "BSN10136",
+                "BusinessServiceBusinessOwner": "name",
+                "BusinessServiceName": "DataHub",
+                "BusinessServiceIONumber": "120000184",
+                "ModuleVersion": "6.0.0",
+                "ModuleId": "azure-databricks-workspace"
+            },
+            "termination_reason": {
+                "code": "JOB_FINISHED",
+                "type": "SUCCESS"
+            },
+            "init_scripts_safe_mode": false
+        }
+    ]
+}
