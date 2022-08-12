@@ -42,13 +42,9 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             AzuriteManager = new AzuriteManager();
             IntegrationTestConfiguration = new IntegrationTestConfiguration();
             AuthorizationConfiguration = new AuthorizationConfiguration();
-            EventHubResourceProvider = new EventHubResourceProvider(IntegrationTestConfiguration.EventHubConnectionString, IntegrationTestConfiguration.ResourceManagementSettings, TestLogger);
             LogContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", MarketOpLogs);
             TimeSeriesContainerClient = new BlobContainerClient("UseDevelopmentStorage=true", TimeSeriesDataContainerName);
         }
-
-        [NotNull]
-        public EventHubListenerMock? EventHubListener { get; private set; }
 
         public AuthorizationConfiguration AuthorizationConfiguration { get; }
 
@@ -59,8 +55,6 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
         private IntegrationTestConfiguration IntegrationTestConfiguration { get; }
 
         private AzuriteManager AzuriteManager { get; }
-
-        private EventHubResourceProvider EventHubResourceProvider { get; }
 
         /// <inheritdoc/>
         protected override void OnConfigureHostSettings(FunctionAppHostSettings hostSettings)
@@ -85,17 +79,6 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
             // Shared logging blob storage container
             await LogContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
             await TimeSeriesContainerClient.CreateIfNotExistsAsync().ConfigureAwait(false);
-
-            // => Event Hub
-            // Overwrite event hub related settings, so the function app uses the names we have control of in the test
-            Environment.SetEnvironmentVariable("EVENT_HUB_CONNECTION_STRING", EventHubResourceProvider.ConnectionString);
-
-            var eventHub = await EventHubResourceProvider
-                .BuildEventHub("evh-timeseries").SetEnvironmentVariableToEventHubName("EVENT_HUB_NAME")
-                .CreateAsync().ConfigureAwait(false);
-
-            EventHubListener = new EventHubListenerMock(EventHubResourceProvider.ConnectionString, eventHub.Name, "UseDevelopmentStorage=true", "container", TestLogger);
-            await EventHubListener.InitializeAsync().ConfigureAwait(false);
         }
 
         /// <inheritdoc/>
@@ -127,14 +110,12 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
         }
 
         /// <inheritdoc/>
-        protected override async Task OnDisposeFunctionAppDependenciesAsync()
+        protected override Task OnDisposeFunctionAppDependenciesAsync()
         {
-            // => Event Hub
-            await EventHubListener.DisposeAsync().ConfigureAwait(false);
-            await EventHubResourceProvider.DisposeAsync().ConfigureAwait(false);
-
             // => Storage
             AzuriteManager.Dispose();
+
+            return Task.CompletedTask;
         }
 
         private static string GetBuildConfiguration()
