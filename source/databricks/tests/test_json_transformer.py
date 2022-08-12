@@ -15,7 +15,11 @@
 import pytest
 import pandas as pd
 from package.codelists import Colname
-from package.schemas import time_series_unprocessed_schema, time_series_points_schema
+from package.schemas import time_series_points_schema
+from package.schemas.time_series_unprocessed import (
+    time_series_unprocessed_schema,
+    TimeSeriesUnprocessedColname as TSUColname,
+)
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -40,9 +44,9 @@ def test_time_series(time_series_unprocessed_factory, time_series_points_factory
         RegistrationDateTime=None,
     )
 
-    expected_registration_data_time = datetime.strptime(
-        "2022-06-09T12:09:15.000Z", date_time_formatting_string
-    )
+    expected_registration_data_time = time_series_unprocessed_df.collect()[0][
+        TSUColname.CreatedDateTime
+    ]
 
     expected_df = time_series_points_factory().drop("storedTime")
 
@@ -69,34 +73,48 @@ def time_series_unprocessed_factory(spark):
     ):
         df = [
             {
-                "BusinessReasonCode": 0,
-                "CreatedDateTime": datetime.strptime(
+                TSUColname.BusinessReasonCode: 0,
+                TSUColname.CreatedDateTime: datetime.strptime(
                     "2022-06-09T12:09:15.000Z", date_time_formatting_string
                 ),
-                "DocumentId": "1",
-                "MeasureUnit": 0,
-                "MeteringPointId": "1",
-                "MeteringPointType": 2,
-                "Period": {
-                    "EndDateTime": StartDateTime,
-                    "Points": [
-                        {"Position": 1, "Quality": 3, "Quantity": Decimal(1.1)},
-                        {"Position": 1, "Quality": 3, "Quantity": Decimal(1.1)},
+                TSUColname.DocumentId: "1",
+                TSUColname.MeasureUnit: 0,
+                TSUColname.MeteringPointId: "1",
+                TSUColname.MeteringPointType: 2,
+                TSUColname.Period: {
+                    TSUColname.EndDateTime: StartDateTime,
+                    TSUColname.Points: [
+                        {
+                            TSUColname.Position: 1,
+                            TSUColname.Quality: 3,
+                            TSUColname.Quantity: Decimal(1.1),
+                        },
+                        {
+                            TSUColname.Position: 1,
+                            TSUColname.Quality: 3,
+                            TSUColname.Quantity: Decimal(1.1),
+                        },
                     ],
-                    "Resolution": 2,
-                    "StartDateTime": datetime.strptime(
+                    TSUColname.Resolution: 2,
+                    TSUColname.StartDateTime: datetime.strptime(
                         "2022-06-08T12:09:15.000Z", date_time_formatting_string
                     ),
                 },
-                "Product": "1",
-                "Receiver": {"BusinessProcessRole": 0, "Id": "2"},
-                "RegistrationDateTime": RegistrationDateTime,
-                "Sender": {"BusinessProcessRole": 0, "Id": "1"},
-                "SeriesId": "1",
-                "TransactionId": "1",
-                "year": 2022,
-                "month": 6,
-                "day": 9,
+                TSUColname.Product: "1",
+                TSUColname.Receiver: {
+                    TSUColname.BusinessProcessRole: 0,
+                    TSUColname.Id: "2",
+                },
+                TSUColname.RegistrationDateTime: RegistrationDateTime,
+                TSUColname.Sender: {
+                    TSUColname.BusinessProcessRole: 0,
+                    TSUColname.Id: "1",
+                },
+                TSUColname.SeriesId: "1",
+                TSUColname.TransactionId: "1",
+                TSUColname.year: 2022,
+                TSUColname.month: 6,
+                TSUColname.day: 9,
             }
         ]
 

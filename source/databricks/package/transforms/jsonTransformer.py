@@ -13,7 +13,12 @@
 # limitations under the License.
 
 from select import select
-from package.schemas import eventhub_timeseries_schema
+from package.schemas.eventhub_timeseries_schema import eventhub_timeseries_schema
+from package.schemas.time_series_unprocessed import (
+    TimeSeriesUnprocessedColname as TSUColname,
+    Period,
+    Points,
+)
 from pyspark.sql.functions import (
     from_json,
     explode,
@@ -61,17 +66,17 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
     )
 
     df = (
-        source.select(col("*"), explode("Period.Points").alias("Points"))
+        source.select(col("*"), explode(Period.Points).alias(TSUColname.Points))
         .select(
-            col("MeteringPointId").alias(Colname.metering_point_id),
-            col("TransactionId").alias(Colname.transaction_id),
-            col("Points.quantity").alias(Colname.quantity),
-            col("Points.quality").alias(Colname.quality),
-            col("Points.position").alias(Colname.position),
-            col("Period.resolution").alias(Colname.resolution),
-            col("Period.StartDateTime").alias(Colname.start_datetime),
-            col("RegistrationDateTime").alias(Colname.registration_date_time),
-            col("CreatedDateTime").alias(Colname.created_date_time),
+            col(TSUColname.MeteringPointId).alias(Colname.metering_point_id),
+            col(TSUColname.TransactionId).alias(Colname.transaction_id),
+            col(Points.Quantity).alias(Colname.quantity),
+            col(Points.Quality).alias(Colname.quality),
+            col(Points.Position).alias(Colname.position),
+            col(Period.Resolution).alias(Colname.resolution),
+            col(Period.StartDateTime).alias(Colname.start_datetime),
+            col(TSUColname.RegistrationDateTime).alias(Colname.registration_date_time),
+            col(TSUColname.CreatedDateTime).alias(Colname.created_date_time),
         )
         .withColumn(
             Colname.registration_date_time,
@@ -83,14 +88,16 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             "TimeToAdd",
             when(
-                col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15
-            ).otherwise(col("Position") - 1),
+                col(Colname.resolution) == Resolution.quarter,
+                (col(Colname.position) - 1) * 15,
+            ).otherwise(col(Colname.position) - 1),
         )
         .withColumn("storedTime", current_timestamp())
         .withColumn(Colname.time, set_time_func)
         .withColumn(Colname.year, year(col(Colname.time)))
         .withColumn(Colname.month, month(col(Colname.time)))
         .withColumn(Colname.day, dayofmonth(col(Colname.time)))
-        .drop("Position" "StartDateTime", "TimeToAdd")
+        .drop("TimeToAdd")
     )
+
     return df
