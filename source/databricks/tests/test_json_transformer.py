@@ -14,7 +14,8 @@
 
 import pytest
 import pandas as pd
-from package.schemas import time_series_unprocessed_schema
+from package.codelists import Colname
+from package.schemas import time_series_unprocessed_schema, time_series_points_schema
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -23,6 +24,7 @@ from pyspark.sql.types import (
     TimestampType,
 )
 from datetime import datetime
+from decimal import Decimal
 from package.transforms.jsonTransformer import (
     transform_unprocessed_time_series_to_points,
 )
@@ -30,17 +32,33 @@ from package.transforms.jsonTransformer import (
 date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
-def test_time_series(time_series_unprocessed_factory):
-    df = time_series_unprocessed_factory(
+def test_time_series(time_series_unprocessed_factory, time_series_points_factory):
+    time_series_unprocessed_df = time_series_unprocessed_factory(
         StartDateTime=datetime.strptime(
             "2022-06-08T12:09:15.000Z", date_time_formatting_string
         ),
-        RegistrationDateTime="",
+        RegistrationDateTime=None,
     )
-    df2 = transform_unprocessed_time_series_to_points(df)
-    df2.show()
-    df2.printSchema()
-    assert 1 == 1
+
+    expected_registration_data_time = datetime.strptime(
+        "2022-06-09T12:09:15.000Z", date_time_formatting_string
+    )
+
+    expected_df = time_series_points_factory().drop("storedTime")
+
+    actual_df = transform_unprocessed_time_series_to_points(
+        time_series_unprocessed_df
+    ).drop("storedTime")
+
+    actual_df.show()
+    expected_df.show()
+
+    assert (
+        actual_df.collect()[0][Colname.registration_date_time]
+        == expected_registration_data_time
+    )
+    assert actual_df.schema == expected_df.schema
+    assert actual_df.collect() == expected_df.collect()
 
 
 @pytest.fixture(scope="module")
@@ -62,8 +80,8 @@ def time_series_unprocessed_factory(spark):
                 "Period": {
                     "EndDateTime": StartDateTime,
                     "Points": [
-                        {"Position": 1, "Quality": 3, "Quantity": "1.1"},
-                        {"Position": 1, "Quality": 3, "Quantity": "1.1"},
+                        {"Position": 1, "Quality": 3, "Quantity": Decimal(1.1)},
+                        {"Position": 1, "Quality": 3, "Quantity": Decimal(1.1)},
                     ],
                     "Resolution": 2,
                     "StartDateTime": datetime.strptime(
@@ -83,6 +101,65 @@ def time_series_unprocessed_factory(spark):
         ]
 
         return spark.createDataFrame(df, time_series_unprocessed_schema)
+
+    return factory
+
+
+@pytest.fixture(scope="module")
+def time_series_points_factory(spark):
+    def factory():
+        df = [
+            {
+                Colname.metering_point_id: 1,
+                Colname.transaction_id: 1,
+                Colname.quantity: Decimal(1.1),
+                Colname.quality: 3,
+                Colname.position: 1,
+                Colname.resolution: 2,
+                Colname.start_datetime: datetime.strptime(
+                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.registration_date_time: datetime.strptime(
+                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.created_date_time: datetime.strptime(
+                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
+                ),
+                "storedTime": None,
+                Colname.time: datetime.strptime(
+                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.year: 2022,
+                Colname.month: 6,
+                Colname.day: 8,
+            },
+            {
+                Colname.metering_point_id: 1,
+                Colname.transaction_id: 1,
+                Colname.quantity: Decimal(1.1),
+                Colname.quality: 3,
+                Colname.position: 1,
+                Colname.resolution: 2,
+                Colname.start_datetime: datetime.strptime(
+                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.registration_date_time: datetime.strptime(
+                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.created_date_time: datetime.strptime(
+                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
+                ),
+                "storedTime": None,
+                Colname.time: datetime.strptime(
+                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
+                ),
+                Colname.year: 2022,
+                Colname.month: 6,
+                Colname.day: 8,
+            },
+        ]
+
+        return spark.createDataFrame(df, time_series_points_schema)
 
     return factory
 

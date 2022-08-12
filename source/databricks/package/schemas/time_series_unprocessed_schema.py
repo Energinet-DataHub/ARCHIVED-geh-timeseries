@@ -43,7 +43,7 @@ time_series_unprocessed_schema = StructType(
                                 [
                                     StructField("Position", LongType(), True),
                                     StructField("Quality", LongType(), True),
-                                    StructField("Quantity", StringType(), True),
+                                    StructField("Quantity", DecimalType(18, 3), True),
                                 ]
                             )
                         ),

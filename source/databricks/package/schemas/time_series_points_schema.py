@@ -19,6 +19,7 @@ from pyspark.sql.types import (
     StringType,
     TimestampType,
     IntegerType,
+    LongType,
 )
 
 time_series_points_schema = StructType(
@@ -26,12 +27,16 @@ time_series_points_schema = StructType(
         StructField(Colname.metering_point_id, StringType(), True),
         StructField(Colname.transaction_id, StringType(), True),
         StructField(Colname.quantity, DecimalType(18, 3), True),
-        StructField(Colname.quality, IntegerType(), True),
+        StructField(Colname.quality, LongType(), True),
+        StructField(Colname.position, LongType(), True),
+        StructField(Colname.resolution, LongType(), True),
+        StructField(Colname.start_datetime, TimestampType(), True),
+        StructField(Colname.registration_date_time, TimestampType(), True),
+        StructField(Colname.created_date_time, TimestampType(), True),
+        StructField("storedTime", TimestampType(), True),
         StructField(Colname.time, TimestampType(), True),
-        StructField(Colname.resolution, IntegerType(), True),
         StructField(Colname.year, IntegerType(), True),
         StructField(Colname.month, IntegerType(), True),
         StructField(Colname.day, IntegerType(), True),
-        StructField(Colname.registration_date_time, TimestampType(), True),
     ]
 )

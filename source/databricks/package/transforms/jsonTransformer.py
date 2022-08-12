@@ -13,7 +13,7 @@
 # limitations under the License.
 
 from select import select
-from package.schemas.eventhub_timeseries_schema import eventhub_timeseries_schema
+from package.schemas import eventhub_timeseries_schema
 from pyspark.sql.functions import (
     from_json,
     explode,
@@ -27,7 +27,7 @@ from pyspark.sql.functions import (
     lit,
     current_timestamp,
 )
-from pyspark.sql.dataframe import DataFrame
+from pyspark.sql import DataFrame
 from package.codelists import Resolution
 from package.codelists import Colname
 
@@ -76,7 +76,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             Colname.registration_date_time,
             when(
-                col(Colname.registration_date_time) == "",
+                col(Colname.registration_date_time).isNull(),
                 col(Colname.created_date_time),
             ).otherwise(col(Colname.registration_date_time)),
         )
@@ -93,5 +93,4 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(Colname.day, dayofmonth(col(Colname.time)))
         .drop("Position" "StartDateTime", "TimeToAdd")
     )
-
     return df
