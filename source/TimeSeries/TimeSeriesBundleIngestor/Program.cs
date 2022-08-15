@@ -100,6 +100,10 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 
             // Health check
             serviceCollection.AddScoped<IHealthCheckEndpointHandler, HealthCheckEndpointHandler>();
+            serviceCollection.AddHealthChecks()
+                .AddLiveCheck()
+                .AddAzureBlobStorage(EnvironmentSettingNames.StorageConnectionString);
+
             // TODO: LRN add healthcheck live to azureblobstorage
             if (EnvironmentHelper.GetEnvBool(EnvironmentSettingNames.DatabricksHealthCheckEnabled))
             {
