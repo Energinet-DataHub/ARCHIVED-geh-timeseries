@@ -20,15 +20,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.FunctionApp.TestCommon;
-using Energinet.DataHub.Core.FunctionApp.TestCommon.EventHub.ListenerMock;
-using Energinet.DataHub.Core.JsonSerialization;
-using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
 using FluentAssertions;
 using Microsoft.Identity.Client;
-using NodaTime;
 using Xunit;
 using Xunit.Abstractions;
 using Xunit.Categories;
@@ -115,53 +111,6 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             Assert.True(blobItemsAfterRequest.Length - blobItemsBeforeRequest.Length == 2);
             twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataRequestType);
             twoNewest.Should().Contain(x => x.Metadata["httpdatatype"] == expectedHttpDataResponseType);
-        }
-
-        [Fact]
-        public async Task When_FunctionExecuted_Then_MessageSentToEventHub()
-        {
-            // Arrange
-            var content = _testDocuments.ValidTimeSeries;
-            using var whenAllEvent = await Fixture.EventHubListener
-                .WhenAny()
-                .VerifyCountAsync(1).ConfigureAwait(false);
-            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
-
-            // Act
-            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
-
-            // Assert
-            var allReceived = whenAllEvent.Wait(TimeSpan.FromSeconds(5));
-            allReceived.Should().BeTrue();
-        }
-
-        [Fact]
-        public async Task When_FunctionExecuted_Then_MessageSentToEventHub_WithCreatedDateTimeSerialized()
-        {
-            // Arrange
-            Fixture.EventHubListener.Reset();
-            var jsonSerializer = new JsonSerializer();
-            var expectedCreatedDateTime = Instant.FromUtc(2022, 12, 17, 09, 30, 47);
-            var content = _testDocuments.ValidTimeSeries;
-            using var whenAllEvent = await Fixture.EventHubListener
-                .WhenAny()
-                .VerifyCountAsync(1).ConfigureAwait(false);
-            using var request = await CreateTimeSeriesHttpRequest(true, content).ConfigureAwait(false);
-
-            // Act
-            await Fixture.HostManager.HttpClient.SendAsync(request).ConfigureAwait(false);
-
-            // Assert
-            var allReceived = whenAllEvent.Wait(TimeSpan.FromSeconds(5));
-            allReceived.Should().BeTrue();
-
-            var events = Fixture.EventHubListener.ReceivedEvents;
-            var dto = await jsonSerializer.DeserializeAsync(events.First().BodyAsStream, typeof(TimeSeriesBundleDto))
-                .ConfigureAwait(false) as TimeSeriesBundleDto;
-
-#pragma warning disable CS8602
-            dto.Document.CreatedDateTime.Should().BeEquivalentTo(expectedCreatedDateTime);
-#pragma warning restore CS8602
         }
 
         private async Task<HttpRequestMessage> CreateTimeSeriesHttpRequest(bool includeJwtToken, string content)
