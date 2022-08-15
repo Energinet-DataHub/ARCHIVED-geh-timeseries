@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .eventhub_timeseries_schema import eventhub_timeseries_schema
-from .time_series_points_schema import time_series_points_schema
 from .time_series_raw_schema import time_series_raw_schema
 from .time_series_unprocessed import (
-    time_series_unprocessed_helper,
+    time_series_unprocessed_colname,
     time_series_unprocessed_schema,
 )
+from .time_series_points import time_series_points_colname, time_series_points_schema

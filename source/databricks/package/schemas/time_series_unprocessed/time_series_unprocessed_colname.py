@@ -36,9 +36,30 @@ class TimeSeriesUnprocessedColname:
     Sender = "Sender"
     SeriesId = "SeriesId"
     TransactionId = "TransactionId"
-    year = "year"
-    month = "month"
-    day = "day"
+    Year = "Year"
+    Month = "Month"
+    Day = "Day"
+    Period_EndDateTime = f"{Period}.{EndDateTime}"
+    Period_Points = f"{Period}.{Points}"
+    Period_Resolution = f"{Period}.{Resolution}"
+    Period_StartDateTime = f"{Period}.{StartDateTime}"
+    Points_Position = f"{Points}.{Position}"
+    Points_Quality = f"{Points}.{Quality}"
+    Points_Quantity = f"{Points}.{Quantity}"
+    Receiver_BuisnessProcessRole = f"{Receiver}.{BusinessProcessRole}"
+    Receiver_Id = f"{Receiver}.{Id}"
+    Sender_BuisnessProcessRole = f"{Sender}.{BusinessProcessRole}"
+    Sender_Id = f"{Sender}.{Id}"
+
+    # class Test:
+    #     def __new__(self):
+    #         self.period = TimeSeriesUnprocessedColname().Period
+    #         return self.period
+
+    #     Hello = "sdfs"
+
+    #     class Points:
+    #         test = "klklkkl"
 
 
 class Period:

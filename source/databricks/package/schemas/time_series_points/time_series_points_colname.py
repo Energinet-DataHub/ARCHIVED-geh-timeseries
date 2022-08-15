@@ -11,5 +11,20 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from .time_series_unprocessed_schema import time_series_unprocessed_schema
-from .time_series_unprocessed_colname import TimeSeriesUnprocessedColname
+
+
+class TimeSeriesPointsColname:
+    MeteringPointId = "MeteringPointId"
+    TransactionId = "TransactionId"
+    Quantity = "Quantity"
+    Quality = "Quality"
+    Position = "Position"
+    Resolution = "Resolution"
+    StartDateTime = "StartDateTime"
+    RegistrationDateTime = "RegistrationDateTime"
+    CreatedDateTime = "CreatedDateTime"
+    StoredTime = "StoredTime"
+    Time = "Time"
+    Year = "Year"
+    Month = "Month"
+    Day = "Day"

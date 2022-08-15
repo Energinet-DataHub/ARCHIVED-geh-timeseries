@@ -14,8 +14,11 @@
 
 import pytest
 import pandas as pd
-from package.codelists import Colname
-from package.schemas import time_series_points_schema
+
+from package.schemas.time_series_points import (
+    time_series_points_schema,
+    TimeSeriesPointsColname as TSPColname,
+)
 from package.schemas.time_series_unprocessed import (
     time_series_unprocessed_schema,
     TimeSeriesUnprocessedColname as TSUColname,
@@ -58,7 +61,7 @@ def test_time_series(time_series_unprocessed_factory, time_series_points_factory
     expected_df.show()
 
     assert (
-        actual_df.collect()[0][Colname.registration_date_time]
+        actual_df.collect()[0][TSPColname.RegistrationDateTime]
         == expected_registration_data_time
     )
     assert actual_df.schema == expected_df.schema
@@ -112,9 +115,9 @@ def time_series_unprocessed_factory(spark):
                 },
                 TSUColname.SeriesId: "1",
                 TSUColname.TransactionId: "1",
-                TSUColname.year: 2022,
-                TSUColname.month: 6,
-                TSUColname.day: 9,
+                TSUColname.Year: 2022,
+                TSUColname.Month: 6,
+                TSUColname.Day: 9,
             }
         ]
 
@@ -128,52 +131,52 @@ def time_series_points_factory(spark):
     def factory():
         df = [
             {
-                Colname.metering_point_id: 1,
-                Colname.transaction_id: 1,
-                Colname.quantity: Decimal(1.1),
-                Colname.quality: 3,
-                Colname.position: 1,
-                Colname.resolution: 2,
-                Colname.start_datetime: datetime.strptime(
+                TSPColname.MeteringPointId: 1,
+                TSPColname.TransactionId: 1,
+                TSPColname.Quantity: Decimal(1.1),
+                TSPColname.Quality: 3,
+                TSPColname.Position: 1,
+                TSPColname.Resolution: 2,
+                TSPColname.StartDateTime: datetime.strptime(
                     "2022-06-08T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.registration_date_time: datetime.strptime(
+                TSPColname.RegistrationDateTime: datetime.strptime(
                     "2022-06-09T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.created_date_time: datetime.strptime(
+                TSPColname.CreatedDateTime: datetime.strptime(
                     "2022-06-09T12:09:15.000Z", date_time_formatting_string
                 ),
                 "storedTime": None,
-                Colname.time: datetime.strptime(
+                TSPColname.Time: datetime.strptime(
                     "2022-06-08T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.year: 2022,
-                Colname.month: 6,
-                Colname.day: 8,
+                TSPColname.Year: 2022,
+                TSPColname.Month: 6,
+                TSPColname.Day: 8,
             },
             {
-                Colname.metering_point_id: 1,
-                Colname.transaction_id: 1,
-                Colname.quantity: Decimal(1.1),
-                Colname.quality: 3,
-                Colname.position: 1,
-                Colname.resolution: 2,
-                Colname.start_datetime: datetime.strptime(
+                TSPColname.MeteringPointId: 1,
+                TSPColname.TransactionId: 1,
+                TSPColname.Quantity: Decimal(1.1),
+                TSPColname.Quality: 3,
+                TSPColname.Position: 1,
+                TSPColname.Resolution: 2,
+                TSPColname.StartDateTime: datetime.strptime(
                     "2022-06-08T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.registration_date_time: datetime.strptime(
+                TSPColname.RegistrationDateTime: datetime.strptime(
                     "2022-06-09T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.created_date_time: datetime.strptime(
+                TSPColname.CreatedDateTime: datetime.strptime(
                     "2022-06-09T12:09:15.000Z", date_time_formatting_string
                 ),
                 "storedTime": None,
-                Colname.time: datetime.strptime(
+                TSPColname.Time: datetime.strptime(
                     "2022-06-08T12:09:15.000Z", date_time_formatting_string
                 ),
-                Colname.year: 2022,
-                Colname.month: 6,
-                Colname.day: 8,
+                TSPColname.Year: 2022,
+                TSPColname.Month: 6,
+                TSPColname.Day: 8,
             },
         ]
 

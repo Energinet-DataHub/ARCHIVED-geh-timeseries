@@ -21,7 +21,7 @@ from pyspark.sql.types import (
     LongType,
     ArrayType,
 )
-from .time_series_unprocessed_helper import TimeSeriesUnprocessedColname as Colname
+from .time_series_unprocessed_colname import TimeSeriesUnprocessedColname as Colname
 
 
 time_series_unprocessed_schema = StructType(
@@ -78,8 +78,8 @@ time_series_unprocessed_schema = StructType(
         ),
         StructField(Colname.SeriesId, StringType(), True),
         StructField(Colname.TransactionId, StringType(), True),
-        StructField(Colname.year, IntegerType(), True),
-        StructField(Colname.month, IntegerType(), True),
-        StructField(Colname.day, IntegerType(), True),
+        StructField(Colname.Year, IntegerType(), True),
+        StructField(Colname.Month, IntegerType(), True),
+        StructField(Colname.Day, IntegerType(), True),
     ]
 )
