@@ -13,20 +13,15 @@
 // limitations under the License.
 
 using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Infrastructure.Blob;
-using Energinet.DataHub.TimeSeries.Infrastructure.EventHub;
 using Microsoft.Extensions.Options;
 
 namespace Energinet.DataHub.TimeSeries.Application
 {
     public class TimeSeriesForwarder : ITimeSeriesForwarder
     {
-        private readonly IEventHubSender _eventHubSender;
-        private readonly IJsonSerializer _jsonSerializer;
         private readonly IRawTimeSeriesStorageClient _rawTimeSeriesStorageClient;
         private readonly ITimeSeriesBundleConverter _timeSeriesBundleConverter;
         private readonly TimeSeriesRawFolderOptions _timeSeriesRawFolderOptions;
@@ -34,14 +29,10 @@ namespace Energinet.DataHub.TimeSeries.Application
         public TimeSeriesForwarder(
             ITimeSeriesBundleConverter timeSeriesBundleConverter,
             IRawTimeSeriesStorageClient rawTimeSeriesStorageClient,
-            IEventHubSender eventHubSender,
-            IJsonSerializer jsonSerializer,
             IOptions<TimeSeriesRawFolderOptions> options)
         {
             _timeSeriesBundleConverter = timeSeriesBundleConverter;
             _rawTimeSeriesStorageClient = rawTimeSeriesStorageClient;
-            _eventHubSender = eventHubSender;
-            _jsonSerializer = jsonSerializer;
             _timeSeriesRawFolderOptions = options.Value;
         }
 
@@ -56,9 +47,6 @@ namespace Energinet.DataHub.TimeSeries.Application
 
             await using var outputStream = await _rawTimeSeriesStorageClient.OpenWriteAsync(blobName);
             await _timeSeriesBundleConverter.ConvertAsync(timeSeriesBundle, outputStream);
-
-            var body = Encoding.UTF8.GetBytes(_jsonSerializer.Serialize(timeSeriesBundle));
-            await _eventHubSender.SendAsync(body).ConfigureAwait(false);
         }
     }
 }
