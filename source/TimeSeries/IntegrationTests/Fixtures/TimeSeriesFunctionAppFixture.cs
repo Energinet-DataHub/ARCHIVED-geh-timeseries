@@ -107,12 +107,12 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests.Fixtures
         }
 
         /// <inheritdoc/>
-        protected override Task OnDisposeFunctionAppDependenciesAsync()
+        protected override async Task OnDisposeFunctionAppDependenciesAsync()
         {
             // => Storage
             AzuriteManager.Dispose();
-
-            return Task.CompletedTask;
+            await LogContainerClient.DeleteAsync().ConfigureAwait(false);
+            await TimeSeriesContainerClient.DeleteAsync().ConfigureAwait(false);
         }
 
         private static string GetBuildConfiguration()
