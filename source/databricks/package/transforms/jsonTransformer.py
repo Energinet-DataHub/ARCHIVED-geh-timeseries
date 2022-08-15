@@ -40,6 +40,7 @@ from package.codelists import Colname
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
+    # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
     set_time_func = (
         when(
             col(TSUColname.Resolution) == Resolution.quarter,

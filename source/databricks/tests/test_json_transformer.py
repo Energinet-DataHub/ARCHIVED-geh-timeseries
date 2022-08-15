@@ -29,6 +29,7 @@ from pyspark.sql.types import (
     StringType,
     IntegerType,
     TimestampType,
+    LongType,
 )
 from datetime import datetime
 from decimal import Decimal
@@ -39,11 +40,13 @@ from package.transforms.jsonTransformer import (
 date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
+def timestamp(dts: StringType()) -> TimestampType():
+    return datetime.strptime(dts, date_time_formatting_string)
+
+
 def test_time_series(time_series_unprocessed_factory, time_series_points_factory):
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        StartDateTime=datetime.strptime(
-            "2022-06-08T12:09:15.000Z", date_time_formatting_string
-        ),
+        StartDateTime=timestamp("2022-06-08T12:09:15.000Z"),
         RegistrationDateTime=None,
     )
 
@@ -51,11 +54,13 @@ def test_time_series(time_series_unprocessed_factory, time_series_points_factory
         TSUColname.CreatedDateTime
     ]
 
-    expected_df = time_series_points_factory().drop("storedTime")
+    expected_df = time_series_points_factory(
+        RegistrationDateTime=expected_registration_data_time
+    ).drop(TSPColname.StoredTime)
 
     actual_df = transform_unprocessed_time_series_to_points(
         time_series_unprocessed_df
-    ).drop("storedTime")
+    ).drop(TSPColname.StoredTime)
 
     actual_df.show()
     expected_df.show()
@@ -68,18 +73,33 @@ def test_time_series(time_series_unprocessed_factory, time_series_points_factory
     assert actual_df.collect() == expected_df.collect()
 
 
+@pytest.mark.parametrize(
+    "resolution, start_datetime, expected_time",
+    [(2, "2022-06-08T12:00:00.000Z", "2022-06-08T12:15:00.000Z")],
+)
+def test_time_series_set_time_func(
+    time_series_unprocessed_factory, resolution, start_datetime, expected_time
+):
+    time_series_unprocessed_df = time_series_unprocessed_factory(
+        StartDateTime=timestamp(start_datetime), Resolution=resolution
+    )
+    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
+    actual_time = actual_df.collect()[0][TSPColname.Time]
+    # TODO WIP
+    assert actual_time == timestamp(expected_time)
+
+
 @pytest.fixture(scope="module")
 def time_series_unprocessed_factory(spark):
     def factory(
-        StartDateTime: TimestampType(),
-        RegistrationDateTime: TimestampType(),
+        StartDateTime: TimestampType() = timestamp("2022-06-08T12:09:15.000Z"),
+        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
+        Resolution: LongType() = 2,
     ):
         df = [
             {
                 TSUColname.BusinessReasonCode: 0,
-                TSUColname.CreatedDateTime: datetime.strptime(
-                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
-                ),
+                TSUColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
                 TSUColname.DocumentId: "1",
                 TSUColname.MeasureUnit: 0,
                 TSUColname.MeteringPointId: "1",
@@ -98,10 +118,8 @@ def time_series_unprocessed_factory(spark):
                             TSUColname.Quantity: Decimal(1.1),
                         },
                     ],
-                    TSUColname.Resolution: 2,
-                    TSUColname.StartDateTime: datetime.strptime(
-                        "2022-06-08T12:09:15.000Z", date_time_formatting_string
-                    ),
+                    TSUColname.Resolution: Resolution,
+                    TSUColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
                 },
                 TSUColname.Product: "1",
                 TSUColname.Receiver: {
@@ -128,7 +146,10 @@ def time_series_unprocessed_factory(spark):
 
 @pytest.fixture(scope="module")
 def time_series_points_factory(spark):
-    def factory():
+    def factory(
+        Resolution: LongType() = 2,
+        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
+    ):
         df = [
             {
                 TSPColname.MeteringPointId: 1,
@@ -136,20 +157,12 @@ def time_series_points_factory(spark):
                 TSPColname.Quantity: Decimal(1.1),
                 TSPColname.Quality: 3,
                 TSPColname.Position: 1,
-                TSPColname.Resolution: 2,
-                TSPColname.StartDateTime: datetime.strptime(
-                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
-                ),
-                TSPColname.RegistrationDateTime: datetime.strptime(
-                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
-                ),
-                TSPColname.CreatedDateTime: datetime.strptime(
-                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
-                ),
-                "storedTime": None,
-                TSPColname.Time: datetime.strptime(
-                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
-                ),
+                TSPColname.Resolution: Resolution,
+                TSPColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
+                TSPColname.RegistrationDateTime: RegistrationDateTime,
+                TSPColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
+                TSPColname.StoredTime: None,
+                TSPColname.Time: timestamp("2022-06-08T12:09:15.000Z"),
                 TSPColname.Year: 2022,
                 TSPColname.Month: 6,
                 TSPColname.Day: 8,
@@ -160,20 +173,12 @@ def time_series_points_factory(spark):
                 TSPColname.Quantity: Decimal(1.1),
                 TSPColname.Quality: 3,
                 TSPColname.Position: 1,
-                TSPColname.Resolution: 2,
-                TSPColname.StartDateTime: datetime.strptime(
-                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
-                ),
-                TSPColname.RegistrationDateTime: datetime.strptime(
-                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
-                ),
-                TSPColname.CreatedDateTime: datetime.strptime(
-                    "2022-06-09T12:09:15.000Z", date_time_formatting_string
-                ),
-                "storedTime": None,
-                TSPColname.Time: datetime.strptime(
-                    "2022-06-08T12:09:15.000Z", date_time_formatting_string
-                ),
+                TSPColname.Resolution: Resolution,
+                TSPColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
+                TSPColname.RegistrationDateTime: RegistrationDateTime,
+                TSPColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
+                TSPColname.StoredTime: None,
+                TSPColname.Time: timestamp("2022-06-08T12:09:15.000Z"),
                 TSPColname.Year: 2022,
                 TSPColname.Month: 6,
                 TSPColname.Day: 8,
