@@ -41,7 +41,7 @@ resource "databricks_job" "publisher_streaming_job" {
   python_wheel_task {
     package_name = "package"
     entry_point = "start_publisher"
-    # IMPORTANT: Be careful about changing the name of the time series points Delta table name
+    # IMPORTANT: Be careful about changing the name of the time series points datalake table name
     # as it is part of the public contract for published time series points
     parameters  = [
          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}",

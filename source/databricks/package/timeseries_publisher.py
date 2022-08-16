@@ -17,8 +17,6 @@ from pyspark.sql.types import BooleanType
 from package.transforms import transform_unprocessed_time_series_to_points
 from package.codelists import Colname
 from package.schemas import time_series_points_schema, time_series_unprocessed_schema
-from delta.tables import DeltaTable
-from package.table_creator import create_delta_table_if_empty
 
 
 def publish_timeseries_batch(
