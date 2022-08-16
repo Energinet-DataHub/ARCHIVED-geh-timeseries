@@ -14,29 +14,29 @@
 
 resource "databricks_job" "publisher_streaming_job" {
   name = "publisher_streaming_job"
-  max_retries = -1
   max_concurrent_runs = 1
   always_running = true
 
   task {
-     # The job must be recreated with each deployment and this is achieved using a unique resource id.
+    # The job must be recreated with each deployment and this is achieved using a unique resource id.
     task_key = "publisher_streaming_job_${uuid()}"
+    max_retries = -1
 
-  new_cluster {
-    spark_version           = data.databricks_spark_version.latest_lts.id
-    node_type_id            = "Standard_DS3_v2"
-    num_workers    = 1
-  }
-	
-  library {
-    maven {
-      coordinates = "com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.17"
+    new_cluster {
+      spark_version           = data.databricks_spark_version.latest_lts.id
+      node_type_id            = "Standard_DS3_v2"
+      num_workers    = 1
     }
-  }
+    
+    library {
+      maven {
+        coordinates = "com.microsoft.azure:azure-eventhubs-spark_2.12:2.3.17"
+      }
+    }
 
-  library {
-    whl = "dbfs:/geh-timeseries/package-1.0-py3-none-any.whl"
-  } 
+    library {
+      whl = "dbfs:/geh-timeseries/package-1.0-py3-none-any.whl"
+    } 
 
   python_wheel_task {
     package_name = "package"
