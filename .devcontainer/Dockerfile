@@ -21,7 +21,7 @@ USER root
 COPY spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
-# Install Azurite (support wasb-protocol storage for Delta tables in integration tests)
+# Install Azurite
 RUN apt-get update; \
     apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
 
