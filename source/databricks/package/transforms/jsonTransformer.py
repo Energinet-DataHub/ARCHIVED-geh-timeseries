@@ -51,6 +51,25 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         )
     )
 
+    # set_time_func = (
+    #     when(
+    #         col("Resolution") == Resolution.quarter,
+    #         expr("StartDateTime + make_dt_interval(0, 0, TimeToAdd, 0)"),
+    #     )
+    #     .when(
+    #         col("Resolution") == Resolution.hour,
+    #         expr("StartDateTime + make_dt_interval(0, TimeToAdd, 0, 0)"),
+    #     )
+    #     .when(
+    #         col("Resolution") == Resolution.day,
+    #         expr("StartDateTime + make_dt_interval(TimeToAdd, 0, 0, 0)"),
+    #     )
+    #     .when(
+    #         col("Resolution") == Resolution.month,
+    #         expr("StartDateTime + make_ym_interval(0, TimeToAdd)"),
+    #     )
+    # )
+
     df = (
         source.select(col("*"), explode("Period.Points").alias("Points"))
         .select(
@@ -75,10 +94,15 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             "TimeToAdd",
             when(
-                col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15
-            ).otherwise(col("Position") - 1),
-        )
-        .withColumn("time", set_time_func)
+                col("Resolution") == Resolution.quarter,
+                (col("Position") - 1) * 15,  # To add 15, 30 or 45 to the minut interval
+            ).otherwise(
+                col("Position") - 1
+            ),  # Position - 1 to make the value set start from zero
+        )  # TimeToAdd is used in set_time_func to add to the interval
+        .withColumn(
+            "time", set_time_func
+        )  # time is the time of observation and what we wil partition on, with year, month, day
         .withColumn(
             "year",
             when(col("time").isNotNull(), year(col("time"))).otherwise(lit(None)),
