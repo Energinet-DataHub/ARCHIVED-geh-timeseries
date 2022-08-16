@@ -23,12 +23,34 @@ from pyspark.sql.functions import (
     dayofmonth,
     current_timestamp,
     lit,
+    expr,
 )
 from pyspark.sql import DataFrame
 from pyspark.sql.types import IntegerType
+from package.codelists import Resolution
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
+    # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
+    set_time_func = (
+        when(
+            col("Resolution") == Resolution.quarter,
+            expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)"),
+        )
+        .when(
+            col("Resolution") == Resolution.hour,
+            expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)"),
+        )
+        .when(
+            col("Resolution") == Resolution.day,
+            expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)"),
+        )
+        .when(
+            col("Resolution") == Resolution.month,
+            expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"),
+        )
+    )
+
     df = (
         source.select(col("*"), explode("Period.Points").alias("Points"))
         .select(
@@ -36,7 +58,9 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             col("TransactionId"),
             col("Points.Quantity").alias("Quantity"),
             col("Points.Quality").alias("Quality"),
+            col("Points.Position").alias("Position"),
             col("Period.Resolution").alias("Resolution"),
+            col("Period.StartDateTime").alias("StartDateTime"),
             col("RegistrationDateTime"),
             col("CreatedDateTime"),
         )
@@ -49,23 +73,25 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         )
         .withColumn("storedTime", current_timestamp())
         .withColumn(
+            "TimeToAdd",
+            when(
+                col("Resolution") == Resolution.quarter, (col("Position") - 1) * 15
+            ).otherwise(col("Position") - 1),
+        )
+        .withColumn("time", set_time_func)
+        .withColumn(
             "year",
-            when(col("storedTime").isNotNull(), year(col("storedTime"))).otherwise(
-                lit(None)
-            ),
+            when(col("time").isNotNull(), year(col("time"))).otherwise(lit(None)),
         )
         .withColumn(
             "month",
-            when(col("storedTime").isNotNull(), month(col("storedTime"))).otherwise(
-                lit(None)
-            ),
+            when(col("time").isNotNull(), month(col("time"))).otherwise(lit(None)),
         )
         .withColumn(
             "day",
-            when(
-                col("storedTime").isNotNull(), dayofmonth(col("storedTime"))
-            ).otherwise(lit(None)),
+            when(col("time").isNotNull(), dayofmonth(col("time"))).otherwise(lit(None)),
         )
+        .drop("StartDateTime", "Positions", "TimeToAdd")
     )
 
     return df

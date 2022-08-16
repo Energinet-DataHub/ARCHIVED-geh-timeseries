@@ -33,8 +33,10 @@ from package.transforms.jsonTransformer import (
 @pytest.fixture(scope="module")
 def time_series_unprocessed_factory(spark):
     def factory(
-        CreatedDateTime: TimestampType(),
-        RegistrationDateTime: TimestampType(),
+        CreatedDateTime: TimestampType() = timestamp("2022-06-09T12:09:15.000Z"),
+        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
+        StartDateTime: TimestampType() = timestamp("2022-06-08T12:09:15.000Z"),
+        Resolution: LongType() = 2,
     ):
         df = [
             {
@@ -53,13 +55,13 @@ def time_series_unprocessed_factory(spark):
                             "Quantity": Decimal(1.1),
                         },
                         {
-                            "Position": 1,
+                            "Position": 2,
                             "Quality": 3,
                             "Quantity": Decimal(1.1),
                         },
                     ],
-                    "Resolution": 2,
-                    "StartDateTime": timestamp("2022-06-08T12:09:15.000Z"),
+                    "Resolution": Resolution,
+                    "StartDateTime": StartDateTime,
                 },
                 "Product": "1",
                 "Receiver": {
@@ -115,3 +117,28 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
 
     # Assert
     assert actual_registration_data_time == expected_registration_date_time
+
+
+@pytest.mark.parametrize(
+    "resolution, expected_time_for_position_2",
+    [
+        (1, timestamp("2022-06-08T12:15:00.000Z")),
+        (2, timestamp("2022-06-08T13:00:00.000Z")),
+        (3, timestamp("2022-06-09T12:00:00.000Z")),
+        (4, timestamp("2022-07-08T12:00:00.000Z")),
+    ],
+)
+def test__transform_unprocessed_time_series_to_points__sets_correct_time_depending_on_resolution(
+    time_series_unprocessed_factory, resolution, expected_time_for_position_2
+):
+    # Arrange
+    time_series_unprocessed_df = time_series_unprocessed_factory(
+        StartDateTime=timestamp("2022-06-08T12:00:00.000Z"), Resolution=resolution
+    )
+
+    # Act
+    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
+    actual_time_for_position_2 = actual_df.collect()[1]["time"]
+
+    # Assert
+    assert actual_time_for_position_2 == expected_time_for_position_2
