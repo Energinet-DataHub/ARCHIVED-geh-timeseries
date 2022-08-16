@@ -14,7 +14,7 @@
 
 import pytest
 import pandas as pd
-from package.schemas import time_series_points_schema, time_series_unprocessed_schema
+from package.schemas import time_series_unprocessed_schema
 from pyspark.sql.types import (
     StructType,
     StructField,
