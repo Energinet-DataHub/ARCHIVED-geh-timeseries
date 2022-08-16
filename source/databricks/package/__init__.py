@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .data_loader import initialize_spark
+from .spark_initializor import initialize_spark
 from .timeseries_persister import timeseries_persister
 from .timeseries_publisher import timeseries_publisher
-from .table_creator import create_delta_table_if_empty

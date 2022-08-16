@@ -21,7 +21,7 @@ USER root
 COPY spark-defaults.conf $SPARK_HOME/conf/spark-defaults.conf
 
 
-# Install Azurite (support wasb-protocol storage for Delta tables in integration tests)
+# Install Azurite
 RUN apt-get update; \
     apt-get install -y npm && npm install -g n && n lts && hash -r && npm install -g azurite
 
@@ -31,7 +31,7 @@ RUN mamba install --quiet --yes --satisfied-skip-solve \
     'coverage=6.3.*' 'azure-storage-blob=12.8.*' 'pytest-mock=3.7.*'
 
 # Install python packages used in pyspark development 
-RUN pip --no-cache-dir install pyspelling azure-eventhub coverage-threshold ptvsd azure-servicebus protodf delta-spark pytest-asyncio flake8 black dataclasses-json
+RUN pip --no-cache-dir install pyspelling coverage-threshold ptvsd pytest-asyncio flake8 black dataclasses-json
 # Below will make everything in the directory owned by the group ${NB_GID}
 RUN fix-permissions "${CONDA_DIR}"
 

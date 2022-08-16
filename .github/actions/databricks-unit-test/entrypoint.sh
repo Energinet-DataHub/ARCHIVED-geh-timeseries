@@ -26,7 +26,6 @@ export PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python
 #Build wheel
 python ../setup.py install
 # python coverage-threshold install
-#pip install coverage-threshold delta-spark
 coverage run --branch -m pytest .
 # Create data for threshold evaluation
 coverage json

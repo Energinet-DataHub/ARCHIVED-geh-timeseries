@@ -30,14 +30,12 @@ from package.schemas import time_series_unprocessed_schema
 
 
 def test_timeseries_publisher_returns_0(
-    spark, databricks_path, delta_lake_path, unprocessed_time_series_json_string
+    spark, databricks_path, data_lake_path, unprocessed_time_series_json_string
 ):
-    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_points_path = f"{delta_lake_path}/time_series_points"
-    time_series_checkpoint_path = f"{delta_lake_path}/time_series_points_checkpoint"
-    time_series_unprocessed_path_json = (
-        f"{delta_lake_path}/unprocessed_time_series_json"
-    )
+    time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
+    time_series_points_path = f"{data_lake_path}/time_series_points"
+    time_series_checkpoint_path = f"{data_lake_path}/time_series_points_checkpoint"
+    time_series_unprocessed_path_json = f"{data_lake_path}/unprocessed_time_series_json"
 
     # Remove used Delta tables in order to avoid side effects from previous/other test runs
     if os.path.exists(time_series_unprocessed_path):
@@ -79,11 +77,11 @@ def test_timeseries_publisher_returns_0(
             "--data-storage-account-key",
             "data-storage-account-key",
             "--time_series_unprocessed_path",
-            f"{delta_lake_path}/unprocessed_time_series",
+            f"{data_lake_path}/unprocessed_time_series",
             "--time_series_points_path",
-            f"{delta_lake_path}/time_series_points",
+            f"{data_lake_path}/time_series_points",
             "--time_series_checkpoint_path",
-            f"{delta_lake_path}/time_series_points_checkpoint",
+            f"{data_lake_path}/time_series_points_checkpoint",
         ]
     )
 
@@ -93,17 +91,15 @@ def test_timeseries_publisher_returns_0(
 
 @pytest.fixture(scope="session")
 def time_series_publisher(
-    spark, delta_lake_path, integration_tests_path, unprocessed_time_series_json_string
+    spark, data_lake_path, integration_tests_path, unprocessed_time_series_json_string
 ):
     # Setup paths
-    time_series_checkpoint_path = f"{delta_lake_path}/time_series_points_checkpoint"
-    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_unprocessed_path_json = (
-        f"{delta_lake_path}/unprocessed_time_series_json"
-    )
-    time_series_points_path = f"{delta_lake_path}/time_series_points"
+    time_series_checkpoint_path = f"{data_lake_path}/time_series_points_checkpoint"
+    time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
+    time_series_unprocessed_path_json = f"{data_lake_path}/unprocessed_time_series_json"
+    time_series_points_path = f"{data_lake_path}/time_series_points"
 
-    # Remove used Delta tables in order to avoid side effects from previous/other test runs
+    # Remove used Datalake tables in order to avoid side effects from previous/other test runs
     if os.path.exists(time_series_unprocessed_path):
         shutil.rmtree(time_series_unprocessed_path)
     if os.path.exists(time_series_points_path):
@@ -150,4 +146,4 @@ async def test_publishes_points(parquet_reader, time_series_publisher):
         return data.count() == 6
 
     succeeded = streaming_job_asserter(time_series_publisher, verification_function)
-    assert succeeded, "No data was stored in Delta table"
+    assert succeeded, "No data was stored in Datalake table"

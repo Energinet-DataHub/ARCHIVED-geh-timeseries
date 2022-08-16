@@ -38,20 +38,20 @@ resource "databricks_job" "publisher_streaming_job" {
       whl = "dbfs:/geh-timeseries/package-1.0-py3-none-any.whl"
     } 
 
-    python_wheel_task {
-      package_name = "package"
-      entry_point = "start_publisher"
-      # IMPORTANT: Be careful about changing the name of the time series points Delta table name
-      # as it is part of the public contract for published time series points
-      parameters  = [
-          "--data-storage-account-name=${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}",
-          "--data-storage-account-key=${data.azurerm_key_vault_secret.kvs_st_data_lake_primary_access_key.value}",
-          "--time_series_unprocessed_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
-          "--time_series_points_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/time-series-points",
-          "--time_series_checkpoint_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
-      ]
-    }
+  python_wheel_task {
+    package_name = "package"
+    entry_point = "start_publisher"
+    # IMPORTANT: Be careful about changing the name of the time series points datalake table name
+    # as it is part of the public contract for published time series points
+    parameters  = [
+         "--data-storage-account-name=${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}",
+         "--data-storage-account-key=${data.azurerm_key_vault_secret.kvs_st_data_lake_primary_access_key.value}",
+         "--time_series_unprocessed_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/timeseries-unprocessed",
+         "--time_series_points_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/time-series-points",
+         "--time_series_checkpoint_path=abfss://timeseries-data@${data.azurerm_key_vault_secret.st_shared_data_lake_name.value}.dfs.core.windows.net/checkpoint-timeseries-publisher"
+    ]
   }
+}
 
   email_notifications {
     no_alert_for_skipped_runs = true
