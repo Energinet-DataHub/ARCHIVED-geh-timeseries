@@ -27,8 +27,6 @@ def initialize_spark(args):
         )
         .set("spark.sql.session.timeZone", "UTC")
         .set("spark.databricks.io.cache.enabled", "True")
-        .set("spark.databricks.delta.formatCheck.enabled", "False")
-        .set("spark.databricks.delta.schema.autoMerge.enabled", "True")
     )
     if args_dict.get("shared_storage_account_name") is not None:
         spark_conf.set(

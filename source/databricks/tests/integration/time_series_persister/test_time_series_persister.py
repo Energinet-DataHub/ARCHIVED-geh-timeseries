@@ -27,10 +27,10 @@ from tests.integration.utils import streaming_job_asserter
 from package.schemas import time_series_raw_schema
 
 
-def test_timeseries_persister_returns_0(spark, databricks_path, delta_lake_path):
-    time_series_raw_path = f"{delta_lake_path}/raw_time_series"
-    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
+def test_timeseries_persister_returns_0(spark, databricks_path, data_lake_path):
+    time_series_raw_path = f"{data_lake_path}/raw_time_series"
+    time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
+    time_series_checkpointpath = f"{data_lake_path}/raw_time_series-checkpoint"
 
     # Remove test folders in order to avoid side effects from previous/other test runs
     if os.path.exists(time_series_unprocessed_path):
@@ -54,11 +54,11 @@ def test_timeseries_persister_returns_0(spark, databricks_path, delta_lake_path)
             "--data-storage-account-key",
             "data-storage-account-key",
             "--time_series_unprocessed_path",
-            f"{delta_lake_path}/unprocessed_time_series",
+            f"{data_lake_path}/unprocessed_time_series",
             "--time_series_raw_path",
-            f"{delta_lake_path}/raw_time_series",
+            f"{data_lake_path}/raw_time_series",
             "--time_series_checkpoint_path",
-            f"{delta_lake_path}/raw_time_series-checkpoint",
+            f"{data_lake_path}/raw_time_series-checkpoint",
         ]
     )
 
@@ -67,11 +67,11 @@ def test_timeseries_persister_returns_0(spark, databricks_path, delta_lake_path)
 
 
 @pytest.fixture(scope="session")
-def time_series_persister(spark, delta_lake_path):
+def time_series_persister(spark, data_lake_path):
     # Setup paths
-    time_series_raw_path = f"{delta_lake_path}/raw_time_series"
-    time_series_unprocessed_path = f"{delta_lake_path}/unprocessed_time_series"
-    time_series_checkpointpath = f"{delta_lake_path}/raw_time_series-checkpoint"
+    time_series_raw_path = f"{data_lake_path}/raw_time_series"
+    time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
+    time_series_checkpointpath = f"{data_lake_path}/raw_time_series-checkpoint"
 
     # Remove test folders in order to avoid side effects from previous/other test runs
     if os.path.exists(time_series_unprocessed_path):
@@ -110,4 +110,4 @@ async def test_process_json(parquet_reader, time_series_persister):
         return data.count() > 0
 
     succeeded = streaming_job_asserter(time_series_persister, verification_function)
-    assert succeeded, "No data was stored in Delta table"
+    assert succeeded, "No data was stored in Datalake"
