@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 from pyspark.sql.types import (
     DecimalType,
     StructType,
@@ -23,7 +22,8 @@ from pyspark.sql.types import (
     ArrayType,
 )
 
-time_series_raw_schema = StructType(
+
+time_series_unprocessed_schema = StructType(
     [
         StructField("BusinessReasonCode", LongType(), True),
         StructField("CreatedDateTime", TimestampType(), True),
@@ -43,7 +43,7 @@ time_series_raw_schema = StructType(
                                 [
                                     StructField("Position", LongType(), True),
                                     StructField("Quality", LongType(), True),
-                                    StructField("Quantity", StringType(), True),
+                                    StructField("Quantity", DecimalType(18, 3), True),
                                 ]
                             )
                         ),
@@ -75,5 +75,8 @@ time_series_raw_schema = StructType(
         ),
         StructField("SeriesId", StringType(), True),
         StructField("TransactionId", StringType(), True),
+        StructField("year", IntegerType(), True),
+        StructField("month", IntegerType(), True),
+        StructField("day", IntegerType(), True),
     ]
 )

@@ -13,96 +13,61 @@
 # limitations under the License.
 
 from select import select
-from package.schemas.eventhub_timeseries_schema import eventhub_timeseries_schema
-from package.schemas.time_series_unprocessed import (
-    TimeSeriesUnprocessedColname as TSUColname,
-)
-from package.schemas.time_series_points import (
-    TimeSeriesPointsColname as TSPColname,
-)
 
 from pyspark.sql.functions import (
-    from_json,
     explode,
     when,
     col,
-    to_timestamp,
-    expr,
     year,
     month,
     dayofmonth,
-    lit,
     current_timestamp,
+    lit,
 )
 from pyspark.sql import DataFrame
-from package.codelists import Resolution
-from package.codelists import Colname
+from pyspark.sql.types import IntegerType
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
-    set_time_func = (
-        when(
-            col(TSUColname.Resolution) == Resolution.quarter,
-            expr(
-                f"{TSUColname.StartDateTime} + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)"
-            ),
-        )
-        .when(
-            col(TSUColname.Resolution) == Resolution.hour,
-            expr(
-                f"{TSUColname.StartDateTime} + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)"
-            ),
-        )
-        .when(
-            col(TSUColname.Resolution) == Resolution.day,
-            expr(
-                f"{TSUColname.StartDateTime} + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)"
-            ),
-        )
-        .when(
-            col(TSUColname.Resolution) == Resolution.month,
-            expr(
-                f"{TSUColname.StartDateTime} + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"
-            ),
-        )
-    )
-
     df = (
-        source.select(
-            col("*"), explode(TSUColname.Period_Points).alias(TSUColname.Points)
-        )
+        source.select(col("*"), explode("Period.Points").alias("Points"))
         .select(
-            col(TSUColname.MeteringPointId),
-            col(TSUColname.TransactionId),
-            col(TSUColname.Points_Quantity).alias(TSUColname.Quantity),
-            col(TSUColname.Points_Quality).alias(TSUColname.Quality),
-            col(TSUColname.Points_Position).alias(TSUColname.Position),
-            col(TSUColname.Period_Resolution).alias(TSUColname.Resolution),
-            col(TSUColname.Period_StartDateTime).alias(TSUColname.StartDateTime),
-            col(TSUColname.RegistrationDateTime),
-            col(TSUColname.CreatedDateTime),
+            col("MeteringPointId"),
+            col("TransactionId"),
+            col("Points.Quantity").alias("Quantity"),
+            col("Points.Quality").alias("Quality"),
+            col("Points.Position").alias("Position"),
+            col("Period.Resolution").alias("Resolution"),
+            col("Period.StartDateTime").alias("StartDateTime"),
+            col("RegistrationDateTime"),
+            col("CreatedDateTime"),
         )
         .withColumn(
-            TSUColname.RegistrationDateTime,
+            "RegistrationDateTime",
             when(
-                col(TSUColname.RegistrationDateTime).isNull(),
-                col(TSUColname.CreatedDateTime),
-            ).otherwise(col(TSUColname.RegistrationDateTime)),
+                col("RegistrationDateTime").isNull(),
+                col("CreatedDateTime"),
+            ).otherwise(col("RegistrationDateTime")),
+        )
+        .withColumn("storedTime", current_timestamp())
+        .withColumn(
+            "year",
+            when(col("storedTime").isNotNull(), year(col("storedTime"))).otherwise(
+                lit(None)
+            ),
         )
         .withColumn(
-            "TimeToAdd",
-            when(
-                col(TSUColname.Resolution) == Resolution.quarter,
-                (col(TSUColname.Position) - 1) * 15,
-            ).otherwise(col(TSUColname.Position) - 1),
+            "month",
+            when(col("storedTime").isNotNull(), month(col("storedTime"))).otherwise(
+                lit(None)
+            ),
         )
-        .withColumn(TSPColname.StoredTime, current_timestamp())
-        .withColumn(TSPColname.Time, set_time_func)
-        .withColumn(TSPColname.Year, year(col(Colname.time)))
-        .withColumn(TSPColname.Month, month(col(Colname.time)))
-        .withColumn(TSPColname.Day, dayofmonth(col(Colname.time)))
-        .drop("TimeToAdd")
+        .withColumn(
+            "day",
+            when(
+                col("storedTime").isNotNull(), dayofmonth(col("storedTime"))
+            ).otherwise(lit(None)),
+        )
     )
 
     return df

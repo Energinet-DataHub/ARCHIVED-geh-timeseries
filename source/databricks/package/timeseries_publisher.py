@@ -15,7 +15,6 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, max
 from pyspark.sql.types import BooleanType
 from package.transforms import transform_unprocessed_time_series_to_points
-from package.codelists import Colname
 from package.schemas import time_series_points_schema, time_series_unprocessed_schema
 from delta.tables import DeltaTable
 from package.table_creator import create_delta_table_if_empty
@@ -31,7 +30,7 @@ def publish_timeseries_batch(
 
     (
         transform_unprocessed_time_series_to_points(unprocessed_time_series_df)
-        .write.partitionBy(Colname.year, Colname.month, Colname.day)
+        .write.partitionBy("year", "month", "day")
         .mode("append")
         .format("parquet")
         .save(time_series_points_path)

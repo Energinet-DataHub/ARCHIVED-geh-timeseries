@@ -24,7 +24,6 @@ import os
 from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_timestamp
 from package import timeseries_publisher
-from package.codelists.colname import Colname
 from tests.integration.utils import streaming_job_asserter
 from package.schemas import time_series_unprocessed_schema
 

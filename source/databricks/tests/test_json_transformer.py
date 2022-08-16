@@ -14,15 +14,7 @@
 
 import pytest
 import pandas as pd
-
-from package.schemas.time_series_points import (
-    time_series_points_schema,
-    TimeSeriesPointsColname as TSPColname,
-)
-from package.schemas.time_series_unprocessed import (
-    time_series_unprocessed_schema,
-    TimeSeriesUnprocessedColname as TSUColname,
-)
+from package.schemas import time_series_points_schema, time_series_unprocessed_schema
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -37,105 +29,53 @@ from package.transforms.jsonTransformer import (
     transform_unprocessed_time_series_to_points,
 )
 
-date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-
-
-def timestamp(dts: StringType()) -> TimestampType():
-    return datetime.strptime(dts, date_time_formatting_string)
-
-
-def test_time_series(time_series_unprocessed_factory, time_series_points_factory):
-    time_series_unprocessed_df = time_series_unprocessed_factory(
-        StartDateTime=timestamp("2022-06-08T12:09:15.000Z"),
-        RegistrationDateTime=None,
-    )
-
-    expected_registration_data_time = time_series_unprocessed_df.collect()[0][
-        TSUColname.CreatedDateTime
-    ]
-
-    expected_df = time_series_points_factory(
-        RegistrationDateTime=expected_registration_data_time
-    ).drop(TSPColname.StoredTime)
-
-    actual_df = transform_unprocessed_time_series_to_points(
-        time_series_unprocessed_df
-    ).drop(TSPColname.StoredTime)
-
-    actual_df.show()
-    expected_df.show()
-
-    assert (
-        actual_df.collect()[0][TSPColname.RegistrationDateTime]
-        == expected_registration_data_time
-    )
-    assert actual_df.schema == expected_df.schema
-    assert actual_df.collect() == expected_df.collect()
-
-
-@pytest.mark.parametrize(
-    "resolution, start_datetime, expected_time",
-    [(2, "2022-06-08T12:00:00.000Z", "2022-06-08T12:15:00.000Z")],
-)
-def test_time_series_set_time_func(
-    time_series_unprocessed_factory, resolution, start_datetime, expected_time
-):
-    time_series_unprocessed_df = time_series_unprocessed_factory(
-        StartDateTime=timestamp(start_datetime), Resolution=resolution
-    )
-    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
-    actual_time = actual_df.collect()[0][TSPColname.Time]
-    # TODO WIP
-    assert actual_time == timestamp(expected_time)
-
 
 @pytest.fixture(scope="module")
 def time_series_unprocessed_factory(spark):
     def factory(
-        StartDateTime: TimestampType() = timestamp("2022-06-08T12:09:15.000Z"),
-        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
-        Resolution: LongType() = 2,
+        CreatedDateTime: TimestampType(),
+        RegistrationDateTime: TimestampType(),
     ):
         df = [
             {
-                TSUColname.BusinessReasonCode: 0,
-                TSUColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
-                TSUColname.DocumentId: "1",
-                TSUColname.MeasureUnit: 0,
-                TSUColname.MeteringPointId: "1",
-                TSUColname.MeteringPointType: 2,
-                TSUColname.Period: {
-                    TSUColname.EndDateTime: StartDateTime,
-                    TSUColname.Points: [
+                "BusinessReasonCode": 0,
+                "CreatedDateTime": timestamp("2022-06-09T12:09:15.000Z"),
+                "DocumentId": "1",
+                "MeasureUnit": 0,
+                "MeteringPointId": "1",
+                "MeteringPointType": 2,
+                "Period": {
+                    "EndDateTime": timestamp("2022-06-09T12:09:15.000Z"),
+                    "Points": [
                         {
-                            TSUColname.Position: 1,
-                            TSUColname.Quality: 3,
-                            TSUColname.Quantity: Decimal(1.1),
+                            "Position": 1,
+                            "Quality": 3,
+                            "Quantity": Decimal(1.1),
                         },
                         {
-                            TSUColname.Position: 1,
-                            TSUColname.Quality: 3,
-                            TSUColname.Quantity: Decimal(1.1),
+                            "Position": 1,
+                            "Quality": 3,
+                            "Quantity": Decimal(1.1),
                         },
                     ],
-                    TSUColname.Resolution: Resolution,
-                    TSUColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
+                    "Resolution": 2,
+                    "StartDateTime": timestamp("2022-06-08T12:09:15.000Z"),
                 },
-                TSUColname.Product: "1",
-                TSUColname.Receiver: {
-                    TSUColname.BusinessProcessRole: 0,
-                    TSUColname.Id: "2",
+                "Product": "1",
+                "Receiver": {
+                    "BusinessProcessRole": 0,
+                    "Id": "2",
                 },
-                TSUColname.RegistrationDateTime: RegistrationDateTime,
-                TSUColname.Sender: {
-                    TSUColname.BusinessProcessRole: 0,
-                    TSUColname.Id: "1",
+                "RegistrationDateTime": RegistrationDateTime,
+                "Sender": {
+                    "BusinessProcessRole": 0,
+                    "Id": "1",
                 },
-                TSUColname.SeriesId: "1",
-                TSUColname.TransactionId: "1",
-                TSUColname.Year: 2022,
-                TSUColname.Month: 6,
-                TSUColname.Day: 9,
+                "SeriesId": "1",
+                "TransactionId": "1",
+                "year": 2022,
+                "month": 6,
+                "day": 9,
             }
         ]
 
@@ -144,135 +84,34 @@ def time_series_unprocessed_factory(spark):
     return factory
 
 
-@pytest.fixture(scope="module")
-def time_series_points_factory(spark):
-    def factory(
-        Resolution: LongType() = 2,
-        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
-    ):
-        df = [
-            {
-                TSPColname.MeteringPointId: 1,
-                TSPColname.TransactionId: 1,
-                TSPColname.Quantity: Decimal(1.1),
-                TSPColname.Quality: 3,
-                TSPColname.Position: 1,
-                TSPColname.Resolution: Resolution,
-                TSPColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
-                TSPColname.RegistrationDateTime: RegistrationDateTime,
-                TSPColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
-                TSPColname.StoredTime: None,
-                TSPColname.Time: timestamp("2022-06-08T12:09:15.000Z"),
-                TSPColname.Year: 2022,
-                TSPColname.Month: 6,
-                TSPColname.Day: 8,
-            },
-            {
-                TSPColname.MeteringPointId: 1,
-                TSPColname.TransactionId: 1,
-                TSPColname.Quantity: Decimal(1.1),
-                TSPColname.Quality: 3,
-                TSPColname.Position: 1,
-                TSPColname.Resolution: Resolution,
-                TSPColname.StartDateTime: timestamp("2022-06-08T12:09:15.000Z"),
-                TSPColname.RegistrationDateTime: RegistrationDateTime,
-                TSPColname.CreatedDateTime: timestamp("2022-06-09T12:09:15.000Z"),
-                TSPColname.StoredTime: None,
-                TSPColname.Time: timestamp("2022-06-08T12:09:15.000Z"),
-                TSPColname.Year: 2022,
-                TSPColname.Month: 6,
-                TSPColname.Day: 8,
-            },
-        ]
-
-        return spark.createDataFrame(df, time_series_points_schema)
-
-    return factory
+date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
 
 
-this_schema = StructType(
+def timestamp(dts: StringType()) -> TimestampType():
+    return datetime.strptime(dts, date_time_formatting_string)
+
+
+@pytest.mark.parametrize(
+    "registration_date_time, expected_registration_date_time",
     [
-        StructField("id", IntegerType(), True),
-        StructField("test", StringType(), True),
-    ]
+        (None, timestamp("2022-06-09T12:09:15.000Z")),
+        (timestamp("2022-06-10T12:09:15.000Z"), timestamp("2022-06-10T12:09:15.000Z")),
+    ],
 )
+def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback_to_created_date_time_when_none(
+    time_series_unprocessed_factory,
+    registration_date_time,
+    expected_registration_date_time,
+):
+    # Arrange
+    time_series_unprocessed_df = time_series_unprocessed_factory(
+        RegistrationDateTime=registration_date_time,
+        CreatedDateTime=timestamp("2022-06-09T12:09:15.000Z"),
+    )
 
+    # Act
+    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
+    actual_registration_data_time = actual_df.collect()[0]["RegistrationDateTime"]
 
-@pytest.fixture(scope="module")
-def test_factory(spark):
-    def factory(
-        id: IntegerType(),
-        test: StringType(),
-    ):
-        pandas_df = pd.DataFrame().append(
-            [
-                {
-                    "id": id,
-                    "test": test,
-                }
-            ],
-            ignore_index=True,
-        )
-
-        return spark.createDataFrame(pandas_df)
-
-    return factory
-
-
-@pytest.fixture(scope="module")
-def test_factory2(spark):
-    def factory():
-        pandas_df = [
-            {
-                "id": 123,
-                "test": "test",
-            }
-        ]
-
-        return spark.createDataFrame(pandas_df, this_schema)
-
-    return factory
-
-
-@pytest.fixture(scope="module")
-def test_factory3(spark):
-    def factory(
-        id: IntegerType(),
-        test: StringType(),
-    ):
-        pandas_df = [
-            {
-                "id": id,
-                "test": test,
-            }
-        ]
-
-        return spark.createDataFrame(pandas_df, this_schema)
-
-    return factory
-
-
-def test__this__thang(spark, test_factory, test_factory2, test_factory3):
-    df1 = test_factory(12, "123")
-    print("df1")
-    df1.show()
-    df1.printSchema()
-    df2 = test_factory3(id=122, test="4132")
-    print("df2")
-    df2.show()
-    df2.printSchema()
-    df3 = spark.createDataFrame([{"id": 123, "test": "test"}], this_schema)
-    print("df3")
-    df3.show()
-    df3.printSchema()
-    df4 = spark.createDataFrame([(123, "test")], this_schema)
-    print("df4")
-    df4.show()
-    df4.printSchema()
-    df5 = test_factory2()
-    print("df5")
-    df5.show()
-    df5.printSchema()
-    for col in df5.dtypes:
-        print(col[0] + " , " + col[1])
-    assert 1 == 1
+    # Assert
+    assert actual_registration_data_time == expected_registration_date_time
