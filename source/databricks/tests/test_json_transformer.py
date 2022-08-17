@@ -86,10 +86,9 @@ def time_series_unprocessed_factory(spark):
     return factory
 
 
-date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-
-
+# Helper function to create TimeStampType
 def timestamp(dts: StringType()) -> TimestampType():
+    date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
     return datetime.strptime(dts, date_time_formatting_string)
 
 
