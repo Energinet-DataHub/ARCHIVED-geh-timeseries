@@ -31,8 +31,8 @@ time_series_points_schema = StructType(
         StructField("RegistrationDateTime", TimestampType(), True),
         StructField("storedTime", TimestampType(), True),
         StructField("time", TimestampType(), True),
-        StructField("year", IntegerType(), True),
-        StructField("month", IntegerType(), True),
-        StructField("day", IntegerType(), True),
+        StructField("year", IntegerType(), False),
+        StructField("month", IntegerType(), False),
+        StructField("day", IntegerType(), False),
     ]
 )

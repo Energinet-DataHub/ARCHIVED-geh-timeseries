@@ -82,15 +82,15 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         )  # time is the time of observation and what we wil partition on, with year, month, day
         .withColumn(
             "year",
-            when(col("time").isNotNull(), year(col("time"))).otherwise(lit(None)),
+            year(col("time")),
         )
         .withColumn(
             "month",
-            when(col("time").isNotNull(), month(col("time"))).otherwise(lit(None)),
+            month(col("time")),
         )
         .withColumn(
             "day",
-            when(col("time").isNotNull(), dayofmonth(col("time"))).otherwise(lit(None)),
+            dayofmonth(col("time")),
         )
         .drop("StartDateTime", "Positions", "Factor")
     )
