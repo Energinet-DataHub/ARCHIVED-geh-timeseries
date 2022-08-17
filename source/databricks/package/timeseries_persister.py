@@ -15,7 +15,6 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.types import StringType, StructType
 from pyspark.sql.functions import year, month, dayofmonth, current_timestamp
-from package.codelists import Colname
 
 
 def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
@@ -28,13 +27,13 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
 
     df = (
         df.withColumn("storedTime", current_timestamp())
-        .withColumn(Colname.year, year("storedTime"))
-        .withColumn(Colname.month, month("storedTime"))
-        .withColumn(Colname.day, dayofmonth("storedTime"))
+        .withColumn("year", year("storedTime"))
+        .withColumn("month", month("storedTime"))
+        .withColumn("day", dayofmonth("storedTime"))
     )
 
     (
-        df.write.partitionBy(Colname.year, Colname.month, Colname.day)
+        df.write.partitionBy("year", "month", "day")
         .format("parquet")
         .mode("append")
         .save(time_series_unprocessed_path)

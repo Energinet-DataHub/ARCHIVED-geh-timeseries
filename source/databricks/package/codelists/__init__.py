@@ -12,4 +12,3 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from .resolution import Resolution
-from .colname import Colname
