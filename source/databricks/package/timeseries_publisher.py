@@ -14,7 +14,7 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, year, month, dayofmonth, when, lit, min, max
 from pyspark.sql.types import BooleanType
-from package.transforms import transform_unprocessed_time_series_to_points
+from package.transformations import transform_unprocessed_time_series_to_points
 from package.schemas import time_series_points_schema, time_series_unprocessed_schema
 
 
