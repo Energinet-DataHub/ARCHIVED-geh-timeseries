@@ -99,13 +99,14 @@ def time_series_unprocessed_factory(spark, timestamp_factory):
         ),
     ],
 )
-def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback_to_created_date_time_when_none(
+def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback(
     time_series_unprocessed_factory,
     timestamp_factory,
     registration_date_time,
     expected_registration_date_time,
     creation_date_time,
 ):
+    "Tests if RegistrationDateTime is None that it fallsback CreatedDateTime"
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
         registration_date_time=timestamp_factory(registration_date_time),
@@ -137,6 +138,7 @@ def test__transform_unprocessed_time_series_to_points__sets_correct_time_dependi
     resolution,
     expected_time_for_position_2,
 ):
+    "Tests if time changes when Resolution does"
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
         start_date_time=timestamp_factory("2022-06-08T12:00:00.000Z"),
