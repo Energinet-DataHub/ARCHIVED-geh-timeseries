@@ -27,6 +27,7 @@ from decimal import Decimal
 from package.transforms.time_series_transformer import (
     transform_unprocessed_time_series_to_points,
 )
+from package.codelists import Resolution
 
 
 @pytest.fixture(scope="module")
@@ -86,10 +87,14 @@ def time_series_unprocessed_factory(spark, timestamp):
 
 
 @pytest.mark.parametrize(
-    "registration_date_time, expected_registration_date_time",
+    "registration_date_time, expected_registration_date_time, creation_date_time",
     [
-        (None, "2022-06-09T12:09:15.000Z"),
-        ("2022-06-10T12:09:15.000Z", "2022-06-10T12:09:15.000Z"),
+        (None, "2022-06-09T12:09:15.000Z", "2022-06-09T12:09:15.000Z"),
+        (
+            "2022-06-10T12:09:15.000Z",
+            "2022-06-10T12:09:15.000Z",
+            "2022-06-09T12:09:15.000Z",
+        ),
     ],
 )
 def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback_to_created_date_time_when_none(
@@ -97,11 +102,12 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
     timestamp,
     registration_date_time,
     expected_registration_date_time,
+    creation_date_time,
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
         RegistrationDateTime=timestamp(registration_date_time),
-        CreatedDateTime=timestamp("2022-06-09T12:09:15.000Z"),
+        CreatedDateTime=timestamp(creation_date_time),
     )
 
     # Act
@@ -115,10 +121,10 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
 @pytest.mark.parametrize(
     "resolution, expected_time_for_position_2",
     [
-        (1, "2022-06-08T12:15:00.000Z"),
-        (2, "2022-06-08T13:00:00.000Z"),
-        (3, "2022-06-09T12:00:00.000Z"),
-        (4, "2022-07-08T12:00:00.000Z"),
+        (Resolution.quarter, "2022-06-08T12:15:00.000Z"),
+        (Resolution.hour, "2022-06-08T13:00:00.000Z"),
+        (Resolution.day, "2022-06-09T12:00:00.000Z"),
+        (Resolution.month, "2022-07-08T12:00:00.000Z"),
     ],
 )
 def test__transform_unprocessed_time_series_to_points__sets_correct_time_depending_on_resolution(
