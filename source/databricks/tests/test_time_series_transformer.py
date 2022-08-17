@@ -31,7 +31,7 @@ from package.transforms.time_series_transformer import (
 
 
 @pytest.fixture(scope="module")
-def time_series_unprocessed_factory(spark):
+def time_series_unprocessed_factory(spark, timestamp):
     def factory(
         CreatedDateTime: TimestampType() = timestamp("2022-06-09T12:09:15.000Z"),
         RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
@@ -86,27 +86,22 @@ def time_series_unprocessed_factory(spark):
     return factory
 
 
-# Helper function to create TimeStampType
-def timestamp(dts: StringType()) -> TimestampType():
-    date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
-    return datetime.strptime(dts, date_time_formatting_string)
-
-
 @pytest.mark.parametrize(
     "registration_date_time, expected_registration_date_time",
     [
-        (None, timestamp("2022-06-09T12:09:15.000Z")),
-        (timestamp("2022-06-10T12:09:15.000Z"), timestamp("2022-06-10T12:09:15.000Z")),
+        (None, "2022-06-09T12:09:15.000Z"),
+        ("2022-06-10T12:09:15.000Z", "2022-06-10T12:09:15.000Z"),
     ],
 )
 def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback_to_created_date_time_when_none(
     time_series_unprocessed_factory,
+    timestamp,
     registration_date_time,
     expected_registration_date_time,
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        RegistrationDateTime=registration_date_time,
+        RegistrationDateTime=timestamp(registration_date_time),
         CreatedDateTime=timestamp("2022-06-09T12:09:15.000Z"),
     )
 
@@ -115,20 +110,20 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
     actual_registration_data_time = actual_df.collect()[0]["RegistrationDateTime"]
 
     # Assert
-    assert actual_registration_data_time == expected_registration_date_time
+    assert actual_registration_data_time == timestamp(expected_registration_date_time)
 
 
 @pytest.mark.parametrize(
     "resolution, expected_time_for_position_2",
     [
-        (1, timestamp("2022-06-08T12:15:00.000Z")),
-        (2, timestamp("2022-06-08T13:00:00.000Z")),
-        (3, timestamp("2022-06-09T12:00:00.000Z")),
-        (4, timestamp("2022-07-08T12:00:00.000Z")),
+        (1, "2022-06-08T12:15:00.000Z"),
+        (2, "2022-06-08T13:00:00.000Z"),
+        (3, "2022-06-09T12:00:00.000Z"),
+        (4, "2022-07-08T12:00:00.000Z"),
     ],
 )
 def test__transform_unprocessed_time_series_to_points__sets_correct_time_depending_on_resolution(
-    time_series_unprocessed_factory, resolution, expected_time_for_position_2
+    time_series_unprocessed_factory, timestamp, resolution, expected_time_for_position_2
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
@@ -140,4 +135,4 @@ def test__transform_unprocessed_time_series_to_points__sets_correct_time_dependi
     actual_time_for_position_2 = actual_df.collect()[1]["time"]
 
     # Assert
-    assert actual_time_for_position_2 == expected_time_for_position_2
+    assert actual_time_for_position_2 == timestamp(expected_time_for_position_2)

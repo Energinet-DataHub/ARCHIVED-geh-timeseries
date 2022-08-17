@@ -51,25 +51,6 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         )
     )
 
-    # set_time_func = (
-    #     when(
-    #         col("Resolution") == Resolution.quarter,
-    #         expr("StartDateTime + make_dt_interval(0, 0, TimeToAdd, 0)"),
-    #     )
-    #     .when(
-    #         col("Resolution") == Resolution.hour,
-    #         expr("StartDateTime + make_dt_interval(0, TimeToAdd, 0, 0)"),
-    #     )
-    #     .when(
-    #         col("Resolution") == Resolution.day,
-    #         expr("StartDateTime + make_dt_interval(TimeToAdd, 0, 0, 0)"),
-    #     )
-    #     .when(
-    #         col("Resolution") == Resolution.month,
-    #         expr("StartDateTime + make_ym_interval(0, TimeToAdd)"),
-    #     )
-    # )
-
     df = (
         source.select(col("*"), explode("Period.Points").alias("Points"))
         .select(
