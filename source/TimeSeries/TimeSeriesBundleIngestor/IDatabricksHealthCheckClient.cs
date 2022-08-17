@@ -12,23 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Azure.Messaging.EventHubs;
-using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
+using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor;
+
+public interface IDatabricksHealthCheckClient
 {
-    public class EventDataFactory : IEventDataFactory
-    {
-        private readonly ICorrelationContext _correlationContext;
-
-        public EventDataFactory(ICorrelationContext correlationContext)
-        {
-            _correlationContext = correlationContext;
-        }
-
-        public EventData Create(byte[] body)
-        {
-            return new EventData(body) { CorrelationId = _correlationContext.Id };
-        }
-    }
+    Task<DatabricksClusterListResponse?> GetClusterListAsync();
 }

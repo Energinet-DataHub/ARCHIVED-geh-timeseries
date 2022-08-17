@@ -12,12 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using System.Threading.Tasks;
+using System.Text.Json.Serialization;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
+
+public class Cluster
 {
-    public interface IEventHubSender
-    {
-        Task SendAsync(byte[] body);
-    }
+    [JsonPropertyName("state")]
+    public string? State { get; set; }
+
+    [JsonPropertyName("default_tags")]
+    public DefaultTags? DefaultTags { get; set; }
 }

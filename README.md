@@ -17,7 +17,7 @@ A time series is a message containing a collection of measurements for a given M
 
 Performance is essential for this time series engine as the expected through-put will be high. Current performance target is processing 16 million time series values per hour, but this figure is expected to be raised significantly.
 
-The domain is also in charge of responding to time series data requests from market participants, and it is a key input data provider for the calculations performed by the [Aggregations domain](https://github.com/Energinet-DataHub/geh-aggregations) in order to settle the electricity market.
+The domain is also in charge of responding to time series data requests from market participants, and it is a key input data provider for the calculations performed by the [wholesale domain](https://github.com/Energinet-DataHub/opengeh-wholesale) in order to settle the electricity market.
 
 These are the business processes maintained by this domain.
 
@@ -30,7 +30,7 @@ These are the business processes maintained by this domain.
 
 ## Architecture
 
-Upon receipt of a time series message, the data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data are published to the [Aggregation domain](https://github.com/Energinet-DataHub/geh-aggregations) for use in their work.
+Upon receipt of a time series message, the data gets processed within [Databricks](https://databricks.com/). In Databricks, jobs and libraries implemented in Python takes care of validating the data before storing the data in a [Delta Lake](https://delta.io/). Finally, the validated time series data are published to the [wholesale domain](https://github.com/Energinet-DataHub/opengeh-wholesale) for use in their work.
 
 ![design](./docs/images/ARCHITECTURE.drawio.png)
 
@@ -44,7 +44,7 @@ This sections documents the data flows to and from the time series domain.
 
 In the current program increment (PI) the planned work is captured by the stated PI goal:
 
-1. When a Grid Access Provider submits a time series for a metering point, the Time Series domain stores it, so that the data is available for calculations done by the Aggregations domain.
+1. When a Grid Access Provider submits a time series for a metering point, the Time Series domain stores it, so that the data is available for calculations done by the wholesale domain.
 
 ## Getting Started
 

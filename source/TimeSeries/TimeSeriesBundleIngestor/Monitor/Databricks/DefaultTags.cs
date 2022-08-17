@@ -12,12 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-using Azure.Messaging.EventHubs;
+namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor.Monitor.Databricks;
 
-namespace Energinet.DataHub.TimeSeries.Infrastructure.EventHub
+public class DefaultTags
 {
-    public interface IEventDataFactory
-    {
-        EventData Create(byte[] body);
-    }
+    public string? ClusterName { get; set; }
+
+    public string? JobId { get; set; }
+
+    public string? RunName { get; set; }
 }

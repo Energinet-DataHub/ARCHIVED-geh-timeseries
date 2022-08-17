@@ -22,7 +22,7 @@ def process_raw_timeseries(df, epoch_id, time_series_unprocessed_path):
     Store received time series partitioned by the time of receival.
 
     Time of receival is currently defined as the time the messages are enqueued
-    on the EventHub.
+    on the Blobstorage.
     """
 
     df = (

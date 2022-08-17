@@ -22,7 +22,6 @@ setup(
     license="MIT",
     packages=find_packages(),
     install_requires=[
-        "delta==0.4.2",
         "ConfigArgParse==1.5.3",
         "pyspark==3.3.0",
         "azure-storage-blob==12.7.1",
