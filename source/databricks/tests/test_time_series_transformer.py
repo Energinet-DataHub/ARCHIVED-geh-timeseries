@@ -33,19 +33,17 @@ from package.codelists import Resolution
 @pytest.fixture(scope="module")
 def time_series_unprocessed_factory(spark, timestamp_factory):
     def factory(
-        CreatedDateTime: TimestampType() = timestamp_factory(
-            "2022-06-09T12:09:15.000Z"
-        ),
-        RegistrationDateTime: TimestampType() = timestamp_factory(
+        created_date_time: datetime = timestamp_factory("2022-06-09T12:09:15.000Z"),
+        registration_date_time: datetime = timestamp_factory(
             "2022-06-10T12:09:15.000Z"
         ),
-        StartDateTime: TimestampType() = timestamp_factory("2022-06-08T12:09:15.000Z"),
-        Resolution: LongType() = 2,
+        start_date_time: datetime = timestamp_factory("2022-06-08T12:09:15.000Z"),
+        resolution: int = 2,
     ):
         df = [
             {
                 "BusinessReasonCode": 0,
-                "CreatedDateTime": timestamp_factory("2022-06-09T12:09:15.000Z"),
+                "CreatedDateTime": created_date_time,
                 "DocumentId": "1",
                 "MeasureUnit": 0,
                 "MeteringPointId": "1",
@@ -64,15 +62,15 @@ def time_series_unprocessed_factory(spark, timestamp_factory):
                             "Quantity": Decimal(1.1),
                         },
                     ],
-                    "Resolution": Resolution,
-                    "StartDateTime": StartDateTime,
+                    "Resolution": resolution,
+                    "StartDateTime": start_date_time,
                 },
                 "Product": "1",
                 "Receiver": {
                     "BusinessProcessRole": 0,
                     "Id": "2",
                 },
-                "RegistrationDateTime": RegistrationDateTime,
+                "RegistrationDateTime": registration_date_time,
                 "Sender": {
                     "BusinessProcessRole": 0,
                     "Id": "1",
@@ -110,8 +108,8 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        RegistrationDateTime=timestamp_factory(registration_date_time),
-        CreatedDateTime=timestamp_factory(creation_date_time),
+        registration_date_time=timestamp_factory(registration_date_time),
+        created_date_time=timestamp_factory(creation_date_time),
     )
 
     # Act
@@ -141,8 +139,8 @@ def test__transform_unprocessed_time_series_to_points__sets_correct_time_dependi
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        StartDateTime=timestamp_factory("2022-06-08T12:00:00.000Z"),
-        Resolution=resolution,
+        start_date_time=timestamp_factory("2022-06-08T12:00:00.000Z"),
+        resolution=resolution,
     )
 
     # Act
