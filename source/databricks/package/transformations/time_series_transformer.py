@@ -35,19 +35,19 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
     set_time_func = (
         when(
             col("Resolution") == Resolution.quarter,
-            expr("StartDateTime + make_interval(0, 0, 0, 0, 0, TimeToAdd, 0)"),
+            expr("StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
         )
         .when(
             col("Resolution") == Resolution.hour,
-            expr("StartDateTime + make_interval(0, 0, 0, 0, TimeToAdd, 0, 0)"),
+            expr("StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
         )
         .when(
             col("Resolution") == Resolution.day,
-            expr("StartDateTime + make_interval(0, 0, 0, TimeToAdd, 0, 0, 0)"),
+            expr("StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
         )
         .when(
             col("Resolution") == Resolution.month,
-            expr("StartDateTime + make_interval(0, TimeToAdd, 0, 0, 0, 0, 0)"),
+            expr("StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
         )
     )
 
@@ -73,14 +73,14 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         )
         .withColumn("storedTime", current_timestamp())
         .withColumn(
-            "TimeToAdd",
+            "Factor",
             when(
                 col("Resolution") == Resolution.quarter,
                 (col("Position") - 1) * 15,  # To add 15, 30 or 45 to the minut interval
             ).otherwise(
                 col("Position") - 1
             ),  # Position - 1 to make the value set start from zero
-        )  # TimeToAdd is used in set_time_func to add to the interval
+        )  # Factor is used in set_time_func to add to the interval
         .withColumn(
             "time", set_time_func
         )  # time is the time of observation and what we wil partition on, with year, month, day
@@ -96,7 +96,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             "day",
             when(col("time").isNotNull(), dayofmonth(col("time"))).otherwise(lit(None)),
         )
-        .drop("StartDateTime", "Positions", "TimeToAdd")
+        .drop("StartDateTime", "Positions", "Factor")
     )
 
     return df
