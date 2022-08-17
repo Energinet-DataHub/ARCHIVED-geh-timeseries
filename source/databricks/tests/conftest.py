@@ -31,9 +31,10 @@ def spark():
     return SparkSession.builder.config(conf=spark_conf).getOrCreate()
 
 
-# Creates timestamp from utc string in correct format yyyy-mm-ddThh:mm:ss.nnnZ
 @pytest.fixture(scope="session")
-def timestamp():
+def timestamp_factory():
+    "Creates timestamp from utc string in correct format yyyy-mm-ddThh:mm:ss.nnnZ"
+
     def factory(dts: StringType()):
         date_time_formatting_string = "%Y-%m-%dT%H:%M:%S.%fZ"
         if dts is None:

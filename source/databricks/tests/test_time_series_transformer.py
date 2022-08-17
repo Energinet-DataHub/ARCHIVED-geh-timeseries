@@ -31,23 +31,27 @@ from package.codelists import Resolution
 
 
 @pytest.fixture(scope="module")
-def time_series_unprocessed_factory(spark, timestamp):
+def time_series_unprocessed_factory(spark, timestamp_factory):
     def factory(
-        CreatedDateTime: TimestampType() = timestamp("2022-06-09T12:09:15.000Z"),
-        RegistrationDateTime: TimestampType() = timestamp("2022-06-10T12:09:15.000Z"),
-        StartDateTime: TimestampType() = timestamp("2022-06-08T12:09:15.000Z"),
+        CreatedDateTime: TimestampType() = timestamp_factory(
+            "2022-06-09T12:09:15.000Z"
+        ),
+        RegistrationDateTime: TimestampType() = timestamp_factory(
+            "2022-06-10T12:09:15.000Z"
+        ),
+        StartDateTime: TimestampType() = timestamp_factory("2022-06-08T12:09:15.000Z"),
         Resolution: LongType() = 2,
     ):
         df = [
             {
                 "BusinessReasonCode": 0,
-                "CreatedDateTime": timestamp("2022-06-09T12:09:15.000Z"),
+                "CreatedDateTime": timestamp_factory("2022-06-09T12:09:15.000Z"),
                 "DocumentId": "1",
                 "MeasureUnit": 0,
                 "MeteringPointId": "1",
                 "MeteringPointType": 2,
                 "Period": {
-                    "EndDateTime": timestamp("2022-06-09T12:09:15.000Z"),
+                    "EndDateTime": timestamp_factory("2022-06-09T12:09:15.000Z"),
                     "Points": [
                         {
                             "Position": 1,
@@ -99,15 +103,15 @@ def time_series_unprocessed_factory(spark, timestamp):
 )
 def test__transform_unprocessed_time_series_to_points__registration_date_time_fallsback_to_created_date_time_when_none(
     time_series_unprocessed_factory,
-    timestamp,
+    timestamp_factory,
     registration_date_time,
     expected_registration_date_time,
     creation_date_time,
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        RegistrationDateTime=timestamp(registration_date_time),
-        CreatedDateTime=timestamp(creation_date_time),
+        RegistrationDateTime=timestamp_factory(registration_date_time),
+        CreatedDateTime=timestamp_factory(creation_date_time),
     )
 
     # Act
@@ -115,7 +119,9 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
     actual_registration_data_time = actual_df.collect()[0]["RegistrationDateTime"]
 
     # Assert
-    assert actual_registration_data_time == timestamp(expected_registration_date_time)
+    assert actual_registration_data_time == timestamp_factory(
+        expected_registration_date_time
+    )
 
 
 @pytest.mark.parametrize(
@@ -128,11 +134,15 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
     ],
 )
 def test__transform_unprocessed_time_series_to_points__sets_correct_time_depending_on_resolution(
-    time_series_unprocessed_factory, timestamp, resolution, expected_time_for_position_2
+    time_series_unprocessed_factory,
+    timestamp_factory,
+    resolution,
+    expected_time_for_position_2,
 ):
     # Arrange
     time_series_unprocessed_df = time_series_unprocessed_factory(
-        StartDateTime=timestamp("2022-06-08T12:00:00.000Z"), Resolution=resolution
+        StartDateTime=timestamp_factory("2022-06-08T12:00:00.000Z"),
+        Resolution=resolution,
     )
 
     # Act
@@ -140,4 +150,4 @@ def test__transform_unprocessed_time_series_to_points__sets_correct_time_dependi
     actual_time_for_position_2 = actual_df.collect()[1]["time"]
 
     # Assert
-    assert actual_time_for_position_2 == timestamp(expected_time_for_position_2)
+    assert actual_time_for_position_2 == timestamp_factory(expected_time_for_position_2)
