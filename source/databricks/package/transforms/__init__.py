@@ -12,4 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from .jsonTransformer import transform_unprocessed_time_series_to_points
+from .time_series_transformer import transform_unprocessed_time_series_to_points
