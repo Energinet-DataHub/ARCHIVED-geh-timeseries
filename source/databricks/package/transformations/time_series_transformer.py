@@ -33,17 +33,6 @@ from package.codelists import Resolution
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
     df = (
         source.select(col("*"), explode("Period.Points").alias("Points"))
-        .select(
-            col("MeteringPointId"),
-            col("TransactionId"),
-            col("Points.Quantity").alias("Quantity"),
-            col("Points.Quality").alias("Quality"),
-            col("Points.Position").alias("Position"),
-            col("Period.Resolution").alias("Resolution"),
-            col("Period.StartDateTime").alias("StartDateTime"),
-            col("RegistrationDateTime"),
-            col("CreatedDateTime"),
-        )
         .withColumn(
             "RegistrationDateTime",
             when(
@@ -55,29 +44,30 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             "Factor",
             when(
-                col("Resolution") == Resolution.quarter,
-                (col("Position") - 1) * 15,  # To add 15, 30 or 45 to the minut interval
+                col("Period.Resolution") == Resolution.quarter,
+                (col("Points.Position") - 1)
+                * 15,  # To add 15, 30 or 45 to the minut interval
             ).otherwise(
-                col("Position") - 1
+                col("Points.Position") - 1
             ),  # Position - 1 to make the value set start from zero
         )  # Factor is used in set_time_func to add to the interval
         .withColumn(  # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
             "time",
             when(
-                col("Resolution") == Resolution.quarter,
-                expr("StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
+                col("Period.Resolution") == Resolution.quarter,
+                expr("Period.StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
             )
             .when(
-                col("Resolution") == Resolution.hour,
-                expr("StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
+                col("Period.Resolution") == Resolution.hour,
+                expr("Period.StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
             )
             .when(
-                col("Resolution") == Resolution.day,
-                expr("StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
+                col("Period.Resolution") == Resolution.day,
+                expr("Period.StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
             )
             .when(
-                col("Resolution") == Resolution.month,
-                expr("StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
+                col("Period.Resolution") == Resolution.month,
+                expr("Period.StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
             ),
         )  # time is the time of observation and what we wil partition on, with year, month, day
         .withColumn(
@@ -92,7 +82,19 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             "day",
             dayofmonth(col("time")),
         )
-        .drop("StartDateTime", "Positions", "Factor")
+        .select(
+            col("MeteringPointId"),
+            col("TransactionId"),
+            col("Points.Quantity").alias("Quantity"),
+            col("Points.Quality").alias("Quality"),
+            col("Period.Resolution").alias("Resolution"),
+            col("RegistrationDateTime"),
+            col("storedTime"),
+            col("time"),
+            col("year"),
+            col("month"),
+            col("day"),
+        )
     )
 
     return df
