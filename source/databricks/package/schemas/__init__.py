@@ -14,4 +14,3 @@
 from .eventhub_timeseries_schema import eventhub_timeseries_schema
 from .time_series_raw_schema import time_series_raw_schema
 from .time_series_unprocessed_schema import time_series_unprocessed_schema
-from .time_series_points_schema import time_series_points_schema
