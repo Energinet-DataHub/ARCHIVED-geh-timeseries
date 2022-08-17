@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import pandas as pd
 from package.schemas import time_series_unprocessed_schema
 from pyspark.sql.types import (
     StructType,
