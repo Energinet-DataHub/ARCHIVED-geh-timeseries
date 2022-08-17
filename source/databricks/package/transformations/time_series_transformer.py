@@ -50,7 +50,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             ).otherwise(
                 col("Points.Position") - 1
             ),  # Position - 1 to make the value set start from zero
-        )  # Factor is used in set_time_func to add to the interval
+        )  # Factor is used in the next step to add to the interval
         .withColumn(  # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
             "time",
             when(
