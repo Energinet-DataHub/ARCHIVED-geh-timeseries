@@ -31,26 +31,6 @@ from package.codelists import Resolution
 
 
 def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
-    # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
-    set_time_func = (
-        when(
-            col("Resolution") == Resolution.quarter,
-            expr("StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
-        )
-        .when(
-            col("Resolution") == Resolution.hour,
-            expr("StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
-        )
-        .when(
-            col("Resolution") == Resolution.day,
-            expr("StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
-        )
-        .when(
-            col("Resolution") == Resolution.month,
-            expr("StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
-        )
-    )
-
     df = (
         source.select(col("*"), explode("Period.Points").alias("Points"))
         .select(
@@ -81,8 +61,24 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
                 col("Position") - 1
             ),  # Position - 1 to make the value set start from zero
         )  # Factor is used in set_time_func to add to the interval
-        .withColumn(
-            "time", set_time_func
+        .withColumn(  # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
+            "time",
+            when(
+                col("Resolution") == Resolution.quarter,
+                expr("StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
+            )
+            .when(
+                col("Resolution") == Resolution.hour,
+                expr("StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
+            )
+            .when(
+                col("Resolution") == Resolution.day,
+                expr("StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
+            )
+            .when(
+                col("Resolution") == Resolution.month,
+                expr("StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
+            ),
         )  # time is the time of observation and what we wil partition on, with year, month, day
         .withColumn(
             "year",
