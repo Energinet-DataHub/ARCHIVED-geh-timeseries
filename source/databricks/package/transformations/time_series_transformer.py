@@ -83,7 +83,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
             dayofmonth(col("time")),
         )
         .select(
-            col("MeteringPointId"),
+            col("GsrnNumber"),
             col("TransactionId"),
             col("Points.Quantity").alias("Quantity"),
             col("Points.Quality").alias("Quality"),
