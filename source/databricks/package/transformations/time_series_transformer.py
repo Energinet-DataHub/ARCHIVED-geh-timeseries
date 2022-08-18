@@ -85,9 +85,9 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .select(
             col("GsrnNumber"),
             col("TransactionId"),
-            col("Points.Quantity").alias("Quantity"),
-            col("Points.Quality").alias("Quality"),
-            col("Period.Resolution").alias("Resolution"),
+            col("Points.Quantity"),
+            col("Points.Quality"),
+            col("Period.Resolution"),
             col("RegistrationDateTime"),
             col("storedTime"),
             col("time"),
