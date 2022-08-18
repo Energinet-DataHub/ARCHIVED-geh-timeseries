@@ -57,7 +57,7 @@ namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
 
         public const string OriginalTransactionIdReferenceSeriesId = "originalTransactionIDReference_Series.mRID";
 
-        public const string MeteringPointId = "marketEvaluationPoint.mRID";
+        public const string GsrnNumber = "marketEvaluationPoint.mRID";
 
         public const string MeteringPointType = "marketEvaluationPoint.type";
 

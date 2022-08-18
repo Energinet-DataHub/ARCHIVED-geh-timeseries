@@ -29,7 +29,7 @@ time_series_raw_schema = StructType(
         StructField("CreatedDateTime", TimestampType(), True),
         StructField("DocumentId", StringType(), True),
         StructField("MeasureUnit", LongType(), True),
-        StructField("MeteringPointId", StringType(), True),
+        StructField("GsrnNumber", StringType(), True),
         StructField("MeteringPointType", LongType(), True),
         StructField(
             "Period",

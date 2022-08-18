@@ -46,7 +46,7 @@ def time_series_unprocessed_factory(spark, timestamp_factory):
                 "CreatedDateTime": created_date_time,
                 "DocumentId": "1",
                 "MeasureUnit": 0,
-                "MeteringPointId": "1",
+                "GsrnNumber": "1",
                 "MeteringPointType": 2,
                 "Period": {
                     "EndDateTime": timestamp_factory("2022-06-09T12:09:15.000Z"),
@@ -159,7 +159,7 @@ def time_series_points_factory(spark, timestamp_factory):
     def factory():
         df = [
             {
-                "MeteringPointId": "1",
+                "GsrnNumber": "1",
                 "TransactionId": "1",
                 "Quantity": Decimal(1.1),
                 "Quality": 3,
@@ -172,7 +172,7 @@ def time_series_points_factory(spark, timestamp_factory):
                 "day": 8,
             },
             {
-                "MeteringPointId": "1",
+                "GsrnNumber": "1",
                 "TransactionId": "1",
                 "Quantity": Decimal(1.1),
                 "Quality": 3,

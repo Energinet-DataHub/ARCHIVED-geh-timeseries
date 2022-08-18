@@ -25,14 +25,14 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
 
             // Cim deserialization will ensure a value is set.
             Id = null!;
-            MeteringPointId = null!;
+            GsrnNumber = null!;
         }
 
         public string Id { get; set; }
 
         public string? TransactionId { get; set; }
 
-        public string MeteringPointId { get; set; }
+        public string GsrnNumber { get; set; }
 
         public MeteringPointType MeteringPointType { get; set; }
 

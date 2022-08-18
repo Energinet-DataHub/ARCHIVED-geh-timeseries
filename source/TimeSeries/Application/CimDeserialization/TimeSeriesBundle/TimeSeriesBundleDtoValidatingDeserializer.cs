@@ -82,10 +82,10 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
                             seriesEntry.TransactionId = content;
                         }
                         else if (reader.CurrentNodeName ==
-                                 CimMarketDocumentConstants.MeteringPointId && reader.CanReadValue)
+                                 CimMarketDocumentConstants.GsrnNumber && reader.CanReadValue)
                         {
                             var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                            seriesEntry.MeteringPointId = content;
+                            seriesEntry.GsrnNumber = content;
                         }
                         else if (reader.CurrentNodeName ==
                                  CimMarketDocumentConstants.MeteringPointType && reader.CanReadValue)
