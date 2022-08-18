@@ -46,7 +46,7 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
                 timeSeriesBundle.Document.BusinessReasonCode,
                 SeriesId = series.Id,
                 TransactionId = (string?)series.TransactionId, // (string?) i needed to mitigate nullability anonymous type error
-                series.MeteringPointId,
+                series.GsrnNumber,
                 series.MeteringPointType,
                 series.RegistrationDateTime,
                 Product = (string?)series.Product, // (string?) i needed to mitigate nullability anonymous type error
