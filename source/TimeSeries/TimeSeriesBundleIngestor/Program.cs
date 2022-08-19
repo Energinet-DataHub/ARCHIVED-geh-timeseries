@@ -18,6 +18,8 @@ using Azure.Messaging.EventHubs;
 using Azure.Storage.Blobs;
 using Energinet.DataHub.Core.App.Common.Diagnostics.HealthChecks;
 using Energinet.DataHub.Core.App.FunctionApp.Diagnostics.HealthChecks;
+using Energinet.DataHub.Core.App.FunctionApp.Extensions.DependencyInjection;
+using Energinet.DataHub.Core.App.FunctionApp.FunctionTelemetryScope;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware;
 using Energinet.DataHub.Core.App.FunctionApp.Middleware.CorrelationId;
 using Energinet.DataHub.Core.JsonSerialization;
@@ -59,8 +61,7 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 
         private static void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddApplicationInsightsTelemetryWorkerService(
-                Environment.GetEnvironmentVariable("APPINSIGHTS_INSTRUMENTATIONKEY"));
+            serviceCollection.AddApplicationInsights();
 
             serviceCollection.AddLogging();
             serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
