@@ -66,7 +66,6 @@ namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
             serviceCollection.AddLogging();
             serviceCollection.AddScoped<ICorrelationContext, CorrelationContext>();
             serviceCollection.AddScoped<CorrelationIdMiddleware>();
-            serviceCollection.AddScoped<FunctionTelemetryScopeMiddleware>();
             serviceCollection.AddScoped<IHttpResponseBuilder, HttpResponseBuilder>();
             serviceCollection.AddScoped<ITimeSeriesForwarder, TimeSeriesForwarder>();
             serviceCollection.AddScoped<ITimeSeriesBundleDtoValidatingDeserializer, TimeSeriesBundleDtoValidatingDeserializer>();
