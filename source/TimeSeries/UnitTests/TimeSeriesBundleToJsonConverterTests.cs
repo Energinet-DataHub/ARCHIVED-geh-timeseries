@@ -74,7 +74,7 @@ public class TimeSeriesBundleToJsonConverterTests
                 {
                     Id = "C123456",
                     TransactionId = "C1875000",
-                    MeteringPointId = "579999993331812345",
+                    GsrnNumber = "579999993331812345",
                     MeteringPointType = MeteringPointType.Consumption,
                     RegistrationDateTime = Instant.FromUtc(2022, 12, 17, 7, 30),
                     Product = "8716867000030",
@@ -99,7 +99,7 @@ public class TimeSeriesBundleToJsonConverterTests
                 {
                     Id = "C789123",
                     TransactionId = "C7445231",
-                    MeteringPointId = "579999997778885555",
+                    GsrnNumber = "579999997778885555",
                     MeteringPointType = MeteringPointType.Production,
                     RegistrationDateTime = Instant.FromUtc(2022, 12, 18, 07, 30),
                     Product = "8716867000030",

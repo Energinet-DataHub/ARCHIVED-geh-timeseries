@@ -23,7 +23,7 @@ from pyspark.sql.types import (
 
 time_series_points_schema = StructType(
     [
-        StructField("MeteringPointId", StringType(), True),
+        StructField("GsrnNumber", StringType(), True),
         StructField("TransactionId", StringType(), True),
         StructField("Quantity", DecimalType(18, 3), True),
         StructField("Quality", LongType(), True),
