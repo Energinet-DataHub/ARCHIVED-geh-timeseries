@@ -28,13 +28,6 @@ namespace Energinet.DataHub.TimeSeries.Application;
 
 public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
 {
-    private readonly IJsonSerializer _jsonSerializer;
-
-    public TimeSeriesBundleConverter(IJsonSerializer jsonSerializer)
-    {
-        _jsonSerializer = jsonSerializer;
-    }
-
     public async Task ConvertAsync(TimeSeriesBundleDto timeSeriesBundle, Stream stream)
     {
         var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
@@ -44,8 +37,7 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
                 timeSeriesBundle.Document.Sender,
                 timeSeriesBundle.Document.Receiver,
                 timeSeriesBundle.Document.BusinessReasonCode,
-                SeriesId = series.Id,
-                TransactionId = (string?)series.TransactionId, // (string?) i needed to mitigate nullability anonymous type error
+                series.TransactionId,
                 series.GsrnNumber,
                 series.MeteringPointType,
                 series.RegistrationDateTime,

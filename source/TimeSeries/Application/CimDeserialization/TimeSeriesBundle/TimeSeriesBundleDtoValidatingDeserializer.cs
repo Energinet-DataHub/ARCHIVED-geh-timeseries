@@ -14,14 +14,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.Schemas;
 using Energinet.DataHub.Core.SchemaValidation;
-using Energinet.DataHub.Core.SchemaValidation.Extensions;
 using Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using NodaTime;
@@ -71,12 +69,6 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
                     while (await reader.AdvanceAsync().ConfigureAwait(false))
                     {
                         if (reader.CurrentNodeName == CimMarketDocumentConstants.Id && reader.CanReadValue)
-                        {
-                            var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
-                            seriesEntry.Id = content;
-                        }
-                        else if (reader.CurrentNodeName ==
-                            CimMarketDocumentConstants.OriginalTransactionIdReferenceSeriesId && reader.CanReadValue)
                         {
                             var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
                             seriesEntry.TransactionId = content;
