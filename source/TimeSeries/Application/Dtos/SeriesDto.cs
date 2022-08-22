@@ -24,13 +24,11 @@ namespace Energinet.DataHub.TimeSeries.Application.Dtos
             Period = new PeriodDto();
 
             // Cim deserialization will ensure a value is set.
-            Id = null!;
+            TransactionId = null!;
             GsrnNumber = null!;
         }
 
-        public string Id { get; set; }
-
-        public string? TransactionId { get; set; }
+        public string TransactionId { get; set; }
 
         public string GsrnNumber { get; set; }
 

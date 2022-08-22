@@ -37,7 +37,7 @@ public class TimeSeriesBundleToJsonConverterTests
     public TimeSeriesBundleToJsonConverterTests()
     {
         _testDocuments = new TestDocuments();
-        _timeSeriesBundleConverter = new TimeSeriesBundleConverter(new JsonSerializer());
+        _timeSeriesBundleConverter = new TimeSeriesBundleConverter();
     }
 
     [Fact]
@@ -72,8 +72,7 @@ public class TimeSeriesBundleToJsonConverterTests
             {
                 new()
                 {
-                    Id = "C123456",
-                    TransactionId = "C1875000",
+                    TransactionId = "C123456",
                     GsrnNumber = "579999993331812345",
                     MeteringPointType = MeteringPointType.Consumption,
                     RegistrationDateTime = Instant.FromUtc(2022, 12, 17, 7, 30),
@@ -97,7 +96,6 @@ public class TimeSeriesBundleToJsonConverterTests
                 },
                 new()
                 {
-                    Id = "C789123",
                     TransactionId = "C7445231",
                     GsrnNumber = "579999997778885555",
                     MeteringPointType = MeteringPointType.Production,
