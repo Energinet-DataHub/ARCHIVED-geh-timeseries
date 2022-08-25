@@ -52,10 +52,3 @@ def assert_codelist_matches_contract(codelist, contract_path):
     for literal in literals:
         supported_arg = next(x for x in supported_literals if literal.name == x["name"])
         assert literal.value == supported_arg["value"]
-
-
-def get_message_type(contract_path):
-    grid_area_updated_schema = read_contract(contract_path)
-    return next(
-        x for x in grid_area_updated_schema["bodyFields"] if x["name"] == "MessageType"
-    )["value"]
