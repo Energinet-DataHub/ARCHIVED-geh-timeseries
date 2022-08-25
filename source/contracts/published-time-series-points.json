@@ -33,7 +33,7 @@
         {
              "name": "time", 
              "type": "timestamp",
-             "description": "Operation time (the time when the power was consumed/produced/exchanged."
+             "description": "Operation time (the time when the power was consumed/produced/exchanged)."
         },
         {
              "name": "year", 
