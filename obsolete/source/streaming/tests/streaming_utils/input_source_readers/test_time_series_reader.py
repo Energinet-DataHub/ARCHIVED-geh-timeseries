@@ -23,7 +23,7 @@ from geh_stream.streaming_utils.input_source_readers.time_series_reader import \
 from decimal import Decimal
 
 
-def test_parse_stream_schema(timeseries_protobuf_factory, event_hub_message_df_factory, time_series_points_schema):
+def test_parse_stream_schema(timeseries_protobuf_factory, event_hub_message_df_factory, published_time_series_points_schema):
     "Test schema of streamed time series points"
 
     time_series_protobuf = timeseries_protobuf_factory()
@@ -32,7 +32,7 @@ def test_parse_stream_schema(timeseries_protobuf_factory, event_hub_message_df_f
     parsed_time_series_point_stream = __parse_stream(event_hub_message_df)
 
     parsed_data_schema = str(parsed_time_series_point_stream.schema)
-    expected_schema = str(time_series_points_schema)
+    expected_schema = str(published_time_series_points_schema)
 
     assert parsed_data_schema == expected_schema
 

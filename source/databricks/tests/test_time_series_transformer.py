@@ -13,7 +13,7 @@
 # limitations under the License.
 
 import pytest
-from package.schemas import time_series_unprocessed_schema, time_series_points_schema
+from package.schemas import time_series_unprocessed_schema, published_time_series_points_schema
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -186,7 +186,7 @@ def time_series_points_factory(spark, timestamp_factory):
             },
         ]
 
-        return spark.createDataFrame(df, time_series_points_schema)
+        return spark.createDataFrame(df, published_time_series_points_schema)
 
     return factory
 
