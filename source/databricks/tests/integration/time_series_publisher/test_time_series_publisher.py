@@ -25,10 +25,14 @@ from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_timestamp
 from package import timeseries_publisher
 from tests.integration.utils import streaming_job_asserter
-from package.schemas import time_series_unprocessed_schema
+from package.schemas import (
+    time_series_unprocessed_schema,
+    published_time_series_points_schema,
+)
+from tests.contract_utils import assert_contract_matches_schema
 
 
-def test_timeseries_publisher_returns_0(
+def test__timeseries_publisher_returns_exit_code_0(
     spark, databricks_path, data_lake_path, unprocessed_time_series_json_string
 ):
     time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
@@ -139,10 +143,30 @@ def time_series_publisher(
 
 
 @pytest.mark.asyncio
-async def test_publishes_points(parquet_reader, time_series_publisher):
+async def test__publishes_points(parquet_reader, time_series_publisher):
     def verification_function():
         data = parquet_reader("/time_series_points")
         return data.count() == 6
 
     succeeded = streaming_job_asserter(time_series_publisher, verification_function)
     assert succeeded, "No data was stored in Datalake table"
+
+
+@pytest.mark.asyncio
+async def test__publishes_points_that_comply_with_public_contract(
+    source_path, parquet_reader, time_series_publisher
+):
+    def verification_function():
+        data = parquet_reader("/time_series_points")
+        assert_contract_matches_schema(
+            f"{source_path}/contracts/published-time-series-points.json", data.schema
+        )
+
+    streaming_job_asserter(time_series_publisher, verification_function)
+
+
+def test__defined_schema_complies_with_public_contract(source_path):
+    assert_contract_matches_schema(
+        f"{source_path}/contracts/published-time-series-points.json",
+        published_time_series_points_schema,
+    )

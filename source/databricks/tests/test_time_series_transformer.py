@@ -13,7 +13,10 @@
 # limitations under the License.
 
 import pytest
-from package.schemas import time_series_unprocessed_schema, time_series_points_schema
+from package.schemas import (
+    time_series_unprocessed_schema,
+    published_time_series_points_schema,
+)
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -152,62 +155,3 @@ def test__transform_unprocessed_time_series_to_points__sets_correct_time_dependi
 
     # Assert
     assert timestamp_factory(expected_time_for_position_2) == actual_time_for_position_2
-
-
-@pytest.fixture(scope="module")
-def time_series_points_factory(spark, timestamp_factory):
-    def factory():
-        df = [
-            {
-                "GsrnNumber": "1",
-                "TransactionId": "1",
-                "Quantity": Decimal(1.1),
-                "Quality": 3,
-                "Resolution": 2,
-                "RegistrationDateTime": timestamp_factory("2022-06-10T12:09:15.000Z"),
-                "storedTime": timestamp_factory("2022-06-10T12:09:15.000Z"),
-                "time": timestamp_factory("2022-06-08T12:09:15.000Z"),
-                "year": 2022,
-                "month": 6,
-                "day": 8,
-            },
-            {
-                "GsrnNumber": "1",
-                "TransactionId": "1",
-                "Quantity": Decimal(1.1),
-                "Quality": 3,
-                "Resolution": 2,
-                "RegistrationDateTime": timestamp_factory("2022-06-10T12:09:15.000Z"),
-                "storedTime": timestamp_factory("2022-06-10T12:09:15.000Z"),
-                "time": timestamp_factory("2022-06-08T13:09:15.000Z"),
-                "year": 2022,
-                "month": 6,
-                "day": 8,
-            },
-        ]
-
-        return spark.createDataFrame(df, time_series_points_schema)
-
-    return factory
-
-
-# IMPORTANT: The schema being tested should match the schema used in wholesale.
-# Make sure to aligne with wholesale domain if any changes are to be made.
-def test__transform_unprocessed_time_series_to_points__follows_schema(
-    time_series_unprocessed_factory, time_series_points_factory
-):
-    "Tests that time_series_point created in the function has the correct schema"
-    # Arrange
-    time_series_unprocessed_df = time_series_unprocessed_factory()
-
-    expected_df = time_series_points_factory()
-
-    # Act
-    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
-
-    # Assert
-    assert expected_df.schema == actual_df.schema
-    assert (
-        expected_df.drop("storedTime").collect()
-        == actual_df.drop("storedTime").collect()
-    )

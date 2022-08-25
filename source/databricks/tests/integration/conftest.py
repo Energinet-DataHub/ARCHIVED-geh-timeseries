@@ -13,7 +13,6 @@
 # limitations under the License.
 
 import pytest
-import os
 from pyspark.sql import SparkSession
 
 
@@ -25,30 +24,19 @@ def spark() -> SparkSession:
 
 
 @pytest.fixture(scope="session")
-def integration_tests_path() -> str:
+def integration_tests_path(databricks_path) -> str:
     """
     Returns the integration tests folder path.
-    Please note that this only works if current folder haven't been changed prior using us.chdir().
+    Please note that this only works if current folder haven't been changed prior using `os.chdir()`.
     The correctness also relies on the prerequisite that this function is actually located in a
     file located directly in the integration tests folder.
     """
-    return os.path.dirname(os.path.realpath(__file__))
+    return f"{databricks_path}/tests/integration"
 
 
 @pytest.fixture(scope="session")
 def data_lake_path(integration_tests_path) -> str:
     return f"{integration_tests_path}/__data_lake__"
-
-
-@pytest.fixture(scope="session")
-def databricks_path() -> str:
-    """
-    Returns the source/databricks folder path.
-    Please note that this only works if current folder haven't been changed prior using us.chdir().
-    The correctness also relies on the prerequisite that this function is actually located in a
-    file located directly in the integration tests folder.
-    """
-    return os.path.dirname(os.path.realpath(__file__)) + "/../.."
 
 
 @pytest.fixture(scope="session")
