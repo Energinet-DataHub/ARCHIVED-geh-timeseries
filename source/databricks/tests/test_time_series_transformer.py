@@ -13,7 +13,10 @@
 # limitations under the License.
 
 import pytest
-from package.schemas import time_series_unprocessed_schema, published_time_series_points_schema
+from package.schemas import (
+    time_series_unprocessed_schema,
+    published_time_series_points_schema,
+)
 from pyspark.sql.types import (
     StructType,
     StructField,
@@ -189,25 +192,3 @@ def time_series_points_factory(spark, timestamp_factory):
         return spark.createDataFrame(df, published_time_series_points_schema)
 
     return factory
-
-
-# IMPORTANT: The schema being tested should match the schema used in wholesale.
-# Make sure to aligne with wholesale domain if any changes are to be made.
-def test__transform_unprocessed_time_series_to_points__follows_schema(
-    time_series_unprocessed_factory, time_series_points_factory
-):
-    "Tests that time_series_point created in the function has the correct schema"
-    # Arrange
-    time_series_unprocessed_df = time_series_unprocessed_factory()
-
-    expected_df = time_series_points_factory()
-
-    # Act
-    actual_df = transform_unprocessed_time_series_to_points(time_series_unprocessed_df)
-
-    # Assert
-    assert expected_df.schema == actual_df.schema
-    assert (
-        expected_df.drop("storedTime").collect()
-        == actual_df.drop("storedTime").collect()
-    )
