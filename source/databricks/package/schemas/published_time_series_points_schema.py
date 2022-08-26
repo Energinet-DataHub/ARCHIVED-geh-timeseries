@@ -21,7 +21,7 @@ from pyspark.sql.types import (
     LongType,
 )
 
-time_series_points_schema = StructType(
+published_time_series_points_schema = StructType(
     [
         StructField("GsrnNumber", StringType(), True),
         StructField("TransactionId", StringType(), True),
