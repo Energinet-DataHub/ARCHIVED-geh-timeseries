@@ -16,7 +16,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
@@ -85,11 +84,11 @@ public class TimeSeriesBundleToJsonConverterTests
                         EndDateTime = Instant.FromUtc(2022, 8, 16, 4, 0),
                         Points = new List<PointDto>
                         {
-                            new() { Quantity = new decimal(242), Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = new decimal(242), Quality = Quality.AsProvided, Position = 2, },
-                            new() { Quantity = new decimal(222), Quality = Quality.AsProvided, Position = 3, },
-                            new() { Quantity = new decimal(202), Quality = Quality.AsProvided, Position = 4, },
-                            new() { Quantity = new decimal(191), Quality = Quality.Incomplete, Position = 5, },
+                            new() { Quantity = "242", Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = "242", Quality = Quality.AsProvided, Position = 2, },
+                            new() { Quantity = "222", Quality = Quality.AsProvided, Position = 3, },
+                            new() { Quantity = "202", Quality = Quality.AsProvided, Position = 4, },
+                            new() { Quantity = "191", Quality = Quality.Incomplete, Position = 5, },
                             new() { Quantity = null, Quality = Quality.NotAvailable, Position = 6, },
                         },
                     },
@@ -109,9 +108,9 @@ public class TimeSeriesBundleToJsonConverterTests
                         EndDateTime = Instant.FromUtc(2022, 8, 17, 1, 0),
                         Points = new List<PointDto>
                         {
-                            new() { Quantity = new decimal(10.123), Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = new decimal(12), Quality = Quality.AsProvided, Position = 2, },
-                            new() { Quantity = new decimal(756), Quality = Quality.AsProvided, Position = 3, },
+                            new() { Quantity = "10.123", Quality = Quality.Estimated, Position = 1, },
+                            new() { Quantity = "12", Quality = Quality.AsProvided, Position = 2, },
+                            new() { Quantity = "756", Quality = Quality.AsProvided, Position = 3, },
                         },
                     },
                 },

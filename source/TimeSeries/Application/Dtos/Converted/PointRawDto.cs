@@ -12,14 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.Application.Enums
-{
-    public enum Resolution
-    {
-        Unknown = 0,
-        Quarter = 1,
-        Hour = 2,
-        Day = 3,
-        Month = 4,
-    }
-}
+using Energinet.DataHub.TimeSeries.Application.Enums;
+
+namespace Energinet.DataHub.TimeSeries.Application.Dtos.Converted;
+
+public sealed record PointRawDto(
+    string? Quantity,
+    Quality Quality,
+    int Position);

@@ -18,8 +18,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Energinet.DataHub.Core.JsonSerialization;
 using Energinet.DataHub.TimeSeries.Application.Dtos;
+using Energinet.DataHub.TimeSeries.Application.Dtos.Converted;
 using NodaTime;
 using NodaTime.Serialization.SystemTextJson;
 using JsonSerializer = System.Text.Json.JsonSerializer;
@@ -30,22 +30,11 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
 {
     public async Task ConvertAsync(TimeSeriesBundleDto timeSeriesBundle, Stream stream)
     {
-        var timeSeriesJsonDtoList = timeSeriesBundle.Series.Select(series => new
-            {
-                DocumentId = timeSeriesBundle.Document.Id,
-                timeSeriesBundle.Document.CreatedDateTime,
-                timeSeriesBundle.Document.Sender,
-                timeSeriesBundle.Document.Receiver,
-                timeSeriesBundle.Document.BusinessReasonCode,
-                series.TransactionId,
-                series.GsrnNumber,
-                series.MeteringPointType,
-                series.RegistrationDateTime,
-                Product = (string?)series.Product, // (string?) i needed to mitigate nullability anonymous type error
-                series.MeasureUnit,
-                series.Period,
-            })
+        var timeSeriesJsonDtoList = timeSeriesBundle
+            .Series
+            .Select(series => Convert(timeSeriesBundle.Document, series))
             .ToList();
+
         var newLine = Encoding.UTF8.GetBytes(Environment.NewLine);
 
         // Options will be remove when SerializeAsync has been implemented in custom JsonSerializer
@@ -66,5 +55,28 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
             // JsonSerializer.SerializeAsync will be replaced with custom implementation when ready
             await JsonSerializer.SerializeAsync(stream, item, options);
         }
+    }
+
+    private static TimeSeriesRawDto Convert(DocumentDto document, SeriesDto seriesDto)
+    {
+        return new TimeSeriesRawDto(
+            document.Id,
+            document.CreatedDateTime,
+            new MarketParticipantRawDto(document.Sender.Id, document.Sender.BusinessProcessRole),
+            new MarketParticipantRawDto(document.Receiver.Id, document.Receiver.BusinessProcessRole),
+            document.BusinessReasonCode,
+            seriesDto.TransactionId,
+            seriesDto.GsrnNumber,
+            seriesDto.MeteringPointType,
+            seriesDto.RegistrationDateTime,
+            seriesDto.Product,
+            seriesDto.MeasureUnit,
+            new PeriodRawDto(
+                seriesDto.Period.Resolution,
+                seriesDto.Period.StartDateTime,
+                seriesDto.Period.EndDateTime,
+                seriesDto.Period.Points
+                    .Select(p => new PointRawDto(p.Quantity, p.Quality, p.Position))
+                    .ToArray()));
     }
 }

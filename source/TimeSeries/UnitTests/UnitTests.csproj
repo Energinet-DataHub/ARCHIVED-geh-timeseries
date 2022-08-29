@@ -58,4 +58,13 @@ limitations under the License.
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\contracts\time-series-raw.json">
+      <Link>TimeSeriesBundleIngestor\time-series-raw.json</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\contracts\enums\time-series-resolution.json">
+      <Link>TimeSeriesBundleIngestor\time-series-resolution.json</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

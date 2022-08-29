@@ -1,0 +1,109 @@
+{
+  "fields": [
+    {
+      "name": "BusinessReasonCode",
+      "type": "long"
+    },
+    {
+      "name": "CreatedDateTime",
+      "type": "timestamp"
+    },
+    {
+      "name": "RegistrationDateTime",
+      "type": "timestamp"
+    },
+    {
+      "name": "DocumentId",
+      "type": "string"
+    },
+    {
+      "name": "TransactionId",
+      "type": "string"
+    },
+    {
+      "name": "MeasureUnit",
+      "type": "long"
+    },
+    {
+      "name": "GsrnNumber",
+      "type": "string"
+    },
+    {
+      "name": "Product",
+      "type": "string"
+    },
+    {
+      "name": "MeteringPointType",
+      "type": "long"
+    },
+    {
+      "name": "Period",
+      "type": {
+        "fields": [
+          {
+            "name": "StartDateTime",
+            "type": "timestamp"
+          },
+          {
+            "name": "EndDateTime",
+            "type": "timestamp"
+          },
+          {
+            "name": "Resolution",
+            "type": "long"
+          },
+          {
+            "name": "Points",
+            "type": "array",
+            "elementType": {
+              "fields": [
+                {
+                  "name": "Position",
+                  "type": "long"
+                },
+                {
+                  "name": "Quality",
+                  "type": "long"
+                },
+                {
+                  "name": "Quantity",
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "Receiver",
+      "type": {
+        "fields": [
+          {
+            "name": "BusinessProcessRole",
+            "type": "long"
+          },
+          {
+            "name": "Id",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "Sender",
+      "type": {
+        "fields": [
+          {
+            "name": "BusinessProcessRole",
+            "type": "long"
+          },
+          {
+            "name": "Id",
+            "type": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

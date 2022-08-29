@@ -12,11 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from enum import IntEnum
+import pytest
+from package.codelists import (
+    Resolution,
+)
+from tests.contract_utils import assert_codelist_matches_contract
 
 
-class Resolution(IntEnum):
-    quarter = 1
-    hour = 2
-    day = 3
-    month = 4
+def test_resolution_is_subset_of_contract(source_path):
+    assert_codelist_matches_contract(
+        Resolution, f"{source_path}/contracts/enums/time-series-resolution.json"
+    )
