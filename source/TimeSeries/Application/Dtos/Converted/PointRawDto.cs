@@ -17,6 +17,6 @@ using Energinet.DataHub.TimeSeries.Application.Enums;
 namespace Energinet.DataHub.TimeSeries.Application.Dtos.Converted;
 
 public sealed record PointRawDto(
-    int Position,
+    decimal? Quantity,
     Quality Quality,
-    decimal? Quantity);
+    int Position);
