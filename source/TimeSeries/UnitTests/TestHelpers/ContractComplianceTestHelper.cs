@@ -110,7 +110,6 @@ internal static class ContractComplianceTestHelper
 
         return propertyType.Name switch
         {
-            "Decimal" => "string", // TODO: talk about this
             "Int32" => "long",
             "String" => "string",
             "Guid" => "string",

@@ -172,7 +172,11 @@ namespace Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeries
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Quantity && reader.CanReadValue)
                 {
-                    var content = await reader.ReadValueAsDecimalAsync().ConfigureAwait(false);
+                    // This checks whether the contents of Quantity is a valid decimal, reusing existing exception handling.
+                    // The actual value is read as a string to avoid lossy conversion to floating point.
+                    await reader.ReadValueAsDecimalAsync().ConfigureAwait(false);
+
+                    var content = await reader.ReadValueAsStringAsync().ConfigureAwait(false);
                     point.Quantity = content;
                 }
                 else if (reader.CurrentNodeName == CimMarketDocumentConstants.Quality && reader.CanReadValue)
