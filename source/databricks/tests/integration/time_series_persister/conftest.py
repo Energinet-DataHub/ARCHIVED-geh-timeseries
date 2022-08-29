@@ -26,7 +26,6 @@ from pyspark.sql.types import (
     TimestampType,
     BooleanType,
     BinaryType,
-    LongType,
 )
 
 time_series_received_schema = StructType(

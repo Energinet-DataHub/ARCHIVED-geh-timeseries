@@ -19,18 +19,21 @@ from pyspark.sql.types import (
     StringType,
     TimestampType,
     IntegerType,
-    LongType,
     ArrayType,
+    ByteType,
 )
+
+# Be expressive about that they are represented as enums in the Python code
+EnumType = ByteType
 
 time_series_raw_schema = StructType(
     [
-        StructField("BusinessReasonCode", LongType(), True),
+        StructField("BusinessReasonCode", EnumType(), True),
         StructField("CreatedDateTime", TimestampType(), True),
         StructField("DocumentId", StringType(), True),
-        StructField("MeasureUnit", LongType(), True),
+        StructField("MeasureUnit", EnumType(), True),
         StructField("GsrnNumber", StringType(), True),
-        StructField("MeteringPointType", LongType(), True),
+        StructField("MeteringPointType", EnumType(), True),
         StructField(
             "Period",
             StructType(
@@ -41,24 +44,24 @@ time_series_raw_schema = StructType(
                         ArrayType(
                             StructType(
                                 [
-                                    StructField("Position", LongType(), True),
-                                    StructField("Quality", LongType(), True),
-                                    StructField("Quantity", StringType(), True),
+                                    StructField("Position", IntegerType(), True),
+                                    StructField("Quality", EnumType(), True),
+                                    StructField("Quantity", DecimalType(18, 3), True),
                                 ]
                             )
                         ),
                     ),
-                    StructField("Resolution", LongType(), True),
+                    StructField("Resolution", EnumType(), True),
                     StructField("StartDateTime", TimestampType(), True),
                 ]
             ),
         ),
-        StructField("Product", StringType(), True),
+        StructField("Product", EnumType(), True),
         StructField(
             "Receiver",
             StructType(
                 [
-                    StructField("BusinessProcessRole", LongType(), True),
+                    StructField("BusinessProcessRole", EnumType(), True),
                     StructField("Id", StringType(), True),
                 ]
             ),
@@ -68,7 +71,7 @@ time_series_raw_schema = StructType(
             "Sender",
             StructType(
                 [
-                    StructField("BusinessProcessRole", LongType(), True),
+                    StructField("BusinessProcessRole", EnumType(), True),
                     StructField("Id", StringType(), True),
                 ]
             ),

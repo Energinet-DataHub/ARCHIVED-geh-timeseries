@@ -23,7 +23,6 @@ from pyspark.sql.types import (
     StringType,
     IntegerType,
     TimestampType,
-    LongType,
 )
 from datetime import datetime
 from decimal import Decimal

@@ -14,11 +14,11 @@
         },
         {
              "name": "Quality", 
-             "type": "long"
+             "type": "enum"
         },
         {
              "name": "Resolution",
-             "type": "long"
+             "type": "enum"
         },
         {
              "name": "RegistrationDateTime", 
@@ -37,18 +37,18 @@
         },
         {
              "name": "year", 
-             "type": "integer",
+             "type": "short",
              "description": "The year part of the 'time' field."
         },
         {
              "name": "month", 
-             "type": "integer",
+             "type": "byte",
              "description": "The month part of the 'time' field."
         },
  
         { 
             "name": "day",
-            "type": "integer",
+            "type": "byte",
             "description": "The day part of the 'time' field."
         }
     ]

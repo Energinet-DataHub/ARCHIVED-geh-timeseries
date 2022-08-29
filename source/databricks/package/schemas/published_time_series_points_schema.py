@@ -18,21 +18,25 @@ from pyspark.sql.types import (
     StringType,
     TimestampType,
     IntegerType,
-    LongType,
+    ByteType,
+    ShortType,
 )
+
+# Be expressive about that they are represented as enums in the Python code
+EnumType = ByteType
 
 published_time_series_points_schema = StructType(
     [
         StructField("GsrnNumber", StringType(), True),
         StructField("TransactionId", StringType(), True),
         StructField("Quantity", DecimalType(18, 3), True),
-        StructField("Quality", LongType(), True),
-        StructField("Resolution", LongType(), True),
+        StructField("Quality", EnumType(), True),
+        StructField("Resolution", EnumType(), True),
         StructField("RegistrationDateTime", TimestampType(), True),
         StructField("storedTime", TimestampType(), False),
         StructField("time", TimestampType(), True),
-        StructField("year", IntegerType(), True),
-        StructField("month", IntegerType(), True),
-        StructField("day", IntegerType(), True),
+        StructField("year", ShortType(), True),
+        StructField("month", ByteType(), True),
+        StructField("day", ByteType(), True),
     ]
 )
