@@ -76,7 +76,7 @@ public class TimeSeriesBundleConverter : ITimeSeriesBundleConverter
                 seriesDto.Period.StartDateTime,
                 seriesDto.Period.EndDateTime,
                 seriesDto.Period.Points
-                    .Select(p => new PointRawDto(p.Position, p.Quality, p.Quantity))
+                    .Select(p => new PointRawDto(p.Quantity, p.Quality, p.Position))
                     .ToArray()));
     }
 }
