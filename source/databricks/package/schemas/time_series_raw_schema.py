@@ -73,7 +73,6 @@ time_series_raw_schema = StructType(
                 ]
             ),
         ),
-        StructField("SeriesId", StringType(), True),
         StructField("TransactionId", StringType(), True),
     ]
 )

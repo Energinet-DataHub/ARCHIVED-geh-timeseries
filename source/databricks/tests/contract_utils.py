@@ -21,24 +21,45 @@ def read_contract(path):
 
 
 def assert_contract_matches_schema(contract_path, schema):
+    def assert_schema_recursively(expected_schema, actual_schema):
+
+        # Assert: Schema and contract has the same number of fields
+        assert len(actual_schema) == len(expected_schema)
+
+        # Assert: Schema matches contract
+        for expected_field in expected_schema:
+            actual_field = next(
+                (f for f in actual_schema if expected_field["name"] == f["name"]),
+                None,
+            )
+
+            assert (
+                actual_field is not None
+            ), f"""Actual schema is missing field '{expected_field["name"]}' from contract."""
+
+            expected_field_type = expected_field["type"]
+            actual_field_type = actual_field["type"]
+
+            if isinstance(expected_field_type, dict):
+                assert_schema_recursively(
+                    expected_field_type["fields"], actual_field_type["fields"]
+                )
+
+            elif expected_field_type == "array":
+                assert_schema_recursively(
+                    expected_field["elementType"]["fields"],
+                    actual_field_type["elementType"]["fields"],
+                )
+
+            else:
+                assert (
+                    actual_field_type == expected_field_type
+                ), f"""Actual type ({actual_field_type}) of field {expected_field["name"]} does not match the expected type ({expected_field["type"]})."""
+
     expected_schema = read_contract(contract_path)["fields"]
     actual_schema = json.loads(schema.json())["fields"]
 
-    # Assert: Schema and contract has the same number of fields
-    assert len(actual_schema) == len(expected_schema)
-
-    # Assert: Schema matches contract
-    for expected_field in expected_schema:
-        actual_field = next(
-            (x for x in actual_schema if expected_field["name"] == x["name"]), None
-        )
-        assert (
-            actual_field is not None
-        ), f"""Actual schema is missing field '{expected_field["name"]}' from contract."""
-        assert (
-            actual_field["type"] == expected_field["type"]
-        ), f"""Actual type ({actual_field["type"]}) of field {expected_field["name"]}
-        does not match the expected type ({expected_field["type"]})."""
+    assert_schema_recursively(expected_schema, actual_schema)
 
 
 def assert_codelist_matches_contract(codelist, contract_path):
