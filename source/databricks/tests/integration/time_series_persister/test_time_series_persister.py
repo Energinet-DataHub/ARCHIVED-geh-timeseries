@@ -25,6 +25,7 @@ import pytest
 from package import timeseries_persister
 from tests.integration.utils import streaming_job_asserter
 from package.schemas import time_series_raw_schema
+from tests.contract_utils import assert_contract_matches_schema
 
 
 def test_timeseries_persister_returns_0(spark, databricks_path, data_lake_path):
@@ -111,3 +112,10 @@ async def test_process_json(parquet_reader, time_series_persister):
 
     succeeded = streaming_job_asserter(time_series_persister, verification_function)
     assert succeeded, "No data was stored in Datalake"
+
+
+def test__raw_schema_complies_with_public_contract(source_path):
+    assert_contract_matches_schema(
+        f"{source_path}/contracts/time-series-raw.json",
+        time_series_raw_schema,
+    )

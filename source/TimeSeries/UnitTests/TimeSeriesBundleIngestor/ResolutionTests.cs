@@ -12,27 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application.Enums;
+using Energinet.DataHub.TimeSeries.UnitTests.TestHelpers;
+using Xunit;
+using Xunit.Categories;
 
-namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
+namespace Energinet.DataHub.TimeSeries.UnitTests.TimeSeriesBundleIngestor;
+
+[UnitTest]
+public sealed class ResolutionTests
 {
-    public static class ResolutionMapper
+    [Fact]
+    public async Task EnumNamesAndValuesMatchContract()
     {
-        private const string CimQuarterOfHour = "PT15M";
-        private const string CimHour = "PT1H";
-        private const string CimDay = "P1D";
-        private const string CimMonth = "P1M";
+        await using var stream = EmbeddedResources.GetStream("TimeSeriesBundleIngestor.time-series-resolution.json");
 
-        public static Resolution Map(string value)
-        {
-            return value switch
-            {
-                CimQuarterOfHour => Resolution.Quarter,
-                CimHour => Resolution.Hour,
-                CimDay => Resolution.Day,
-                CimMonth => Resolution.Month,
-                _ => Resolution.Unknown,
-            };
-        }
+        await ContractComplianceTestHelper.VerifyEnumCompliesWithContractAsync<Resolution>(stream);
     }
 }

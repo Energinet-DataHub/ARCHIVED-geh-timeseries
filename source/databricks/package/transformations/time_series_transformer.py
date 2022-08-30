@@ -44,7 +44,7 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(
             "Factor",
             when(
-                col("Period.Resolution") == Resolution.quarter,
+                col("Period.Resolution") == Resolution.quarter.value,
                 (col("Points.Position") - 1)
                 * 15,  # To add 15, 30 or 45 to the minut interval
             ).otherwise(
@@ -54,19 +54,19 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
         .withColumn(  # make_interval( [years [, months [, weeks [, days [, hours [, mins [, secs] ] ] ] ] ] ] )
             "time",
             when(
-                col("Period.Resolution") == Resolution.quarter,
+                col("Period.Resolution") == Resolution.quarter.value,
                 expr("Period.StartDateTime + make_interval(0, 0, 0, 0, 0, Factor, 0)"),
             )
             .when(
-                col("Period.Resolution") == Resolution.hour,
+                col("Period.Resolution") == Resolution.hour.value,
                 expr("Period.StartDateTime + make_interval(0, 0, 0, 0, Factor, 0, 0)"),
             )
             .when(
-                col("Period.Resolution") == Resolution.day,
+                col("Period.Resolution") == Resolution.day.value,
                 expr("Period.StartDateTime + make_interval(0, 0, 0, Factor, 0, 0, 0)"),
             )
             .when(
-                col("Period.Resolution") == Resolution.month,
+                col("Period.Resolution") == Resolution.month.value,
                 expr("Period.StartDateTime + make_interval(0, Factor, 0, 0, 0, 0, 0)"),
             ),
         )  # time is the time of observation and what we wil partition on, with year, month, day

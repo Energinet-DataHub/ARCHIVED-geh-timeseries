@@ -12,14 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Energinet.DataHub.TimeSeries.Application.Enums
+using System.Threading.Tasks;
+using Energinet.DataHub.TimeSeries.Application.Dtos.Converted;
+using Energinet.DataHub.TimeSeries.UnitTests.TestHelpers;
+using Xunit;
+using Xunit.Categories;
+
+namespace Energinet.DataHub.TimeSeries.UnitTests.TimeSeriesBundleIngestor;
+
+[UnitTest]
+public sealed class TimeSeriesRawDtoTests
 {
-    public enum Resolution
+    [Fact]
+    public async Task PropertyNamesAndTypesMatchContract()
     {
-        Unknown = 0,
-        Quarter = 1,
-        Hour = 2,
-        Day = 3,
-        Month = 4,
+        await using var stream = EmbeddedResources.GetStream("TimeSeriesBundleIngestor.time-series-raw.json");
+
+        await ContractComplianceTestHelper.VerifyTypeCompliesWithContractAsync<TimeSeriesRawDto>(stream);
     }
 }

@@ -130,10 +130,10 @@ def test__transform_unprocessed_time_series_to_points__registration_date_time_fa
 @pytest.mark.parametrize(
     "resolution, expected_time_for_position_2",
     [
-        (Resolution.quarter, "2022-06-08T12:15:00.000Z"),
-        (Resolution.hour, "2022-06-08T13:00:00.000Z"),
-        (Resolution.day, "2022-06-09T12:00:00.000Z"),
-        (Resolution.month, "2022-07-08T12:00:00.000Z"),
+        (Resolution.quarter.value, "2022-06-08T12:15:00.000Z"),
+        (Resolution.hour.value, "2022-06-08T13:00:00.000Z"),
+        (Resolution.day.value, "2022-06-09T12:00:00.000Z"),
+        (Resolution.month.value, "2022-07-08T12:00:00.000Z"),
     ],
 )
 def test__transform_unprocessed_time_series_to_points__sets_correct_time_depending_on_resolution(
