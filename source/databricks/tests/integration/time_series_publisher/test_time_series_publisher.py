@@ -33,7 +33,7 @@ from tests.contract_utils import assert_contract_matches_schema
 
 
 def test__timeseries_publisher_returns_exit_code_0(
-    spark, databricks_path, data_lake_path, unprocessed_time_series_json_string
+    spark, databricks_path, data_lake_path
 ):
     time_series_unprocessed_path = f"{data_lake_path}/unprocessed_time_series"
     time_series_points_path = f"{data_lake_path}/time_series_points"
