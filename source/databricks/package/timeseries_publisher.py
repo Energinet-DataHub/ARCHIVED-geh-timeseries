@@ -43,8 +43,8 @@ def timeseries_publisher(
 ):
 
     return (
-        spark.readStream.format("parquet")
-        .schema(time_series_unprocessed_schema)
+        spark.readStream.schema(time_series_unprocessed_schema)
+        .format("parquet")
         .load(time_series_unprocessed_path)
         .writeStream.option("checkpointLocation", time_series_checkpoint_path)
         .foreachBatch(
