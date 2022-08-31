@@ -40,7 +40,12 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
                 col("CreatedDateTime"),
             ).otherwise(col("RegistrationDateTime")),
         )
-        .withColumn("Points.Quantity", col("Points.Quantity").cast(DecimalType(18, 3)))
+        .withColumn(
+            "Points",
+            col("Points").withField(
+                "Quantity", col("Points.Quantity").cast(DecimalType(18, 3))
+            ),
+        )
         .withColumn("storedTime", current_timestamp())
         .withColumn(
             "Factor",
