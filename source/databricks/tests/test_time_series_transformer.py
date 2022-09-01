@@ -57,12 +57,12 @@ def time_series_unprocessed_factory(spark, timestamp_factory):
                         {
                             "Position": 1,
                             "Quality": 3,
-                            "Quantity": Decimal(1.1),
+                            "Quantity": "1.1",
                         },
                         {
                             "Position": 2,
                             "Quality": 3,
-                            "Quantity": Decimal(1.1),
+                            "Quantity": "1.1",
                         },
                     ],
                     "Resolution": resolution,
