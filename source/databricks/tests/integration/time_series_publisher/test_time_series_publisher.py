@@ -141,7 +141,9 @@ def time_series_publisher(spark, data_lake_path, integration_tests_path):
 
 
 @pytest.mark.asyncio
-async def test__publishes_points(parquet_reader, time_series_publisher):
+async def test__publishes_points(
+    spark, parquet_reader, time_series_publisher, data_lake_path
+):
     def verification_function():
         data = parquet_reader("/time_series_points")
         return data.count() == 6
@@ -150,19 +152,23 @@ async def test__publishes_points(parquet_reader, time_series_publisher):
     assert succeeded, "No data was stored in Datalake table"
 
 
-# @pytest.mark.asyncio
-# async def test__publishes_points_that_comply_with_public_contract(
-#     source_path, parquet_reader, time_series_publisher
-# ):
-#     def verification_function():
-#         data = parquet_reader("/time_series_points")
-#         assert_contract_matches_schema(
-#             f"{source_path}/contracts/published-time-series-points.json", data.schema
-#         )
+@pytest.mark.asyncio
+async def test__publishes_points_that_comply_with_public_contract(
+    source_path, parquet_reader, time_series_publisher
+):
+    def verification_function():
+        data = parquet_reader("/time_series_points")
+        result = data.count() > 0
+        if result:
+            global schema
+            schema = data.schema
+        return result
 
-#         return True
-
-#     assert streaming_job_asserter(time_series_publisher, verification_function)
+    streaming_job_asserter(time_series_publisher, verification_function)
+    assert_contract_matches_schema(
+        f"{source_path}/contracts/published-time-series-points.json",
+        schema,
+    )
 
 
 def test__defined_schema_complies_with_public_contract(source_path):
