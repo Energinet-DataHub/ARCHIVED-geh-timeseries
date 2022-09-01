@@ -31,7 +31,7 @@ limitations under the License.
     <PackageReference Include="Energinet.DataHub.Core.JsonSerialization" Version="2.1.0" />
     <PackageReference Include="Energinet.DataHub.Core.Logging" Version="2.2.0" />
     <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.0" />
-    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.0" />
+    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
