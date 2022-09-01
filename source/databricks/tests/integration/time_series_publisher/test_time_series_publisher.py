@@ -164,7 +164,8 @@ async def test__publishes_points_that_comply_with_public_contract(
             schema = data.schema
         return result
 
-    streaming_job_asserter(time_series_publisher, verification_function)
+    succeeded = streaming_job_asserter(time_series_publisher, verification_function)
+    assert succeeded, "No data was stored in Datalake table"
     assert_contract_matches_schema(
         f"{source_path}/contracts/published-time-series-points.json",
         schema,
