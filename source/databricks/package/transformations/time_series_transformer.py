@@ -26,7 +26,7 @@ from pyspark.sql.functions import (
     expr,
 )
 from pyspark.sql import DataFrame
-from pyspark.sql.types import IntegerType
+from pyspark.sql.types import IntegerType, DecimalType
 from package.codelists import Resolution
 
 
@@ -39,6 +39,12 @@ def transform_unprocessed_time_series_to_points(source: DataFrame) -> DataFrame:
                 col("RegistrationDateTime").isNull(),
                 col("CreatedDateTime"),
             ).otherwise(col("RegistrationDateTime")),
+        )
+        .withColumn(
+            "Points",
+            col("Points").withField(
+                "Quantity", col("Points.Quantity").cast(DecimalType(18, 3))
+            ),
         )
         .withColumn("storedTime", current_timestamp())
         .withColumn(

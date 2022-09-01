@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from pyspark.sql.types import (
-    DecimalType,
     StructType,
     StructField,
     StringType,
@@ -43,7 +42,7 @@ time_series_unprocessed_schema = StructType(
                                 [
                                     StructField("Position", LongType(), True),
                                     StructField("Quality", LongType(), True),
-                                    StructField("Quantity", DecimalType(18, 3), True),
+                                    StructField("Quantity", StringType(), True),
                                 ]
                             )
                         ),
@@ -73,7 +72,6 @@ time_series_unprocessed_schema = StructType(
                 ]
             ),
         ),
-        StructField("SeriesId", StringType(), True),
         StructField("TransactionId", StringType(), True),
         StructField("year", IntegerType(), True),
         StructField("month", IntegerType(), True),
