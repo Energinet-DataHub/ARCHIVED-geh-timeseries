@@ -16,10 +16,11 @@ using Energinet.DataHub.Core.App.Common.Abstractions.Identity;
 using Energinet.DataHub.Core.App.Common.Abstractions.Security;
 using Energinet.DataHub.Core.App.Common.Identity;
 using Energinet.DataHub.Core.App.Common.Security;
-using Energinet.DataHub.Core.App.FunctionApp.Middleware;
+using Energinet.DataHub.Core.FunctionApp.Common.Middleware;
 using Energinet.DataHub.TimeSeries.Infrastructure.Registration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using JwtTokenMiddleware = Energinet.DataHub.Core.App.FunctionApp.Middleware.JwtTokenMiddleware;
 
 namespace Energinet.DataHub.TimeSeries.TimeSeriesBundleIngestor
 {

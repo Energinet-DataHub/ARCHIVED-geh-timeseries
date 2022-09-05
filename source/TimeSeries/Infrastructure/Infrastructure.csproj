@@ -22,12 +22,20 @@ limitations under the License.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
-    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="5.0.0" />
-    <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.0" />
-    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.0" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.6.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.14.0-beta.1" />
+    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="7.0.0" />
+    <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.1" />
+    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.7.0-preview1" />
     <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
+    <PackageReference Update="StyleCop.Analyzers" Version="1.2.0-beta.435">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Update="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0-preview1.22362.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
