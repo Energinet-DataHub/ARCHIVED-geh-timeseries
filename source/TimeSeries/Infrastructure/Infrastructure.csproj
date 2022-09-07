@@ -22,10 +22,10 @@ limitations under the License.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.0" />
-    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="5.0.0" />
+    <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
+    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="7.0.0" />
     <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.0" />
-    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.0" />
+    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.6.0" />
     <PackageReference Include="NodaTime.Serialization.SystemTextJson" Version="1.0.0" />
   </ItemGroup>
