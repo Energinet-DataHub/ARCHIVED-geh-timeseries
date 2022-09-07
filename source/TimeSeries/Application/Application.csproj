@@ -22,7 +22,7 @@ limitations under the License.
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Energinet.DataHub.Core.JsonSerialization" Version="2.1.0" />
+    <PackageReference Include="Energinet.DataHub.Core.JsonSerialization" Version="2.1.1" />
     <PackageReference Include="NodaTime" Version="3.1.2" />
   </ItemGroup>
 

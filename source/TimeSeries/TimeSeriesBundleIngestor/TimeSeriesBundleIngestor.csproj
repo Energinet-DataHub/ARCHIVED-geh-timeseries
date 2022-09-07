@@ -25,13 +25,13 @@ limitations under the License.
     <PackageReference Include="AspNetCore.HealthChecks.AzureServiceBus" Version="6.0.4" />
     <PackageReference Include="AspNetCore.HealthChecks.AzureStorage" Version="6.1.1" />
     <PackageReference Include="Energinet.DataHub.Core.App.Common.Security" Version="5.0.0" />
-    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="5.0.0" />
+    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="7.0.0" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common" Version="2.0.1" />
     <PackageReference Include="Energinet.DataHub.Core.FunctionApp.Common.Abstractions" Version="2.0.1" />
-    <PackageReference Include="Energinet.DataHub.Core.JsonSerialization" Version="2.1.0" />
-    <PackageReference Include="Energinet.DataHub.Core.Logging" Version="2.2.0" />
+    <PackageReference Include="Energinet.DataHub.Core.JsonSerialization" Version="2.1.1" />
+    <PackageReference Include="Energinet.DataHub.Core.Logging" Version="2.2.1" />
     <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.0" />
-    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.0" />
+    <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.1" />
     <PackageReference Include="Microsoft.ApplicationInsights" Version="2.21.0" />
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
