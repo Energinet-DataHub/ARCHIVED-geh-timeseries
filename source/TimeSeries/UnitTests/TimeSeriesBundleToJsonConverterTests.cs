@@ -52,8 +52,7 @@ public class TimeSeriesBundleToJsonConverterTests
         var actual = Encoding.UTF8.GetString(stream.ToArray());
 
         // Assert
-        Assert.Equal(expected, actual);
-        //actual.Should().Be(expected);
+        actual.Should().Be(expected);
     }
 
     private TimeSeriesBundleDto CreateTestTimeSeriesBundleDto()
