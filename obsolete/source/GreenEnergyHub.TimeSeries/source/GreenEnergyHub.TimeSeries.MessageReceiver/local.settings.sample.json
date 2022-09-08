@@ -1,7 +1,6 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsDashboard": "UseDevelopmentStorage=true",
     "AzureWebJobsStorage": "UseDevelopmentStorage=true",
     "CACERT_PATH": "c:\\cacert\\cacert.pem",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
