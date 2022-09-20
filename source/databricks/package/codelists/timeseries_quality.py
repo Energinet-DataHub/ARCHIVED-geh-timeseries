@@ -16,7 +16,7 @@ from enum import IntEnum
 
 
 class TimeSeriesQuality(IntEnum):
-    "Quality values used in contracts exposed by the time series domain."
+    "Quality values used both internally (.NET and Spark) and in contracts exposed by the time series domain."
+    missing = 2
     estimated = 3
-    asProvided = 4  # Maps to Quality.measured
-    incomplete = 5
+    measured = 4

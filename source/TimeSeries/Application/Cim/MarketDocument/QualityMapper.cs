@@ -18,24 +18,20 @@ namespace Energinet.DataHub.TimeSeries.Application.Cim.MarketDocument
 {
     public static class QualityMapper
     {
-        private const string CimAdjusted = "A01";
-        private const string CimNotAvailable = "A02";
+        private const string CimMissing = "A02";
         private const string CimEstimated = "A03";
-        private const string CimAsProvided = "A04";
-        private const string CimIncomplete = "A05";
+        private const string CimMeasured = "A04";
         private const string CimCalculated = "Z01";
 
         public static Quality Map(string value)
         {
             return value switch
             {
-                CimAdjusted => Quality.Adjusted,
-                CimNotAvailable => Quality.NotAvailable,
+                CimMissing => Quality.Missing,
                 CimEstimated => Quality.Estimated,
-                CimAsProvided => Quality.AsProvided,
-                CimIncomplete => Quality.Incomplete,
+                CimMeasured => Quality.Measured,
                 CimCalculated => Quality.Calculated,
-                _ => Quality.Unknown,
+                _ => Quality.Invalid,
             };
         }
     }
