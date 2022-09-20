@@ -85,11 +85,10 @@ public class TimeSeriesBundleToJsonConverterTests
                         Points = new List<PointDto>
                         {
                             new() { Quantity = "242", Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = "242", Quality = Quality.AsProvided, Position = 2, },
-                            new() { Quantity = "222", Quality = Quality.AsProvided, Position = 3, },
-                            new() { Quantity = "202", Quality = Quality.AsProvided, Position = 4, },
-                            new() { Quantity = "191", Quality = Quality.Incomplete, Position = 5, },
-                            new() { Quantity = null, Quality = Quality.NotAvailable, Position = 6, },
+                            new() { Quantity = "242", Quality = Quality.Measured, Position = 2, },
+                            new() { Quantity = "222", Quality = Quality.Measured, Position = 3, },
+                            new() { Quantity = "202", Quality = Quality.Measured, Position = 4, },
+                            new() { Quantity = null, Quality = Quality.Missing, Position = 5, },
                         },
                     },
                 },
@@ -109,8 +108,8 @@ public class TimeSeriesBundleToJsonConverterTests
                         Points = new List<PointDto>
                         {
                             new() { Quantity = "10.123", Quality = Quality.Estimated, Position = 1, },
-                            new() { Quantity = "12", Quality = Quality.AsProvided, Position = 2, },
-                            new() { Quantity = "756", Quality = Quality.AsProvided, Position = 3, },
+                            new() { Quantity = "12", Quality = Quality.Measured, Position = 2, },
+                            new() { Quantity = "756", Quality = Quality.Measured, Position = 3, },
                         },
                     },
                 },

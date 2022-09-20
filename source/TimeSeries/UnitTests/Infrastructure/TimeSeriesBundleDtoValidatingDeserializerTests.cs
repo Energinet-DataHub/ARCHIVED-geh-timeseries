@@ -16,6 +16,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Energinet.DataHub.Core.TestCommon.AutoFixture.Attributes;
 using Energinet.DataHub.TimeSeries.Application.CimDeserialization.TimeSeriesBundle;
+using Energinet.DataHub.TimeSeries.Application.Dtos;
 using Energinet.DataHub.TimeSeries.Application.Enums;
 using Energinet.DataHub.TimeSeries.TestCore.Assets;
 using FluentAssertions;
@@ -70,7 +71,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
         [Theory]
         [InlineAutoMoqData]
         public async Task
-            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithQualityNotPresent_ReturnsParsedObjectWithQualitySetToAsProvided(
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithQualityNotPresent_ReturnsParsedObjectWithQualitySetToMeasured(
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
@@ -87,7 +88,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
             {
                 foreach (var point in points)
                 {
-                    point.Quality.Should().Be(Quality.AsProvided);
+                    point.Quality.Should().Be(Quality.Measured);
                 }
             }
         }
@@ -95,7 +96,7 @@ namespace Energinet.DataHub.TimeSeries.UnitTests.Infrastructure
         [Theory]
         [InlineAutoMoqData]
         public async Task
-            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithQuantityNotPresent_ReturnsParsedObjectWithQuantitySetToNull(
+            ValidateAndDeserialize_WhenCalledWithTimeSeriesWithoutQuantity_ReturnsParsedObjectWithQuantitySetToNull(
                 TimeSeriesBundleDtoValidatingDeserializer sut)
         {
             // Arrange
