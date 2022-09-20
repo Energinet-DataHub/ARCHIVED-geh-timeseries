@@ -16,12 +16,10 @@ namespace Energinet.DataHub.TimeSeries.Application.Enums
 {
     public enum Quality
     {
-        Unknown = 0,
-        Adjusted = 1,
-        NotAvailable = 2,
+        Invalid = 0,
+        Missing = 2,
         Estimated = 3,
-        AsProvided = 4,
-        Incomplete = 5,
+        Measured = 4,
         Calculated = 6,
     }
 }

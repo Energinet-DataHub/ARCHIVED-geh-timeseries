@@ -56,8 +56,7 @@ limitations under the License.
             </cim:Point>
             <cim:Point>
                 <cim:position>5</cim:position>
-                <cim:quantity>191</cim:quantity>
-                <cim:quality>A05</cim:quality>
+                <cim:quality>A02</cim:quality>
             </cim:Point>
             <cim:Point>
                 <cim:position>6</cim:position>

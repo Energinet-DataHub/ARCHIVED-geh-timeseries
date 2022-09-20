@@ -36,30 +36,11 @@ limitations under the License.
             <cim:resolution>PT1H</cim:resolution>
             <cim:timeInterval>
                 <cim:start>2022-08-15T22:00Z</cim:start>
-                <cim:end>2022-08-16T04:00Z</cim:end>
+                <cim:end>2022-08-15T23:00Z</cim:end>
             </cim:timeInterval>
             <cim:Point>
                 <cim:position>1</cim:position>
                 <cim:quantity>242</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>2</cim:position>
-                <cim:quantity>242</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>3</cim:position>
-                <cim:quantity>222</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>4</cim:position>
-                <cim:quantity>202</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>5</cim:position>
-                <cim:quantity>191</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>6</cim:position>
             </cim:Point>
         </cim:Period>
     </cim:Series>
@@ -75,19 +56,11 @@ limitations under the License.
             <cim:resolution>PT1H</cim:resolution>
             <cim:timeInterval>
                 <cim:start>2022-08-16T22:00Z</cim:start>
-                <cim:end>2022-08-17T01:00Z</cim:end>
+                <cim:end>2022-08-16T23:00Z</cim:end>
             </cim:timeInterval>
             <cim:Point>
                 <cim:position>1</cim:position>
                 <cim:quantity>10.123</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>2</cim:position>
-                <cim:quantity>12</cim:quantity>
-            </cim:Point>
-            <cim:Point>
-                <cim:position>3</cim:position>
-                <cim:quantity>756</cim:quantity>
             </cim:Point>
         </cim:Period>
     </cim:Series>

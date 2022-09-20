@@ -23,6 +23,8 @@ def test_resolution_is_subset_of_contract(source_path):
     )
 
 
+# TODO: How do we know when the contract is with .NET and when it's for external contracts?
+#       Comment applies to contracts in opengeh-wholesale as-well
 def test_timeseries_quality_enum_equals_timeseries_contract(source_path):
     assert_codelist_matches_contract(
         TimeSeriesQuality, f"{source_path}/contracts/enums/timeseries-quality.json"

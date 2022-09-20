@@ -12,21 +12,22 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System.Threading.Tasks;
 using Energinet.DataHub.TimeSeries.Application.Enums;
+using Energinet.DataHub.TimeSeries.UnitTests.TestHelpers;
+using Xunit;
+using Xunit.Categories;
 
-namespace Energinet.DataHub.TimeSeries.Application.Dtos
+namespace Energinet.DataHub.TimeSeries.UnitTests.TimeSeriesBundleIngestor;
+
+[UnitTest]
+public sealed class QualityTests
 {
-    public class PointDto
+    [Fact]
+    public async Task EnumNamesAndValuesMatchContract()
     {
-        public PointDto()
-        {
-            Quality = Quality.Measured;
-        }
+        await using var stream = EmbeddedResources.GetStream("TimeSeriesBundleIngestor.timeseries-quality.json");
 
-        public string? Quantity { get; set; }
-
-        public Quality Quality { get; set; }
-
-        public int Position { get; set; }
+        await ContractComplianceTestHelper.VerifyEnumCompliesWithContractAsync<Quality>(stream);
     }
 }
