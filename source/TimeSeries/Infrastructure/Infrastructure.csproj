@@ -23,7 +23,7 @@ limitations under the License.
 
   <ItemGroup>
     <PackageReference Include="Azure.Storage.Blobs" Version="12.13.1" />
-    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="7.0.0" />
+    <PackageReference Include="Energinet.DataHub.Core.App.FunctionApp" Version="7.1.0" />
     <PackageReference Include="Energinet.DataHub.Core.Schemas" Version="2.1.0" />
     <PackageReference Include="Energinet.DataHub.Core.SchemaValidation" Version="2.1.1" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Core" Version="1.6.0" />
