@@ -36,7 +36,7 @@ limitations under the License.
     <PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.Http" Version="3.0.13" />
     <PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.3.0" OutputItemType="Analyzer" />
-    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.8.0" />
+    <PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.0" />
     <PackageReference Remove="Microsoft.CodeAnalysis.FxCopAnalyzers" />
   </ItemGroup>
   <ItemGroup>
