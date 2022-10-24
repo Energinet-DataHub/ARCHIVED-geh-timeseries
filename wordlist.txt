@@ -11,11 +11,13 @@ Connectionstring
 cov
 csv
 Databricks
+databricks
 dataframe
 debugz
 deserialize
 dev
 devcontainer
+Dockerfile
 dotnet
 DTO
 Energinet
@@ -81,3 +83,4 @@ WSL
 www
 xt
 xunit
+yml

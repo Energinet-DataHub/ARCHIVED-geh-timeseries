@@ -11,6 +11,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 name: CD
 
 on:
@@ -50,6 +51,7 @@ jobs:
   update_coverage_report_python:
     uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@v8
     with:
-      PATH_STATIC_CHECKS: './source'
-      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,W503,E122,E123,E126,F811'
-      TEST_REPORT_PATH: ./source/databricks/tests/coverage.json
+      PATH_STATIC_CHECKS: './source/databricks'
+      # documented here https://github.com/Energinet-DataHub/opengeh-wholesale/tree/main/source/databricks#styling-and-formatting
+      IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,E203,W503'
+      TEST_REPORT_PATH: ./source/databricks/tests/htmlcov/

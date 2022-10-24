@@ -18,10 +18,9 @@
 set -e
 cd source/databricks/tests/
 
-# There env vars are important to ensure that the driver and worker nodes in spark are alligned
+# These env vars are important to ensure that the driver and worker nodes in spark are alligned
 export PYSPARK_PYTHON=/opt/conda/bin/python
 export PYSPARK_DRIVER_PYTHON=/opt/conda/bin/python
-
 
 #Build wheel
 python ../setup.py install

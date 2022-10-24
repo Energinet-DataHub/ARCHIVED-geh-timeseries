@@ -11,12 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 name: CI
 
 on:
   pull_request:
     branches:
       - main
+    paths-ignore:
+      - .docker/**
+      - .github/workflows/cd-docker-test-image.yml
 
 jobs:
   ci_base:
@@ -39,10 +43,10 @@ jobs:
   databricks_ci:
     uses: Energinet-DataHub/.github/.github/workflows/python-ci-test-and-coverage.yml@v8
     with:
-      PATH_STATIC_CHECKS: './source'
-      # documented here https://github.com/Energinet-DataHub/geh-timeseries/tree/main/source/databricks#styling-and-formatting
+      PATH_STATIC_CHECKS: './source/databricks'
+      # documented here https://github.com/Energinet-DataHub/opengeh-wholesale/tree/main/source/databricks#styling-and-formatting
       IGNORE_ERRORS_AND_WARNING_FLAKE8: 'E501,F401,E402,E203,W503'
-      TEST_REPORT_PATH: ./source/databricks/htmlcov/
+      TEST_REPORT_PATH: ./source/databricks/tests/htmlcov/
 
   terraform_validate:
     uses: Energinet-DataHub/.github/.github/workflows/terraform-validate.yml@v8
