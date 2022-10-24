@@ -1,7 +1,7 @@
 {
   "ignorePatterns": [
     {
-      "pattern": "^https://docs.github.com/"
+      "pattern": "^https://docs.github.com/*"
     }
   ],
   "httpHeaders": [
