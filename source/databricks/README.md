@@ -124,6 +124,8 @@ If a pull request triggers a new Docker image to be published, a new version of 
 
 ### Running the tests using a published Docker image
 
+<!-- markdown-link-check-disable -->
 The default Docker image used for testing is the newest version of the "latest"-tagged [databricks-unit-test](https://github.com/orgs/Energinet-DataHub/packages?repo_name=geh-timeseries)-image stored in [GitHub packages](https://docs.github.com/en/packages/learn-github-packages/introduction-to-github-packages), which is a container registry.
+<!-- markdown-link-check-enable-->
 
 In a pull request, it is possible to change the version of the Docker image used for running the tests. For example, if a pull request changes the Dockerfile, it might be relevant to run the test base towards the new Docker image. To change the version of the Docker image used, change the `image`-reference in the [docker-compose.yml](../../.devcontainer/docker-compose.yml)-file to e.g. `ghcr.io/energinet-datahub/geh-timeseries/databricks-unit-test:pre-release-pr311`.
