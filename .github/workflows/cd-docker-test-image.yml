@@ -21,11 +21,13 @@ on:
       - main
     paths:
       - .docker/**
+      - .github/workflows/cd-docker-test-image.yml
   push:
     branches:
       - main
     paths:
       - .docker/**
+      - .github/workflows/cd-docker-test-image.yml
 
 env:
   REGISTRY: ghcr.io
