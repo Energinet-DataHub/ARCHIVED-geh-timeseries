@@ -78,7 +78,7 @@ namespace Energinet.DataHub.TimeSeries.IntegrationTests
             // Assert
             var response = await Fixture.TimeSeriesContainerClient.GetBlobClient(blobName).DownloadAsync();
             var actual = await new StreamReader(response.Value.Content).ReadToEndAsync();
-            actual.Should().Be(expected);
+            Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
         }
 
         [Fact]

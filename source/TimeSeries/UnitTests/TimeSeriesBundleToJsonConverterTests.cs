@@ -53,7 +53,6 @@ public class TimeSeriesBundleToJsonConverterTests
 
         // Assert
         Assert.Equal(expected, actual, ignoreLineEndingDifferences: true);
-        ////actual.Should().Be(expected);
     }
 
     private TimeSeriesBundleDto CreateTestTimeSeriesBundleDto()
